@@ -19,9 +19,16 @@ import org.springframework.web.client.RestTemplate;
  **/
 @Controller
 public class MemberController {
+
     @GetMapping("/signup")
-    public String signupPage() {
-        return "signupPage";
+    public String signupPageForm() {
+        return "member/signupPage";
+    }
+
+    @PostMapping("/signup")
+    public String signupComplete() {
+
+        return "member/signupComplete";
     }
 
     @GetMapping("/login")
