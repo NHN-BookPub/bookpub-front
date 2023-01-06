@@ -1,10 +1,10 @@
-package com.bookpub.bookpubfront;
+package com.bookpub.bookpubfront.main;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
 /**
- * Some description here
+ * 메인화면 view 컨트롤러.
  *
  * @author : 임태원
  * @since : 1.0
@@ -15,6 +15,6 @@ public class MainController {
 
     @GetMapping("/")
     public String mainView() {
-        return "index";
+        return "main/index";
     }
 }
