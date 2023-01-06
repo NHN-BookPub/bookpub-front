@@ -6,6 +6,11 @@
 </head>
 <body>
 <h2>회원가입이 완료되었습니다.</h2>
-<div th:text="${body}"></div>
+<span>id : </span><div th:text="${member.member_id}"></div>
+<span>nickname : </span><div th:text="${member.member_nickname}"></div>
+<span>email : </span><div th:text="${member.member_email}"></div>
+<span>tier : </span><div th:text="${member.member_tier}"></div>
 </body>
 </html>
+
+}

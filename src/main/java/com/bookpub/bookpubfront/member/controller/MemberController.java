@@ -1,6 +1,10 @@
 package com.bookpub.bookpubfront.member.controller;
 
 import com.bookpub.bookpubfront.member.dto.MemberSignupRequest;
+import com.bookpub.bookpubfront.member.exception.SignUpFailedException;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.Map;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -42,15 +46,22 @@ public class MemberController {
         HttpEntity<MemberSignupRequest> entity = new HttpEntity<>(memberSignupRequest, headers);
 
         ResponseEntity<String> exchange = restTemplate.exchange(
-                gatewayUrl + "/shopping/signup",
+                gatewayUrl + "/api/signup",
                 HttpMethod.POST,
                 entity,
                 String.class
         );
+        ObjectMapper objectMapper = new ObjectMapper();
 
-        String body = exchange.getBody();
+        Map memberInfo = null;
 
-        model.addAttribute("body", body);
+        try {
+            memberInfo = objectMapper.readValue(exchange.getBody(), Map.class);
+        } catch (JsonProcessingException e) {
+            throw new SignUpFailedException(memberSignupRequest.getMemberId());
+        }
+
+        model.addAttribute("member", memberInfo);
 
         return "member/signupComplete";
     }
