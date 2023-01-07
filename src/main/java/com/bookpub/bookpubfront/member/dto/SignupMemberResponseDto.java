@@ -5,7 +5,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * member Request DTO개체
@@ -15,8 +14,7 @@ import lombok.ToString;
  **/
 @Getter
 @AllArgsConstructor
-@ToString
-public class MemberSignupRequest {
+public class SignupMemberResponseDto {
     @NotBlank
     @Size(min = 2, max = 200)
     @Pattern(regexp = "^.*(?=.*[가-힣])(?=^.{2,200}).*$")
@@ -59,4 +57,8 @@ public class MemberSignupRequest {
 
     @NotBlank
     private String detailAddress;
+
+    public void setEncodePwd(String encodePwd) {
+        this.pwd = encodePwd;
+    }
 }
