@@ -8,7 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
 /**
- * Some description here
+ * Security 설정 클래스.
  *
  * @author : 임태원
  * @since : 1.0
