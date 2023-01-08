@@ -1,8 +1,8 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,17 +24,17 @@ public class MemberAdaptor {
     private final RestTemplate restTemplate;
     private final GateWayConfig gatewayUrl;
 
-    public ResponseEntity<SignupMemberRequestDto> signupRequest(SignupMemberResponseDto signupRequest) {
+    public ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest) {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<SignupMemberResponseDto> entity = new HttpEntity<>(signupRequest, headers);
+        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, headers);
 
         return restTemplate.exchange(
                 gatewayUrl.getGatewayUrl() + "/api/signup",
                 HttpMethod.POST,
                 entity,
-                SignupMemberRequestDto.class
+                SignupMemberResponseDto.class
         );
     }
 }

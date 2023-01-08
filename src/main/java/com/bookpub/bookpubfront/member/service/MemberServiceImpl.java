@@ -1,8 +1,8 @@
 package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,14 +21,14 @@ public class MemberServiceImpl implements MemberService {
     private final MemberAdaptor memberAdaptor;
 
     @Override
-    public SignupMemberRequestDto signup(SignupMemberResponseDto signupMemberResponseDto) {
-        String originPwd = signupMemberResponseDto.getPwd();
+    public SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto) {
+        String originPwd = signupMemberRequestDto.getPwd();
         String encodePwd = passwordEncoder.encode(originPwd);
 
-        signupMemberResponseDto.setEncodePwd(encodePwd);
+        signupMemberRequestDto.setEncodePwd(encodePwd);
 
-        ResponseEntity<SignupMemberRequestDto> exchange
-                = memberAdaptor.signupRequest(signupMemberResponseDto);
+        ResponseEntity<SignupMemberResponseDto> exchange
+                = memberAdaptor.signupRequest(signupMemberRequestDto);
 
         return exchange.getBody();
     }

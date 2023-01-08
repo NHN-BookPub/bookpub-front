@@ -1,7 +1,7 @@
 package com.bookpub.bookpubfront.member.controller;
 
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.service.MemberService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +27,10 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public String signupComplete(@Valid SignupMemberResponseDto signupMemberResponseDto,
+    public String signupComplete(@Valid SignupMemberRequestDto signupMemberRequestDto,
                                  Model model) {
-        SignupMemberRequestDto memberInfo
-                = memberService.signup(signupMemberResponseDto);
+        SignupMemberResponseDto memberInfo
+                = memberService.signup(signupMemberRequestDto);
 
         model.addAttribute("member", memberInfo);
 
