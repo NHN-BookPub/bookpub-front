@@ -2,9 +2,9 @@ package com.bookpub.bookpubfront.member.dto;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import org.hibernate.validator.constraints.Length;
 
 /**
  * member Request DTO개체
@@ -16,37 +16,35 @@ import lombok.Getter;
 @AllArgsConstructor
 public class SignupMemberResponseDto {
     @NotBlank
-    @Size(min = 2, max = 200)
-    @Pattern(regexp = "^.*(?=.*[가-힣])(?=^.{2,200}).*$")
+    @Pattern(regexp = "^.*(?=.*[가-힣a-z])(?=.{2,200}).*$",
+            message = "이름은 한글 또는 영어 2글자 이상 200글자 이하로 입력해주세요.")
     private String name;
 
     @NotBlank
-    @Size(min = 2, max = 8)
-    @Pattern(regexp = "^.*(?=.*[a-z])(?=.*\\d)(?=^.{2,8}).*$")
+    @Pattern(regexp = "^.*(?=.*[a-z])(?=.*[a-z\\d])(?=.{2,8}).*$",
+            message = "닉네임은 영어는 필수 숫자는 선택으로 2글자 이상 8글자 이하로 입력해주세요.")
     private String nickname;
 
     @NotBlank
-    @Size(min = 6, max = 6)
-    @Pattern(regexp = "^.*(?=.*\\d)(?=^.{6}).*$")
+    @Pattern(regexp = "^.*(?=.*\\d)(?=.{6}).*$", message = "생년월일은 숫자로 6글자 입력해주세요")
     private String birth;
 
     @NotBlank
-    @Size(min = 2, max = 2)
+    @Length(min = 2, max = 2, message = "성별의 길이는 2글자로 입력해주세요")
     private String gender;
 
     @NotBlank
-    @Size(min = 5, max = 20)
-    @Pattern(regexp = "^.*(?=.*[a-z])(?=.*\\d)(?=^.{5,20}).*$")
+    @Pattern(regexp = "^.*(?=.*[a-z])(?=.*\\d)(?=.{5,20}).*$",
+            message = "아이디는 영어와 숫자를 섞어 5글자에서 20글자로 입력해주세요.")
     private String memberId;
 
     @NotBlank
-    @Size(min = 8, max = 20)
-    @Pattern(regexp = "^.*(?=^.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$")
+    @Pattern(regexp = "^.*(?=.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$",
+            message = "패스워드는 대문자, 소문자, 숫자, 특수문자로 구성된 8글자에서 20글자로 입력해주세요.")
     private String pwd;
 
     @NotBlank
-    @Size(min = 11, max = 11)
-    @Pattern(regexp = "^.*(?=.*\\d)(?=^.{11}).*$")
+    @Pattern(regexp = "^.*(?=.*\\d)(?=.{11}).*$", message = "전화번호는 숫자 11글자로 입력해주세요.")
     private String phone;
 
     @NotBlank

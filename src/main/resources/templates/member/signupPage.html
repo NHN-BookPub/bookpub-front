@@ -47,7 +47,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name">이름</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="한글 2글자 이상" value="" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상" value="" required>
                         <div class="invalid-feedback">
                             이름을 입력해주세요.
                         </div>
@@ -153,10 +153,10 @@
     window.addEventListener('load', () => {
         const forms = document.getElementsByClassName('validation-form');
         let emptyReg = /\s/g;
-        let nameReg = /^.*(?=.*[가-힣])(?=^.{2,200}).*$/;
+        let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
         let idReg = /^.*(?=.*[a-z])(?=.*\d)(?=^.{5,20}).*$/;
         let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
-        let nickReg = /^.*(?=.*[a-z])(?=.*\d)(?=^.{2,8}).*$/;
+        let nickReg = /^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$/;
         let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
         let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 
@@ -181,7 +181,7 @@
 
                 let nickVal = document.getElementById('nickname').value;
                 if (!nickReg.test(nickVal) || emptyReg.test(nickVal)) {
-                    alert('닉네임은 영소문자,숫자로 구성된 2글자 이상, 8글자 이하로 생성해주세요.')
+                    alert('닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.')
                     return false;
                 }
 
