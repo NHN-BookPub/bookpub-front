@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookPub</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="../static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader" />
+    <th:block th:include="admin/fragments/adminNavigationBar" />
+
+    <div class="modal fade" id="tagAddModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">태그 등록</h3>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/add/tag" class="was-validated" method="post">
+                        <div class="form-group">
+                            <label for="addTagName">태그 이름</label>
+                            <input type="text" class="form-control" id="addTagName" placeholder="태그 이름" name="addTagName" minlength="2" maxlength="20" required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">최소 2글자, 최대 20글자</div>
+                        </div>
+
+                        <br/>
+
+                        <div class="form-group">
+                            <label for="addColorCode">태그 색상 코드 </label>
+                            <input type="text" class="form-control" id="addColorCode" placeholder="#FFFFFF" name="addColorCode" pattern="#([a-fA-F0-9]{6})" required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">유효하지 않는 색상 코드</div>
+                        </div>
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소</button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="tagModifyModal" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">태그 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/modify/tag" class="was-validated" method="post">
+                        <div class="form-group">
+                            <lable for="modifyTagNo">변경할 태그 번호</lable>
+                            <input type="text" class="form-control" id="modifyTagNo" placeholder="태그 번호" name="modifyTagNo" required>
+                            <div class="valid-feedback">Valid. </div>
+                            <div class="invalid-feedback">번호를 입력 해주세요.</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modifyTagName">태그 이름</label>
+                            <input type="text" class="form-control" id="modifyTagName" placeholder="변경할 이름" name="modifyTagName" minlength="2" maxlength="20" required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">최소 2글자, 최대 20글자</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="modifyColorCode">태그 색상 코드 </label>
+                            <input type="text" class="form-control" id="modifyColorCode" placeholder="#FFFFFF" name="modifyColorCode" pattern="#([a-fA-F0-9]{6})" required>
+                            <div class="valid-feedback">Valid.</div>
+                            <div class="invalid-feedback">유효하지 않는 색상 코드</div>
+                        </div>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소</button>
+                        <button class="btn btn-primary">등록</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">태그 목록</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">태그 등록, 수정, 삭제</li>
+                </ol>
+
+                <hr/>
+
+                <div align="right">
+                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#tagAddModal">태그 등록</button>
+                    <button class="btn btn-info float-right" data-toggle="modal" data-target="#tagModifyModal">태그 수정</button>
+                </div>
+
+                <br/>
+
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <i class="fas fa-table me-1"></i>
+                        태그 리스트
+                    </div>
+                    <div class="card-body">
+                        <table id="datatablesSimple">
+                            <thead>
+                                <tr>
+                                    <th>태그번호</th>
+                                    <th>태그이름</th>
+                                    <th>색상코드</th>
+                                    <th>태그</th>
+                                    <th>비고</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="tag : ${tags}">
+                                    <td th:text="${tag.tagNo}"></td>
+                                    <td th:text="${tag.tagName}"></td>
+                                    <td th:text="${tag.colorCode}"></td>
+                                    <td style="width: 10%; height: 50%; color: white; text-align: center;">
+                                        <div th:style="|background-color: ${tag.colorCode}|">
+                                            <span th:text="${tag.tagName}"/>
+                                        </div>
+                                    </td>
+                                    <td align="center">
+                                        <form th:action="@{/admin/delete/tags/{tagNo}(tagNo=${tag.tagNo})}", method="post">
+                                            <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+        </main>
+
+        <th:block th:include="admin/fragments/adminFooter" />
+    </div>
+
+
+
+</div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/chart-area-demo.js"></script>
+<script src="/static/js/admin/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+
+</html>
