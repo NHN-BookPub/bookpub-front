@@ -1,6 +1,6 @@
 package com.bookpub.bookpubfront.config;
 
-import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 
 /**
@@ -10,11 +10,15 @@ import org.springframework.context.annotation.Configuration;
  * @since : 1.0
  **/
 @Configuration
+@ConfigurationProperties(prefix = "book-pub")
 public class GateWayConfig {
-    @Value("${book-pub.gateway}")
-    private String gatewayUrl;
+    private String gateway;
 
     public String getGatewayUrl() {
-        return gatewayUrl;
+        return gateway;
+    }
+
+    public void setGateway(String gateway) {
+        this.gateway = gateway;
     }
 }
