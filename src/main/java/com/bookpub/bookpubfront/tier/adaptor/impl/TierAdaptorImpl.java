@@ -85,6 +85,7 @@ public class TierAdaptorImpl implements TierAdaptor {
     public List<TierResponseDto> requestTierList() {
         String url = gateway.getGatewayUrl() + TIER_URI;
 
+
         ResponseEntity<List<TierResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
                 new HttpEntity<>(makeheaders()),

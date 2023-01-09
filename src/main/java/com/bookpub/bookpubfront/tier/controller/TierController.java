@@ -6,9 +6,9 @@ import com.bookpub.bookpubfront.tier.dto.response.TierResponseDto;
 import com.bookpub.bookpubfront.tier.service.TierService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -29,13 +29,13 @@ public class TierController {
     /**
      * 관리자가 등급 메인페이지로 갈수있게해준다.
      *
-     * @param request the request
+     * @param model the request
      * @return 등급메인
      */
     @GetMapping("/admin/tiers")
-    public String tierMain(HttpServletRequest request) {
+    public String tierMain(Model model) {
         List<TierResponseDto> tiers = tierService.getTiers();
-        request.setAttribute("tiers", tiers);
+        model.addAttribute("tiers", tiers);
         return "admin/tier/tierMain";
     }
 
@@ -68,14 +68,14 @@ public class TierController {
      * 등급번호를 통해 등급을 조회시 수정페이지로 보냄.
      *
      * @param tierNo  등급번호 기입.
-     * @param request view 로 정보를 보내기위한 request.
+     * @param model view 로 정보를 보내기위한 request.
      * @return the string
      */
     @GetMapping("/admin/tiers/{tierNo}")
     public String tierModifyForm(@PathVariable("tierNo") Integer tierNo,
-                                 HttpServletRequest request) {
+                                 Model model) {
         TierResponseDto tier = tierService.getTier(tierNo);
-        request.setAttribute("tier", tier);
+        model.addAttribute("tier", tier);
 
         return "admin/tier/tierModify";
     }
