@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.category.adaptor.dto.response;
+package com.bookpub.bookpubfront.category.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

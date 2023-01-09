@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.category.adaptor.dto.request;
+package com.bookpub.bookpubfront.category.dto.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
