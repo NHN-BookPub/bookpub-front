@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 태그 수정을 위한 DTO.
  *
  * @author : 박경서
  * @since : 1.0

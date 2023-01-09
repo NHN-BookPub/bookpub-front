@@ -5,7 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Some description here.
+ * 태그 조회를 위한 DTO.
  *
  * @author : 박경서
  * @since : 1.0
