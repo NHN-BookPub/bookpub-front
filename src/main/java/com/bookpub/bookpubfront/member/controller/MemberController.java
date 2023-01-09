@@ -1,19 +1,14 @@
 package com.bookpub.bookpubfront.member.controller;
 
-import com.bookpub.bookpubfront.member.dto.MemberSignupRequest;
+import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.service.MemberService;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * 멤버 api 컨트롤러.
@@ -24,10 +19,7 @@ import org.springframework.web.client.RestTemplate;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
-    private final RestTemplate restTemplate;
-
-    @Value("${book-pub.gateway}")
-    private String gatewayUrl;
+    private final MemberService memberService;
 
     @GetMapping("/signup")
     public String signupPageForm() {
@@ -35,22 +27,12 @@ public class MemberController {
     }
 
     @PostMapping("/signup")
-    public String signupComplete(@Valid MemberSignupRequest memberSignupRequest,
+    public String signupComplete(@Valid SignupMemberRequestDto signupMemberRequestDto,
                                  Model model) {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<MemberSignupRequest> entity = new HttpEntity<>(memberSignupRequest, headers);
+        SignupMemberResponseDto memberInfo
+                = memberService.signup(signupMemberRequestDto);
 
-        ResponseEntity<String> exchange = restTemplate.exchange(
-                gatewayUrl + "/shopping/signup",
-                HttpMethod.POST,
-                entity,
-                String.class
-        );
-
-        String body = exchange.getBody();
-
-        model.addAttribute("body", body);
+        model.addAttribute("member", memberInfo);
 
         return "member/signupComplete";
     }
