@@ -5,8 +5,6 @@ import com.bookpub.bookpubfront.couponpolicy.adaptor.CouponPolicyAdaptor;
 import com.bookpub.bookpubfront.couponpolicy.dto.request.CreateCouponPolicyRequestDto;
 import com.bookpub.bookpubfront.couponpolicy.dto.request.ModifyCouponPolicyRequestDto;
 import com.bookpub.bookpubfront.couponpolicy.dto.response.GetCouponPolicyResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -29,7 +27,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
     private final GateWayConfig gateWayConfig;
-    private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
     private static final String COUPON_POLICY_URL = "/api/coupon-policies";
 
@@ -37,13 +34,12 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void requestAddCouponPolicy(CreateCouponPolicyRequestDto createRequestDto)
-            throws JsonProcessingException {
-        String request = objectMapper.writeValueAsString(createRequestDto);
+    public void requestAddCouponPolicy(CreateCouponPolicyRequestDto createRequestDto) {
 
         String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_URL;
 
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeaders());
+        HttpEntity<CreateCouponPolicyRequestDto> httpEntity =
+                new HttpEntity<>(createRequestDto, makeHeaders());
 
         ResponseEntity<Void> response = restTemplate.exchange(url,
                 HttpMethod.POST,
@@ -57,13 +53,12 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void requestModifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto)
-            throws JsonProcessingException {
-        String request = objectMapper.writeValueAsString(modifyRequestDto);
+    public void requestModifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto) {
 
         String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_URL;
 
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeaders());
+        HttpEntity<ModifyCouponPolicyRequestDto> httpEntity =
+                new HttpEntity<>(modifyRequestDto, makeHeaders());
 
         ResponseEntity<Void> response = restTemplate.exchange(url,
                 HttpMethod.PUT,

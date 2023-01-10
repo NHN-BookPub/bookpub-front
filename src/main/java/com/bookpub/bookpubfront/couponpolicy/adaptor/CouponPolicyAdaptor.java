@@ -3,7 +3,6 @@ package com.bookpub.bookpubfront.couponpolicy.adaptor;
 import com.bookpub.bookpubfront.couponpolicy.dto.request.CreateCouponPolicyRequestDto;
 import com.bookpub.bookpubfront.couponpolicy.dto.request.ModifyCouponPolicyRequestDto;
 import com.bookpub.bookpubfront.couponpolicy.dto.response.GetCouponPolicyResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 /**
@@ -19,19 +18,15 @@ public interface CouponPolicyAdaptor {
      * 쿠폰정책을 등록하기 위한 메소드입니다.
      *
      * @param createRequestDto 쿠폰정책 생성에 필요한 정보들을 담은 Dto
-     * @throws JsonProcessingException json 관련 에러
      */
-    void requestAddCouponPolicy(CreateCouponPolicyRequestDto createRequestDto)
-            throws JsonProcessingException;
+    void requestAddCouponPolicy(CreateCouponPolicyRequestDto createRequestDto);
 
     /**
      * 쿠폰정책을 수정하기 위한 메소드입니다.
      *
      * @param modifyRequestDto 쿠폰정책 수정에 필요한 정보들을 담은 Dto.
-     * @throws JsonProcessingException json 관련 에러
      */
-    void requestModifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto)
-            throws JsonProcessingException;
+    void requestModifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto);
 
     /**
      * 쿠폰정책 단건 조회를 위한 메소드입니다.
@@ -45,7 +40,6 @@ public interface CouponPolicyAdaptor {
      * 쿠폰정책 리스트 조회를 위한 메소드입니다.
      *
      * @return 쿠폰정책 정보들을 담은 GetCouponPolicyResponseDto 리스트
-     * @throws JsonProcessingException json 관련 에러
      */
-    List<GetCouponPolicyResponseDto> requestCouponPolicies() throws JsonProcessingException;
+    List<GetCouponPolicyResponseDto> requestCouponPolicies();
 }
