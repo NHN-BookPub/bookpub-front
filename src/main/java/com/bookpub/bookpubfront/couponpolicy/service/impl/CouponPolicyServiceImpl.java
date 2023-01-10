@@ -5,7 +5,6 @@ import com.bookpub.bookpubfront.couponpolicy.dto.request.CreateCouponPolicyReque
 import com.bookpub.bookpubfront.couponpolicy.dto.request.ModifyCouponPolicyRequestDto;
 import com.bookpub.bookpubfront.couponpolicy.dto.response.GetCouponPolicyResponseDto;
 import com.bookpub.bookpubfront.couponpolicy.service.CouponPolicyService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -25,8 +24,7 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
      * {@inheritDoc}
      */
     @Override
-    public void createCouponPolicy(CreateCouponPolicyRequestDto createRequestDto)
-            throws JsonProcessingException {
+    public void createCouponPolicy(CreateCouponPolicyRequestDto createRequestDto) {
         couponPolicyAdaptor.requestAddCouponPolicy(createRequestDto);
     }
 
@@ -34,8 +32,7 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
      * {@inheritDoc}
      */
     @Override
-    public void modifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto)
-            throws JsonProcessingException {
+    public void modifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto) {
         couponPolicyAdaptor.requestModifyCouponPolicy(modifyRequestDto);
     }
 
@@ -43,7 +40,7 @@ public class CouponPolicyServiceImpl implements CouponPolicyService {
      * {@inheritDoc}
      */
     @Override
-    public List<GetCouponPolicyResponseDto> getCouponPolicies() throws JsonProcessingException {
+    public List<GetCouponPolicyResponseDto> getCouponPolicies() {
         return couponPolicyAdaptor.requestCouponPolicies();
     }
 }
