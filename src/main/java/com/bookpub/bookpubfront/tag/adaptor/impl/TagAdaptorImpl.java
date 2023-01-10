@@ -61,11 +61,11 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity entity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
-                String.class
+                Void.class
         );
 
         checkError(response);
@@ -84,11 +84,11 @@ public class TagAdaptorImpl implements TagAdaptor {
 
         HttpEntity entity = new HttpEntity<>(request, headers);
 
-        ResponseEntity<String> response = restTemplate.exchange(
+        ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 entity,
-                String.class
+                Void.class
         );
 
         checkError(response);
