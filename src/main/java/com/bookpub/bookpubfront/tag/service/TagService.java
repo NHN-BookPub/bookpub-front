@@ -3,7 +3,6 @@ package com.bookpub.bookpubfront.tag.service;
 import com.bookpub.bookpubfront.tag.dto.AddTagRequestDto;
 import com.bookpub.bookpubfront.tag.dto.GetTagResponseDto;
 import com.bookpub.bookpubfront.tag.dto.ModifyTagRequestDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 /**
@@ -18,9 +17,8 @@ public interface TagService {
      * 전체 태그들을 찾는 메서드.
      *
      * @return 전체 태그들
-     * @throws JsonProcessingException Json 파싱 중 발생하는 오류
      */
-    List<GetTagResponseDto> findAllTags() throws JsonProcessingException;
+    List<GetTagResponseDto> findAllTags();
 
     /**
      * 태그를 등록하는 메서드.

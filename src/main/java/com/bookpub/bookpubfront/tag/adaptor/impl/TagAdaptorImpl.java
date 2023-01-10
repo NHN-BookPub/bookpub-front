@@ -5,11 +5,9 @@ import com.bookpub.bookpubfront.tag.adaptor.TagAdaptor;
 import com.bookpub.bookpubfront.tag.dto.AddTagRequestDto;
 import com.bookpub.bookpubfront.tag.dto.GetTagResponseDto;
 import com.bookpub.bookpubfront.tag.dto.ModifyTagRequestDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.Arrays;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -30,28 +28,24 @@ import org.springframework.web.client.RestTemplate;
 public class TagAdaptorImpl implements TagAdaptor {
 
     private final RestTemplate restTemplate;
-    private final ObjectMapper objectMapper;
     private final GateWayConfig gateWayConfig;
 
     private static final String API_PATH = "/api/tags";
 
     /**
      * {@inheritDoc}
-     *
-     * @throws JsonProcessingException Json 파싱 중 발생하는 오류
      */
     @Override
-    public List<GetTagResponseDto> getTags() throws JsonProcessingException {
+    public List<GetTagResponseDto> getTags() {
         String url = gateWayConfig.getGatewayUrl() + API_PATH;
 
-        ResponseEntity<String> response = restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                null,
-                String.class
-        );
-
-        return Arrays.asList(objectMapper.readValue(response.getBody(), GetTagResponseDto[].class));
+        return restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    new HttpEntity<>(makeHeaders()),
+                    new ParameterizedTypeReference<List<GetTagResponseDto>>() {
+                    })
+                .getBody();
     }
 
     /**

@@ -5,7 +5,6 @@ import com.bookpub.bookpubfront.tag.dto.AddTagRequestDto;
 import com.bookpub.bookpubfront.tag.dto.GetTagResponseDto;
 import com.bookpub.bookpubfront.tag.dto.ModifyTagRequestDto;
 import com.bookpub.bookpubfront.tag.service.TagService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,11 +23,9 @@ public class TagServiceImpl implements TagService {
 
     /**
      * {@inheritDoc}
-     *
-     * @throws JsonProcessingException Json 파싱 중 발생하는 오류
      */
     @Override
-    public List<GetTagResponseDto> findAllTags() throws JsonProcessingException {
+    public List<GetTagResponseDto> findAllTags()  {
         return tagAdaptor.getTags();
     }
 
