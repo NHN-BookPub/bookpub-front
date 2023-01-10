@@ -30,7 +30,6 @@ public class AdminCouponPolicyController {
      *
      * @param model 뷰에서 띄워줄 정보를 담은 request
      * @return 쿠폰 정책 리스트 조회 뷰
-     * @throws JsonProcessingException json 관련 에러
      */
     @GetMapping("/coupon/coupon-policies")
     public String goCouponPolicy(Model model) throws JsonProcessingException {
@@ -44,7 +43,6 @@ public class AdminCouponPolicyController {
      *
      * @param createRequestDto 쿠폰정책 등록에 필요한 정보를 담은 Dto
      * @return 쿠폰 정책 리스트 조회 뷰
-     * @throws JsonProcessingException json 관련 에러
      */
     @PostMapping("/coupon/coupon-policies")
     public String addCouponPolicy(@ModelAttribute CreateCouponPolicyRequestDto createRequestDto)
@@ -59,7 +57,6 @@ public class AdminCouponPolicyController {
      *
      * @param modifyRequestDto 쿠폰정책 수정에 필요한 정보를 담은 Dto
      * @return 쿠폰 정책 리스트 조회 뷰
-     * @throws JsonProcessingException json 관련 에러
      */
     @PostMapping("/coupon/coupon-policies/modify")
     public String modifyCouponPolicy(@ModelAttribute ModifyCouponPolicyRequestDto modifyRequestDto)
