@@ -40,6 +40,13 @@ public interface CategoryService {
     List<GetCategoryResponseDto> getCategories();
 
     /**
+     * 최상위 카테고리 조회하는 메소드.
+     *
+     * @return 최상위 카테고리 반환.
+     */
+    List<GetCategoryResponseDto> getParentCategories();
+
+    /**
      * 단건 카테고리 조회하는 메소드.
      *
      * @param categoryNo 카테고리 번호.

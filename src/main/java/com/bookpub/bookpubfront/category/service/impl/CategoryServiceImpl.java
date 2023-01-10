@@ -53,6 +53,14 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
+    public List<GetCategoryResponseDto> getParentCategories() {
+        return categoryAdaptor.parentCategoryList();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GetCategoryResponseDto getCategory(Integer categoryNo) {
         return categoryAdaptor.requestCategory(categoryNo);
     }

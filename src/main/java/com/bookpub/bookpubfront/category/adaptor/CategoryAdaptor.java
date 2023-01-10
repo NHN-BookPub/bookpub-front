@@ -40,6 +40,20 @@ public interface CategoryAdaptor {
     List<GetCategoryResponseDto> requestCategoryList();
 
     /**
+     * 노출 여부 true 인 카테고리 리스트 api 서버에서 받아오는 메소드.
+     *
+     * @return 노출 여부 true 인 카테고리 리스트
+     */
+    List<GetCategoryResponseDto> requestCategoryDisplayedTrueList();
+
+    /**
+     * 최상의 카테고리 api 서버에서 받아오는 메소드.
+     *
+     * @return 최상의 카테고리 리스트
+     */
+    List<GetCategoryResponseDto> parentCategoryList();
+
+    /**
      * 카테고리 단건 api 서버에서 받아오는 메소드.
      *
      * @param categoryNo 카테고리 번호

@@ -96,6 +96,40 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
      * {@inheritDoc}
      */
     @Override
+    public List<GetCategoryResponseDto> requestCategoryDisplayedTrueList() {
+        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "?display=true";
+
+        ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHttpHeaders()),
+                new ParameterizedTypeReference<>() {
+                });
+
+        checkError(response);
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetCategoryResponseDto> parentCategoryList() {
+        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent";
+
+        ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHttpHeaders()),
+                new ParameterizedTypeReference<>() {
+                });
+
+        checkError(response);
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GetCategoryResponseDto requestCategory(Integer categoryNo) {
 
         String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/" + categoryNo;
