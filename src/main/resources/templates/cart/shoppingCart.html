@@ -12,68 +12,87 @@
 
     <link href="static/css/cart/shoppingCart.css" rel="stylesheet"/>
     <link href="static/css/main/styles.css" rel="stylesheet" />
+    <script src="static/js/cart/shoppingCart.js" ></script>
+
+    <script>
+
+    </script>
 </head>
 <body>
 
 <div class="main">
     <th:block th:include="main/fragments/mainHeader" />
 
-    <div>
+    <div class="cart-body " style="padding-top: 5%; padding-bottom: 5%; width: 80%; margin: auto">
         <h1>장바구니</h1>
-        <h2 class="sub-heading">20000원 부터 무료 배송</h2>
+        <br/>
 
-        <section class="shopping-cart">
-            <ol class="ui-list shopping-cart--list" id="shopping-cart--list">
-
-                <script id="shopping-cart--list-item-template" type="text/template">
-                    <li class="_grid shopping-cart--list-item">
-                        <div class="_column product-image">
-                            <img class="product-image--img" src="{{=img}}" alt="Item image" />
-                        </div>
-                        <div class="_column product-info">
-                            <h4 class="product-name">{{=name}}</h4>
-                            <p class="product-desc">{{=desc}}</p>
-                            <div class="price product-single-price">${{=price}}</div>
-                        </div>
-                        <div class="_column product-modifiers" data-product-price="{{=price}}">
-                            <div class="_grid">
-                                <button class="_btn _column product-subtract">&minus;</button>
-                                <div class="_column product-qty">0</div>
-                                <button class="_btn _column product-plus">&plus;</button>
+        <!--   redis session or cookie 저장된 값들을 가지고 다시 구현     -->
+        <table id="cart" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th style="width:50%">상품</th>
+                    <th style="width:10%">정가</th>
+                    <th style="width:8%">수량</th>
+                    <th style="width:22%" class="text-center">판매가</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-th="Product">
+                        <div class="row">
+                            <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+                            <div class="col-sm-10">
+                                <h4 class="nomargin">Product 1</h4>
+                                <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
                             </div>
-                            <button class="_btn entypo-trash product-remove">Remove</button>
-                            <div class="price product-total-price">$0.00</div>
                         </div>
-                    </li>
-                </script>
+                    </td>
+                    <td data-th="Price">2000원</td>
+                    <td data-th="Quantity">
+                        <input type="number" min="1" max="999" class="form-control text-center" value="1">
+                    </td>
+                    <td data-th="Subtotal" class="text-center">2000원</td>
+                </tr>
 
-            </ol>
-
-            <footer class="_grid cart-totals">
-                <div class="_column subtotal" id="subtotalCtr">
-                    <div class="cart-totals-key">Subtotal</div>
-                    <div class="cart-totals-value">$0.00</div>
-                </div>
-                <div class="_column shipping" id="shippingCtr">
-                    <div class="cart-totals-key">Shipping</div>
-                    <div class="cart-totals-value">$0.00</div>
-                </div>
-                <div class="_column taxes" id="taxesCtr">
-                    <div class="cart-totals-key">Taxes (6%)</div>
-                    <div class="cart-totals-value">$0.00</div>
-                </div>
-                <div class="_column total" id="totalCtr">
-                    <div class="cart-totals-key">Total</div>
-                    <div class="cart-totals-value">$0.00</div>
-                </div>
-                <div class="_column checkout">
-                    <button class="_btn checkout-btn entypo-forward">Checkout</button>
-                </div>
-            </footer>
-
-        </section>
+                <tr>
+                    <td data-th="Product">
+                        <div class="row">
+                            <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+                            <div class="col-sm-10">
+                                <h4 class="nomargin">Product 2</h4>
+                                <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-th="Price">1100원</td>
+                    <td data-th="Quantity">
+                        <input type="number" min="1" max="999" class="form-control text-center" value="1">
+                    </td>
+                    <td data-th="Subtotal" class="text-center">1000원</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><a href="/" class="btn btn-warning"><i class="fa fa-angle-left"></i> 계속 쇼핑하기</a></td>
+                    <td colspan="2" class="hidden-xs"></td>
+<!--                    <td class="hidden-xs text-center"><strong>총</strong> <strong>38000</strong><strong>원</strong></td>-->
+                    <td align="center"><a href="/order" class="btn btn-primary btn-block"> 주문하기 <i class="fa fa-angle-right"></i></a></td>
+                </tr>
+            </tfoot>
+        </table>
 
     </div>
+
+    <div class="cartInfo" style="margin: auto; width: 80%; padding-top: 2%; padding-bottom: 2%; background-color: whitesmoke">
+        <ul>
+            <li> <span style="color: darkseagreen"> 장바구니는 하루(24시간)동안만 저장됩니다. </span></li>
+            <li> <span style="color: firebrick"> 비회원주문은 포인트가 적립되지 않습니다.</span> </li>
+            <li> 배송지역에 따라 배송 기간이 달라질 수 있습니다. </li>
+        </ul>
+    </div>
+
+    <div style="padding-top: 5%"></div>
 
     <th:block th:include="main/fragments/mainFooter"/>
 </div>
