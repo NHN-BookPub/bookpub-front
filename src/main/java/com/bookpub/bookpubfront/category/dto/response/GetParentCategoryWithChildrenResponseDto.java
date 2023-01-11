@@ -2,6 +2,7 @@ package com.bookpub.bookpubfront.category.dto.response;
 
 import java.util.List;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 /**
@@ -11,6 +12,7 @@ import lombok.Setter;
  * @since : 1.0
  **/
 @Getter
+@NoArgsConstructor
 public class GetParentCategoryWithChildrenResponseDto {
 
     private Integer categoryNo;
