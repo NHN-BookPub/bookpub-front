@@ -7,23 +7,155 @@
 </head>
 <body>
 <div id="layoutSidenav_nav">
-  <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
-    <div class="sb-sidenav-menu">
-      <div class="nav">
+    <nav class="sb-sidenav accordion sb-sidenav-dark" id="sidenavAccordion">
+        <div class="sb-sidenav-menu">
+            <div class="nav">
 
-        <div class="sb-sidenav-menu-heading">통계</div>
-        <!--      --------------------------------------------------------------------------          -->
+                <div class="sb-sidenav-menu-heading">통계</div>
+                <!--      --------------------------------------------------------------------------          -->
 
-        <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSales" aria-expanded="false" aria-controls="collapseSales">
-          <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-bar"></i></div>
-          매출/매입
-          <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
-        </a>
-        <div class="collapse" id="collapseSales" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
-          <nav class="sb-sidenav-menu-nested nav">
-            <a class="nav-link" href="layout-static.html">매출 통계</a>
-            <a class="nav-link" href="layout-sidenav-light.html">매입 통계</a>
-          </nav>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseSales" aria-expanded="false" aria-controls="collapseSales">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-chart-bar"></i></div>
+                    매출/매입
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseSales" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-static.html">매출 통계</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">매입 통계</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+
+                <div class="sb-sidenav-menu-heading">관리자메뉴</div>
+
+                <!--      --------------------------------------------------------------------------          -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseMembers" aria-expanded="false" aria-controls="collapseMembers">
+                    <div class="sb-nav-link-icon"><i class="fas fa-circle-user"></i></div>
+                    회원
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseMembers" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">회원목록</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">회원등급목록</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseProducts" aria-expanded="false" aria-controls="collapseProducts">
+                    <div class="sb-nav-link-icon"><i class="fas fa-book-open"></i></div>
+                    상품
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseProducts" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-static.html">상품목록</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">구독상품목록</a>
+                        <a class="nav-link" href="/admin/tagList">태그목록</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCategories" aria-expanded="false" aria-controls="collapseCategories">
+                    <div class="sb-nav-link-icon"><i class="fa fa-hashtag" aria-hidden="true"></i></div>
+                    카테고리
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseCategories" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">카테고리목록</a>
+                    </nav>
+                </div>
+
+
+                <!--      --------------------------------------------------------------------------          -->
+
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCustomerServices" aria-expanded="false" aria-controls="collapseCustomerServices">
+                    <div class="sb-nav-link-icon"><i class="fa-sharp fa-solid fa-headset"></i></div>
+                    고객서비스
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseCustomerServices" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">FAQ</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">공지사항</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseReviews" aria-expanded="false" aria-controls="collapseReviews">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-file-pen"></i></div>
+                    리뷰
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseReviews" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">리뷰목록</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseCoupons" aria-expanded="false" aria-controls="collapseCoupons">
+                    <div class="sb-nav-link-icon"><i class="fa fa-credit-card"></i></div>
+                    쿠폰
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseCoupons" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">쿠폰목록</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">쿠폰지급</a>
+                        <a class="nav-link" href="/admin/coupon/coupon-policies">쿠폰정책</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseBookPubOrders" aria-expanded="false" aria-controls="collapseBookPubOrders">
+                    <div class="sb-nav-link-icon"><i class="fa-solid fa-clipboard-list"></i></div>
+                    주문
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseBookPubOrders" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">주문목록</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">배송비 정책 관리</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">포장비 정책 관리</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapsePoints" aria-expanded="false" aria-controls="collapsePoints">
+                    <div class="sb-nav-link-icon"><i class="fa-sharp fa-solid fa-p"></i></div>
+                    포인트
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapsePoints" aria-labelledby="headingTwo" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-sidenav-light.html">포인트목록</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">포인트 정책 관리</a>
+                    </nav>
+                </div>
+
+                <!--      --------------------------------------------------------------------------          -->
+
+                <!--      --------------------------------------------------------------------------          -->
+                <div class="sb-sidenav-menu-heading">문의</div>
+                <a class="nav-link collapsed" href="#" data-bs-toggle="collapse" data-bs-target="#collapseInquiries" aria-expanded="false" aria-controls="collapseInquiries">
+                    <div class="sb-nav-link-icon"><i class="fa fa-question-circle" aria-hidden="true"></i></div>
+                    문의
+                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
+                </a>
+                <div class="collapse" id="collapseInquiries" aria-labelledby="headingOne" data-bs-parent="#sidenavAccordion">
+                    <nav class="sb-sidenav-menu-nested nav">
+                        <a class="nav-link" href="layout-static.html">1:1 문의</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">1:1 채팅</a>
+                        <a class="nav-link" href="layout-sidenav-light.html">상품문의</a>
+                    </nav>
+                </div>
+
+            </div>
         </div>
 
         <!--      --------------------------------------------------------------------------          -->
