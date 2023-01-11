@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookPub</title>
+
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="static/css/main/styles.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <link href="static/css/cart/shoppingCart.css" rel="stylesheet"/>
+    <link href="static/css/main/styles.css" rel="stylesheet" />
+</head>
+<body>
+
+<div class="main">
+    <th:block th:include="main/fragments/mainHeader" />
+
+    <div>
+        <h1>장바구니</h1>
+        <h2 class="sub-heading">20000원 부터 무료 배송</h2>
+
+        <section class="shopping-cart">
+            <ol class="ui-list shopping-cart--list" id="shopping-cart--list">
+
+                <script id="shopping-cart--list-item-template" type="text/template">
+                    <li class="_grid shopping-cart--list-item">
+                        <div class="_column product-image">
+                            <img class="product-image--img" src="{{=img}}" alt="Item image" />
+                        </div>
+                        <div class="_column product-info">
+                            <h4 class="product-name">{{=name}}</h4>
+                            <p class="product-desc">{{=desc}}</p>
+                            <div class="price product-single-price">${{=price}}</div>
+                        </div>
+                        <div class="_column product-modifiers" data-product-price="{{=price}}">
+                            <div class="_grid">
+                                <button class="_btn _column product-subtract">&minus;</button>
+                                <div class="_column product-qty">0</div>
+                                <button class="_btn _column product-plus">&plus;</button>
+                            </div>
+                            <button class="_btn entypo-trash product-remove">Remove</button>
+                            <div class="price product-total-price">$0.00</div>
+                        </div>
+                    </li>
+                </script>
+
+            </ol>
+
+            <footer class="_grid cart-totals">
+                <div class="_column subtotal" id="subtotalCtr">
+                    <div class="cart-totals-key">Subtotal</div>
+                    <div class="cart-totals-value">$0.00</div>
+                </div>
+                <div class="_column shipping" id="shippingCtr">
+                    <div class="cart-totals-key">Shipping</div>
+                    <div class="cart-totals-value">$0.00</div>
+                </div>
+                <div class="_column taxes" id="taxesCtr">
+                    <div class="cart-totals-key">Taxes (6%)</div>
+                    <div class="cart-totals-value">$0.00</div>
+                </div>
+                <div class="_column total" id="totalCtr">
+                    <div class="cart-totals-key">Total</div>
+                    <div class="cart-totals-value">$0.00</div>
+                </div>
+                <div class="_column checkout">
+                    <button class="_btn checkout-btn entypo-forward">Checkout</button>
+                </div>
+            </footer>
+
+        </section>
+
+    </div>
+
+    <th:block th:include="main/fragments/mainFooter"/>
+</div>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="static/js/main/scripts.js"></script>
+
+</body>
+</html>
