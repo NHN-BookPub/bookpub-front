@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.member.dto;
+package com.bookpub.bookpubfront.member.dto.response;
 
 import lombok.Getter;
 
