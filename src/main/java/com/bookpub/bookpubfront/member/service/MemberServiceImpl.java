@@ -1,8 +1,12 @@
 package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.AuthMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.AuthMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.LoginMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -20,6 +24,9 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto) {
         String originPwd = signupMemberRequestDto.getPwd();
@@ -31,5 +38,15 @@ public class MemberServiceImpl implements MemberService {
                 = memberAdaptor.signupRequest(signupMemberRequestDto);
 
         return exchange.getBody();
+    }
+
+    @Override
+    public AuthMemberResponseDto auth(AuthMemberRequestDto authMemberRequestDto) {
+        return memberAdaptor.tokenRequest(authMemberRequestDto).getBody();
+    }
+
+    @Override
+    public LoginMemberResponseDto login(LoginMemberRequestDto loginMemberRequestDto) {
+        return memberAdaptor.loginRequest(loginMemberRequestDto).getBody();
     }
 }

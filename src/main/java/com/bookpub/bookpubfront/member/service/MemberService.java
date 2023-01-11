@@ -1,7 +1,11 @@
 package com.bookpub.bookpubfront.member.service;
 
-import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.AuthMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.AuthMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.LoginMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 
 /**
  * 멤버 도메인의 서비스.
@@ -20,4 +24,7 @@ public interface MemberService {
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
 
+    AuthMemberResponseDto auth(AuthMemberRequestDto authMemberRequestDto);
+
+    LoginMemberResponseDto login(LoginMemberRequestDto loginMemberRequestDto);
 }
