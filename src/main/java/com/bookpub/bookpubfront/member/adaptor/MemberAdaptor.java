@@ -1,8 +1,12 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.AuthMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.AuthMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.LoginMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -24,11 +28,9 @@ public class MemberAdaptor {
     private final RestTemplate restTemplate;
     private final GateWayConfig gatewayUrl;
 
-    public ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest) {
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, headers);
+    public ResponseEntity<SignupMemberResponseDto> signupRequest(
+            SignupMemberRequestDto signupRequest) {
+        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, makeHeader());
 
         return restTemplate.exchange(
                 gatewayUrl.getGatewayUrl() + "/api/signup",
@@ -36,5 +38,36 @@ public class MemberAdaptor {
                 entity,
                 SignupMemberResponseDto.class
         );
+    }
+
+    public ResponseEntity<LoginMemberResponseDto> loginRequest(
+            LoginMemberRequestDto loginRequest) {
+        HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
+
+        return restTemplate.exchange(
+                gatewayUrl.getGatewayUrl() + "/api/login",
+                HttpMethod.GET,
+                entity,
+                LoginMemberResponseDto.class
+        );
+    }
+
+    public ResponseEntity<AuthMemberResponseDto> tokenRequest(
+            AuthMemberRequestDto authRequest) {
+        HttpEntity<AuthMemberRequestDto> entity = new HttpEntity<>(authRequest, makeHeader());
+
+        return restTemplate.exchange(
+                gatewayUrl.getGatewayUrl() + "/auth/token/issue",
+                HttpMethod.POST,
+                entity,
+                AuthMemberResponseDto.class
+        );
+    }
+
+
+    public HttpHeaders makeHeader() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        return headers;
     }
 }
