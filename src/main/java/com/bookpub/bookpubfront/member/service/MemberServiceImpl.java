@@ -1,9 +1,15 @@
 package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -31,5 +37,30 @@ public class MemberServiceImpl implements MemberService {
                 = memberAdaptor.signupRequest(signupMemberRequestDto);
 
         return exchange.getBody();
+    }
+
+    @Override
+    public void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto) {
+        memberAdaptor.requestMemberNickNameChange(memberNo, dto);
+    }
+
+    @Override
+    public void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto) {
+        memberAdaptor.requestMemberEmailChange(memberNo, dto);
+    }
+
+    @Override
+    public MemberDetailResponseDto getMember(Long memberNo){
+        return memberAdaptor.requestMemberDetails(memberNo);
+    }
+
+    @Override
+    public PageResponse<MemberResponseDto> getMembers(Pageable pageable){
+        return memberAdaptor.requestMembers(pageable);
+    }
+
+    @Override
+    public void memberBlock(Long memberNo){
+        memberAdaptor.requestMemberBlock(memberNo);
     }
 }

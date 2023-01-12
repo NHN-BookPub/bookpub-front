@@ -1,7 +1,13 @@
 package com.bookpub.bookpubfront.member.service;
 
-import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.utils.PageResponse;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 멤버 도메인의 서비스.
@@ -20,4 +26,13 @@ public interface MemberService {
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
 
+    void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto);
+
+    void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto);
+
+    MemberDetailResponseDto getMember(Long memberNo);
+
+    PageResponse<MemberResponseDto> getMembers(Pageable pageable);
+
+    void memberBlock(Long memberNo);
 }

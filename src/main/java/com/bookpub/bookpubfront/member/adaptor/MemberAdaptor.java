@@ -1,16 +1,14 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
-import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.SignupMemberRequestDto;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.utils.PageResponse;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * 멤버의 서버간 데이터 송신 및 수신을 담당하는 클래스.
@@ -18,23 +16,17 @@ import org.springframework.web.client.RestTemplate;
  * @author : 임태원
  * @since : 1.0
  **/
-@Component
-@RequiredArgsConstructor
-public class MemberAdaptor {
-    private final RestTemplate restTemplate;
-    private final GateWayConfig gatewayUrl;
+public interface MemberAdaptor {
 
-    public ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest) {
+    ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest);
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, headers);
+    void requestMemberNickNameChange(Long memberNo, ModifyMemberNickNameRequestDto requestDto);
 
-        return restTemplate.exchange(
-                gatewayUrl.getGatewayUrl() + "/api/signup",
-                HttpMethod.POST,
-                entity,
-                SignupMemberResponseDto.class
-        );
-    }
+    void requestMemberEmailChange(Long memberNo, ModifyMemberEmailRequestDto requestDto);
+
+    MemberDetailResponseDto requestMemberDetails(Long memberNo);
+
+    PageResponse<MemberResponseDto> requestMembers(Pageable pageable);
+
+    void requestMemberBlock(Long memberNo);
 }
