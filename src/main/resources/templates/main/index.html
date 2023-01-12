@@ -16,11 +16,18 @@
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 
     <style>
+        .def {
+            display: none;
+        }
 
+        abc:hover .def {
+            display: block;
+        }
     </style>
 </head>
 <body>
-    <th:block th:include="main/fragments/mainHeader"/>
+<!--    <th:block th:include="main/fragments/mainHeader(category)"/>-->
+    <th:block th:replace="~{main/fragments/mainHeader :: main_header(${category})}"/>
 
 <!-- Section-->
 <section>

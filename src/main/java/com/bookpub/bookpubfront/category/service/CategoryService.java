@@ -3,6 +3,7 @@ package com.bookpub.bookpubfront.category.service;
 import com.bookpub.bookpubfront.category.dto.request.CreateCategoryRequestDto;
 import com.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
+import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
@@ -53,5 +54,12 @@ public interface CategoryService {
      * @return 해당 카테고리 정보 반환.
      */
     GetCategoryResponseDto getCategory(Integer categoryNo);
+
+    /**
+     * 최상위 카테고리와 그 하위 카테고리 조회하는 메소드.
+     *
+     * @return 최상위 카테고리와 그 하위 카테고리 반환.
+     */
+    List<GetParentCategoryWithChildrenResponseDto> getParentCategoryWithChildren();
 
 }

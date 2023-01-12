@@ -4,6 +4,7 @@ import com.bookpub.bookpubfront.category.adaptor.CategoryAdaptor;
 import com.bookpub.bookpubfront.category.dto.request.CreateCategoryRequestDto;
 import com.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
+import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.bookpub.bookpubfront.category.service.CategoryService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
@@ -54,7 +55,7 @@ public class CategoryServiceImpl implements CategoryService {
      */
     @Override
     public List<GetCategoryResponseDto> getParentCategories() {
-        return categoryAdaptor.parentCategoryList();
+        return categoryAdaptor.requestParentCategoryList();
     }
 
     /**
@@ -63,5 +64,13 @@ public class CategoryServiceImpl implements CategoryService {
     @Override
     public GetCategoryResponseDto getCategory(Integer categoryNo) {
         return categoryAdaptor.requestCategory(categoryNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetParentCategoryWithChildrenResponseDto> getParentCategoryWithChildren() {
+        return categoryAdaptor.requestParentWithChildList();
     }
 }

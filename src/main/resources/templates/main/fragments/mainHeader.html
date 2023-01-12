@@ -2,18 +2,9 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-
-    <style>
-        .def {
-            display: none;
-        }
-
-        abc:hover .def{
-            display: block;
-        }
-    </style>
 </head>
 <body>
+<th:block th:fragment="main_header(category)">
 <nav class="navbar navbar-expand-lg navbar-light bg-black">
     <div class="container px-4 px-lg-5">
         <a class="navbar-brand" style="color: white" href="/">BookPub</a>
@@ -90,38 +81,17 @@
                         <div class="aaa">
                             <abc class="nav-link" style="color:white" aria-current="page">
                                 분야찾기
-                                <ul class ="def">
-                                    <h5>국내도서</h5>
-                                    <span>추리소설</span>
-                                    <span>판타지소설</span> <br/>
-                                    <h5>해외</h5>
-                                    <span>추리소설</span>
-                                    <span>판타지소설</span>
+                                <th:block th:if="${category != null}">
+                                    <ul class ="def">
+                                        <th:block th:each="parent: ${category}">
+                                        <h5 th:text="${parent.categoryName}"></h5>
+                                            <th:block th:each="child: ${parent.childList}">
+                                                <a th:text="${child.categoryName}" th:href="@{/category/{id}(id=${child.categoryNo})}"></a><br/>
+                                            </th:block>
+                                        </th:block>
+                                    </ul>
+                                </th:block>
 
-<!--                                    <table style="border: 1px">-->
-<!--                                        <thead>-->
-<!--                                            <th>국내도서</th>-->
-<!--                                            <th>외국도서</th>-->
-<!--                                        </thead>-->
-<!--                                        <tbody>-->
-<!--                                            <td>추리 소설</td>-->
-<!--                                            <td>판자티 소설</td>-->
-<!--                                        </tbody>-->
-
-<!--                                    </table>-->
-
-<!--                                    <table style="border: 1px">-->
-<!--                                        <thead>-->
-<!--                                        <th>국내도서</th>-->
-<!--                                        <th>외국도서</th>-->
-<!--                                        </thead>-->
-<!--                                        <tbody>-->
-<!--                                        <td>추리 소설</td>-->
-<!--                                        <td>판자티 소설</td>-->
-<!--                                        </tbody>-->
-
-<!--                                    </table>-->
-                                </ul>
                             </abc>
                         </div>
                     </li>
@@ -141,5 +111,6 @@
         </div>
     </nav>
 
+</th:block>
 </body>
 </html>

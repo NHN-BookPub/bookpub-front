@@ -4,6 +4,7 @@ import com.bookpub.bookpubfront.category.adaptor.CategoryAdaptor;
 import com.bookpub.bookpubfront.category.dto.request.CreateCategoryRequestDto;
 import com.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
+import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -96,24 +97,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public List<GetCategoryResponseDto> requestCategoryDisplayedTrueList() {
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "?display=true";
-
-        ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
-                HttpMethod.GET,
-                new HttpEntity<>(makeHttpHeaders()),
-                new ParameterizedTypeReference<>() {
-                });
-
-        checkError(response);
-        return response.getBody();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<GetCategoryResponseDto> parentCategoryList() {
+    public List<GetCategoryResponseDto> requestParentCategoryList() {
         String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent";
 
         ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
@@ -138,6 +122,23 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
                 new HttpEntity<>(makeHttpHeaders()),
                 new ParameterizedTypeReference<>() {
                 });
+
+        checkError(response);
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetParentCategoryWithChildrenResponseDto> requestParentWithChildList() {
+        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent-child";
+
+        ResponseEntity<List<GetParentCategoryWithChildrenResponseDto>> response = restTemplate
+                .exchange(url, HttpMethod.GET,
+                    new HttpEntity<>(makeHttpHeaders()),
+                    new ParameterizedTypeReference<>() {
+                    });
 
         checkError(response);
         return response.getBody();
