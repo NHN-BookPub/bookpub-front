@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.member.dto;
+package com.bookpub.bookpubfront.member.dto.request;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;

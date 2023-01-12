@@ -1,6 +1,7 @@
 package com.bookpub.bookpubfront.tier.adaptor.impl;
 
 
+import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.tier.adaptor.TierAdaptor;
 import com.bookpub.bookpubfront.tier.dto.request.CreateTierRequestDto;
@@ -12,10 +13,8 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -45,7 +44,7 @@ public class TierAdaptorImpl implements TierAdaptor {
         String request = objectMapper.writeValueAsString(createRequestDto);
 
         String url = gateway.getGatewayUrl() + TIER_URI;
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeheaders());
+        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(url,
                 HttpMethod.POST,
@@ -65,7 +64,7 @@ public class TierAdaptorImpl implements TierAdaptor {
         String request = objectMapper.writeValueAsString(modifyTierRequestDto);
 
         String url = gateway.getGatewayUrl() + TIER_URI;
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeheaders());
+        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(url,
                 HttpMethod.PUT,
@@ -88,7 +87,7 @@ public class TierAdaptorImpl implements TierAdaptor {
 
         ResponseEntity<List<TierResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeheaders()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -107,7 +106,7 @@ public class TierAdaptorImpl implements TierAdaptor {
 
         ResponseEntity<TierResponseDto> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeheaders()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<TierResponseDto>() {
                 });
 
@@ -123,12 +122,5 @@ public class TierAdaptorImpl implements TierAdaptor {
         if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
             throw new RuntimeException();
         }
-    }
-
-    private static HttpHeaders makeheaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
     }
 }
