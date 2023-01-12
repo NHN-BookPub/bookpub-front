@@ -34,6 +34,10 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
     private static final String MEMBER_API = "/api/members";
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest) {
 
@@ -47,6 +51,10 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestMemberNickNameChange(Long memberNo, ModifyMemberNickNameRequestDto requestDto) {
 
@@ -57,6 +65,10 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 Void.class);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestMemberEmailChange(Long memberNo, ModifyMemberEmailRequestDto requestDto) {
 
@@ -67,6 +79,10 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 Void.class);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MemberDetailResponseDto requestMemberDetails(Long memberNo) {
 
@@ -78,6 +94,10 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         ).getBody();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<MemberResponseDto> requestMembers(Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(gateWayConfig.getGatewayUrl() + "/api/admin/members")
@@ -94,6 +114,10 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         ).getBody();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestMemberBlock(Long memberNo) {
         restTemplate.exchange(

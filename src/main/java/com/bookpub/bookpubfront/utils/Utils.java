@@ -9,11 +9,16 @@ import org.springframework.http.MediaType;
  *
  * @author : 유호철
  * @since : 1.0
- **/
+ */
 public class Utils {
     private Utils() {
     }
 
+    /**
+     * 헤더생성에 대한 중복을 방지한 메서드입니다.
+     *
+     * @return http 헤더가 반환됩니다.
+     */
     public static HttpHeaders makeHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

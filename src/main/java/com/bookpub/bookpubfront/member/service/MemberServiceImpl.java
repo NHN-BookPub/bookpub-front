@@ -26,6 +26,10 @@ public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto) {
         String originPwd = signupMemberRequestDto.getPwd();
@@ -39,26 +43,45 @@ public class MemberServiceImpl implements MemberService {
         return exchange.getBody();
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto) {
         memberAdaptor.requestMemberNickNameChange(memberNo, dto);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto) {
         memberAdaptor.requestMemberEmailChange(memberNo, dto);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public MemberDetailResponseDto getMember(Long memberNo){
         return memberAdaptor.requestMemberDetails(memberNo);
     }
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<MemberResponseDto> getMembers(Pageable pageable){
         return memberAdaptor.requestMembers(pageable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void memberBlock(Long memberNo){
         memberAdaptor.requestMemberBlock(memberNo);

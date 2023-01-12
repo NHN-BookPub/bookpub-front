@@ -19,14 +19,20 @@ import org.springframework.web.bind.annotation.PostMapping;
  *
  * @author : 유호철
  * @since : 1.0
- **/
-
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
     private final MemberService memberService;
 
+    /**
+     * 관리자가 멤버 정보들을 볼수있는 View 로 갑니다.
+     *
+     * @param pageable 페이징 정보기입.
+     * @param model    모델.
+     * @return 관리자 멤버 리스트 페이지.
+     */
     @GetMapping("/admin/members")
     public String memberList(@PageableDefault Pageable pageable,
                               Model model) {
@@ -45,6 +51,13 @@ public class MemberController {
         return "admin/member/memberList";
     }
 
+    /**
+     * 관리자 멤버의 세부정보를 파악하기위한 메서드입니다.
+     *
+     * @param memberNo 멤버번호.
+     * @param model    모델.
+     * @return 관리자 의 멤버 상세페이지.
+     */
     @GetMapping("/admin/members/{memberNo}")
     public String adminMemberInfo(@PathVariable("memberNo") Long memberNo,
                                   Model model) {
@@ -55,13 +68,27 @@ public class MemberController {
         return "admin/member/memberInfo";
     }
 
+    /**
+     * 관리자가 사용자를 차단하기위해 쓰이는 컨트롤러.
+     *
+     * @param memberNo 멤버번호.
+     * @param pageable 페이징 정보.
+     * @return 멤버리스트 페이지로 리다이렉트.
+     */
     @PostMapping("/admin/members/{memberNo}")
     public String adminMemberBlock(@PathVariable("memberNo") Long memberNo,
                                    Pageable pageable) {
         memberService.memberBlock(memberNo);
-        return "redirect:/admin/members?page=" + pageable.getPageNumber() + "size=" + pageable.getPageSize();
+        return "redirect:/admin/members?page=" + pageable.getPageNumber() + "?size=" + pageable.getPageSize();
     }
 
+    /**
+     * 멤버가 멤버 정보를 보기위한 요청.
+     *
+     * @param memberNo 멤버 정보가 기입
+     * @param model 모델.
+     * @return 멤버의 개인정보 페이지로 이동.
+     */
     @GetMapping("/members/{memberNo}")
     public String memberInfo(@PathVariable("memberNo") Long memberNo,
                              Model model) {

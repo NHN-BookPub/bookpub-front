@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
  *
  * @author : 임태원
  * @since : 1.0
- **/
+ */
 public interface MemberService {
 
     /**
@@ -26,13 +26,42 @@ public interface MemberService {
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
 
+    /**
+     * 멤버의 닉네임을 적어야하는 메서드입니다.
+     *
+     * @param memberNo 멤버 번호.
+     * @param dto      수정할 닉네임 기입.
+     */
     void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto);
 
+    /**
+     * 멤버의 이메일 정보를 수정해야하는 메서드입니다.
+     *
+     * @param memberNo 멤버 번호가 기입.
+     * @param dto      멤버가 수정할 이메일 정보.
+     */
     void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto);
 
+    /**
+     * 멤버의 단일값 반환.
+     *
+     * @param memberNo 멤버 번호가 기입.
+     * @return 멤버의 상세정보가 반환.
+     */
     MemberDetailResponseDto getMember(Long memberNo);
 
+    /**
+     * 멤버들의 정보를 list 로 받는 메서드입니다.
+     *
+     * @param pageable 페이징 정보가 기입.
+     * @return 페이징 정보가 기입된 멤버정보가 반환.
+     */
     PageResponse<MemberResponseDto> getMembers(Pageable pageable);
 
+    /**
+     * 멤버의 차단을 위한 메서드입니다.
+     *
+     * @param memberNo 멤버 번호가 기입.
+     */
     void memberBlock(Long memberNo);
 }
