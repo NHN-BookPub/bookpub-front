@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.member.adaptor.impl;
 
+import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
@@ -7,9 +8,11 @@ import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDt
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import com.bookpub.bookpubfront.utils.Utils;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -41,7 +44,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest) {
 
-        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, Utils.makeHeader());
+        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, makeHeader());
 
         return restTemplate.exchange(
                 gateWayConfig.getGatewayUrl() + "/api/signup",
@@ -61,7 +64,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         restTemplate.exchange(
                 gateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/nickName",
                 HttpMethod.PUT,
-                new HttpEntity<>(requestDto, Utils.makeHeader()),
+                new HttpEntity<>(requestDto, makeHeader()),
                 Void.class);
     }
 
@@ -75,7 +78,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         restTemplate.exchange(
                 gateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/email",
                 HttpMethod.PUT,
-                new HttpEntity<>(requestDto, Utils.makeHeader()),
+                new HttpEntity<>(requestDto, makeHeader()),
                 Void.class);
     }
 
@@ -89,7 +92,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         return restTemplate.exchange(
                 gateWayConfig.getGatewayUrl() + MEMBER_API + memberNo,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 MemberDetailResponseDto.class
         ).getBody();
     }
@@ -108,7 +111,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<PageResponse<MemberResponseDto>>() {
                 }
         ).getBody();
@@ -123,8 +126,37 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         restTemplate.exchange(
                 gateWayConfig.getGatewayUrl() + "/api/admin/members/" + memberNo,
                 HttpMethod.PUT,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 Void.class
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberStatisticsResponseDto requestMemberStatics() {
+
+        return restTemplate.exchange(
+                gateWayConfig.getGatewayUrl() + "/api/admin/members/statistics",
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                MemberStatisticsResponseDto.class
+        ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<MemberTierStatisticsResponseDto> requestMemberTierStatics(){
+
+        return restTemplate.exchange(
+                gateWayConfig.getGatewayUrl() + "/api/admin/tier/statistics",
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<List<MemberTierStatisticsResponseDto>>() {
+                }
+        ).getBody();
     }
 }
