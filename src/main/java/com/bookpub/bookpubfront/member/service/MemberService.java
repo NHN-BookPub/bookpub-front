@@ -4,9 +4,12 @@ import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -64,4 +67,18 @@ public interface MemberService {
      * @param memberNo 멤버 번호가 기입.
      */
     void memberBlock(Long memberNo);
+
+    /**
+     * 회원들의 통계를 반환합니다.
+     *
+     * @return 회원의 통계를 반환.
+     */
+    MemberStatisticsResponseDto memberStatistics();
+
+    /**
+     * 회원의 등급별 통계를 반환
+     *
+     * @return the list
+     */
+    List<MemberTierStatisticsResponseDto> memberTierStatistics();
 }

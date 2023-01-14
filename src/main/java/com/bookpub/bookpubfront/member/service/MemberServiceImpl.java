@@ -5,9 +5,12 @@ import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
@@ -85,5 +88,21 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void memberBlock(Long memberNo){
         memberAdaptor.requestMemberBlock(memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberStatisticsResponseDto memberStatistics(){
+        return memberAdaptor.requestMemberStatics();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<MemberTierStatisticsResponseDto> memberTierStatistics(){
+        return memberAdaptor.requestMemberTierStatics();
     }
 }
