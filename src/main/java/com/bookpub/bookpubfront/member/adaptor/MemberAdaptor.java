@@ -27,6 +27,11 @@ public class MemberAdaptor {
     private final RestTemplate restTemplate;
     private final GateWayConfig gatewayUrl;
 
+    /** 회원가입을 위해 shop 서버와 통신하는 메소드.
+     *
+     * @param signupRequest 회원가입을 위한 멤버정보가 들어있는 요청 dto.
+     * @return shop 서버에서 전달해준 회원가입 승낙 정보가 들어있는 응답 dto.
+     */
     public ResponseEntity<SignupMemberResponseDto> signupRequest(
             SignupMemberRequestDto signupRequest) {
         HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, makeHeader());
@@ -39,6 +44,11 @@ public class MemberAdaptor {
         );
     }
 
+    /** 로그인을 위해 auth 서버와 통신하는 메소드.
+     *
+     * @param loginRequest 로그인을 위한 멤버정보가 들어있는 요청 dto.
+     * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
+     */
     public ResponseEntity<Void> loginRequest(
             LoginMemberRequestDto loginRequest) {
         HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
@@ -51,6 +61,11 @@ public class MemberAdaptor {
         );
     }
 
+    /** 요청헤더를 만드는 과정을 담아둔 메소드.
+     *  추후 util로 빼도 될듯 함.
+     *
+     * @return 만들어진 header를 반환한다.
+     */
     public HttpHeaders makeHeader() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);

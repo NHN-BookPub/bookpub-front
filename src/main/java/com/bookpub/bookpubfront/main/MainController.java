@@ -22,6 +22,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
     private final RedisTemplate<String,String> redisTemplate;
 
+    /** 메인화면에 연결해주는 controller get메소드.
+     *
+     * @param model html에 동적인 값을 넘겨주는 객체.
+     * @return 메인화면 뷰
+     */
     @GetMapping("/")
     public String mainView(Model model) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();

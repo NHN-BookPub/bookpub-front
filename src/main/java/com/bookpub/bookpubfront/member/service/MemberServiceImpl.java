@@ -40,9 +40,14 @@ public class MemberServiceImpl implements MemberService {
         ResponseEntity<SignupMemberResponseDto> exchange
                 = memberAdaptor.signupRequest(signupMemberRequestDto);
 
+
+
         return exchange.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session) {
         ResponseEntity<Void> jwtResponse = memberAdaptor.loginRequest(loginMemberRequestDto);

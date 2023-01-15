@@ -26,11 +26,21 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MemberController {
     private final MemberService memberService;
 
+    /** 회원가입 페이지를 연결해주는 메소드.
+     *
+     * @return 회원가입 페이지 view를 보여줌
+     */
     @GetMapping("/signup")
     public String signupPageForm() {
         return "member/signupPage";
     }
 
+    /** 회원가입 정보로 통신한 후 성공페이지를 띄워주는 메소드.
+     *
+     * @param signupMemberRequestDto 회원가입 정보를 담고있다.
+     * @param model html에 동적인 정보를 전달해주는 객체.
+     * @return 성공, 실패 페이지를 보여준다.
+     */
     @PostMapping("/signup")
     public String signupComplete(@Valid SignupMemberRequestDto signupMemberRequestDto,
                                  Model model) {
@@ -42,6 +52,12 @@ public class MemberController {
         return "member/signupComplete";
     }
 
+    /** 로그인 화면을 보여주는 메소드.
+     *
+     * @param model html에 동적인 정보를 전달해주는 객체.
+     * @param request 페이지의 요청정보가 담겨있는 객체.
+     * @return 로그인 화면.
+     */
     @GetMapping("/login")
     public String loginPageForm(Model model, HttpServletRequest request) {
         model.addAttribute("sessionId",request.getSession().getId());
@@ -49,6 +65,12 @@ public class MemberController {
         return "member/loginPage";
     }
 
+    /** 로그인 성공, 실패에 따른 화면을 보여주는 view.
+     *
+     * @param requestDto 로그인 요청 정보가 담겨있는 dto.
+     * @param request 페이지의 요청정보가 담겨있는 객체.
+     * @return 메인화면 또는 로그인화면을 띄워준다.
+     */
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto, HttpServletRequest request) {
         memberService.login(requestDto, request.getSession());

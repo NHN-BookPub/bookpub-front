@@ -19,7 +19,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
- * Some description here
+ * front 서버의 로그인을 위한 커스텀 필터.
  *
  * @author : 임태원
  * @since : 1.0
@@ -29,6 +29,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private final ObjectMapper mapper;
 
+    /**
+     * 특정 조건에서 필터가 작동하여 로그인 진행.
+     *
+     * @param request 요청 정보 객체.
+     * @param response 응답 정보 객체.
+     * @param filterChain security의 필터체인 객체.
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
 

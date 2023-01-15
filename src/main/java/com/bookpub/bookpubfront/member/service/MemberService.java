@@ -21,5 +21,10 @@ public interface MemberService {
      */
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
+    /** member 아이디, 패스워드를 통해 로그인 진행 메소드.
+     *
+     * @param loginMemberRequestDto 멤버의 아이디, 패스워드가 담겨있다.
+     * @param session HTTPSession 객체.
+     */
     void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session);
 }

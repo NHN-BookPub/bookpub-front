@@ -1,7 +1,7 @@
 package com.bookpub.bookpubfront.token.exception;
 
 /**
- * Some description here
+ * 토큰이 발행되지 않을경우 발생하는 exception.
  *
  * @author : 임태원
  * @since : 1.0
