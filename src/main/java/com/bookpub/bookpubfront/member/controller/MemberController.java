@@ -2,17 +2,17 @@ package com.bookpub.bookpubfront.member.controller;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.service.MemberService;
-import javax.servlet.http.HttpServletRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
-import javax.validation.Valid;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,7 +41,7 @@ public class MemberController {
      */
     @GetMapping("/admin/members")
     public String memberList(@PageableDefault Pageable pageable,
-                              Model model) {
+                             Model model) {
         PageResponse<MemberResponseDto> members = memberService.getMembers(pageable);
 
         model.addAttribute("content", members.getContent());
@@ -57,7 +57,8 @@ public class MemberController {
         return "admin/member/memberList";
     }
 
-    /** 회원가입 페이지를 연결해주는 메소드.
+    /**
+     * 회원가입 페이지를 연결해주는 메소드.
      *
      * @return 회원가입 페이지 view를 보여줌
      */
@@ -66,10 +67,11 @@ public class MemberController {
         return "member/signupPage";
     }
 
-    /** 회원가입 정보로 통신한 후 성공페이지를 띄워주는 메소드.
+    /**
+     * 회원가입 정보로 통신한 후 성공페이지를 띄워주는 메소드.
      *
      * @param signupMemberRequestDto 회원가입 정보를 담고있다.
-     * @param model html에 동적인 정보를 전달해주는 객체.
+     * @param model                  html에 동적인 정보를 전달해주는 객체.
      * @return 성공, 실패 페이지를 보여준다.
      */
     @PostMapping("/signup")
@@ -118,7 +120,7 @@ public class MemberController {
      * 멤버가 멤버 정보를 보기위한 요청.
      *
      * @param memberNo 멤버 정보가 기입
-     * @param model 모델.
+     * @param model    모델.
      * @return 멤버의 개인정보 페이지로 이동.
      */
     @GetMapping("/members/{memberNo}")
@@ -130,28 +132,37 @@ public class MemberController {
         return "members/memberInfo";
     }
 
-    /** 로그인 화면을 보여주는 메소드.
+    /**
+     * 로그인 화면을 보여주는 메소드.
      *
-     * @param model html에 동적인 정보를 전달해주는 객체.
+     * @param model   html에 동적인 정보를 전달해주는 객체.
      * @param request 페이지의 요청정보가 담겨있는 객체.
      * @return 로그인 화면.
      */
     @GetMapping("/login")
     public String loginPageForm(Model model, HttpServletRequest request) {
-        model.addAttribute("sessionId",request.getSession().getId());
+        model.addAttribute("sessionId", request.getSession().getId());
 
         return "member/loginPage";
     }
 
-    /** 로그인 성공, 실패에 따른 화면을 보여주는 view.
+    /**
+     * 로그인 성공, 실패에 따른 화면을 보여주는 view.
      *
      * @param requestDto 로그인 요청 정보가 담겨있는 dto.
-     * @param request 페이지의 요청정보가 담겨있는 객체.
+     * @param request    페이지의 요청정보가 담겨있는 객체.
      * @return 메인화면 또는 로그인화면을 띄워준다.
      */
     @PostMapping("/login")
     public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto, HttpServletRequest request) {
         memberService.login(requestDto, request.getSession());
+
+        return "redirect:/";
+    }
+
+    @GetMapping("/logout")
+    public String logoutSubmit(HttpServletRequest request) {
+        memberService.logout(request.getSession());
 
         return "redirect:/";
     }

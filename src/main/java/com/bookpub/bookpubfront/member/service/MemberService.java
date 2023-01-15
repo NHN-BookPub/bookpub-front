@@ -1,20 +1,18 @@
 package com.bookpub.bookpubfront.member.service;
 
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
-import org.springframework.data.domain.Pageable;
-import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import javax.servlet.http.HttpSession;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 멤버 도메인의 서비스.
@@ -32,12 +30,21 @@ public interface MemberService {
      */
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
-    /** member 아이디, 패스워드를 통해 로그인 진행 메소드.
+    /**
+     * member 아이디, 패스워드를 통해 로그인 진행 메소드.
      *
      * @param loginMemberRequestDto 멤버의 아이디, 패스워드가 담겨있다.
-     * @param session HTTPSession 객체.
+     * @param session               HTTPSession 객체.
      */
     void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session);
+
+    /**
+     * 회원 로그아웃 메소드.
+     *
+     * @param session HttpSession 객체.
+     */
+    void logout(HttpSession session);
+
 
     /**
      * 멤버의 닉네임을 적어야하는 메서드입니다.

@@ -2,26 +2,27 @@ package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
-import com.bookpub.bookpubfront.token.util.JwtUtil;
-import java.util.Objects;
-import javax.servlet.http.HttpSession;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
+import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import java.util.Objects;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -35,12 +36,9 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+    private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
-
-    /**
-     * {@inheritDoc}
-     */
 
     /**
      * {@inheritDoc}
@@ -67,11 +65,25 @@ public class MemberServiceImpl implements MemberService {
 
         String accessToken = Objects.requireNonNull(jwtResponse.getHeaders().get("Authorization")).get(0);
 
-        if(Objects.isNull(accessToken)){
+        if (Objects.isNull(accessToken)) {
             throw new TokenNotIssuedException();
         }
 
         session.setAttribute(JwtUtil.JWT_SESSION, accessToken);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void logout(HttpSession session) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (Objects.nonNull(authentication)) {
+            redisTemplate.opsForHash().delete((String) authentication.getPrincipal(), authentication.getCredentials());
+            session.invalidate();
+            SecurityContextHolder.clearContext();
+        }
     }
 
 
@@ -97,7 +109,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public MemberDetailResponseDto getMember(Long memberNo){
+    public MemberDetailResponseDto getMember(Long memberNo) {
         return memberAdaptor.requestMemberDetails(memberNo);
     }
 
@@ -106,7 +118,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<MemberResponseDto> getMembers(Pageable pageable){
+    public PageResponse<MemberResponseDto> getMembers(Pageable pageable) {
         return memberAdaptor.requestMembers(pageable);
     }
 
@@ -114,7 +126,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void memberBlock(Long memberNo){
+    public void memberBlock(Long memberNo) {
         memberAdaptor.requestMemberBlock(memberNo);
     }
 
@@ -122,7 +134,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public MemberStatisticsResponseDto memberStatistics(){
+    public MemberStatisticsResponseDto memberStatistics() {
         return memberAdaptor.requestMemberStatics();
     }
 
@@ -130,7 +142,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public List<MemberTierStatisticsResponseDto> memberTierStatistics(){
+    public List<MemberTierStatisticsResponseDto> memberTierStatistics() {
         return memberAdaptor.requestMemberTierStatics();
     }
 }
