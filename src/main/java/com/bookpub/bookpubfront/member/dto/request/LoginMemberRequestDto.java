@@ -12,6 +12,7 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class LoginMemberRequestDto {
-    private String memberId;
-    private String memberPwd;
+    private String id;
+    private String pwd;
+    private String sessionId;
 }
