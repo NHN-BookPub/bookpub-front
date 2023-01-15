@@ -65,10 +65,11 @@
 <body>
 <div class="login-wrapper">
     <form method="post" action="/login" id="login-form">
-        <input type="text" name="id" th:placeholder="admin">
+        <input type="text" name="id" th:placeholder="tagkdj1">
         <br/>
-        <input type="password" name="pwd" th:placeholder="adminadmin">
+        <input type="password" name="pwd" placeholder="Abc123!@#">
         <br/>
+        <input type="hidden" name="sessionId" th:value="${sessionId}">
         <input type="submit" th:value="login">
     </form>
 </div>
