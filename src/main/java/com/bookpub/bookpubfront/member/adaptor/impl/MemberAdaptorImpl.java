@@ -91,7 +91,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public MemberDetailResponseDto requestMemberDetails(Long memberNo) {
 
         return restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + MEMBER_API + memberNo,
+                gateWayConfig.getGatewayUrl() + MEMBER_API + "/" + memberNo,
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 MemberDetailResponseDto.class
@@ -150,7 +150,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public List<MemberTierStatisticsResponseDto> requestMemberTierStatics(){
+    public List<MemberTierStatisticsResponseDto> requestMemberTierStatics() {
 
         return restTemplate.exchange(
                 gateWayConfig.getGatewayUrl() + "/api/admin/tier/statistics",
