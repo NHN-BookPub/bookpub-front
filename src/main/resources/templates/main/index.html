@@ -43,13 +43,18 @@
                         <li class="nav-item"><a class="nav-link" style="color: white" href="#!">e-book</a></li>
 
                         <li class="nav-item"><a class="nav-link" style="color: white" href="#!">매거진</a></li>
-
                     </ul>
 
                     <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ms-lg-4">
-                        <li class="nav-item"><a class="nav-link" style="color: white" href="#!">로그인</a></li>
+                        <li class="nav-item">
+                            <a th:if="${userId == null}" class="nav-link" style="color: white" href="/login" >로그인</a>
+                            <a th:if="${userId != null}" class="nav-link" style="color: white" href="/logout" >로그아웃</a>
+                        </li>
 
-                        <li class="nav-item"><a class="nav-link" style="color: white" href="/signup">회원가입</a></li>
+                        <li class="nav-item">
+                            <a th:if="${userId == null}" class="nav-link" style="color: white" href="/signup">회원가입</a>
+                            <a th:if="${userId != null}" class="nav-link" style="color: white" href="#!" th:text="${userId} + 마이페이지"></a>
+                        </li>
                     </ul>
 
                     <form class="d-flex">
