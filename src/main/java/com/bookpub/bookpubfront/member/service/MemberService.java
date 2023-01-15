@@ -1,15 +1,17 @@
 package com.bookpub.bookpubfront.member.service;
 
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -27,6 +29,21 @@ public interface MemberService {
      * @return 저장된 멤버 정보의 일부를 반환받는 DTO
      */
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
+
+    /**
+     * member 아이디, 패스워드를 통해 로그인 진행 메소드.
+     *
+     * @param loginMemberRequestDto 멤버의 아이디, 패스워드가 담겨있다.
+     * @param session               HTTPSession 객체.
+     */
+    void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session);
+
+    /**
+     * 회원 로그아웃 메소드.
+     *
+     * @param session HttpSession 객체.
+     */
+    void logout(HttpSession session);
 
 
     /**

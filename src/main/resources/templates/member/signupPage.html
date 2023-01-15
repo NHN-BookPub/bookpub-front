@@ -47,7 +47,8 @@
                 <div class="row">
                     <div class="col-md-6 mb-3">
                         <label for="name">이름</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상" value="" required>
+                        <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
+                               value="" required>
                         <div class="invalid-feedback">
                             이름을 입력해주세요.
                         </div>
@@ -74,7 +75,8 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="birth">생년월일</label>
-                        <input type="text" class="form-control" id="birth" name="birth" placeholder="6글자 (981008)" value=""
+                        <input type="text" class="form-control" id="birth" name="birth" placeholder="6글자 (981008)"
+                               value=""
                                required>
                         <div class="invalid-feedback">
                             생년월일을 입력해주세요.
@@ -83,7 +85,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="memberId">아이디</label>
-                    <input type="text" class="form-control" id="memberId" name="memberId" placeholder="5~20자, 특수문자x, 한글x, 공백x"
+                    <input type="text" class="form-control" id="memberId" name="memberId"
+                           placeholder="5~20자, 특수문자x, 한글x, 공백x"
                            value="" required>
                     <div class="invalid-feedback">
                         아이디를 입력해주세요.
@@ -108,7 +111,8 @@
                 </div>
                 <div class="mb-3">
                     <label for="phone">전화번호</label>
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="01012345678" value="" required>
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="01012345678" value=""
+                           required>
                     <div class="invalid-feedback">
                         전화번호를 입력해주세요.
                     </div>
@@ -168,13 +172,13 @@
                     event.stopPropagation();
                 }
                 let nameVal = document.getElementById('name').value;
-                if(!nameReg.test(nameVal) || emptyReg.test(nameVal)){
+                if (!nameReg.test(nameVal) || emptyReg.test(nameVal)) {
                     alert('이름은 한글 2글자 이상으로 생성해주세요.')
                     return false;
                 }
 
                 let birthVal = document.getElementById('birth').value;
-                if(!birthReg.test(birthVal) || emptyReg.test(birthVal)){
+                if (!birthReg.test(birthVal) || emptyReg.test(birthVal)) {
                     alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
                     return false;
                 }
@@ -210,7 +214,7 @@
                 }
 
                 let phoneVal = document.getElementById('phone').value;
-                if(!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)){
+                if (!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)) {
                     alert('전화번호 11자리를 입력해주세요 ( - 제외).')
                     return false;
                 }

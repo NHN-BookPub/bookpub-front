@@ -3,6 +3,7 @@ package com.bookpub.bookpubfront.member.adaptor.impl;
 import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
@@ -158,5 +159,20 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new ParameterizedTypeReference<List<MemberTierStatisticsResponseDto>>() {
                 }
         ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest) {
+        HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
+
+        return restTemplate.exchange(
+                gateWayConfig.getGatewayUrl() + "/auth/login",
+                HttpMethod.POST,
+                entity,
+                Void.class
+        );
     }
 }
