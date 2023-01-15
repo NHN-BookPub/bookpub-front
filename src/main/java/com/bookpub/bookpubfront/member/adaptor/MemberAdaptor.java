@@ -1,74 +1,81 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
-import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.MediaType;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Component;
-import org.springframework.web.client.RestTemplate;
 
 /**
- * 멤버의 서버간 데이터 송신 및 수신을 담당하는 클래스.
- *
- * @author : 임태원
- * @since : 1.0
- **/
-@Component
-@RequiredArgsConstructor
-@Slf4j
-public class MemberAdaptor {
-    private final RestTemplate restTemplate;
-    private final GateWayConfig gatewayUrl;
+ * 멤버가 shop 이랑 http 통신을 하기위한 인터페이스 입니다.
+ */
+public interface MemberAdaptor {
 
-    /** 회원가입을 위해 shop 서버와 통신하는 메소드.
+    /**
+     * 회원가입 여부의 값이 반환됩니다.
      *
-     * @param signupRequest 회원가입을 위한 멤버정보가 들어있는 요청 dto.
-     * @return shop 서버에서 전달해준 회원가입 승낙 정보가 들어있는 응답 dto.
+     * @param signupRequest 회원가입 정보.
+     * @return 성공 201 이 반환됩니다.
      */
-    public ResponseEntity<SignupMemberResponseDto> signupRequest(
-            SignupMemberRequestDto signupRequest) {
-        HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, makeHeader());
+    ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest);
 
-        return restTemplate.exchange(
-                gatewayUrl.getGatewayUrl() + "/api/signup",
-                HttpMethod.POST,
-                entity,
-                SignupMemberResponseDto.class
-        );
-    }
-
-    /** 로그인을 위해 auth 서버와 통신하는 메소드.
+    /**
+     * 멤버 닉네임을 변경하기위한 메서드입니다.
      *
-     * @param loginRequest 로그인을 위한 멤버정보가 들어있는 요청 dto.
-     * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
+     * @param memberNo  멤버 번호가 기입.
+     * @param requestDto 수정할 닉네임 기입.
      */
-    public ResponseEntity<Void> loginRequest(
-            LoginMemberRequestDto loginRequest) {
-        HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
+    void requestMemberNickNameChange(Long memberNo, ModifyMemberNickNameRequestDto requestDto);
 
-        return restTemplate.exchange(
-                gatewayUrl.getGatewayUrl() + "/auth/login",
-                HttpMethod.POST,
-                entity,
-                Void.class
-        );
-    }
-
-    /** 요청헤더를 만드는 과정을 담아둔 메소드.
-     *  추후 util로 빼도 될듯 함.
+    /**
+     * 이메일을 변경할때 쓰이는 메서드입니다.
      *
-     * @return 만들어진 header를 반환한다.
+     * @param memberNo   멤버 번호가 기입.
+     * @param requestDto 변경할 이메일 번호가 기입.
      */
-    public HttpHeaders makeHeader() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        return headers;
-    }
+    void requestMemberEmailChange(Long memberNo, ModifyMemberEmailRequestDto requestDto);
+
+    /**
+     * 멤버의 상세정보를 받기위하여 쓰이는 메서드입니다.
+     *
+     * @param memberNo 멤버 번호가 기입
+     * @return 멤버의 상세 정보가 반환됩니다.
+     */
+    MemberDetailResponseDto requestMemberDetails(Long memberNo);
+
+    /**
+     * 페이징 정보가 담긴 멤버들이 반환.
+     *
+     * @param pageable 페이징 정보 기입.
+     * @return 페이징 객체에 담긴 멤버정보들을 반환.
+     */
+    PageResponse<MemberResponseDto> requestMembers(Pageable pageable);
+
+    /**
+     * 사용자의 차단을 위한 메서드입니다.
+     *
+     * @param memberNo 멤버 번호가기입.
+     */
+    void requestMemberBlock(Long memberNo);
+
+    /**
+     * 회원의 전체 통계가 나오는 메서드입니다.
+     *
+     * @return 회원의 통계가 반환.
+     */
+    MemberStatisticsResponseDto requestMemberStatics();
+
+    /**
+     * 회원의 등급별 추이가 반환됩니다.
+     *
+     * @return 회원의 등급별 추이가 반환.
+     */
+    List<MemberTierStatisticsResponseDto> requestMemberTierStatics();
 }

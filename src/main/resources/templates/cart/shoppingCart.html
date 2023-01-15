@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookPub</title>
+
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="static/css/main/styles.css" rel="stylesheet" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
+
+    <link href="static/css/cart/shoppingCart.css" rel="stylesheet"/>
+    <link href="static/css/main/styles.css" rel="stylesheet" />
+    <script src="static/js/cart/shoppingCart.js" ></script>
+
+    <script>
+
+    </script>
+</head>
+<body>
+
+<div class="main">
+    <th:block th:include="main/fragments/mainHeader" />
+
+    <div class="cart-body " style="padding-top: 5%; padding-bottom: 5%; width: 80%; margin: auto">
+        <h1>장바구니</h1>
+        <br/>
+
+        <!--   redis session or cookie 저장된 값들을 가지고 다시 구현     -->
+        <table id="cart" class="table table-hover table-condensed">
+            <thead>
+                <tr>
+                    <th style="width:50%">상품</th>
+                    <th style="width:10%">정가</th>
+                    <th style="width:8%">수량</th>
+                    <th style="width:22%" class="text-center">판매가</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td data-th="Product">
+                        <div class="row">
+                            <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+                            <div class="col-sm-10">
+                                <h4 class="nomargin">Product 1</h4>
+                                <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-th="Price">2000원</td>
+                    <td data-th="Quantity">
+                        <input type="number" min="1" max="999" class="form-control text-center" value="1">
+                    </td>
+                    <td data-th="Subtotal" class="text-center">2000원</td>
+                </tr>
+
+                <tr>
+                    <td data-th="Product">
+                        <div class="row">
+                            <div class="col-sm-2 hidden-xs"><img src="http://placehold.it/100x100" alt="..." class="img-responsive"/></div>
+                            <div class="col-sm-10">
+                                <h4 class="nomargin">Product 2</h4>
+                                <p>Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Lorem ipsum dolor sit amet.</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td data-th="Price">1100원</td>
+                    <td data-th="Quantity">
+                        <input type="number" min="1" max="999" class="form-control text-center" value="1">
+                    </td>
+                    <td data-th="Subtotal" class="text-center">1000원</td>
+                </tr>
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td><a href="/" class="btn btn-warning"><i class="fa fa-angle-left"></i> 계속 쇼핑하기</a></td>
+                    <td colspan="2" class="hidden-xs"></td>
+<!--                    <td class="hidden-xs text-center"><strong>총</strong> <strong>38000</strong><strong>원</strong></td>-->
+                    <td align="center"><a href="/order" class="btn btn-primary btn-block"> 주문하기 <i class="fa fa-angle-right"></i></a></td>
+                </tr>
+            </tfoot>
+        </table>
+
+    </div>
+
+    <div class="cartInfo" style="margin: auto; width: 80%; padding-top: 2%; padding-bottom: 2%; background-color: whitesmoke">
+        <ul>
+            <li> <span style="color: darkseagreen"> 장바구니는 하루(24시간)동안만 저장됩니다. </span></li>
+            <li> <span style="color: firebrick"> 비회원주문은 포인트가 적립되지 않습니다.</span> </li>
+            <li> 배송지역에 따라 배송 기간이 달라질 수 있습니다. </li>
+        </ul>
+    </div>
+
+    <div style="padding-top: 5%"></div>
+
+    <th:block th:include="main/fragments/mainFooter"/>
+</div>
+
+<!-- Bootstrap core JS-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<!-- Core theme JS-->
+<script src="static/js/main/scripts.js"></script>
+
+</body>
+</html>
