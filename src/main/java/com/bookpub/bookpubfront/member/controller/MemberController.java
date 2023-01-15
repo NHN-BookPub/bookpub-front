@@ -32,13 +32,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 public class MemberController {
     private final MemberService memberService;
 
-    /** 회원가입 페이지를 연결해주는 메소드.
-     *
-     * @return 회원가입 페이지 view를 보여줌
-     */
-    @GetMapping("/signup")
-    public String signupPageForm() {
-        return "member/signupPage";
     /**
      * 관리자가 멤버 정보들을 볼수있는 View 로 갑니다.
      *
@@ -64,6 +57,15 @@ public class MemberController {
         return "admin/member/memberList";
     }
 
+    /** 회원가입 페이지를 연결해주는 메소드.
+     *
+     * @return 회원가입 페이지 view를 보여줌
+     */
+    @GetMapping("/signup")
+    public String signupPageForm() {
+        return "member/signupPage";
+    }
+
     /** 회원가입 정보로 통신한 후 성공페이지를 띄워주는 메소드.
      *
      * @param signupMemberRequestDto 회원가입 정보를 담고있다.
@@ -75,6 +77,12 @@ public class MemberController {
                                  Model model) {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
+
+        model.addAttribute("member", memberInfo);
+
+        return "member/signupComplete";
+    }
+
     /**
      * 관리자 멤버의 세부정보를 파악하기위한 메서드입니다.
      *

@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
@@ -78,4 +79,11 @@ public interface MemberAdaptor {
      * @return 회원의 등급별 추이가 반환.
      */
     List<MemberTierStatisticsResponseDto> requestMemberTierStatics();
+
+    /** 로그인을 위해 auth 서버와 통신하는 메소드.
+     *
+     * @param loginRequest 로그인을 위한 멤버정보가 들어있는 요청 dto.
+     * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
+     */
+    ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest);
 }
