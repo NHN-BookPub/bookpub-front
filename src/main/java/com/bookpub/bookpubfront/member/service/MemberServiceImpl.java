@@ -1,13 +1,15 @@
 package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.member.dto.request.AuthMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.AuthMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.LoginMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
+import com.bookpub.bookpubfront.token.util.JwtUtil;
+import java.util.Objects;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
  * @since : 1.0
  **/
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
     private final PasswordEncoder passwordEncoder;
@@ -41,12 +44,15 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public AuthMemberResponseDto auth(AuthMemberRequestDto authMemberRequestDto) {
-        return memberAdaptor.tokenRequest(authMemberRequestDto).getBody();
-    }
+    public void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session) {
+        ResponseEntity<Void> jwtResponse = memberAdaptor.loginRequest(loginMemberRequestDto);
 
-    @Override
-    public LoginMemberResponseDto login(LoginMemberRequestDto loginMemberRequestDto) {
-        return memberAdaptor.loginRequest(loginMemberRequestDto).getBody();
+        String accessToken = Objects.requireNonNull(jwtResponse.getHeaders().get("Authorization")).get(0);
+
+        if(Objects.isNull(accessToken)){
+            throw new TokenNotIssuedException();
+        }
+
+        session.setAttribute(JwtUtil.JWT_SESSION, accessToken);
     }
 }

@@ -1,20 +1,18 @@
 package com.bookpub.bookpubfront.member.controller;
 
-import com.bookpub.bookpubfront.member.dto.request.AuthMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.AuthMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.service.MemberService;
-import java.util.ArrayList;
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 
 /**
  * 멤버 api 컨트롤러.
@@ -24,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestBody;
  **/
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
 
@@ -44,32 +43,16 @@ public class MemberController {
     }
 
     @GetMapping("/login")
-    public String loginPageForm() {
+    public String loginPageForm(Model model, HttpServletRequest request) {
+        model.addAttribute("sessionId",request.getSession().getId());
+
         return "member/loginPage";
     }
 
     @PostMapping("/login")
-    public String login(
-            @Valid @RequestBody LoginMemberRequestDto loginMemberRequestDto) {
+    public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto, HttpServletRequest request) {
+        memberService.login(requestDto, request.getSession());
 
-        return null;
+        return "redirect:/";
     }
-
-    @GetMapping("/auth/test")
-    public String test2(Model model) {
-        List<String> authorities = new ArrayList<>();
-        authorities.add("ROLE_MEMBER");
-
-        AuthMemberRequestDto authMemberRequestDto = new AuthMemberRequestDto(
-                "tagkdj1",
-                authorities
-        );
-
-        AuthMemberResponseDto login = memberService.auth(authMemberRequestDto);
-
-        model.addAttribute("token", login.getToken());
-
-        return "member/test";
-    }
-
 }

@@ -1,13 +1,11 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.request.AuthMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.AuthMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.LoginMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -24,6 +22,7 @@ import org.springframework.web.client.RestTemplate;
  **/
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MemberAdaptor {
     private final RestTemplate restTemplate;
     private final GateWayConfig gatewayUrl;
@@ -40,30 +39,17 @@ public class MemberAdaptor {
         );
     }
 
-    public ResponseEntity<LoginMemberResponseDto> loginRequest(
+    public ResponseEntity<Void> loginRequest(
             LoginMemberRequestDto loginRequest) {
         HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
 
         return restTemplate.exchange(
-                gatewayUrl.getGatewayUrl() + "/api/login",
-                HttpMethod.GET,
-                entity,
-                LoginMemberResponseDto.class
-        );
-    }
-
-    public ResponseEntity<AuthMemberResponseDto> tokenRequest(
-            AuthMemberRequestDto authRequest) {
-        HttpEntity<AuthMemberRequestDto> entity = new HttpEntity<>(authRequest, makeHeader());
-
-        return restTemplate.exchange(
-                gatewayUrl.getGatewayUrl() + "/auth/token/issue",
+                gatewayUrl.getGatewayUrl() + "/auth/login",
                 HttpMethod.POST,
                 entity,
-                AuthMemberResponseDto.class
+                Void.class
         );
     }
-
 
     public HttpHeaders makeHeader() {
         HttpHeaders headers = new HttpHeaders();
