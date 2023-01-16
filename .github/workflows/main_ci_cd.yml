@@ -69,15 +69,15 @@ jobs:
         
 #         2번째 서버 배포
 
-#     - name: deploy server-2 helath check stop
-#       uses: appleboy/ssh-action@master
-#       with:
-#         host: ${{ secrets.SSH_IP_2 }}
-#         username: ${{ secrets.SSH_ID_2 }}
-#         key: ${{ secrets.SSH_KEY_2 }}
-#         port: ${{ secrets.SSH_PORT }}
-#         script_stop: true
-#         script: "./deploy.sh"
+    - name: deploy server-2 helath check stop
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP_2 }}
+        username: ${{ secrets.SSH_ID_2 }}
+        key: ${{ secrets.SSH_KEY_2 }}
+        port: ${{ secrets.SSH_PORT }}
+        script_stop: true
+        script: "./deploy.sh"
         
     - name: Sleep for 60 seconds(L4 죽이기용)
       uses: jakejarvis/wait-action@master
