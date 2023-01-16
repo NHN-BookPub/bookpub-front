@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -43,14 +43,13 @@
 
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0 ms-lg-4">
                     <li>
-                        <a th:if="${userId == null}" class="nav-link" style="color: white" href="/login">로그인</a>
-                        <a th:if="${userId != null}" class="nav-link" style="color: white" href="/logout">로그아웃</a>
+                        <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/login">로그인</a>
+                        <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" href="/logout">로그아웃</a>
                     </li>
 
                     <li class="nav-item">
-                        <a th:if="${userId == null}" class="nav-link" style="color: white" href="/signup">회원가입</a>
-                        <a th:if="${userId != null}" class="nav-link" style="color: white" href="#!"
-                           th:text="${userId} + 마이페이지"></a>
+                        <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/signup">회원가입</a>
+                        <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" href="#!">마이페이지</a>
                     </li>
 
                     <li class="nav-item">
