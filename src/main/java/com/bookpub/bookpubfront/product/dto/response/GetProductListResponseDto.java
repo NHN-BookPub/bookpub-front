@@ -1,6 +1,5 @@
 package com.bookpub.bookpubfront.product.dto.response;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -12,7 +11,6 @@ import lombok.NoArgsConstructor;
  **/
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetProductListResponseDto {
     private Long productNo;
     private String title;

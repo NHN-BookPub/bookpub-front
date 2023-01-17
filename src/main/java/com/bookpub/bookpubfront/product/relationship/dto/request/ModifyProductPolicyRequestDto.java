@@ -1,6 +1,7 @@
 package com.bookpub.bookpubfront.product.relationship.dto.request;
 
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
@@ -14,9 +15,10 @@ import org.hibernate.validator.constraints.Length;
 @Getter
 @AllArgsConstructor
 public class ModifyProductPolicyRequestDto {
-    @Length(max = 10)
+    @Length(min = 1, max = 10)
     private String policyMethod;
     @NotNull
     private boolean policySaved;
+    @PositiveOrZero
     private Integer saveRate;
 }
