@@ -47,4 +47,8 @@ public class MainController {
         model.addAttribute("userId", userId);
         return "main/index";
     }
+    @GetMapping("/v1")
+    public String mainView2(){
+        return "main/root";
+    }
 }
