@@ -26,9 +26,25 @@ jobs:
         java-version: '11'
         distribution: 'temurin'
         cache: maven
+        
     - name: Build with Maven
       run: mvn -B package --file pom.xml
 
+    - name: deploy server-1 helath check stop
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP }}
+        username: ${{ secrets.SSH_ID }}
+        key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script_stop: true
+        script: "./deploy.sh"
+        
+    - name: Sleep for 60 seconds(L4 죽이기용)
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '60s'
+        
     - name : upload file
       uses: appleboy/scp-action@master
       with:
@@ -46,6 +62,45 @@ jobs:
         host: ${{ secrets.SSH_IP }}
         username: ${{ secrets.SSH_ID }}
         key: ${{ secrets.SSH_KEY }}
+        port: ${{ secrets.SSH_PORT }}
+        script_stop: true
+        script: "./startup.sh"
+        
+        
+#         2번째 서버 배포
+
+    - name: deploy server-2 helath check stop
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP_2 }}
+        username: ${{ secrets.SSH_ID_2 }}
+        key: ${{ secrets.SSH_KEY_2 }}
+        port: ${{ secrets.SSH_PORT }}
+        script_stop: true
+        script: "./deploy.sh"
+        
+    - name: Sleep for 60 seconds(L4 죽이기용)
+      uses: jakejarvis/wait-action@master
+      with:
+        time: '60s'
+        
+    - name : upload file
+      uses: appleboy/scp-action@master
+      with:
+        host: ${{ secrets.SSH_IP_2 }}
+        username: ${{ secrets.SSH_ID_2 }}
+        key: ${{ secrets.SSH_KEY_2 }}
+        port: ${{ secrets.SSH_PORT }}
+        source: "target/*.jar"
+        target: "~/"
+        rm: false
+
+    - name: execute shell script
+      uses: appleboy/ssh-action@master
+      with:
+        host: ${{ secrets.SSH_IP_2 }}
+        username: ${{ secrets.SSH_ID_2 }}
+        key: ${{ secrets.SSH_KEY_2 }}
         port: ${{ secrets.SSH_PORT }}
         script_stop: true
         script: "./startup.sh"

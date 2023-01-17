@@ -131,7 +131,7 @@ public class MemberController {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
         model.addAttribute("member", member);
 
-        return "members/memberInfo";
+        return "mypage/mypage";
     }
 
     /**
