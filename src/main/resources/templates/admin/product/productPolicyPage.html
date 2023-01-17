@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookPub</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div class="modal fade" id="productPolicyAddModal" role="dialog">
+        <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품정책 등록</h3>
+                </div>
+
+
+                <div class="modal-body">
+                    <form action="/admin/product/product-policies" class="was-validated" method="post">
+                        <div class="form-group row">
+                            <div class="col">
+                                <label>적립방식</label>
+                                <select class="form-control" name="policyMethod" required>
+                                    <option value="" selected disabled hidden>==적립방식 선택==</option>
+                                    <option th:value="'실구매가'">실구매가 기준</option>
+                                    <option th:value="'판매가'">판매가 기준</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label>적립방식</label>
+                                <select class="form-control" name="policySaved" required>
+                                    <option value="" selected disabled hidden>==적립여부 선택==</option>
+                                    <option th:value="true">적립됨</option>
+                                    <option th:value="false">적립안됨</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label for="addSaveRate">적립율(%)</label>
+                                <input type="text" class="form-control" id="addSaveRate" placeholder="0~100사이의 숫자 입력"
+                                       name="saveRate" pattern="^[1-9][0-9]?$|^100$" required>
+                                <div class="valid-feedback">Valid.</div>
+                                <div class="invalid-feedback">0~100사이의 숫자를 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left: 80%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="productPolicyModifyModal" role="dialog">
+        <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품정책 수정</h3>
+                </div>
+
+                <div class="modal-body">
+                    <form action="/admin/product/product-policies/modify" class="was-validated" method="post">
+                        <div class="form-group row">
+                            <div class="col">
+                                <label for="modifyPolicyNo">수정할 싱픔정책 번호</label>
+                                <input type="text" class="form-control" id="modifyPolicyNo" placeholder="정책 번호 입력"
+                                       name="policyNo" min="1"
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                       required>
+                                <div class="invalid-feedback">수정할 상품정책 번호를 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label>적립방식</label>
+                                <select class="form-control" name="policyMethod" required>
+                                    <option value="" selected disabled hidden>==적립방식 선택==</option>
+                                    <option value="실구매가">실구매가 기준</option>
+                                    <option value="판매가">판매가 기준</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label>적립방식</label>
+                                <select class="form-control" name="policySaved" required>
+                                    <option value="" selected disabled hidden>==적립여부 선택==</option>
+                                    <option value="1">적립됨</option>
+                                    <option value="0">적립안됨</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group row">
+                            <div class="col">
+                                <label for="modifySaveRate">적립율(%)</label>
+                                <input type="text" class="form-control" id="modifySaveRate" placeholder="1~100사이의 숫자 입력"
+                                       name="saveRate" pattern="^[1-9][0-9]?$|^100$">
+                                <div class="invalid-feedback">1~100사이의 숫자를 입력해주세요.</div>
+                            </div>
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left: 80%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">상품정책 목록</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">상품정책 등록, 수정</li>
+                </ol>
+
+                <hr/>
+
+                <div align="right">
+                    <button class="btn btn-primary float-right" data-toggle="modal"
+                            data-target="#productPolicyAddModal">상품정책 등록
+                    </button>
+                    <button class="btn btn-info float-right" data-toggle="modal"
+                            data-target="#productPolicyModifyModal">상품정책 수정
+                    </button>
+                </div>
+
+                <br/>
+
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>상품정책 번호</th>
+                            <th>적립방식</th>
+                            <th>적립여부</th>
+                            <th>적립률</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="productPolicy : ${productPolicies}">
+                            <td th:text="${productPolicy.policyNo}"></td>
+                            <td th:text="${productPolicy.policyMethod}"></td>
+                            <td th:text="${productPolicy.policySaved} ? 'Yes' : 'No'"></td>
+                            <td th:if="${productPolicy.saveRate} != null"
+                                th:text="${productPolicy.saveRate} + '%'"></td>
+                            <td th:unless="${productPolicy.saveRate} != null" th:text="${productPolicy.saveRate}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+
+        <th:block th:include="admin/fragments/adminFooter"/>
+    </div>
+
+</div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</html>
