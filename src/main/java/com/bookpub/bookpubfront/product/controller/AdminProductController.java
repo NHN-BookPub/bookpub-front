@@ -83,7 +83,7 @@ public class AdminProductController {
      * @param model     view 로 보낼 request
      * @return 상품 상세 정보 화
      */
-    @PostMapping("/{productNo}")
+    @GetMapping("/{productNo}")
     public String productDetail(@PathVariable("productNo") Long productNo, Model model) {
         GetProductDetailResponseDto product = productService.findProduct(productNo);
         model.addAttribute("product", product);
