@@ -3,7 +3,6 @@ package com.bookpub.bookpubfront.main;
 import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.bookpub.bookpubfront.category.service.CategoryService;
 import java.util.List;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import lombok.RequiredArgsConstructor;
@@ -23,11 +22,11 @@ import org.springframework.web.bind.annotation.GetMapping;
 @Slf4j
 @RequiredArgsConstructor
 public class MainController {
-    private final RedisTemplate<String,String> redisTemplate;
 
     private final CategoryService categoryService;
 
-    /** 메인화면에 연결해주는 controller get메소드.
+    /**
+     * 메인화면에 연결해주는 controller get메소드.
      *
      * @param model html에 동적인 값을 넘겨주는 객체.
      * @return 메인화면 뷰
@@ -38,10 +37,7 @@ public class MainController {
         List<GetParentCategoryWithChildrenResponseDto> parentCategoryWithChildren =
                 categoryService.getParentCategoryWithChildren();
 
-        String memberUUID = (String) authentication.getPrincipal();
-        String sessionId = (String) authentication.getCredentials();
-        String userId
-                = (String) redisTemplate.opsForHash().get(memberUUID, sessionId);
+        String userId = (String) authentication.getPrincipal();
 
         model.addAttribute("category", parentCategoryWithChildren);
         model.addAttribute("userId", userId);

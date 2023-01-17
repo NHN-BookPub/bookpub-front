@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -24,6 +25,7 @@ import org.springframework.security.web.access.intercept.FilterSecurityIntercept
 @Configuration
 public class SecurityConfig {
     private final ObjectMapper objectMapper;
+    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * security filterChain 설정
@@ -62,12 +64,13 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder();
     }
 
-    /** 토큰을 securityContextHolder에 넣어줄 필터.
+    /**
+     * 토큰을 securityContextHolder에 넣어줄 필터.
      *
      * @return 커스텀한 인증필터를 반환한다.
      */
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() {
-        return new CustomAuthenticationFilter(objectMapper);
+        return new CustomAuthenticationFilter(objectMapper, redisTemplate);
     }
 }
