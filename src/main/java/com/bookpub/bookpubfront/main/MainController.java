@@ -39,8 +39,6 @@ public class MainController {
 
         String userId = (String) authentication.getPrincipal();
 
-        log.info(userId);
-
         model.addAttribute("category", parentCategoryWithChildren);
         model.addAttribute("userId", userId);
         return "main/index";

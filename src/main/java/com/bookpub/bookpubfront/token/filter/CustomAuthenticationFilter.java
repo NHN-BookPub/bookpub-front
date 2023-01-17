@@ -30,6 +30,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private final ObjectMapper mapper;
     private final RedisTemplate<String, String> redisTemplate;
+    private static final String ACCESS_TOKEN = "access-token";
 
     /**
      * 특정 조건에서 필터가 작동하여 로그인 진행.
@@ -68,10 +69,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 authorities.add(new SimpleGrantedAuthority(role));
             }
 
-            String memberId = (String) redisTemplate.opsForHash().get(tokenInfo.getMemberUUID(), session.getId());
+            String memberId = (String) redisTemplate.opsForHash().get(tokenInfo.getMemberUUID(), ACCESS_TOKEN);
 
             UsernamePasswordAuthenticationToken token
-                    = new UsernamePasswordAuthenticationToken(memberId, session.getId(), authorities);
+                    = new UsernamePasswordAuthenticationToken(memberId, "dummy", authorities);
 
             SecurityContextHolder.getContext().setAuthentication(token);
             filterChain.doFilter(request, response);
