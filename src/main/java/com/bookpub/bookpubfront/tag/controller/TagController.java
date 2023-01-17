@@ -36,7 +36,7 @@ public class TagController {
      * @param model view 로 정보를 보내는 request
      * @return 태그 목록
      */
-    @GetMapping("/tagList")
+    @GetMapping("/tags")
     public String tagList(Model model) {
         List<GetTagResponseDto> tags = tagService.findAllTags();
 
