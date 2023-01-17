@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookPub</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+    <script>
+        var tagList = []
+
+        $('input[name="tagList"]:checked').each(function (i) {
+            tagList.push($(this).val());
+        });
+    </script>
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div class="modal fade" id="productAddModal" role="dialog">
+        <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 등록</h3>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/products/add" class="was-validated" method="post">
+                        <div class="row">
+                            <div class="col">
+                                <label>상품 유형</label>
+                                <select class="form-control" name="typeStateNo" required>
+                                    <option value="" selected disabled hidden>==상품 유형 선택==</option>
+                                    <option th:each="typeStateCode : ${typeStateCodes}"
+                                            th:value="${typeStateCode.codeNo}"
+                                            th:text="${typeStateCode.codeName}"></option>
+                                </select>
+                            </div>
+                            <div class="col">
+                                <label>상품 판매 유형</label>
+                                <select class="form-control" name="saleStateNo" required>
+                                    <option value="" selected disabled hidden>==상품 유형 선택==</option>
+                                    <option th:each="saleStateCode : ${saleStateCodes}"
+                                            th:value="${saleStateCode.codeNo}"
+                                            th:text="${saleStateCode.codeCategory}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="form-group">
+                                <label>포인트 정책</label>
+                                <select class="form-control" name="policyNo" required>
+                                    <option value="" selected disabled hidden>==포인트 정책 유형 선택==</option>
+                                    <option th:each="policy: ${policies}" th:value="${policy.policyNo}"
+                                            th:text="${policy.policyMethod} + '/ 적립률 : ' + ${policy.saveRate} + '%'"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="addTitle">책 제목</label>
+                                <input type="text" class="form-control" id="addTitle" placeholder="제목" name="title"
+                                       minlength="1" maxlength="100" required>
+                                <div class="invalid-feedback">최소 1글자, 최대 100글자</div>
+                            </div>
+                            <div class="col">
+                                <label for="addIsbn">
+                                    <a href="https://www.nl.go.kr/seoji/" target="_blank" rel="noopener noreferrer"
+                                       style="text-decoration-line: none">
+                                        ISBN
+                                    </a>
+                                </label>
+                                <input type="text" class="form-control" id="addIsbn" placeholder="ISBN"
+                                       name="productIsbn" minlength="10" maxlength="13" required>
+                                <div class="invalid-feedback">유효하지 않는 ISBN</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="addTitle">
+                                저자
+                                <a href="/admin/authors" target="_blank" rel="noopener noreferrer"
+                                   style="text-decoration-line: none">
+                                    (저자 목록)
+                                </a>
+                            </label>
+                            <input type="text" class="form-control" id="addAuthor" placeholder="저자 번호를 입력 ex) 1,3,4"
+                                   name="authors" required>
+                            <div class="invalid-feedback">최소 1명의 저자</div>
+                        </div>
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <label>카테고리1</label>
+                                <select class="form-control" name="categoryOne" required>
+                                    <option value="" selected disabled hidden>==카테고리 선택==</option>
+                                    <div th:each="category, index : ${categories}">
+                                        <option th:each="childCategory : ${category.childList}"
+                                                th:value="${childCategory.categoryNo}"
+                                                th:text="${category.categoryName} + '/' + ${childCategory.categoryName}"></option>
+                                    </div>
+                                </select>
+                            </div>
+
+                            <div class="form-group col">
+                                <label>카테고리2</label>
+                                <select class="form-control" name="categoryTwo">
+                                    <option value="">==카테고리 선택==</option>
+                                    <div th:each="category : ${categories}">
+                                        <option th:each="childCategory : ${category.childList}"
+                                                th:value="${childCategory.categoryNo}"
+                                                th:text="${category.categoryName} + '/' + ${childCategory.categoryName}"></option>
+                                    </div>
+                                </select>
+                            </div>
+
+                            <div class="form-group col">
+                                <label>카테고리3</label>
+                                <select class="form-control" name="categoryThree">
+                                    <option value="">==카테고리 선택==</option>
+                                    <div th:each="category : ${categories}">
+                                        <option th:each="childCategory : ${category.childList}"
+                                                th:value="${childCategory.categoryNo}"
+                                                th:text="${category.categoryName} + '/' + ${childCategory.categoryName}"></option>
+                                    </div>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label>태그</label>
+                            <br/>
+                            <label th:each="tag : ${tags}" th:for="${tag.tagName}+'id'">&nbsp;&nbsp;
+                                <input type="checkbox" class="form-check-label" th:id="${tag.tagName}+'id'"
+                                       name="tagList" th:value="${tag.tagNo}" th:text="${tag.tagName}">
+                            </label>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="addTitle">출판사</label>
+                                <input type="text" class="form-control" id="addPublisher" placeholder="출판사"
+                                       name="productPublisher" minlength="1" maxlength="50" required>
+                                <div class="invalid-feedback">최소 1글자, 최대 50글자</div>
+                            </div>
+                            <div class="col">
+                                <label for="addIsbn">페이지수</label>
+                                <input type="text" class="form-control" id="addPageCount" placeholder="00"
+                                       name="pageCount" min="1"
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                       required>
+                                <div class="invalid-feedback">최소 1 Page</div>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="addDescription">설명</label>
+                            <textarea class="form-control" id="addDescription" placeholder="설명"
+                                      name="productDescription"></textarea>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="addPrice">정가</label>
+                                <input type="text" class="form-control" id="addPrice" placeholder="00"
+                                       name="productPrice" min="100"
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                       required>
+                                <div class="invalid-feedback">최소 100원</div>
+                            </div>
+
+                            <div class="col">
+                                <label for="addSaleRate">할인율(%)</label>
+                                <input type="text" class="form-control" id="addSaleRate" name="saleRate" min="0"
+                                       max="99" value="0"
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="addPublishAt">출판일시</label>
+                                <input type="datetime-local" id="addPublishAt" name="publishedAt" required>
+                            </div>
+
+                            <div class="col">
+                                <label for="addPriority">우선순위 (0 ~ 100)</label>
+                                <input type="text" class="form-control" id="addPriority" name="priority" min="0"
+                                       max="100" value="50"
+                                       oninput="this.value = this.value.replace(/-[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="addSubscribed">구독여부</label>
+                            <select id="addSubscribed" name="subscribed" class="form-select">
+                                <option selected>구독불가</option>
+                                <option>구독가능</option>
+                            </select>
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left: 80%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">상품 목록</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">
+                        상품 목록, 수정 등 관리
+                    </li>
+                </ol>
+
+                <hr/>
+
+                <div align="right">
+                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#productAddModal">상품
+                        등록
+                    </button>
+                </div>
+
+                <br/>
+
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>상품번호</th>
+                            <th>책 제목</th>
+                            <th>판매가격</th>
+                            <th>정가</th>
+                            <th>재고수량</th>
+                            <th>정보</th>
+                            <th>비고</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product: ${products}">
+                            <td th:text="${product.productNo}"></td>
+                            <td th:text="${product.title}"></td>
+                            <td th:text="${product.salesPrice}"></td>
+                            <td th:text="${product.productPrice}"></td>
+                            <td th:text="${product.productStock}"></td>
+                            <td>
+                                <form th:action="@{/admin/products/{productNo}(productNo=${product.productNo})}"
+                                      method="post">
+                                    <button type="submit" class="btn btn-light">정보조회</button>
+                                </form>
+                            </td>
+                            <td>
+                                <form th:action="@{/admin/products/deleted/{productNo}(productNo=${product.productNo})}"
+                                      method="post">
+                                    <button th:if="${product.deleted} == true" class="btn btn-warning">복구</button>
+                                    <button th:unless="${product.deleted} == true" class="btn btn-danger">삭제</button>
+                                </form>
+                            </td>
+
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+
+            </div>
+        </main>
+        <th:block th:include="admin/fragments/adminFooter"/>
+    </div>
+
+</div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</html>
