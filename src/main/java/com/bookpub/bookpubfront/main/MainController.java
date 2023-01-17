@@ -39,10 +39,9 @@ public class MainController {
         List<GetParentCategoryWithChildrenResponseDto> parentCategoryWithChildren =
                 categoryService.getParentCategoryWithChildren();
 
-        String memberUUID = (String) authentication.getPrincipal();
-        String sessionId = (String) authentication.getCredentials();
-        String userId
-                = (String) redisTemplate.opsForHash().get(memberUUID, sessionId);
+        String userId = (String) authentication.getPrincipal();
+
+        log.info(userId);
 
         model.addAttribute("category", parentCategoryWithChildren);
         model.addAttribute("userId", userId);

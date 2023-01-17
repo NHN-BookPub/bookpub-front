@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,6 +29,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private final ObjectMapper mapper;
+    private final RedisTemplate<String, String> redisTemplate;
 
     /**
      * 특정 조건에서 필터가 작동하여 로그인 진행.
@@ -66,8 +68,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 authorities.add(new SimpleGrantedAuthority(role));
             }
 
+            String memberId = (String) redisTemplate.opsForHash().get(tokenInfo.getMemberUUID(), session.getId());
+
             UsernamePasswordAuthenticationToken token
-                    = new UsernamePasswordAuthenticationToken(tokenInfo.getMemberUUID(), session.getId(), authorities);
+                    = new UsernamePasswordAuthenticationToken(memberId, session.getId(), authorities);
 
             SecurityContextHolder.getContext().setAuthentication(token);
             filterChain.doFilter(request, response);
