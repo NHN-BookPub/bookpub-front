@@ -48,6 +48,7 @@ public class SignupMemberRequestDto {
     private String phone;
 
     @NotBlank
+    @Pattern(regexp = "^\\w+([\\.-]?\\w+)*@\\w+([\\.-]?\\w+)*(\\.\\w{2,3})+$")
     private String email;
 
     @NotBlank

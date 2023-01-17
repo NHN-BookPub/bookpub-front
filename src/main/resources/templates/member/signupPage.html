@@ -11,6 +11,7 @@
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="/static/css/main/signup.css">
     <script src="http://code.jquery.com/jquery-latest.js"></script>
+    <link rel="stylesheet" href="../../static/css/main/signup.css">
 
 </head>
 
@@ -20,22 +21,12 @@
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">회원가입</h4>
             <form class="validation-form" novalidate action="/signup" method="post">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="name">이름</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
-                               value="" required>
-                        <div class="invalid-feedback">
-                            이름을 입력해주세요.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="nickname">별명</label>
-                        <input type="text" class="form-control" id="nickname" name="nickname"
-                               placeholder="영어+숫자 2~8글자" value="" required>
-                        <div class="invalid-feedback">
-                            별명을 입력해주세요.
-                        </div>
+                <div class="mb-3">
+                    <label for="name">이름</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
+                           value="" required>
+                    <div class="invalid-feedback">
+                        이름을 입력해주세요.
                     </div>
                 </div>
                 <div class="row">
@@ -59,15 +50,47 @@
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
+                <div class="mb-3" style="margin-bottom: 0.4rem !important;">
+                    <label for="nickname">닉네임</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname"
+                           placeholder="영어+숫자 2~8글자" value="" required>
+                    <span class="nick-duplicate">닉네임을 다시 입력해주세요.</span>
+                    <span class="nick-ok">사용 가능한 닉네임 입니다.</span>
+                    <input id="nickname-check" type="hidden" value="0">
+                    <div class="invalid-feedback">
+                        별명을 입력해주세요.
+                    </div>
+                    <div class="button-box">
+                        <button class="checkBtn" type="button" th:onclick="nickCheckFunc()">중복확인</button>
+                    </div>
+                </div>
+
+                <div class="mb-3" style="margin-bottom: 0.4rem !important;">
+                    <label for="email">이메일</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com"
+                           value="" required>
+                    <span class="email-duplicate">이메일을 다시 입력해주세요.</span>
+                    <span class="email-ok">사용 가능한 이메일 입니다.</span>
+                    <input id="email-check" type="hidden" value="0">
+                    <div class="invalid-feedback">
+                        이메일을 입력해주세요.
+                    </div>
+                    <div class="button-box">
+                        <button class="checkBtn" type="button" th:onclick="emailCheckFunc()">중복확인</button>
+                    </div>
+                </div>
+                <div class="mb-3 margin-bottom: 0.4rem !important;">
                     <label for="memberId">아이디</label>
                     <input type="text" class="form-control" id="memberId" name="memberId"
                            placeholder="5~20자, 특수문자x, 한글x, 공백x"
                            value="" required>
-                    <button th:url="${url}" type="button" th:onclick="idCheck(this.getAttribute('url'))">중복확인</button>
-                    <span class="id-duplicate">이미 사용중인 아이디 입니다.</span>
+                    <input id="id-check" type="hidden" value="0">
+                    <span class="id-duplicate">아이디를 다시 입력해주세요.</span>
                     <span class="id-ok">사용 가능한 아이디 입니다.</span>
                     <div class="invalid-feedback">아이디를 입력해주세요.</div>
+                    <div class="button-box">
+                        <button class="checkBtn" type="button" th:onclick="idCheckFunc()">중복확인</button>
+                    </div>
                 </div>
                 <div class="mb-3">
                     <label for="pwd">패스워드</label>
@@ -93,13 +116,10 @@
                     <div class="invalid-feedback">
                         전화번호를 입력해주세요.
                     </div>
-                </div>
-                <div class="mb-3">
-                    <label for="email">이메일</label>
-                    <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com"
-                           required>
-                    <div class="invalid-feedback">
-                        이메일을 입력해주세요.
+                    <div class="button-box">
+                        <button id="smsAuthSend" type="button" onclick="smsAuth()">인증번호 전송</button>
+                        <input type="text" id="authInput" name="auth" required>
+                        <button id="smsAuthConfirm" type="button" onclick="smsConfirm()">확인</button>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -121,7 +141,9 @@
                     <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
                 </div>
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+                <button class="btn btn-primary btn-lg btn-block" id="submitBtn" type="submit" disabled="disabled">가입
+                    완료
+                </button>
             </form>
         </div>
     </div>

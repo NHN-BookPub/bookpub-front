@@ -86,4 +86,10 @@ public interface MemberAdaptor {
      * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
      */
     ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest);
+
+    ResponseEntity<Boolean> idDuplicateCheck(String id);
+
+    ResponseEntity<Boolean> emailDuplicateCheck(String email);
+
+    ResponseEntity<Boolean> nickDuplicateCheck(String nickname);
 }

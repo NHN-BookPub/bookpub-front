@@ -145,4 +145,19 @@ public class MemberServiceImpl implements MemberService {
     public List<MemberTierStatisticsResponseDto> memberTierStatistics() {
         return memberAdaptor.requestMemberTierStatics();
     }
+
+    @Override
+    public boolean idDuplicateCheck(String id) {
+        return Boolean.TRUE.equals(memberAdaptor.idDuplicateCheck(id).getBody());
+    }
+
+    @Override
+    public boolean emailDuplicateCheck(String email) {
+        return Boolean.TRUE.equals(memberAdaptor.emailDuplicateCheck(email).getBody());
+    }
+
+    @Override
+    public boolean nickDuplicateCheck(String nickname) {
+        return Boolean.TRUE.equals(memberAdaptor.nickDuplicateCheck(nickname).getBody());
+    }
 }

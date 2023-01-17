@@ -3,10 +3,13 @@ package com.bookpub.bookpubfront.member.adaptor.impl;
 import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
+import com.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.EmailCheckRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
@@ -169,10 +172,46 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
 
         return restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + "/auth/login",
+                GateWayConfig.getGatewayUrl() + "/auth/login",
                 HttpMethod.POST,
                 entity,
                 Void.class
+        );
+    }
+
+    @Override
+    public ResponseEntity<Boolean> idDuplicateCheck(String id) {
+        HttpEntity<IdCheckRequestDto> entity = new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/signup/idCheck",
+                HttpMethod.POST,
+                entity,
+                Boolean.class
+        );
+    }
+
+    @Override
+    public ResponseEntity<Boolean> emailDuplicateCheck(String email) {
+        HttpEntity<EmailCheckRequestDto> entity = new HttpEntity<>(new EmailCheckRequestDto(email), makeHeader());
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/signup/emailCheck",
+                HttpMethod.POST,
+                entity,
+                Boolean.class
+        );
+    }
+
+    @Override
+    public ResponseEntity<Boolean> nickDuplicateCheck(String nickname) {
+        HttpEntity<NickCheckRequestDto> entity = new HttpEntity<>(new NickCheckRequestDto(nickname), makeHeader());
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/signup/nickCheck",
+                HttpMethod.POST,
+                entity,
+                Boolean.class
         );
     }
 }
