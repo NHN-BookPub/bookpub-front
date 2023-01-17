@@ -9,33 +9,9 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="/static/css/main/signup.css">
+    <script src="http://code.jquery.com/jquery-latest.js"></script>
 
-    <style>
-        body {
-            min-height: 100vh;
-
-            background: -webkit-gradient(linear, left bottom, right top, from(#000000), to(#070707));
-            background: -webkit-linear-gradient(bottom left, #000000 0%, #000000 100%);
-            background: -moz-linear-gradient(bottom left, #0a0a0a 0%, #050505 100%);
-            background: -o-linear-gradient(bottom left, #000000 0%, #000000 100%);
-            background: linear-gradient(to top right, #696969 0%, #606060 100%);
-        }
-
-        .input-form {
-            max-width: 680px;
-
-            margin-top: 80px;
-            padding: 32px;
-
-            background: #fff;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-            -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-            box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
-        }
-    </style>
 </head>
 
 <body>
@@ -88,9 +64,10 @@
                     <input type="text" class="form-control" id="memberId" name="memberId"
                            placeholder="5~20자, 특수문자x, 한글x, 공백x"
                            value="" required>
-                    <div class="invalid-feedback">
-                        아이디를 입력해주세요.
-                    </div>
+                    <button th:url="${url}" type="button" th:onclick="idCheck(this.getAttribute('url'))">중복확인</button>
+                    <span class="id-duplicate">이미 사용중인 아이디 입니다.</span>
+                    <span class="id-ok">사용 가능한 아이디 입니다.</span>
+                    <div class="invalid-feedback">아이디를 입력해주세요.</div>
                 </div>
                 <div class="mb-3">
                     <label for="pwd">패스워드</label>
@@ -152,80 +129,6 @@
         <p class="mb-1" style="color: white">&copy; 2023 BOOKPUB</p>
     </footer>
 </div>
-
-<script>
-    window.addEventListener('load', () => {
-        const forms = document.getElementsByClassName('validation-form');
-        let emptyReg = /\s/g;
-        let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
-        let idReg = /^.*(?=.*[a-z])(?=.*\d)(?=^.{5,20}).*$/;
-        let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
-        let nickReg = /^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$/;
-        let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
-        let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
-
-
-        Array.prototype.filter.call(forms, (form) => {
-            form.addEventListener('submit', function (event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                let nameVal = document.getElementById('name').value;
-                if (!nameReg.test(nameVal) || emptyReg.test(nameVal)) {
-                    alert('이름은 한글 2글자 이상으로 생성해주세요.')
-                    return false;
-                }
-
-                let birthVal = document.getElementById('birth').value;
-                if (!birthReg.test(birthVal) || emptyReg.test(birthVal)) {
-                    alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
-                    return false;
-                }
-
-                let nickVal = document.getElementById('nickname').value;
-                if (!nickReg.test(nickVal) || emptyReg.test(nickVal)) {
-                    alert('닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.')
-                    return false;
-                }
-
-                let idVal = document.getElementById('memberId').value;
-                if (!idReg.test(idVal) || emptyReg.test(idVal)) {
-                    alert('아이디는 영소문자,숫자로 구성된 5글자 이상, 20글자 이하로 생성해주세요.')
-                    return false;
-                }
-
-                const pwdVal = document.getElementById('pwd').value;
-                const pwdOkVal = document.getElementById('pwd-check').value;
-
-                if (!pwdReg.test(pwdVal) || emptyReg.test(pwdVal)) {
-                    alert('비밀번호는 영대소문자,숫자,특수문자로 구성된 8글자 이상 20글자 이하로 생성하세요.')
-                    return false;
-                } else {
-                    if (pwdOkVal) {
-                        if (pwdVal !== pwdOkVal) {
-                            alert('비밀번호가 일치하지 않습니다.')
-                            return false;
-                        }
-                    } else {
-                        alert('비밀번호확인을 입력하세요.')
-                        return false;
-                    }
-                }
-
-                let phoneVal = document.getElementById('phone').value;
-                if (!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)) {
-                    alert('전화번호 11자리를 입력해주세요 ( - 제외).')
-                    return false;
-                }
-
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-
-</script>
-
-
+<script src="/static/js/main/signup.js"></script>
 </body>
 </html>

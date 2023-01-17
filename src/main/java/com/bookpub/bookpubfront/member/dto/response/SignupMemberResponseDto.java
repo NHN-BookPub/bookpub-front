@@ -1,6 +1,8 @@
 package com.bookpub.bookpubfront.member.dto.response;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * shop 서버에서 응답받은 데이터가 들어갈 DTO
@@ -10,6 +12,8 @@ import lombok.Getter;
  **/
 
 @Getter
+@AllArgsConstructor
+@NoArgsConstructor
 public class SignupMemberResponseDto {
     private String memberId;
     private String memberNickname;

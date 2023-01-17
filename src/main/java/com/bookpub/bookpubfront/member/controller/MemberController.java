@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.member.controller;
 
+import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
@@ -63,7 +64,8 @@ public class MemberController {
      * @return 회원가입 페이지 view를 보여줌
      */
     @GetMapping("/signup")
-    public String signupPageForm() {
+    public String signupPageForm(Model model) {
+        model.addAttribute("url",GateWayConfig.getGatewayUrl()+"/api/signup");
         return "member/signupPage";
     }
 
@@ -143,7 +145,7 @@ public class MemberController {
     public String loginPageForm(Model model, HttpServletRequest request) {
         model.addAttribute("sessionId", request.getSession().getId());
 
-        return "member/loginPage";
+        return "member/login";
     }
 
     /**
@@ -165,5 +167,18 @@ public class MemberController {
         memberService.logout(request.getSession());
 
         return "redirect:/";
+    }
+
+    @GetMapping("/signup/test")
+    public String test(Model model) {
+        SignupMemberResponseDto signupMemberResponseDto = new SignupMemberResponseDto(
+                "tagkdj1",
+                "taewon",
+                "tagkdj1@naver.com",
+                "basic"
+        );
+        model.addAttribute("member",signupMemberResponseDto);
+
+        return "member/signupComplete";
     }
 }
