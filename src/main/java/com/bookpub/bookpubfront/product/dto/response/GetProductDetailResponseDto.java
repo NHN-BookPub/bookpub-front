@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * 상품 상세 정보를 담는 DTO.
@@ -13,7 +12,6 @@ import lombok.NoArgsConstructor;
  * @since : 1.0
  **/
 @Getter
-@NoArgsConstructor
 public class GetProductDetailResponseDto {
     private Long productNo;
     private String productIsbn;

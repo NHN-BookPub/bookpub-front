@@ -1,7 +1,6 @@
 package com.bookpub.bookpubfront.product.relationship.dto.response;
 
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 
 /**
  * 상품 정책 응답을 받는 DTO.
@@ -10,7 +9,6 @@ import lombok.NoArgsConstructor;
  * @since : 1.0
  **/
 @Getter
-@NoArgsConstructor
 public class GetProductPolicyResponseDto {
     private Integer policyNo;
     private String policyMethod;
