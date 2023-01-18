@@ -173,7 +173,7 @@ function nickCheckFunc() {
 }
 
 function allCheck() {
-    return idCheck.value === "1" && emailCheck.value === "1" && nicknameCheck.value === "1";
+    return idCheck.value === "1" && nicknameCheck.value === "1";
 }
 
 
@@ -202,10 +202,9 @@ function smsConfirm() {
     const authInput = document.getElementById('authInput');
     if (authInput.value === authMessage) {
         alert("인증에 성공하였습니다.");
-        phone.disabled = true;
+        phone.readable = true;
         authInput.disabled = true;
         confirmBtn.css("display", "none");
-
     } else {
         alert("인증에 실패하였습니다.")
         authInput.value='';
@@ -215,7 +214,7 @@ function smsConfirm() {
 function findAddress() {
     new daum.Postcode({
         oncomplete: function (data) {
-            document.getElementById("roadAddress").value = data.roadAddress;
+            document.getElementById("address").value = data.roadAddress;
         }
     }).open();
 }

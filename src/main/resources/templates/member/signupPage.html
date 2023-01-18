@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
     <!-- jQury cdn-->
-
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
     <!-- Bootstrap CSS -->
@@ -128,14 +127,14 @@
 
                 <div>
                     <div class="mb-3">
-                        <label for="roadAddress">도로명 주소</label>
-                        <input class="form-control" type="text" id="roadAddress" placeholder="도로명주소" required disabled>
+                        <label for="address">도로명 주소</label>
+                        <input class="form-control" type="text" id="address" name="address" placeholder="도로명주소" required readonly>
                         <div class="invalid-feedback">주소를 입력해주세요.</div>
 
                     </div>
                     <div class="mb-3">
                         <label for="detailAddress">상세주소</label>
-                        <input type="text" class="form-control" id="detailAddress" name="address" placeholder="상세주소"
+                        <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소"
                                required>
                         <div class="invalid-feedback">상세주소를 입력해주세요.</div>
                     </div>
