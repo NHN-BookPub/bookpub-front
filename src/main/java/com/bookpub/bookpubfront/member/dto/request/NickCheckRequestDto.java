@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here
+ * 닉네임 체크 request dto.
  *
  * @author : 임태원
  * @since : 1.0

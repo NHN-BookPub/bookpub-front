@@ -19,6 +19,6 @@ public class GateWayConfig {
     }
 
     public void setGateway(String gateway) {
-        this.gateway = gateway;
+        GateWayConfig.gateway = gateway;
     }
 }

@@ -101,7 +101,5 @@ public interface MemberService {
 
     boolean idDuplicateCheck(String id);
 
-    boolean emailDuplicateCheck(String id);
-
     boolean nickDuplicateCheck(String id);
 }

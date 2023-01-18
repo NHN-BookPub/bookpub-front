@@ -152,11 +152,6 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public boolean emailDuplicateCheck(String email) {
-        return Boolean.TRUE.equals(memberAdaptor.emailDuplicateCheck(email).getBody());
-    }
-
-    @Override
     public boolean nickDuplicateCheck(String nickname) {
         return Boolean.TRUE.equals(memberAdaptor.nickDuplicateCheck(nickname).getBody());
     }

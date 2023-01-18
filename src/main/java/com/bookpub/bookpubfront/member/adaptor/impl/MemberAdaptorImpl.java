@@ -8,7 +8,6 @@ import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.EmailCheckRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
@@ -37,8 +36,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @RequiredArgsConstructor
 public class MemberAdaptorImpl implements MemberAdaptor {
     private final RestTemplate restTemplate;
-    private final GateWayConfig gateWayConfig;
-
     private static final String MEMBER_API = "/api/members";
 
 
@@ -51,7 +48,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, makeHeader());
 
         return restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + "/api/signup",
+                GateWayConfig.getGatewayUrl() + "/api/signup",
                 HttpMethod.POST,
                 entity,
                 SignupMemberResponseDto.class
@@ -66,7 +63,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public void requestMemberNickNameChange(Long memberNo, ModifyMemberNickNameRequestDto requestDto) {
 
         restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/nickName",
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/nickName",
                 HttpMethod.PUT,
                 new HttpEntity<>(requestDto, makeHeader()),
                 Void.class);
@@ -80,7 +77,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public void requestMemberEmailChange(Long memberNo, ModifyMemberEmailRequestDto requestDto) {
 
         restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/email",
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/email",
                 HttpMethod.PUT,
                 new HttpEntity<>(requestDto, makeHeader()),
                 Void.class);
@@ -94,7 +91,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public MemberDetailResponseDto requestMemberDetails(Long memberNo) {
 
         return restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + MEMBER_API + "/" + memberNo,
+                GateWayConfig.getGatewayUrl() + MEMBER_API + "/" + memberNo,
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 MemberDetailResponseDto.class
@@ -107,7 +104,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      */
     @Override
     public PageResponse<MemberResponseDto> requestMembers(Pageable pageable) {
-        String url = UriComponentsBuilder.fromHttpUrl(gateWayConfig.getGatewayUrl() + "/api/admin/members")
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + "/api/admin/members")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -128,7 +125,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public void requestMemberBlock(Long memberNo) {
         restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + "/api/admin/members/" + memberNo,
+                GateWayConfig.getGatewayUrl() + "/api/admin/members/" + memberNo,
                 HttpMethod.PUT,
                 new HttpEntity<>(makeHeader()),
                 Void.class
@@ -142,7 +139,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public MemberStatisticsResponseDto requestMemberStatics() {
 
         return restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + "/api/admin/members/statistics",
+                GateWayConfig.getGatewayUrl() + "/api/admin/members/statistics",
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 MemberStatisticsResponseDto.class
@@ -156,7 +153,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public List<MemberTierStatisticsResponseDto> requestMemberTierStatics() {
 
         return restTemplate.exchange(
-                gateWayConfig.getGatewayUrl() + "/api/admin/tier/statistics",
+                GateWayConfig.getGatewayUrl() + "/api/admin/tier/statistics",
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<List<MemberTierStatisticsResponseDto>>() {
@@ -179,6 +176,9 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<Boolean> idDuplicateCheck(String id) {
         HttpEntity<IdCheckRequestDto> entity = new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
@@ -191,18 +191,9 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
     }
 
-    @Override
-    public ResponseEntity<Boolean> emailDuplicateCheck(String email) {
-        HttpEntity<EmailCheckRequestDto> entity = new HttpEntity<>(new EmailCheckRequestDto(email), makeHeader());
-
-        return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/api/signup/emailCheck",
-                HttpMethod.POST,
-                entity,
-                Boolean.class
-        );
-    }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ResponseEntity<Boolean> nickDuplicateCheck(String nickname) {
         HttpEntity<NickCheckRequestDto> entity = new HttpEntity<>(new NickCheckRequestDto(nickname), makeHeader());

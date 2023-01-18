@@ -87,9 +87,19 @@ public interface MemberAdaptor {
      */
     ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest);
 
+    /**
+     * 아이디 중복체크를 위해 통신 메소드.
+     *
+     * @param id 회원가입 아이디.
+     * @return 중복여부 true, false
+     */
     ResponseEntity<Boolean> idDuplicateCheck(String id);
 
-    ResponseEntity<Boolean> emailDuplicateCheck(String email);
-
+    /**
+     * 닉네임 중복체크를 위해 통신하는 메소드.
+     *
+     * @param nickname 회원가입 닉네임.
+     * @return 중복여부 true, false
+     */
     ResponseEntity<Boolean> nickDuplicateCheck(String nickname);
 }

@@ -11,10 +11,7 @@ const idCheck = $("#id-check");
 const emailCheck = $("#email-check");
 
 let authMessage;
-let authText = $('#authInput');
-let authButton = $('#smsAuthConfirm');
-let authBtn = $('#smsAuthSend');
-
+let confirmBtn = $('#smsAuthConfirm');
 
 window.addEventListener('load', () => {
     const forms = document.getElementsByClassName('validation-form');
@@ -55,7 +52,7 @@ function nicknamePattern() {
     return true;
 }
 
-function emailPatter() {
+function emailPattern() {
     let emailVal = document.getElementById('email').value;
     if (!emailReg.test(emailVal) || emptyReg.test(emailVal)) {
         alert('이메일 형식을 갖춰서 생성해주세요')
@@ -64,10 +61,20 @@ function emailPatter() {
     return true;
 }
 
+function phonePattern() {
+    let phoneVal = document.getElementById('phone').value;
+    if (!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)) {
+        alert('전화번호 11자리를 입력해주세요 ( - 제외).')
+        return false;
+    }
+    return true;
+}
+
 function check() {
     nicknamePattern();
     idPattern();
-    emailPatter();
+    emailPattern();
+    phonePattern();
 
     let nameVal = document.getElementById('name').value;
     if (!nameReg.test(nameVal) || emptyReg.test(nameVal)) {
@@ -99,90 +106,70 @@ function check() {
         }
     }
 
-    let phoneVal = document.getElementById('phone').value;
-    if (!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)) {
-        alert('전화번호 11자리를 입력해주세요 ( - 제외).')
-        return false;
-    }
 }
 
 
 function idCheckFunc() {
     const id = $("#memberId").val();
-
-    $.ajax({
-        type: "post",
-        async: true,
-        url: "./idCheck",
-        data: {"id": id},
-        success: function (result) {
-            if (result === false && idPattern()) {
-                $('.id-ok').css("display", "inline-block");
-                $('.id-duplicate').css("display", "none");
-                idCheck.value = "1";
-                if (allCheck()) {
-                    $("#submitBtn").removeAttr("disabled");
+    if (idPattern()) {
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "./idCheck",
+            data: {"id": id},
+            success: function (result) {
+                if (result === false) {
+                    $('.id-ok').css("display", "inline-block");
+                    $('.id-duplicate').css("display", "none");
+                    idCheck.value = "1";
+                    if (allCheck()) {
+                        $("#submitBtn").removeAttr("disabled");
+                    }
+                } else {
+                    $('.id-duplicate').css("display", "inline-block");
+                    $('.id-ok').css("display", "none");
+                    alert("이미 사용하는 아이디 입니다.");
+                    $('#memberId').val('');
                 }
-            } else {
-                $('.id-duplicate').css("display", "inline-block");
-                $('.id_ok').css("display", "none");
-                alert("이미 사용하는 아이디 입니다.");
-                $('#memberId').val('');
-            }
-        },
-    })
-}
-
-function emailCheckFunc() {
-    const email = $("#email").val();
-
-    $.ajax({
-        type: "post",
-        async: true,
-        url: "./emailCheck",
-        data: {"email": email},
-        success: function (result) {
-            if (result === false && emailPatter()) {
-                $('.email-ok').css("display", "inline-block");
-                $('.email-duplicate').css("display", "none");
-                emailCheck.value = "1";
-                if (allCheck()) {
-                    $("#submitBtn").removeAttr("disabled");
-                }
-            } else {
-                $('.email-duplicate').css("display", "inline-block");
-                $('.email_ok').css("display", "none");
-                alert("이미 사용하는 이메일입니다.");
-                $('#email').val('');
-            }
-        },
-    })
+            },
+        })
+    } else {
+        $('.id-duplicate').css("display", "inline-block");
+        $('.id-ok').css("display", "none");
+        $('#memberId').val('');
+    }
 }
 
 function nickCheckFunc() {
     const nickname = $("#nickname").val();
 
-    $.ajax({
-        type: "post",
-        async: true,
-        url: "./nickCheck",
-        data: {"nickname": nickname},
-        success: function (result) {
-            if (result === false && nicknamePattern()) {
-                $('.nick-ok').css("display", "inline-block");
-                $('.nick-duplicate').css("display", "none");
-                nicknameCheck.value = "1";
-                if (allCheck()) {
-                    $("#submitBtn").removeAttr("disabled");
+    if (nicknamePattern()) {
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "./nickCheck",
+            data: {"nickname": nickname},
+            success: function (result) {
+                if (result === false) {
+                    $('.nick-ok').css("display", "inline-block");
+                    $('.nick-duplicate').css("display", "none");
+                    nicknameCheck.value = "1";
+                    if (allCheck()) {
+                        $("#submitBtn").removeAttr("disabled");
+                    }
+                } else {
+                    $('.nick-duplicate').css("display", "inline-block");
+                    $('.nick-ok').css("display", "none");
+                    alert("이미 사용하는 닉네임 입니다.");
+                    $('#nickname').val('');
                 }
-            } else {
-                $('.nick-duplicate').css("display", "inline-block");
-                $('.nick_ok').css("display", "none");
-                alert("이미 사용하는 닉네임 입니다.");
-                $('#nickname').val('');
-            }
-        },
-    })
+            },
+        })
+    } else {
+        $('.nick-duplicate').css("display", "inline-block");
+        $('.nick-ok').css("display", "none");
+        $('#nickname').val('');
+    }
 }
 
 function allCheck() {
@@ -191,30 +178,44 @@ function allCheck() {
 
 
 function smsAuth() {
+    if (phonePattern()) {
+        $.ajax({
+            type: "post",
+            async: false,
+            url: "./smsSend",
+            success: function (result) {
+                alert("인증번호가 전송되었습니다");
+                authMessage = result;
+                console.log(authMessage)
+                $('#smsAuthSend').css("display", "none");
+                $('#smsAuthConfirm').css("display", "inline-block");
+                $('#authInput').css("display", "inline-block");
+                $('#inputLabel').css("display", "inline-block");
 
-    $.ajax({
-        type: "post",
-        async: true,
-        url: "./smsSend",
-        success: function (result) {
-            authMessage = result;
-            authBtn.css("display", "none");
-            authText.css("display", "inline-block");
-            authButton.css("display", "inline-block");
-        },
-    })
+            },
+        })
+    }
 }
 
 function smsConfirm() {
-    console.log(authMessage);
-    console.log(authText.val());
-
-    if (authText.val() === authMessage) {
-        alert("인증에 성공하였습니다")
-        authText.css("display", "none");
-        authButton.css("display", "none");
+    const phone = document.getElementById('phone');
+    const authInput = document.getElementById('authInput');
+    if (authInput.value === authMessage) {
+        alert("인증에 성공하였습니다.");
+        phone.disabled = true;
+        authInput.disabled = true;
+        confirmBtn.css("display", "none");
 
     } else {
-        authText.val('');
+        alert("인증에 실패하였습니다.")
+        authInput.value='';
     }
+}
+
+function findAddress() {
+    new daum.Postcode({
+        oncomplete: function (data) {
+            document.getElementById("roadAddress").value = data.roadAddress;
+        }
+    }).open();
 }

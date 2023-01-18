@@ -21,21 +21,33 @@ public class MemberRestController {
     private final MemberService memberService;
     private final DoorayConfig doorayConfig;
 
+    /**
+     * id 중복체크 restController.
+     *
+     * @param id 회원가입 아이디.
+     * @return id 중복여부 확인.
+     */
     @PostMapping("/idCheck")
     public boolean idDuplicateCheck(@RequestParam("id") String id) {
         return memberService.idDuplicateCheck(id);
     }
 
+    /**
+     * nickname 중복체크 restController.
+     *
+     * @param nickname 회원가입 아이디.
+     * @return nickname 중복여부 확인.
+     */
     @PostMapping("/nickCheck")
     public boolean nickDuplicateCheck(@RequestParam("nickname") String nickname) {
         return memberService.nickDuplicateCheck(nickname);
     }
 
-    @PostMapping("/emailCheck")
-    public boolean emailDuplicateCheck(@RequestParam("email") String email) {
-        return memberService.emailDuplicateCheck(email);
-    }
-
+    /**
+     * 전화번호 인증 메소드.
+     *
+     * @return 해당 번호로 전송된 회원가입 코드.
+     */
     @PostMapping("/smsSend")
     public String doorayMessage() {
         String authenticateMessage = UUID.randomUUID().toString();

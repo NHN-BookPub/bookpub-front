@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here
+ * 회원가입 아이디 체크 request Dto
  *
  * @author : 임태원
  * @since : 1.0
