@@ -4,9 +4,11 @@ import com.bookpub.bookpubfront.token.dto.TokenInfoDto;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.FilterChain;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -16,7 +18,10 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 /**
@@ -35,27 +40,22 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     /**
      * 특정 조건에서 필터가 작동하여 로그인 진행.
      *
-     * @param request 요청 정보 객체.
-     * @param response 응답 정보 객체.
+     * @param request     요청 정보 객체.
+     * @param response    응답 정보 객체.
      * @param filterChain security의 필터체인 객체.
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
 
         try {
+            if (Objects.isNull(findCookie())) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+
             HttpSession session = request.getSession(false);
 
-            if (Objects.isNull(session)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
-
             String accessToken = (String) session.getAttribute(JwtUtil.JWT_SESSION);
-
-            if (Objects.isNull(accessToken)) {
-                filterChain.doFilter(request, response);
-                return;
-            }
 
             String payload = JwtUtil.decodeJwt(accessToken);
             TokenInfoDto tokenInfo = mapper.readValue(payload, TokenInfoDto.class);
@@ -74,7 +74,14 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken token
                     = new UsernamePasswordAuthenticationToken(memberId, "dummy", authorities);
 
-            SecurityContextHolder.getContext().setAuthentication(token);
+
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(token);
+            SecurityContextHolder.setContext(securityContext);
+
+            Object credentials1 = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            log.info(credentials1.toString());
+
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
@@ -82,5 +89,15 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         } finally {
             SecurityContextHolder.clearContext();
         }
+    }
+
+    public Cookie findCookie() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(JwtUtil.JWT_SESSION))
+                .findAny()
+                .orElse(null);
     }
 }
