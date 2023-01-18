@@ -162,23 +162,16 @@ public class MemberController {
         return "redirect:/";
     }
 
+    /**
+     * 로그아웃
+     *
+     * @param request HTTP Request.
+     * @return 로그아웃 후 메인화면으로 리다이렉트.
+     */
     @GetMapping("/logout")
     public String logoutSubmit(HttpServletRequest request) {
         memberService.logout(request.getSession());
 
         return "redirect:/";
-    }
-
-    @GetMapping("/signup/test")
-    public String test(Model model) {
-        SignupMemberResponseDto signupMemberResponseDto = new SignupMemberResponseDto(
-                "tagkdj1",
-                "taewon",
-                "tagkdj1@naver.com",
-                "basic"
-        );
-        model.addAttribute("member",signupMemberResponseDto);
-
-        return "member/signupComplete";
     }
 }

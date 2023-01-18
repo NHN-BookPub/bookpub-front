@@ -98,4 +98,8 @@ public interface MemberService {
      * @return the list
      */
     List<MemberTierStatisticsResponseDto> memberTierStatistics();
+
+    boolean idDuplicateCheck(String id);
+
+    boolean nickDuplicateCheck(String id);
 }

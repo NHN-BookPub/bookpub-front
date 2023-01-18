@@ -86,4 +86,20 @@ public interface MemberAdaptor {
      * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
      */
     ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest);
+
+    /**
+     * 아이디 중복체크를 위해 통신 메소드.
+     *
+     * @param id 회원가입 아이디.
+     * @return 중복여부 true, false
+     */
+    ResponseEntity<Boolean> idDuplicateCheck(String id);
+
+    /**
+     * 닉네임 중복체크를 위해 통신하는 메소드.
+     *
+     * @param nickname 회원가입 닉네임.
+     * @return 중복여부 true, false
+     */
+    ResponseEntity<Boolean> nickDuplicateCheck(String nickname);
 }

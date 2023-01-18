@@ -40,7 +40,8 @@ public class SecurityConfig {
 //                .antMatchers("/", "/login", "/signup").permitAll()
 //                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().permitAll();
-        http.csrf().disable();
+        http.csrf()
+                .disable();
         http.cors().disable();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
