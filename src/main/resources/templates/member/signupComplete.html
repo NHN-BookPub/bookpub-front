@@ -3,14 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/css/main/styles.css"/>
+    <link rel="stylesheet" href="/static/css/main/gnbFooter.css"/>
+    <link rel="stylesheet" href="/static/css/main/signupComplete.css"/>
 </head>
 <body>
-<h2>회원가입이 완료되었습니다.</h2>
-<span>id : </span><div th:text="${member.memberId}"></div>
-<span>nickname : </span><div th:text="${member.memberNickname}"></div>
-<span>email : </span><div th:text="${member.memberEmail}"></div>
-<span>tier : </span><div th:text="${member.tierName}"></div>
+<th:block th:include="main/fragments/mainHeader"/>
+
+<div class="welcome">
+    <img style="width: 200px; margin-top:40px;" src="/static/img/main/bookpub-logo-black.png"/>
+    <div class="complete">
+        <h1>
+            북펍의 회원이 되신걸 환영합니다.
+        </h1>
+        <div class="memberInfo">
+            <div class="info" style="display: flex">
+                <span>가입 아이디 :&nbsp;</span>
+                <span th:text=" ${member.memberId}"></span>
+            </div>
+            <div class="info" style="display: flex">
+                <span>회원 등급 :&nbsp;</span>
+                <span th:text=" ${member.tierName}"></span>
+            </div>
+        </div>
+    </div>
+    <div class="complete_sub">
+        <span>회원가입이 성공적으로 완료되었습니다.</span>
+        <span>북펍 공식 온라인 스토어의 다양한 서비스를 이용해보세요.</span>
+
+
+    </div>
+    <div class="complete_sub2">
+        <span>지금 "신규 가입 축하 1만원 쿠폰"이 발급되었습니다.</span>
+        <span>지금 마이페이지에서 확인하세요.</span>
+        <span>(쿠폰 사용기간 : 발급일로부터 30일)</span>
+    </div>
+    <div class="btn-container">
+        <a href="#" class="btnSubmit">쿠폰함으로 가기</a>
+        <a href="/" class="btnSubmit">메인 화면으로 가기</a>
+    </div>
+</div>
 </body>
 </html>
-
-}

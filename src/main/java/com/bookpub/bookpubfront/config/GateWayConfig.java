@@ -12,13 +12,13 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 @ConfigurationProperties(prefix = "book-pub")
 public class GateWayConfig {
-    private String gateway;
+    private static String gateway;
 
-    public String getGatewayUrl() {
+    public static String getGatewayUrl() {
         return gateway;
     }
 
     public void setGateway(String gateway) {
-        this.gateway = gateway;
+        GateWayConfig.gateway = gateway;
     }
 }

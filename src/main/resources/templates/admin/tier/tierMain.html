@@ -31,8 +31,8 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="tier, count : ${tiers}">
-                                <td th:text="${count.count}"></td>
+                            <tr th:each="tier, index : ${tiers}">
+                                <td th:text="${index.count}"></td>
                                 <td th:text="${tier.tierName}"></td>
                                 <td><a class="w-auto btn-sm btn-primary btn-lg" th:href="@{|/admin/tiers/${tier.tierNo}|}">수정</a></td>
                             </tr>

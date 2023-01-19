@@ -5,37 +5,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>회원가입</title>
+    <!-- jQury cdn-->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
 
-    <style>
-        body {
-            min-height: 100vh;
 
-            background: -webkit-gradient(linear, left bottom, right top, from(#000000), to(#070707));
-            background: -webkit-linear-gradient(bottom left, #000000 0%, #000000 100%);
-            background: -moz-linear-gradient(bottom left, #0a0a0a 0%, #050505 100%);
-            background: -o-linear-gradient(bottom left, #000000 0%, #000000 100%);
-            background: linear-gradient(to top right, #696969 0%, #606060 100%);
-        }
+    <link rel="stylesheet" href="/static/css/main/signup.css">
+    <script src="/static/js/main/signup.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
-        .input-form {
-            max-width: 680px;
 
-            margin-top: 80px;
-            padding: 32px;
-
-            background: #fff;
-            -webkit-border-radius: 10px;
-            -moz-border-radius: 10px;
-            border-radius: 10px;
-            -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-            -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
-            box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
-        }
-    </style>
 </head>
 
 <body>
@@ -44,21 +26,12 @@
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">회원가입</h4>
             <form class="validation-form" novalidate action="/signup" method="post">
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label for="name">이름</label>
-                        <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상" value="" required>
-                        <div class="invalid-feedback">
-                            이름을 입력해주세요.
-                        </div>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label for="nickname">별명</label>
-                        <input type="text" class="form-control" id="nickname" name="nickname"
-                               placeholder="영어+숫자 2~8글자" value="" required>
-                        <div class="invalid-feedback">
-                            별명을 입력해주세요.
-                        </div>
+                <div class="mb-3">
+                    <label for="name">이름</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
+                           value="" required>
+                    <div class="invalid-feedback">
+                        이름을 입력해주세요.
                     </div>
                 </div>
                 <div class="row">
@@ -74,19 +47,40 @@
                     </div>
                     <div class="col-md-6 mb-3">
                         <label for="birth">생년월일</label>
-                        <input type="text" class="form-control" id="birth" name="birth" placeholder="6글자 (981008)" value=""
+                        <input type="text" class="form-control" id="birth" name="birth" placeholder="6글자 (981008)"
+                               value=""
                                required>
                         <div class="invalid-feedback">
                             생년월일을 입력해주세요.
                         </div>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="memberId">아이디</label>
-                    <input type="text" class="form-control" id="memberId" name="memberId" placeholder="5~20자, 특수문자x, 한글x, 공백x"
-                           value="" required>
+                <div class="mb-3" style="margin-bottom: 0.4rem !important;">
+                    <label for="nickname">닉네임</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname"
+                           placeholder="영어+숫자 2~8글자" value="" required>
+                    <span class="nick-duplicate">닉네임을 다시 입력해주세요.</span>
+                    <span class="nick-ok">사용 가능한 닉네임 입니다.</span>
+                    <input id="nickname-check" type="hidden" value="0">
                     <div class="invalid-feedback">
-                        아이디를 입력해주세요.
+                        별명을 입력해주세요.
+                    </div>
+                    <div class="button-box">
+                        <button class="checkBtn" type="button" onclick="nickCheckFunc()">중복확인</button>
+                    </div>
+                </div>
+
+                <div class="mb-3 margin-bottom: 0.4rem !important;">
+                    <label for="memberId">아이디</label>
+                    <input type="text" class="form-control" id="memberId" name="memberId"
+                           placeholder="5~20자, 특수문자x, 한글x, 공백x"
+                           value="" required>
+                    <input id="id-check" type="hidden" value="0">
+                    <span class="id-duplicate">아이디를 다시 입력해주세요.</span>
+                    <span class="id-ok">사용 가능한 아이디 입니다.</span>
+                    <div class="invalid-feedback">아이디를 입력해주세요.</div>
+                    <div class="button-box">
+                        <button class="checkBtn" type="button" onclick="idCheckFunc()">중복확인</button>
                     </div>
                 </div>
                 <div class="mb-3">
@@ -107,31 +101,46 @@
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="phone">전화번호</label>
-                    <input type="text" class="form-control" id="phone" name="phone" placeholder="01012345678" value="" required>
-                    <div class="invalid-feedback">
-                        전화번호를 입력해주세요.
-                    </div>
-                </div>
-                <div class="mb-3">
                     <label for="email">이메일</label>
                     <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com"
-                           required>
+                           value="" required>
                     <div class="invalid-feedback">
                         이메일을 입력해주세요.
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="address">주소</label>
-                    <input type="text" class="form-control" id="address" name="address" placeholder="광주광역시 서구" required>
+                    <label for="phone">전화번호</label>
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="01012345678" value=""
+                           required>
                     <div class="invalid-feedback">
-                        주소를 입력해주세요.
+                        전화번호를 입력해주세요.
+                    </div>
+                    <div class="button-box">
+                        <div class="confirm-box">
+                            <label id="inputLabel" for="authInput">인증번호 입력</label>
+                            <input type="text" id="authInput" name="auth" required>
+                            <button id="smsAuthConfirm" type="button" onclick="smsConfirm()">확인</button>
+                        </div>
+                        <button id="smsAuthSend" type="button" onclick="smsAuth()">인증번호 전송</button>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <label for="detailAddress">상세주소</label>
-                    <input type="text" class="form-control" id="detailAddress" name="detailAddress"
-                           placeholder="109동 102호">
+
+                <div>
+                    <div class="mb-3">
+                        <label for="address">도로명 주소</label>
+                        <input class="form-control" type="text" id="address" name="address" placeholder="도로명주소" required readonly>
+                        <div class="invalid-feedback">주소를 입력해주세요.</div>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="detailAddress">상세주소</label>
+                        <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소"
+                               required>
+                        <div class="invalid-feedback">상세주소를 입력해주세요.</div>
+                    </div>
+                    <div class="button-box">
+                        <input class="checkBtn" type="button" onclick="findAddress()" value="우편번호 찾기"><br>
+                    </div>
                 </div>
 
                 <hr class="mb-4">
@@ -140,7 +149,9 @@
                     <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
                 </div>
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" type="submit">가입 완료</button>
+                <button class="btn btn-primary btn-lg btn-block" id="submitBtn" type="submit" disabled="disabled">가입
+                    완료
+                </button>
             </form>
         </div>
     </div>
@@ -148,80 +159,5 @@
         <p class="mb-1" style="color: white">&copy; 2023 BOOKPUB</p>
     </footer>
 </div>
-
-<script>
-    window.addEventListener('load', () => {
-        const forms = document.getElementsByClassName('validation-form');
-        let emptyReg = /\s/g;
-        let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
-        let idReg = /^.*(?=.*[a-z])(?=.*\d)(?=^.{5,20}).*$/;
-        let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
-        let nickReg = /^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$/;
-        let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
-        let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
-
-
-        Array.prototype.filter.call(forms, (form) => {
-            form.addEventListener('submit', function (event) {
-                if (form.checkValidity() === false) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                }
-                let nameVal = document.getElementById('name').value;
-                if(!nameReg.test(nameVal) || emptyReg.test(nameVal)){
-                    alert('이름은 한글 2글자 이상으로 생성해주세요.')
-                    return false;
-                }
-
-                let birthVal = document.getElementById('birth').value;
-                if(!birthReg.test(birthVal) || emptyReg.test(birthVal)){
-                    alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
-                    return false;
-                }
-
-                let nickVal = document.getElementById('nickname').value;
-                if (!nickReg.test(nickVal) || emptyReg.test(nickVal)) {
-                    alert('닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.')
-                    return false;
-                }
-
-                let idVal = document.getElementById('memberId').value;
-                if (!idReg.test(idVal) || emptyReg.test(idVal)) {
-                    alert('아이디는 영소문자,숫자로 구성된 5글자 이상, 20글자 이하로 생성해주세요.')
-                    return false;
-                }
-
-                const pwdVal = document.getElementById('pwd').value;
-                const pwdOkVal = document.getElementById('pwd-check').value;
-
-                if (!pwdReg.test(pwdVal) || emptyReg.test(pwdVal)) {
-                    alert('비밀번호는 영대소문자,숫자,특수문자로 구성된 8글자 이상 20글자 이하로 생성하세요.')
-                    return false;
-                } else {
-                    if (pwdOkVal) {
-                        if (pwdVal !== pwdOkVal) {
-                            alert('비밀번호가 일치하지 않습니다.')
-                            return false;
-                        }
-                    } else {
-                        alert('비밀번호확인을 입력하세요.')
-                        return false;
-                    }
-                }
-
-                let phoneVal = document.getElementById('phone').value;
-                if(!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)){
-                    alert('전화번호 11자리를 입력해주세요 ( - 제외).')
-                    return false;
-                }
-
-                form.classList.add('was-validated');
-            }, false);
-        });
-    }, false);
-
-</script>
-
-
 </body>
 </html>

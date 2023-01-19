@@ -1,0 +1,92 @@
+body {
+    min-height: 100vh;
+
+    background: -webkit-gradient(linear, left bottom, right top, from(#000000), to(#070707));
+    background: -webkit-linear-gradient(bottom left, #000000 0%, #000000 100%);
+    background: -moz-linear-gradient(bottom left, #0a0a0a 0%, #050505 100%);
+    background: -o-linear-gradient(bottom left, #000000 0%, #000000 100%);
+    background: linear-gradient(to top right, #696969 0%, #606060 100%);
+}
+
+.input-form {
+    max-width: 680px;
+
+    margin-top: 80px;
+    padding: 32px;
+
+    background: #fff;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+    -moz-box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15);
+    box-shadow: 0 8px 20px 0 rgba(0, 0, 0, 0.15)
+}
+
+.id-ok, .email-ok, .nick-ok {
+    color: #008000;
+    display: none;
+    padding: 0.375rem 0.75rem;
+}
+
+.id-duplicate, .email-duplicate, .nick-duplicate {
+    color: #6A82FB;
+    display: none;
+    padding: 0.375rem 0.75rem;
+}
+
+
+.button-box {
+    display: flex;
+    margin-top: 7px;
+    justify-content: end;
+    gap: 6px;
+}
+
+.checkBtn {
+    background-color: white;
+    color: black;
+    border: 1px solid blue;
+    width: 100px;
+    border-radius: 50px;
+}
+
+#smsAuthSend:hover, #smsAuthConfirm:hover, .checkBtn:hover {
+    background-color: #ececec;
+}
+
+#smsAuthConfirm {
+    background-color: white;
+    color: black;
+    border: 1px solid blue;
+    width: 120px;
+    border-radius: 50px;
+    display: none;
+
+}
+
+#inputLabel {
+    display: none;
+    margin-top: 0.5rem;
+}
+
+#authInput {
+    width: 58%;
+    display: none;
+}
+
+#smsAuthSend {
+    background-color: white;
+    color: black;
+    border: 1px solid blue;
+    width: 120px;
+    border-radius: 50px;
+}
+
+.confirm-box {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+}

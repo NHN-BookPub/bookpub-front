@@ -1,0 +1,134 @@
+@import url("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
+
+.login-block {
+    background: #DE6262;
+    background: -webkit-linear-gradient(to bottom, #ffffff, #000000);
+    background: linear-gradient(to bottom, #303062a6, #1E1F29);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    float: left;
+    width: 100%;
+    height: 100vh;
+    padding: 50px 77px;
+}
+
+.text-center {
+    color: black;
+}
+
+.banner-sec {
+    background: url(https://static.pexels.com/photos/33972/pexels-photo.jpg) no-repeat left bottom;
+    background-size: cover;
+    min-height: 500px;
+    border-radius: 0 10px 10px 0;
+    padding: 0;
+}
+
+.login-container {
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 15px 20px 0px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-inner {
+    border-radius: 0 10px 10px 0;
+}
+
+.carousel-caption {
+    text-align: left;
+    left: 5%;
+}
+
+.login-sec {
+    padding: 50px 30px;
+    position: relative;
+}
+
+.login-sec .copy-text {
+    position: absolute;
+    width: 80%;
+    bottom: 20px;
+    font-size: 13px;
+    text-align: center;
+}
+
+.login-sec .copy-text i {
+    color: #ee0000;
+}
+
+.login-sec .copy-text a {
+    color: #E36262;
+}
+
+.login-sec h2 {
+    margin-bottom: 30px;
+    font-weight: 800;
+    font-size: 30px;
+    color: #000000;
+}
+
+.login-sec h2:after {
+    content: " ";
+    width: 100px;
+    height: 5px;
+    background: #9a9a9a;
+    display: block;
+    margin-top: 20px;
+    border-radius: 3px;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.btn-login {
+    background: #000000;
+    color: #fff;
+    font-weight: 600;
+}
+
+.btn {
+    width: 100% !important;
+}
+
+.banner-text {
+    width: 75%;
+    position: absolute;
+    bottom: 40px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+
+.banner-text h2 {
+    color: #000000;
+    font-weight: 600;
+}
+
+.banner-text h2:after {
+    content: " ";
+    width: 100px;
+    height: 5px;
+    background: #000000;
+    display: block;
+    margin-top: 20px;
+    border-radius: 3px;
+}
+
+.banner-text p {
+    color: #030303;
+}
+
+.login-form-check {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-left: 0;
+}
+
+.btn-login{
+    background-color: black !important;
+    color: white !important;
+    font-weight: 600 !important;
+}

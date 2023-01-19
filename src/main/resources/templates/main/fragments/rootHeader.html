@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<header>
+    <!-- TOP HEADER -->
+    <div id="top-header">
+        <div class="container">
+            <ul class="header-links pull-left">
+                <li><i class="fa fa-phone"></i>
+                    <span style="color: aliceblue"> 010-1234-1234
+							</span>
+                </li>
+                <li><i class="fa fa-envelope-o"></i><span style="color: aliceblue"> book-pub@gmail.com
+						</span></li>
+                <li><i class="fa fa-map-marker"></i><span style="color: aliceblue"> Korea
+						</span></li>
+            </ul>
+            <ul class="header-links pull-right">
+                <li>
+                    <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/login">로그인</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" href="/logout">로그아웃</a>
+                </li>
+
+                <li class="nav-item">
+                    <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/signup">회원가입</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" th:href="'/members/' + ${#authentication.principal}">마이페이지</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <!-- /TOP HEADER -->
+
+    <!-- MAIN HEADER -->
+    <div id="header">
+        <!-- container -->
+        <div class="container">
+            <!-- row -->
+            <div class="row">
+                <!-- LOGO -->
+                <div class="col-md-3">
+                    <div class="header-logo">
+                        <a href="#" class="logo">
+<!--                            <img src="./img/bookpub-logo.png" height="70" width="169"alt="">-->
+                        </a>
+                    </div>
+                </div>
+                <!-- /LOGO -->
+
+                <!-- SEARCH BAR -->
+                <div class="col-md-6">
+                    <div class="header-search">
+                        <form>
+                            <select class="input-select">
+                                <option value="0">통합 검색</option>
+                                <option value="1">저자 검색</option>
+                                <option value="1">제목 검색</option>
+                            </select>
+                            <input class="input" placeholder="Search here">
+                            <button class="search-btn">검색</button>
+                        </form>
+                    </div>
+                </div>
+                <!-- /SEARCH BAR -->
+
+                <!-- ACCOUNT -->
+                <div class="col-md-3 clearfix">
+                    <div class="header-ctn">
+                        <!-- Wishlist -->
+                        <div>
+                            <a href="#">
+                                <i class="fa fa-heart-o"></i>
+                                <span>찜 목록</span>
+                                <div class="qty">2</div>
+                            </a>
+                        </div>
+                        <!-- /Wishlist -->
+
+                        <!-- Cart -->
+                        <div class="dropdown">
+                            <a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+                                <i class="fa fa-shopping-cart"></i>
+                                <span>장바구니</span>
+                                <div class="qty">3</div>
+                            </a>
+                            <div class="cart-dropdown">
+                                <div class="cart-list">
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                            <h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+                                        </div>
+                                        <button class="delete"><i class="fa fa-close"></i></button>
+                                    </div>
+
+                                    <div class="product-widget">
+                                        <div class="product-img">
+                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                        </div>
+                                        <div class="product-body">
+                                            <h3 class="product-name"><a href="#">product name goes here</a></h3>
+                                            <h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+                                        </div>
+                                        <button class="delete"><i class="fa fa-close"></i></button>
+                                    </div>
+                                </div>
+                                <div class="cart-summary">
+                                    <small>3 Item(s) selected</small>
+                                    <h5>SUBTOTAL: $2940.00</h5>
+                                </div>
+                                <div class="cart-btns">
+                                    <a href="#">View Cart</a>
+                                    <a href="#">Checkout  <i class="fa fa-arrow-circle-right"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- /Cart -->
+
+                        <!-- Menu Toogle -->
+                        <div class="menu-toggle">
+                            <a href="#">
+                                <i class="fa fa-bars"></i>
+                                <span>Menu</span>
+                            </a>
+                        </div>
+                        <!-- /Menu Toogle -->
+                    </div>
+                </div>
+                <!-- /ACCOUNT -->
+            </div>
+            <!-- row -->
+        </div>
+        <!-- container -->
+    </div>
+    <!-- /MAIN HEADER -->
+
+    <!-- NAVIGATION -->
+    <nav id="navigation">
+        <!-- container -->
+        <div class="container">
+            <!-- responsive-nav -->
+            <div id="responsive-nav">
+                <!-- NAV -->
+                <ul class="main-nav nav navbar-nav">
+                    <li class="active"><a href="/v1">홈</a></li>
+                    <li><a href="/categories">분야찾기</a></li>
+                    <li><a href="#">베스트셀러</a></li>
+                    <li><a href="#">신간도서</a></li>
+                    <li><a href="#">이벤트</a></li>
+                    <li><a href="#">추천도서</a></li>
+                    <li><a href="#">공지사항</a></li>
+                </ul>
+                <!-- /NAV -->
+            </div>
+            <!-- /responsive-nav -->
+        </div>
+        <!-- /container -->
+    </nav>
+    <!-- /NAVIGATION -->
+</header>
+</body>
+</html>
