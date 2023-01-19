@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+
+  <title>BookPub</title>
+  <!-- Google font -->
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+  <!-- Bootstrap -->
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+  <!-- Slick -->
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+  <!-- nouislider -->
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+  <!-- Custom stlylesheet -->
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+  <title>분야찾기</title>
+
+
+</head>
+<body>
+
+<!-- HEADER -->
+<th:block th:include="main/fragments/rootHeader"></th:block>
+<!-- /HEADER -->
+
+
+<div style="height: fit-content; display: flex; justify-content: space-around; width: 100vw">
+  <div th:each="parent: ${category}">
+    <h2 th:text="${parent.categoryName}"></h2>
+    <th:block th:each="child: ${parent.childList}">
+      <a th:text="${child.categoryName}"
+         th:href="@{/category/{id}(id=${child.categoryNo})}"></a><br/>
+    </th:block>
+  </div>
+</div>
+
+
+</body>
+</html>
