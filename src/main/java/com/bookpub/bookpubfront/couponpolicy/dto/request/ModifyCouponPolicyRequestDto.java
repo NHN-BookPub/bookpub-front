@@ -14,7 +14,7 @@ import lombok.Getter;
 public class ModifyCouponPolicyRequestDto {
     private Integer policyNo;
     private boolean policyFixed;
-    private Long discountRate;
+    private Long policyPrice;
     private Long policyMinimum;
     private Long maxDiscount;
 }
