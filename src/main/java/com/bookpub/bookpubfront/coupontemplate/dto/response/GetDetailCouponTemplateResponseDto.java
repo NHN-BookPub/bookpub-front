@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 쿠폰템플릿을 상세조회하기 위한 정보를 담은 Dto.
  *
  * @author : 정유진
  * @since : 1.0

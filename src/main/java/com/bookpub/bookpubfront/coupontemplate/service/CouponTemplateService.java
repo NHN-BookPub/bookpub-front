@@ -9,18 +9,42 @@ import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 
 /**
- * Some description here.
+ * 쿠폰템플릿을 다루기 위한 서비스 인터페이스입니다.
  *
  * @author : 정유진
  * @since : 1.0
- **/
+ */
 public interface CouponTemplateService {
+    /**
+     * 쿠폰템플릿 페이지를 조회하기 위한 메소드입니다.
+     *
+     * @param pageable 페이지 정보
+     * @return 쿠폰템플릿 정보 Dto를 담은 페이지 정보
+     */
     PageResponse<GetCouponTemplateResponseDto> getCouponTemplates(Pageable pageable);
 
+    /**
+     * 쿠폰템플릿 상세 정보를 조회하기 위한 메소드입니다.
+     *
+     * @param templateNo 조회할 템플릿 번호
+     * @return 쿠폰템플릿 상세 정보를 담은 Dto
+     */
     GetDetailCouponTemplateResponseDto getDetailCouponTemplate(Long templateNo);
 
+    /**
+     * 쿠폰템플릿을 등록하기 위한 메소드입니다.
+     *
+     * @param createRequestDto 등록할 템플릿 정보를 담은 Dto.
+     * @throws IOException 파일 등록시 IOException
+     */
     void createCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) throws IOException;
 
+    /**
+     * 쿠폰템플릿을 수정하기 위한 메소드입니다.
+     *
+     * @param templateNo       수정할 템플릿 번호
+     * @param modifyRequestDto 수정할 템플릿 정보를 담은 Dto.
+     */
     void modifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto);
 
 

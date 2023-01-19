@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 쿠폰템플릿 파일 정보를 전송하기 위해 변환한 정보를 담은 Dto.
  *
  * @author : 정유진
  * @since : 1.0

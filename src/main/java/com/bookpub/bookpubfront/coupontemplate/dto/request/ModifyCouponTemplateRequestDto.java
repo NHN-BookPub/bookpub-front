@@ -10,7 +10,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
- * Some description here.
+ * 쿠폰템플릿을 수정하기 위한 정보를 담은 Dto.
  *
  * @author : 정유진
  * @since : 1.0

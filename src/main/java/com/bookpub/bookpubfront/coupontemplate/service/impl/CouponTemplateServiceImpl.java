@@ -22,22 +22,34 @@ import org.springframework.stereotype.Service;
 public class CouponTemplateServiceImpl implements CouponTemplateService {
     private final CouponTemplateAdaptor couponTemplateAdaptor;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<GetCouponTemplateResponseDto> getCouponTemplates(Pageable pageable) {
         return couponTemplateAdaptor.requestCouponTemplates(pageable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GetDetailCouponTemplateResponseDto getDetailCouponTemplate(Long templateNo) {
         return couponTemplateAdaptor.requestDetailCouponTemplate(templateNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) {
 
         couponTemplateAdaptor.requestAddCouponTemplate(createRequestDto);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
         couponTemplateAdaptor.requestModifyCouponTemplate(templateNo, modifyRequestDto);

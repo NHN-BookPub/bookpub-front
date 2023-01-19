@@ -9,7 +9,6 @@ import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTempl
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -25,12 +24,11 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * Some description here.
+ * 관리자 페이지의 쿠폰 템플릿을 관리하기 위한 컨트롤러입니다.
  *
  * @author : 정유진
  * @since : 1.0
  **/
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
@@ -39,6 +37,9 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
     private static final String COUPON_TEMPLATE_URL = "/api/coupon-templates";
 
 
+    /**
+     * {@inheritDoc}
+     */
     public PageResponse<GetCouponTemplateResponseDto> requestCouponTemplates(Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL)
                 .queryParam("page", pageable.getPageNumber())
@@ -57,6 +58,9 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GetDetailCouponTemplateResponseDto requestDetailCouponTemplate(Long templateNo) {
         String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/details/" + templateNo;
@@ -72,6 +76,9 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     public void requestAddCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) {
 
         String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL;
@@ -95,6 +102,9 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         checkError(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestModifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
         String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
@@ -118,6 +128,11 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         checkError(response);
     }
 
+    /**
+     * 헤더를 만들어주는 메소드입니다.
+     *
+     * @return 헤정
+     */
     private static HttpHeaders makeHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
@@ -125,6 +140,12 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         return headers;
     }
 
+    /**
+     * 에러 체크를 위한 메소드입니다.
+     *
+     * @param response
+     * @param <T>
+     */
     private static <T> void checkError(ResponseEntity<T> response) {
         HttpStatus statusCode = response.getStatusCode();
 
@@ -132,6 +153,4 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
             throw new RuntimeException();
         }
     }
-
-
 }

@@ -1,25 +1,14 @@
 package com.bookpub.bookpubfront.coupontemplate.dto.request;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateTimeDeserializer;
-import java.io.IOException;
 import java.time.LocalDateTime;
-import javax.servlet.annotation.MultipartConfig;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
-import org.springframework.core.io.ByteArrayResource;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.multipart.commons.CommonsMultipartFile;
 
 /**
- * Some description here.
+ * 쿠폰템플릿을 등록하기 위한 정보를 담은 Dto.
  *
  * @author : 정유진
  * @since : 1.0

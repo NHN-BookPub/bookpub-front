@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
- * Some description here.
+ * 관리자 페이지의 쿠폰 템플릿을 관리하기 위한 컨트롤러입니다.
  *
  * @author : 정유진
  * @since : 1.0
@@ -41,6 +41,13 @@ public class AdminCouponTemplateController {
     private final CouponStateCodeService couponStateCodeService;
     private final CouponPolicyService couponPolicyService;
 
+    /**
+     * 쿠폰템플릿 페이지를 조회한 정보를 담아 view로 가기 위한 메소드입니다.
+     *
+     * @param pageable 페이지 정보
+     * @param model    the model
+     * @return 관리자 쿠폰템플릿 페이지
+     */
     @GetMapping("/coupon/coupon-templates")
     public String couponTemplateList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<GetCouponTemplateResponseDto> couponTemplates = couponTemplateService.getCouponTemplates(pageable);
@@ -64,6 +71,13 @@ public class AdminCouponTemplateController {
         return "admin/coupon/couponTemplatePage";
     }
 
+    /**
+     * 쿠폰템플릿 단건 조회 및 view로 가기 위한 메소드입니다.
+     *
+     * @param templateNo 조회할 쿠폰템플릿 번호
+     * @param model      the model
+     * @return 쿠폰템플릿 상세보기 페이지
+     */
     @GetMapping("/coupon/coupon-templates/{templateNo}")
     public String couponTemplateDetail(@PathVariable Long templateNo, Model model) {
         GetDetailCouponTemplateResponseDto couponTemplate =
@@ -82,6 +96,13 @@ public class AdminCouponTemplateController {
         return "admin/coupon/couponTemplateDetail";
     }
 
+    /**
+     * 쿠폰템플릿을 등록하기 위한 메소드입니다.
+     *
+     * @param createRequestDto 등록할 쿠폰템플릿 정보를 담은 dto
+     * @return 쿠폰템플릿 페이지로 이동
+     * @throws IOException 파일로 인한 IOExcpeption
+     */
     @PostMapping("/coupon/coupon-templates")
     public String addCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) throws IOException {
         couponTemplateService.createCouponTemplate(createRequestDto);
@@ -89,6 +110,13 @@ public class AdminCouponTemplateController {
         return "redirect:/admin/coupon/coupon-templates";
     }
 
+    /**
+     * 쿠폰템플릿을 수정하기 위한 메소드입니다.
+     *
+     * @param templateNo       수정할 쿠폰템플릿 번호
+     * @param modifyRequestDto 수정할 쿠폰템플릿 정보를 담은 dto
+     * @return 쿠폰템플릿 페이지로 이동
+     */
     @PostMapping("/coupon/coupon-templates/modify/{templateNo}")
     public String modifyCouponTemplate(@PathVariable("templateNo") Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
         couponTemplateService.modifyCouponTemplate(templateNo, modifyRequestDto);
