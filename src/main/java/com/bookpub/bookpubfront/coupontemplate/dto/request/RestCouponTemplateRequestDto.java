@@ -19,9 +19,7 @@ public class RestCouponTemplateRequestDto {
     private Integer categoryNo;
     private Integer codeNo;
     private String templateName;
-    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime finishedAt;
-    //@DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime issuedAt;
     private boolean templateOverlapped;
     private boolean templateBundled;
