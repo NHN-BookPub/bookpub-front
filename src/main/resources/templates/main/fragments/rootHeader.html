@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -19,8 +19,15 @@
 						</span></li>
             </ul>
             <ul class="header-links pull-right">
-                <li><a href="#"><i class="fa fa-dollar"></i> 주문하기 </a></li>
-                <li><a href="#"><i class="fa fa-user-o"></i> 로그인하기 </a></li>
+                <li>
+                    <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/login">로그인</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" href="/logout">로그아웃</a>
+                </li>
+
+                <li class="nav-item">
+                    <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/signup">회원가입</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" th:href="'/members/' + ${#authentication.principal}">마이페이지</a>
+                </li>
             </ul>
         </div>
     </div>

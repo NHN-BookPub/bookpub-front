@@ -7,8 +7,12 @@ import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.service.MemberService;
+import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import java.time.Duration;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -65,7 +69,7 @@ public class MemberController {
      */
     @GetMapping("/signup")
     public String signupPageForm(Model model) {
-        model.addAttribute("url",GateWayConfig.getGatewayUrl()+"/api/signup");
+        model.addAttribute("url", GateWayConfig.getGatewayUrl() + "/api/signup");
         return "member/signupPage";
     }
 
@@ -156,8 +160,15 @@ public class MemberController {
      * @return 메인화면 또는 로그인화면을 띄워준다.
      */
     @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto, HttpServletRequest request) {
+    public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto,
+                              HttpServletRequest request, HttpServletResponse response) {
         memberService.login(requestDto, request.getSession());
+
+        Cookie cookie = new Cookie(JwtUtil.JWT_SESSION, request.getSession().getId());
+        cookie.setMaxAge((int) Duration.ofDays(1).getSeconds());
+        cookie.setPath("/");
+
+        response.addCookie(cookie);
 
         return "redirect:/";
     }
@@ -169,8 +180,8 @@ public class MemberController {
      * @return 로그아웃 후 메인화면으로 리다이렉트.
      */
     @GetMapping("/logout")
-    public String logoutSubmit(HttpServletRequest request) {
-        memberService.logout(request.getSession());
+    public String logoutSubmit(HttpServletRequest request, HttpServletResponse response) {
+        memberService.logout(response, request.getSession());
 
         return "redirect:/";
     }

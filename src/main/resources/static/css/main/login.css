@@ -1,16 +1,16 @@
 @import url("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
 
 .login-block {
-    background: #DE6262; /* fallback for old browsers */
-    background: -webkit-linear-gradient(to bottom, #ffffff, #000000); /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to bottom, #000000, #a6a3a3); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: #DE6262;
+    background: -webkit-linear-gradient(to bottom, #ffffff, #000000);
+    background: linear-gradient(to bottom, #303062a6, #1E1F29);
     display: flex;
     justify-content: center;
     align-items: center;
     float: left;
     width: 100%;
-    height: 82vh;
-    padding: 50px 0;
+    height: 100vh;
+    padding: 50px 77px;
 }
 
 .text-center {
@@ -25,7 +25,7 @@
     padding: 0;
 }
 
-.container {
+.login-container {
     background: #fff;
     border-radius: 10px;
     box-shadow: 15px 20px 0px rgba(0, 0, 0, 0.1);

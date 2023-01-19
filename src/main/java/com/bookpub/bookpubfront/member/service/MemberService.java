@@ -11,6 +11,7 @@ import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponse
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
 
@@ -43,7 +44,7 @@ public interface MemberService {
      *
      * @param session HttpSession 객체.
      */
-    void logout(HttpSession session);
+    void logout(HttpServletResponse response, HttpSession session);
 
 
     /**
