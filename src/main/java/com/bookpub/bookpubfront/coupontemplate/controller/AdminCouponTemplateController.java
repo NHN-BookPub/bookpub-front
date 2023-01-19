@@ -15,7 +15,6 @@ import com.bookpub.bookpubfront.utils.PageResponse;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -31,7 +30,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  * @author : 정유진
  * @since : 1.0
  **/
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping("/admin")
@@ -64,9 +62,6 @@ public class AdminCouponTemplateController {
         model.addAttribute("isNext", couponTemplates.isNext());
         model.addAttribute("isPrevious", couponTemplates.isPrevious());
         model.addAttribute("pageButtonNum", 5);
-
-        log.info("content = {}", couponTemplates.getContent());
-
 
         return "admin/coupon/couponTemplatePage";
     }

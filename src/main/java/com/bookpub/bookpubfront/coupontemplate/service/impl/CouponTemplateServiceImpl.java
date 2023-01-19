@@ -12,7 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
- * Some description here.
+ * 쿠폰템플릿을 다루기 위한 서비스 구현체입니다.
  *
  * @author : 정유진
  * @since : 1.0
