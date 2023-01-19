@@ -180,8 +180,8 @@ public class MemberController {
      * @return 로그아웃 후 메인화면으로 리다이렉트.
      */
     @GetMapping("/logout")
-    public String logoutSubmit(HttpServletRequest request) {
-        memberService.logout(request.getSession());
+    public String logoutSubmit(HttpServletRequest request, HttpServletResponse response) {
+        memberService.logout(response, request.getSession());
 
         return "redirect:/";
     }

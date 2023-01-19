@@ -13,8 +13,11 @@ import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import com.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -76,12 +79,23 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void logout(HttpSession session) {
+    public void logout(HttpServletResponse response, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
             redisTemplate.opsForHash().delete((String) authentication.getPrincipal(), authentication.getCredentials());
-            session.invalidate();
+
+            session.removeAttribute(JwtUtil.JWT_SESSION);
+
+            Cookie jwtCookie = Utils.findJwtCookie();
+
+            if (Objects.nonNull(jwtCookie)) {
+                jwtCookie.setMaxAge(0);
+                jwtCookie.setValue(null);
+                jwtCookie.setPath("/");
+                response.addCookie(jwtCookie);
+            }
+
             SecurityContextHolder.clearContext();
         }
     }

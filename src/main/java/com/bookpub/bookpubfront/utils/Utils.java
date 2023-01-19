@@ -1,8 +1,15 @@
 package com.bookpub.bookpubfront.utils;
 
+import com.bookpub.bookpubfront.token.util.JwtUtil;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
  * 중복된 Header 를 반환 하는 유틸클래스입니다.
@@ -24,6 +31,20 @@ public class Utils {
         headers.setContentType(MediaType.APPLICATION_JSON);
         headers.setAccept(List.of(MediaType.APPLICATION_JSON));
         return headers;
+    }
+
+    public static Cookie findJwtCookie() {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+
+        if(Objects.isNull(request.getCookies())){
+            return null;
+        }
+
+        return Arrays.stream(request.getCookies())
+                .filter(cookie -> cookie.getName().equals(JwtUtil.JWT_SESSION))
+                .findAny()
+                .orElse(null);
     }
 
 }
