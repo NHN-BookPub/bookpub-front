@@ -24,7 +24,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * 관리자 페이지의 쿠폰 템플릿을 관리하기 위한 컨트롤러입니다.
+ * 관리자 페이지의 쿠폰 템플릿을 관리하기 위한 어댑터입니다.
  *
  * @author : 정유진
  * @since : 1.0

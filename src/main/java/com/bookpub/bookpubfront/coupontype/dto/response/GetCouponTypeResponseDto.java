@@ -3,7 +3,7 @@ package com.bookpub.bookpubfront.coupontype.dto.response;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 쿠폰유형을 조회하기 위한 정보를 담은 Dto.
  *
  * @author : 정유진
  * @since : 1.0

@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Some description here.
+ * 관리자 페이지의 쿠폰상태코드를 관리하기 위한 어댑터입니다.
  *
  * @author : 정유진
  * @since : 1.0
@@ -27,6 +27,10 @@ public class CouponStateCodeAdaptorImpl implements CouponStateCodeAdaptor {
     private final GateWayConfig gateWayConfig;
     private final RestTemplate restTemplate;
     private static final String COUPON_TEMPLATE_URL = "/api/coupon-state-codes";
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetCouponStateCodeResponseDto> requestCouponStateCodes() {
 

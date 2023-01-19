@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Some description here.
+ * 관리자 페이지의 쿠폰 유형을 관리하기 위한 어댑터입니다.
  *
  * @author : 정유진
  * @since : 1.0
@@ -29,6 +29,9 @@ public class CouponTypeAdaptorImpl implements CouponTypeAdaptor {
     private final RestTemplate restTemplate;
     private static final String COUPON_TEMPLATE_URL = "/api/coupon-types";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetCouponTypeResponseDto> requestCouponTypes() {
         String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL;
