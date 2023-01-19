@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 멤버를 다루는 멤버 컨트롤러입니다.
@@ -31,6 +32,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
+    private static final  String REDIRECT_MY_PAGE = "redirect:/members/";
     private final MemberService memberService;
 
     /**
@@ -65,7 +67,7 @@ public class MemberController {
      */
     @GetMapping("/signup")
     public String signupPageForm(Model model) {
-        model.addAttribute("url",GateWayConfig.getGatewayUrl()+"/api/signup");
+        model.addAttribute("url", GateWayConfig.getGatewayUrl() + "/api/signup");
         return "member/signupPage";
     }
 
@@ -131,7 +133,7 @@ public class MemberController {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
         model.addAttribute("member", member);
 
-        return "mypage/mypage";
+        return "mypage/memberInfo";
     }
 
     /**
@@ -173,5 +175,86 @@ public class MemberController {
         memberService.logout(request.getSession());
 
         return "redirect:/";
+    }
+
+    /**
+     * 회원의 이름을 바꾸는 메서드입니다.
+     * 마이페이지 내정보로 리다이렉트 됩니다.
+     *
+     * @param memberNo 회원번호
+     * @param name     변경할 이름
+     * @return 마이페이지 내정보.
+     */
+    @PostMapping("/members/{memberNo}/name")
+    public String memberExchangeName(@PathVariable("memberNo") Long memberNo,
+                                      @RequestParam("exchangeName") String name) {
+        memberService.modifyMemberName(memberNo, name);
+
+
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    /**
+     * 회원의 닉네임을 변경하기위한 메서드입니다.
+     * 마이페이지의 내정보창으로 반환됩니다.
+     *
+     * @param memberNo 회원번호.
+     * @param nickname the nickname
+     * @return the string
+     */
+    @PostMapping("/members/{memberNo}/nickname")
+    public String memberExchangeNickname(@PathVariable("memberNo") Long memberNo,
+                                         @RequestParam("exchangeNickname") String nickname) {
+        memberService.modifyMemberNickName(memberNo, nickname);
+
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    /**
+     * 회원의 이메일을 변경할때쓰이는 메서드입니다.
+     * 마이페이지 내정보창으로 이동합니다.
+     *
+     * @param memberNo 회원번호
+     * @param email    변경할 이메일.
+     * @return 마이페이지 내정보.
+     */
+    @PostMapping("/members/{memberNo}/email")
+    public String memberExchangeEmail(@PathVariable("memberNo") Long memberNo,
+                                      @RequestParam("exchangeEmail") String email) {
+        memberService.modifyMemberEmail(memberNo, email);
+
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    /**
+     * 회원의 휴대전화번호가 변경될때 사용되는 메서드입니다.
+     * 마이페이의 내정보 페이지로 이동합니다.
+     *
+     * @param memberNo 회원번호
+     * @param phone    휴대전화번호기입
+     * @return 마이페이지 내정보
+     */
+    @PostMapping("/members/{memberNo}/phone")
+    public String memberExchangePhone(@PathVariable("memberNo") Long memberNo,
+                                      @RequestParam("exchangePhone") String phone) {
+        memberService.modifyMemberPhone(memberNo, phone);
+
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    /**
+     * 멤버의 비밀번호가 변경될때 쓰이는 메서드입니다.
+     * 마이페이지의 내정보 페이지로 이동합니다.
+     *
+     * @param memberNo 회원번호
+     * @param password 변경할 비밀번호
+     * @return the string
+     */
+    @PostMapping("/members/{memberNo}/password")
+    public String memberExchangePassword(@PathVariable("memberNo") Long memberNo,
+                                         @RequestParam("exchangePwd") String password){
+
+        memberService.modifyMemberPassword(memberNo,password);
+        return REDIRECT_MY_PAGE + memberNo;
     }
 }
