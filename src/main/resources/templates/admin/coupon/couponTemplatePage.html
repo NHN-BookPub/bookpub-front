@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>BookPub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">쿠폰템플릿</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">쿠폰템플릿 등록, 수정 (상세정보 조회 시 수정 가능)</li>
+                </ol>
+
+                <div align="right">
+                    <button type="button" class="btn btn-primary mb-4 ms-auto" data-toggle="modal" data-target="#add">
+                        등록
+                    </button>
+                </div>
+
+                <hr/>
+
+                <!-- Modal -->
+                <div class="modal fade" id="add" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">쿠폰템플릿 등록</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/coupon/coupon-templates" class="was-validated" method="post" enctype="multipart/form-data">
+
+                                    <div class="form-group">
+                                        <label for="addPolicy">쿠폰정책</label>
+                                        <select name="policyNo" id="addPolicy" class="form-select" required>
+                                            <option value="" selected disabled hidden>==쿠폰 정책 선택==</option>
+                                            <div th:each="couponPolicy : ${couponPolicyList}" >
+                                                 <option th:if="${couponPolicy.policyFixed}" th:value="${couponPolicy.policyNo}" th:text="'정액/할인가:' + ${couponPolicy.policyPrice} + '원/최소주문금액:' + ${couponPolicy.policyMinimum} + '원/최대할인가격:' + ${couponPolicy.maxDiscount} + '원'"></option>
+                                                <option th:unless="${couponPolicy.policyFixed}" th:value="${couponPolicy.policyNo}" th:text="'정률/할인율:' + ${couponPolicy.policyPrice} + '%/최소주문금액:' + ${couponPolicy.policyMinimum} + '원/최대할인가격:' + ${couponPolicy.maxDiscount} + '원'"></option>
+                                            </div>
+                                        </select>
+                                    </div>
+
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <label for="addTypeNo">쿠폰유형</label>
+                                        <select name="typeNo" id="addTypeNo" class="form-select" required>
+                                            <option value="" selected disabled hidden>==쿠폰 유형 선택==</option>
+                                            <option th:each="couponType : ${couponTypeList}" th:value="${couponType.typeNo}" th:text="${couponType.typeName}"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addCodeNo">쿠폰적용범위</label>
+                                        <select name="codeNo" id="addCodeNo" class="form-select" required>
+                                            <option value="" selected disabled hidden>==쿠폰 적용 범위 선택==</option>
+                                            <option th:each="couponStateCode : ${couponStateCodeList}" th:value="${couponStateCode.codeNo}" th:text="${couponStateCode.codeTarget}"></option>
+                                        </select>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addProductNo">적용될 상품 (링크걸기)</label>
+                                        <input type="text" class="form-control" id="addProductNo" placeholder="개별상품 쿠폰일 경우, 적용할 상품 번호를 입력하세요."
+                                               name="productNo">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addCategoryNo">적용될 카테고리 (링크걸기)</label>
+                                        <input type="text" class="form-control" id="addCategoryNo" placeholder="카테고리 쿠폰일 경우, 적용할 카테고리 번호를 입력하세요."
+                                               name="categoryNo">
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addName">쿠폰템플릿 이름</label>
+                                        <input type="text" class="form-control" id="addName"
+                                               placeholder="쿠폰템플릿 이름을 입력하세요." name="templateName" pattern="^\S[a-zA-Zㄱ-힣0-9!@#$%^&*()_+-=₩~ ]*$"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">이름을 입력하세요</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="fileUpload">쿠폰 이미지</label>
+                                    <input type="file" id="fileUpload" name="templateImage" accept="image/*"/>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addIssuedAt">쿠폰 발급일자</label>
+                                        <input type="datetime-local" id="addIssuedAt" name="issuedAt" required>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addFinishedAt">쿠폰 만료일자</label>
+                                    <input type="datetime-local" id="addFinishedAt" name="finishedAt">
+                                    </div>
+
+                                    <label>쿠폰 중복 적용 가능여부</label>
+                                    <select name="templateOverlapped" class="form-select">
+                                        <option value="1">가능</option>
+                                        <option value="0">불가능</option>
+                                    </select>
+
+                                    <label>쿠폰 묶음할인 가능여부</label>
+                                    <select name="templateBundled" class="form-select">
+                                        <option value="1">가능</option>
+                                        <option value="0">불가능</option>
+                                    </select>
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" class="btn btn-primary">등록</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <br/>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    쿠폰템플릿 목록
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>쿠폰템플릿 번호</th>
+                            <th>이름</th>
+                            <th>이미지</th>
+                            <th>발급일자</th>
+                            <th>쿠폰만료일</th>
+                            <th>상세보기</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="couponTemplate : ${couponTemplateList}">
+                            <td th:text="${couponTemplate.templateNo}"></td>
+                            <td th:text="${couponTemplate.templateName}"></td>
+                            <td><img class="img-fluid" th:src="@{'data:image/*;base64,'+${couponTemplate.templateImage}}" alt="이미지 없음"/></td>
+                            <td th:text="${#temporals.format(couponTemplate.issuedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td th:text="${#temporals.format(couponTemplate.finishedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                            <td><form th:action="@{/admin/coupon/coupon-templates/{templateNo}(templateNo=${couponTemplate.templateNo})}" method="get">
+                                <button class="btn btn-success" type="submit">상세보기</button>
+                            </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${currentPage}-1))}">Previous</a>
+                            </li>
+                            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                                <li class ="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${page-1}))}" th:text="${page}"></a></li>
+                            </th:block>
+                            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${currentPage}+1))}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/chart-area-demo.js"></script>
+<script src="/static/js/admin/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+</body>
+</html>
