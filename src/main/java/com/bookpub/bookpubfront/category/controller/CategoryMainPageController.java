@@ -26,7 +26,7 @@ public class CategoryMainPageController {
      * @param model view 로 정보를 보내는 request
      * @return 카테고리 페이지
      */
-    @GetMapping("/v1/categories")
+    @GetMapping("/categories")
     public String mainCategory(Model model) {
         List<GetParentCategoryWithChildrenResponseDto> parentCategoryWithChildren =
                 categoryService.getParentCategoryWithChildren();
