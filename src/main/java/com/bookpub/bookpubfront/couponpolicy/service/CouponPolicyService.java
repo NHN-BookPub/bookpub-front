@@ -37,5 +37,5 @@ public interface CouponPolicyService {
      * @return 쿠폰정책 정보들을 담은 GetCouponPolicyResponseDto 리스트
      * @throws JsonProcessingException json 관련 에러
      */
-    List<GetCouponPolicyResponseDto> getCouponPolicies() throws JsonProcessingException;
+    List<GetCouponPolicyResponseDto> getCouponPolicies();
 }
