@@ -1,9 +1,8 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
@@ -31,17 +30,17 @@ public interface MemberAdaptor {
      * 멤버 닉네임을 변경하기위한 메서드입니다.
      *
      * @param memberNo  멤버 번호가 기입.
-     * @param requestDto 수정할 닉네임 기입.
+     * @param nickname 수정할 닉네임 기입.
      */
-    void requestMemberNickNameChange(Long memberNo, ModifyMemberNickNameRequestDto requestDto);
+    void requestMemberNickNameChange(Long memberNo, String nickname);
 
     /**
      * 이메일을 변경할때 쓰이는 메서드입니다.
      *
      * @param memberNo   멤버 번호가 기입.
-     * @param requestDto 변경할 이메일 번호가 기입.
+     * @param email 변경할 이메일 번호가 기입.
      */
-    void requestMemberEmailChange(Long memberNo, ModifyMemberEmailRequestDto requestDto);
+    void requestMemberEmailChange(Long memberNo, String email);
 
     /**
      * 멤버의 상세정보를 받기위하여 쓰이는 메서드입니다.
@@ -102,4 +101,30 @@ public interface MemberAdaptor {
      * @return 중복여부 true, false
      */
     ResponseEntity<Boolean> nickDuplicateCheck(String nickname);
+
+    /**
+     * 회원의 이름을 수정하기위한 메서드입니다.
+     *
+     * @param memberNo 회원 번호 기입
+     * @param name     회원 명
+     */
+    void requestMemberNameChange(Long memberNo, String name);
+
+    /**
+     * 회원의 휴대폰 번호를 수정하기위한 메서드입니다.
+     *
+     * @param memberNo 회원 번호 기입
+     * @param phone    휴대전화 번호 기입
+     */
+    void requestMemberPhoneChange(Long memberNo, String phone);
+
+    /**
+     * 회원의 비밀 번호를 받기위해 사용되는 메서드 입니다.
+     *
+     * @param memberNo 회원의 번호가 기입.
+     * @return 회원의 encoding 된 값이 반환됩니다.
+     */
+    MemberPasswordResponseDto requestMemberPassword(Long memberNo);
+
+    void requestMemberPasswordChange(Long memberNo, String password);
 }
