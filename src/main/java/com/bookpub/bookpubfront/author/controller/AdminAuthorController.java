@@ -24,7 +24,6 @@ public class AdminAuthorController {
 
     private final AuthorService authorService;
 
-
     /**
      * 관리자 페이지에서 저자 목록을 보여주기 위한 매핑.
      *
@@ -36,9 +35,14 @@ public class AdminAuthorController {
     public String findAllAuthors(@PageableDefault Pageable pageable, Model model) {
         PageResponse<GetAuthorResponseDto> authors = authorService.getAuthors(pageable);
 
-        model.addAttribute("content", authors.getContent());
-        model.addAttribute("next", authors.isNext());
+        model.addAttribute("authors", authors.getContent());
+        model.addAttribute("totalPages", authors.getTotalPages());
+        model.addAttribute("currentPage", authors.getNumber());
 
-        return "/admin/author/authorIndex";
+        model.addAttribute("isPrevious", authors.isPrevious());
+        model.addAttribute("isNext", authors.isNext());
+        model.addAttribute("pageButtonNum", 100);
+
+        return "admin/author/authorIndex";
     }
 }
