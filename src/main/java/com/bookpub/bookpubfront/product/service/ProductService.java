@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.product.service;
 
+import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
 import com.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
@@ -45,4 +46,13 @@ public interface ProductService {
      * @return 상품 상세 정보를 담은 DTO
      */
     GetProductDetailResponseDto findProduct(Long productNo);
+
+    /**
+     * 상품 유형을 가지고 상품을 조회하려는 메서드.
+     *
+     * @param typeNo 상품 유형 번호
+     * @param limit  제한 갯수
+     * @return 유형별 상품
+     */
+    List<GetProductByTypeResponseDto> findProductsByType(Integer typeNo, Integer limit);
 }
