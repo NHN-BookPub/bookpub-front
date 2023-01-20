@@ -16,6 +16,7 @@ public class GetProductDetailResponseDto {
     private Long productNo;
     private String productIsbn;
     private String title;
+    private String productPublisher;
     private Integer pageCount;
     private String productDescription;
     private Long salesPrice;

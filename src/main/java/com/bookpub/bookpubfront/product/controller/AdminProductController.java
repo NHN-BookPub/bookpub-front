@@ -46,6 +46,7 @@ public class AdminProductController {
     private final ProductSaleStateCodeService productSaleStateCodeService;
     private final ProductPolicyService productPolicyService;
     private final TagService tagService;
+    private static final String REDIRECT = "redirect:/admin/products";
 
     /**
      * 관리자 페이지에서 상품 목록을 보기 위한 맵핑.
@@ -72,6 +73,9 @@ public class AdminProductController {
         model.addAttribute("saleStateCodes", saleStateCodes);
         model.addAttribute("policies", policies);
         model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("pageButtonNum", 100);
 
         return "admin/product/productIndex";
     }
@@ -83,7 +87,7 @@ public class AdminProductController {
      * @param model     view 로 보낼 request
      * @return 상품 상세 정보 화
      */
-    @GetMapping("/{productNo}")
+    @PostMapping("/{productNo}")
     public String productDetail(@PathVariable("productNo") Long productNo, Model model) {
         GetProductDetailResponseDto product = productService.findProduct(productNo);
         model.addAttribute("product", product);
@@ -100,10 +104,10 @@ public class AdminProductController {
      */
     @PostMapping("/add")
     public String addProduct(@ModelAttribute InputProductFormRequestDto inputProduct,
-                             @RequestParam(value = "tagList") List<Integer> tagList) {
+                             @RequestParam(value = "tagList", required = false) List<Integer> tagList) {
         productService.createCategory(inputProduct, tagList);
 
-        return "redirect:/admin/products";
+        return REDIRECT;
     }
 
     /**
@@ -116,7 +120,7 @@ public class AdminProductController {
     public String setDeletedProduct(@PathVariable("productNo") Long productNo) {
         productService.setProductDeleted(productNo);
 
-        return "redirect:/admin/products";
+        return REDIRECT;
     }
 
 }
