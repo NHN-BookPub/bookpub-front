@@ -2,10 +2,9 @@ package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
@@ -105,8 +104,8 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto) {
-        memberAdaptor.requestMemberNickNameChange(memberNo, dto);
+    public void modifyMemberNickName(Long memberNo, String nickname) {
+        memberAdaptor.requestMemberNickNameChange(memberNo, nickname);
     }
 
 
@@ -114,8 +113,8 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto) {
-        memberAdaptor.requestMemberEmailChange(memberNo, dto);
+    public void modifyMemberEmail(Long memberNo, String email) {
+        memberAdaptor.requestMemberEmailChange(memberNo, email);
     }
 
 
@@ -160,13 +159,52 @@ public class MemberServiceImpl implements MemberService {
         return memberAdaptor.requestMemberTierStatics();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean idDuplicateCheck(String id) {
         return Boolean.TRUE.equals(memberAdaptor.idDuplicateCheck(id).getBody());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean nickDuplicateCheck(String nickname) {
         return Boolean.TRUE.equals(memberAdaptor.nickDuplicateCheck(nickname).getBody());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberName(Long memberNo,
+                                 String name){
+        memberAdaptor.requestMemberNameChange(memberNo, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberPhone(Long memberNo, String phone) {
+        memberAdaptor.requestMemberPhoneChange(memberNo, phone);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberPassword(Long memberNo, String password) {
+        memberAdaptor.requestMemberPasswordChange(memberNo, password);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberPasswordResponseDto getMemberPassword(Long memberNo) {
+        return memberAdaptor.requestMemberPassword(memberNo);
     }
 }
