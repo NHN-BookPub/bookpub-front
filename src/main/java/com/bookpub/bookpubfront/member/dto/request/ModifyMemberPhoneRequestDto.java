@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 휴대전화를 수정하기위한 클래스입니다.
  *
  * @author : 유호철
  * @since : 1.0
