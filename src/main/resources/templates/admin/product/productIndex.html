@@ -262,7 +262,7 @@
                             <td>
                                 <form th:action="@{/admin/products/{productNo}(productNo=${product.productNo})}"
                                       method="post">
-                                    <button type="submit" class="btn btn-light">정보조회</button>
+                                    <button type="submit" class="btn btn-info">정보조회</button>
                                 </form>
                             </td>
                             <td>
@@ -276,6 +276,17 @@
                         </tr>
                         </tbody>
                     </table>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="@{/admin/products(page=(${page}-1))}"
+                                       th:text="${page}"></a></li>
+                            </th:block>
+                        </ul>
+                    </nav>
                 </div>
 
 
