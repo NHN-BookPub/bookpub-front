@@ -5,6 +5,8 @@ import com.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
 import com.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
 import com.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.bookpub.bookpubfront.state.OrderState;
+import com.bookpub.bookpubfront.state.anno.StateCode;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -29,6 +31,9 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     private final RestTemplate restTemplate;
     private static final String ORDER_URL = "/api/orders";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createOrderRequest(CreateOrderRequestDto requestDto)
             throws JsonProcessingException {
@@ -39,9 +44,11 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 restTemplate.exchange(url, HttpMethod.POST, httpEntity, Void.class);
 
         checkError(response);
-
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<GetOrderListResponseDto> getAllOrdersRequest(@Min(0) Integer page) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
@@ -55,6 +62,9 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         return checkError(response).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL + "/" + orderNo;
@@ -66,16 +76,47 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         return checkError(response).getBody();
     }
 
-//    @Override
-//    public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
-//        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-//                +
-//    }
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
+        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
+                + "/" + orderNo + "/invoice?no=" + invoiceNo;
+        ResponseEntity<Void> response =
+                restTemplate.exchange(url, HttpMethod.PUT,
+                        new HttpEntity<>(getHttpHeaders()),
+                        new ParameterizedTypeReference<>() {});
 
+        checkError(response);
+    }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyStateCodeRequest(Long orderNo,
+                                       @StateCode(enumClass = OrderState.class)
+                                       String codeName) {
+        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
+                + "/" + orderNo + "/state?no" + codeName;
 
+        ResponseEntity<Void> response =
+                restTemplate.exchange(url, HttpMethod.PUT,
+                        new HttpEntity<>(getHttpHeaders()),
+                        new ParameterizedTypeReference<>() {});
 
+        checkError(response);
+    }
 
+    /**
+     * 에러를 체크하기 위한 메서드입니다.
+     * 400, 500번대 에러를 거릅니다.
+     *
+     * @param response ResponseEntity 받습니다.
+     * @return 에러가 없으면 그대로 반환합니다.
+     * @param <T> 지네릭 타입입니다.
+     */
     private <T> ResponseEntity<T> checkError(ResponseEntity<T> response) {
         HttpStatus status = response.getStatusCode();
 
@@ -86,6 +127,12 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         return response;
     }
 
+
+    /**
+     * 콘텐트 타입이 지정된 헤더를 반환하는 메서드입니다.
+     *
+     * @return JSon 헤더를 반환합니다.
+     */
     private HttpHeaders getHttpHeaders() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
