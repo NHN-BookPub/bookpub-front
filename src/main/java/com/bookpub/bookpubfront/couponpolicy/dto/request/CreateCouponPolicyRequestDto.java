@@ -13,7 +13,7 @@ import lombok.Getter;
 @AllArgsConstructor
 public class CreateCouponPolicyRequestDto {
     private boolean policyFixed;
-    private Long discountRate;
+    private Long policyPrice;
     private Long policyMinimum;
     private Long maxDiscount;
 }

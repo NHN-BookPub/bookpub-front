@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 멤버의 닉네임을 수정하기위한 클래스입니다.
  *
  * @author : 유호철
  * @since : 1.0

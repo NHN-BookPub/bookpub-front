@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.token.filter;
 
+import static com.bookpub.bookpubfront.utils.Utils.findJwtCookie;
 import com.bookpub.bookpubfront.token.dto.TokenInfoDto;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +17,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -35,20 +37,20 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     /**
      * 특정 조건에서 필터가 작동하여 로그인 진행.
      *
-     * @param request 요청 정보 객체.
-     * @param response 응답 정보 객체.
+     * @param request     요청 정보 객체.
+     * @param response    응답 정보 객체.
      * @param filterChain security의 필터체인 객체.
      */
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
 
         try {
-            HttpSession session = request.getSession(false);
-
-            if (Objects.isNull(session)) {
+            if (Objects.isNull(findJwtCookie())) {
                 filterChain.doFilter(request, response);
                 return;
             }
+
+            HttpSession session = request.getSession();
 
             String accessToken = (String) session.getAttribute(JwtUtil.JWT_SESSION);
 
@@ -74,7 +76,11 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             UsernamePasswordAuthenticationToken token
                     = new UsernamePasswordAuthenticationToken(memberId, "dummy", authorities);
 
-            SecurityContextHolder.getContext().setAuthentication(token);
+            SecurityContext securityContext = SecurityContextHolder.createEmptyContext();
+            securityContext.setAuthentication(token);
+            SecurityContextHolder.setContext(securityContext);
+
+
             filterChain.doFilter(request, response);
 
         } catch (Exception e) {
@@ -83,4 +89,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.clearContext();
         }
     }
+
+
 }

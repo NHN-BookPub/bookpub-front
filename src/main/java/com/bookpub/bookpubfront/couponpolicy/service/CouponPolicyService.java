@@ -17,7 +17,6 @@ public interface CouponPolicyService {
      * 쿠폰정책을 등록하기 위한 메소드입니다.
      *
      * @param createRequestDto 쿠폰등록에 필요한 정보들을 담은 Dto
-     * @throws JsonProcessingException json 관련 에러
      */
     void createCouponPolicy(CreateCouponPolicyRequestDto createRequestDto)
             throws JsonProcessingException;
@@ -26,7 +25,6 @@ public interface CouponPolicyService {
      * 쿠폰정책을 수정하기 위한 메소드입니다.
      *
      * @param modifyRequestDto 쿠폰수정에 필요한 정보들을 담은 Dto
-     * @throws JsonProcessingException json 관련 에러
      */
     void modifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto)
             throws JsonProcessingException;
@@ -35,7 +33,6 @@ public interface CouponPolicyService {
      * 쿠폰정책 리스트를 조회하기 위한 메소드입니다.
      *
      * @return 쿠폰정책 정보들을 담은 GetCouponPolicyResponseDto 리스트
-     * @throws JsonProcessingException json 관련 에러
      */
-    List<GetCouponPolicyResponseDto> getCouponPolicies() throws JsonProcessingException;
+    List<GetCouponPolicyResponseDto> getCouponPolicies();
 }

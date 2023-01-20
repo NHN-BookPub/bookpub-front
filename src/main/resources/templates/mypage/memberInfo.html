@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <style>
+
+        .control-label {
+            text-align: start;
+        }
+
+        .myPageBody {
+            padding-right: 20px;
+            padding-left: 20px;
+        }
+
+        .member-info-point {
+            background: #E7DBF2;
+        }
+
+        .check-member-info {
+            padding-left: 10px;
+        }
+
+    </style>
+</head>
+<body>
+<div id="body-pd">
+    <th:block th:include="mypage/fragments/mypageHeader"></th:block>
+    <th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+    <div class="myPageBody">
+        <br>
+        <h2 class="mb-3 ">내 정보</h2>
+
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card  text-black-50 mb-4 member-info-tier">
+                    <div class="card-body">
+                        <span class="float-lg-start">내등급</span>
+                        <span class="float-end check-member-info justify-content-end"
+                              th:text="${member.tierName}"></span>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        <a class="text-white stretched-link justify-content-end" href="#">등급</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card member-info-point text-black-50 mb-4">
+                    <div class="card-body">
+                        <span class="float-lg-start">잔여 포인트</span>
+                        <span class="check-member float-end justify-content-end"
+                              th:text="${member.point}"></span>
+                    </div>
+                    <div class="card-footer d-flex align-items-center">
+                        <a class="text-white stretched-link justify-content-end" href="#">포인트 사용 내역</a>
+                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br>
+        <div class="list-group">
+            <h5 class="mb-2 control-label">내 이름</h5>
+
+
+            <a href="#change_name"
+               class="nav__link list-group-item list-group-item-action flex-column align-items-start"
+               data-toggle="modal">
+                <div class="d-flex w-100 justify-content-end">
+                    <small class="badge bg-opacity-20">수정하기</small>
+                </div>
+                <span class="mb-2" th:text="${member.memberName}"></span>
+            </a>
+            <!--        이름 변경 모달        -->
+            <div class="modal fade" id="change_name" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">이름 변경</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} + '/name'" class="was-validated"
+                                  method="POST">
+                                <input type="hidden" id="member-no" th:value="${#authentication.principal}">
+                                <br/>
+                                <div class="form-group">
+                                    <label for="exchangeName">변경할 이름</label>
+                                    <input type="text" class="form-control" id="exchangeName" placeholder="변경할 이름 기입"
+                                           name="exchangeName"
+                                           pattern="^.*(?=.*[가-힣a-z])(?=.{2,200}).*$" required>
+                                    <div class="valid-feedback">완료</div>
+                                    <div class="invalid-feedback">2자 10자</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="btn btn-primary">등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--        이름 변경 모달        -->
+            <br>
+            <h5 class="mb-2 control-label">생년 월일 </h5>
+            <a href="#"
+               class="list-group-item list-group-item-action flex-column align-items-start list-group-item-dark">
+                <div class="d-flex w-50 justify-content">
+                    <span class="mb-2" th:text="${member.birthYear} + '년'"></span>
+                    <span class="mb-2" th:text="${member.birthMonth}"></span>
+                </div>
+            </a>
+
+            <br>
+            <h5 class="mb-2 control-label">닉네임</h5>
+            <a href="#change_nickname"
+               class="nav__link list-group-item list-group-item-action flex-column align-items-start"
+               data-toggle="modal">
+                <div class="d-flex w-100 justify-content-end">
+                    <small class="badge bg-opacity-20">수정하기</small>
+                </div>
+                <span class="mb-2" th:text="${member.nickname}"></span>
+            </a>
+            <!-- 닉네임 변경모달           -->
+            <div class="modal fade" id="change_nickname" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">닉네임 변경</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} + '/nickname'" class="was-validated"
+                                  method="post">
+                                <br/>
+                                <div class="form-group">
+                                    <label for="change_nickname">닉네임 기입</label>
+                                    <input type="text" class="form-control"
+                                           placeholder="닉네임을 입력해주세요" name="exchangeNickname"
+                                           pattern="^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$"
+                                           required>
+                                    <div class="valid-feedback">완료</div>
+                                    <div class="invalid-feedback">닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.</div>
+                                </div>
+
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="btn btn-primary nickname-btn">등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- 닉네임 변경모달           -->
+
+            <br>
+            <h5 class="mb-2 control-label">성 별 </h5>
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start">
+                <div class="d-flex w-100 justify-content-end">
+                </div>
+                <span class="mb-2" th:text="${member.gender}">남성</span>
+            </a>
+
+            <br>
+            <h5 class="mb-2 control-label">휴대전화</h5>
+            <a href="#change_phone" class="list-group-item list-group-item-action flex-column align-items-start"
+               data-toggle="modal">
+                <div class="d-flex w-100 justify-content-end">
+                    <small class="badge bg-opacity-20">수정하기</small>
+                </div>
+                <span class="mb-2" th:text="${member.phone}">01043580106</span>
+            </a>
+            <!--        휴대전화 변경 모달       -->
+
+            <div class="modal fade" id="change_phone" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="phoneExLabel">휴대전화 변경</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} + '/phone'" class="was-validated"
+                                  method="post">
+                                <br/>
+                                <div class="form-group">
+                                    <label for="exchangePhone">변경할 휴대전화 번호</label>
+                                    <input type="text" class="form-control" id="exchangePhone"
+                                           placeholder="010xxxxxxxx" name="exchangePhone" pattern="\d{3}\d{4}\d{4}"
+                                           required>
+                                    <div class="valid-feedback">완료</div>
+                                    <div class="invalid-feedback">휴대전화 형식에 맞지않습니다.</div>
+                                    <button id="smsAuthSend" class="btn btn-outline-primary" type="button"
+                                            onclick="smsAuth()">인증번호 전송
+                                    </button>
+                                </div>
+                                <div class="form-group">
+                                    <label id="inputLabel" for="authInput">인증번호 기입</label>
+                                    <br>
+                                    <input type="text" id="authInput" name="auth" required>
+                                    <button id="smsAuthConfirm" class="btn btn-outline-info" type="button" onclick="smsConfirm()">확인</button>
+                                    <br>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" id="phone-auth" class=" btn btn-primary" disabled>등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!--        휴대전화 변경 모달       -->
+
+            <br>
+            <h5 class="mb-2 control-label">비밀번호</h5>
+            <a href="#change_pwd" class="nav-link list-group-item list-group-item-action flex-column align-items-start"
+               data-toggle="modal">
+                <div class="d-flex w-100 justify-content-end">
+                    <small class="badge bg-opacity-20">수정하기</small>
+                </div>
+                <span class="mb-2">***************</span>
+            </a>
+            <!--       비밀번호 변경 모달        -->
+            <div class="modal fade" id="change_pwd" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">비밀번호 변경</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} + '/password'" class="was-validated" method="post">
+                                <br/>
+                                <div class="form-group">
+                                    <label for="currentPwd">현재 비밀번호</label>
+                                    <input type="password" class="form-control" id="currentPwd"
+                                           placeholder="현재 비밀번호를 입력해주세요" name="currentPwd"
+                                           pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,50}$"
+                                           required>
+                                    <div class="valid-feedback">완료</div>
+                                    <div class="invalid-feedback">영문 대,소 문자,숫자,특수문자 로 8~50자</div>
+                                    <button id="check-current-pwd" type="button" class="btn btn-outline-info" onclick="pwdCheck()">비밀번호 확인</button>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="exchangePwd">변경할 비밀번호</label>
+                                    <input type="password" class="form-control" id="exchangePwd"
+                                           placeholder="영대소문자,숫자,특수문자로 구성된 8글자 이상 20글자 이하"
+                                           name="exchangePwd"
+                                           pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,50}$"
+                                           onchange="validatePassword()"
+                                           required disabled>
+                                </div>
+                                <div class="form-group">
+                                    <label for="exchangeCheckPwd">변경할 비밀번호 확인</label>
+                                    <input type="password" class="form-control" id="exchangeCheckPwd"
+                                           placeholder="변경할 비밀번호 확인"
+                                           name="exchangeCheckPwd"
+                                           pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,50}$"
+                                           onchange="validatePassword()"
+                                           disabled>
+                                    <div class="valid-feedback">완료</div>
+                                    <div class="invalid-feedback">영문 대,소 문자,숫자,특수문자 로 8~50자</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" id="pwd-register" class="btn btn-primary" disabled>등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--       비밀번호 변경 모달        -->
+
+
+            <br>
+            <h5 class="mb-2 control-label">이메일</h5>
+            <a href="#changeEmail" class="list-group-item list-group-item-action flex-column align-items-start"
+               data-toggle="modal">
+                <div class="d-flex w-100 justify-content-end">
+                    <small class="badge bg-opacity-20">수정하기</small>
+                </div>
+                <span class="mb-2" th:text="${member.email}"></span>
+            </a>
+            <div class="modal fade" id="changeEmail" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="emailExLabel">이메일 변경</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} +'/email'" class="was-validated"
+                                  method="post">
+                                <br/>
+                                <div class="form-group">
+                                    <label for="exchangeEmail">변경할 이메일</label>
+                                    <input type="email" class="form-control" id="exchangeEmail"
+                                           placeholder="abc@xxxx.xxx" name="exchangeEmail"
+                                           pattern="^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                                           required>
+                                    <div class="valid-feedback">완료</div>
+                                    <div class="invalid-feedback">이메일 형식에 맞지않습니다.</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="btn btn-primary">등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <br>
+            <h5 class="mb-2 control-label"> 주소</h5>
+            <details open="">
+                <summary>주소 내역 보기</summary>
+                <table id="layerID" class="table table-bordered">
+                    <thead class="thead-light">
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">First</th>
+                        <th scope="col">Last</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <th scope="row">1</th>
+                        <td>Mark</td>
+                        <td>Otto</td>
+                        <td>@mdo</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">2</th>
+                        <td>Jacob</td>
+                        <td>Thornton</td>
+                        <td>@fat</td>
+                    </tr>
+                    <tr>
+                        <th scope="row">3</th>
+                        <td>Larry</td>
+                        <td>the Bird</td>
+                        <td>@twitter</td>
+                    </tr>
+                    </tbody>
+                </table>
+            </details>
+        </div>
+    </div>
+</div>
+<script>
+    var exPwd = document.getElementById("exchangePwd");
+    var checkPwd = document.getElementById("exchangeCheckPwd");
+
+    function validatePassword() {
+        if (exPwd.value !== checkPwd.value) {
+            checkPwd.setCustomValidity("패스워드가 일치하지 않습니다.");
+        } else {
+            checkPwd.setCustomValidity('');
+        }
+    }
+
+    exPwd.onchange = validatePassword;
+    checkPwd = validatePassword;
+</script>
+<script th:inline="javascript">
+    let findTier = (value) => {
+        if (value === 'white') {
+            return "#CCCCCC"
+        } else if (value === 'sliver') {
+            return "#C0C0C0"
+        } else if (value === 'gold') {
+            return "#FFD700";
+        } else if (value === 'platinum') {
+            return "#00B4C9";
+        } else if (value === 'Diamond') {
+            return "#CCFFFF";
+        } else
+            return "#CC9999";
+    }
+
+    let layerId = document.getElementById("layerID");
+
+    function LayerView(layerId) {
+        layerId.style.visibility = "visible";
+    }
+
+    function LayerHiding(layerId) {
+        layerId.style.visibility = "hidden";
+    }
+
+    //bronze(기본) ,white, silver , gold, platinum, Diamond
+    let tierName = [[${member.tierName}]];
+
+    const tier = tierName.toString().toLowerCase();
+
+    document.getElementsByClassName("member-info-tier")
+        .item(0)
+        .style.background = findTier(tier);
+
+</script>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+<script src="/static/js/mypage/mypage-member.js"></script>
+</body>
+</html>

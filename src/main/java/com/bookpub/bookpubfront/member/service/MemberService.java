@@ -1,16 +1,16 @@
 package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
 
@@ -43,24 +43,24 @@ public interface MemberService {
      *
      * @param session HttpSession 객체.
      */
-    void logout(HttpSession session);
+    void logout(HttpServletResponse response, HttpSession session);
 
 
     /**
      * 멤버의 닉네임을 적어야하는 메서드입니다.
      *
      * @param memberNo 멤버 번호.
-     * @param dto      수정할 닉네임 기입.
+     * @param nickname      수정할 닉네임 기입.
      */
-    void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto);
+    void modifyMemberNickName(Long memberNo, String nickname);
 
     /**
      * 멤버의 이메일 정보를 수정해야하는 메서드입니다.
      *
      * @param memberNo 멤버 번호가 기입.
-     * @param dto      멤버가 수정할 이메일 정보.
+     * @param email      멤버가 수정할 이메일 정보.
      */
-    void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto);
+    void modifyMemberEmail(Long memberNo, String email);
 
     /**
      * 멤버의 단일값 반환.
@@ -98,4 +98,40 @@ public interface MemberService {
      * @return the list
      */
     List<MemberTierStatisticsResponseDto> memberTierStatistics();
+
+    boolean idDuplicateCheck(String id);
+
+    boolean nickDuplicateCheck(String id);
+
+    /**
+     * 멤버에 이름을 수정할때 쓰이는 메서드입니다.
+     *
+     * @param memberNo 회원번호
+     * @param name     이름
+     */
+    void modifyMemberName(Long memberNo, String name);
+
+    /**
+     * 멤버의 휴대전화번호를 수정할때 쓰이는 메서드입니다.
+     *
+     * @param memberNo 회원번호
+     * @param phone    변경할 전화번호
+     */
+    void modifyMemberPhone(Long memberNo, String phone);
+
+    /**
+     * 회원의 비밀번호가 수정될때 쓰이는 메서드입니다.
+     *
+     * @param memberNo 회원번호
+     * @param password raw 한 비밀번호
+     */
+    void modifyMemberPassword(Long memberNo, String password);
+
+    /**
+     * 멤버의 패스워드를 받아 처리하는 메서드입니다.
+     *
+     * @param memberNo 회원번호
+     * @return 회원의 encoding 된 비밀번호 반환.
+     */
+    MemberPasswordResponseDto getMemberPassword(Long memberNo);
 }
