@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum PaymentTypeState {
+public enum PaymentTypeState implements States {
     CARD("카드결제", true);
     private final String name;
     private final boolean isUsed;

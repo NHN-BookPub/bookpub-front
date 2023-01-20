@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum PaymentState {
+public enum PaymentState implements States {
     COMPLETE_PAYMENT("결제승인", true),
     CANCEL_PAYMENT("결제거절", true),
     WAITING_PAYMENT("결제대기", true);

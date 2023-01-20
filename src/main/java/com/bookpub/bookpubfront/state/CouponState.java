@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum CouponState {
+public enum CouponState implements States {
     COUPON_ALL("전체", true),
     COUPON_CATEGORY("카테고리", true),
     COUPON_PERSONAL("개별상품", true);

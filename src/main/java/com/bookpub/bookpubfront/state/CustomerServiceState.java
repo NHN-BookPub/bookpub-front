@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum CustomerServiceState {
+public enum CustomerServiceState implements States {
     FAQ("FAQ", true),
     NOTICE("공지사항", true);
     private final String name;

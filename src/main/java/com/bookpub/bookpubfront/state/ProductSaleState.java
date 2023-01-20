@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum ProductSaleState implements States{
+public enum ProductSaleState implements States {
     SALE("판매중", true),
     SOLD_OUT("품절", true),
     STOP("중단", true);

@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum SubscribeState {
+public enum SubscribeState implements States {
     COMPLETE_SUBSCRIPTION("구독만료", true),
     WAITING_SUBSCRIPTION("구독중", true),
     CANCEL_SUBSCRIPTION("구독취소", true);

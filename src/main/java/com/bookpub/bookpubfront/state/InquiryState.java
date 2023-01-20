@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum InquiryState {
+public enum InquiryState implements States {
     ERROR("불량", true),
     EXCHANGE("교환", true),
     REFUND("환불", true),

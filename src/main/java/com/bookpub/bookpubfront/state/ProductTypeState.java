@@ -10,7 +10,7 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-public enum ProductTypeState {
+public enum ProductTypeState implements States {
     BEST_SELLER("베스트셀러", true),
     RECOMMENDATION("추천", true),
     NEW("신간", true),
