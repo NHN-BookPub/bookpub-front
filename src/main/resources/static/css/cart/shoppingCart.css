@@ -88,10 +88,11 @@ h1, .sub-heading {
  * @section: product-info;
  * @extends: _column;
  */
-.product-info {
+.product-info-head {
     width: 70.832119%;
     padding: .5rem;
 }
+
 .product-name {
     font: 300 2.4em/1 "Lato", sans-serif;
     letter-spacing: -.025em;
