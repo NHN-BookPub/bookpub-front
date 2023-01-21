@@ -134,4 +134,12 @@ public interface MemberService {
      * @return 회원의 encoding 된 비밀번호 반환.
      */
     MemberPasswordResponseDto getMemberPassword(Long memberNo);
+
+    /**
+     * 회원의 베이스 주소지를 변경하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 기준 주소지가 될 주소번호
+     */
+    void modifyMemberAddress(Long memberNo, Long addressNo);
 }

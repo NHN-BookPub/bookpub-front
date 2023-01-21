@@ -10,8 +10,8 @@ import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPasswordRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPhoneRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
@@ -271,5 +271,16 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
     }
 
-
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestMemberBaseAddressChange(Long memberNo, Long addressNo) {
+        restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses/" + addressNo,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
 }

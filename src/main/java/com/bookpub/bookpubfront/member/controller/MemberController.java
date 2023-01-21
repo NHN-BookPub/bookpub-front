@@ -268,4 +268,20 @@ public class MemberController {
         memberService.modifyMemberPassword(memberNo,password);
         return REDIRECT_MY_PAGE + memberNo;
     }
+
+
+    /**
+     * 멤버의 기준주소지를 변경하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 주소번호
+     * @return the string
+     */
+    @PostMapping("/members/{memberNo}/addresses/{addressNo}")
+    public String memberExchangeBaseAddress(@PathVariable("memberNo") Long memberNo,
+                                            @PathVariable("addressNo") Long addressNo){
+
+        memberService.modifyMemberAddress(memberNo, addressNo);
+        return REDIRECT_MY_PAGE + memberNo;
+    }
 }

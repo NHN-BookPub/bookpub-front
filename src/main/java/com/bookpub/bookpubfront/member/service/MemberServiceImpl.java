@@ -207,4 +207,12 @@ public class MemberServiceImpl implements MemberService {
     public MemberPasswordResponseDto getMemberPassword(Long memberNo) {
         return memberAdaptor.requestMemberPassword(memberNo);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberAddress(Long memberNo, Long addressNo) {
+        memberAdaptor.requestMemberBaseAddressChange(memberNo, addressNo);
+    }
 }

@@ -1,13 +1,13 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -126,5 +126,19 @@ public interface MemberAdaptor {
      */
     MemberPasswordResponseDto requestMemberPassword(Long memberNo);
 
+    /**
+     * 회원의 비밀번호를 변경할때 사용되는 메서드입니다.
+     *
+     * @param memberNo 회원의 번호
+     * @param password 변경할 raw 패스워드
+     */
     void requestMemberPasswordChange(Long memberNo, String password);
+
+    /**
+     * 회원의 베이스 주소를 변경할때 사용되는 메서드입니다.
+     *
+     * @param memberNo  회원 번호
+     * @param addressNo 변경할 raw 패스워드
+     */
+    void requestMemberBaseAddressChange(Long memberNo, Long addressNo);
 }
