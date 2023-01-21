@@ -203,7 +203,9 @@
                                     <label id="inputLabel" for="authInput">인증번호 기입</label>
                                     <br>
                                     <input type="text" id="authInput" name="auth" required>
-                                    <button id="smsAuthConfirm" class="btn btn-outline-info" type="button" onclick="smsConfirm()">확인</button>
+                                    <button id="smsAuthConfirm" class="btn btn-outline-info" type="button"
+                                            onclick="smsConfirm()">확인
+                                    </button>
                                     <br>
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
@@ -234,7 +236,8 @@
                             <h5 class="modal-title" id="staticBackdropLabel">비밀번호 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} + '/password'" class="was-validated" method="post">
+                            <form th:action="'/members/' + ${member.memberNo} + '/password'" class="was-validated"
+                                  method="post">
                                 <br/>
                                 <div class="form-group">
                                     <label for="currentPwd">현재 비밀번호</label>
@@ -244,7 +247,9 @@
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">영문 대,소 문자,숫자,특수문자 로 8~50자</div>
-                                    <button id="check-current-pwd" type="button" class="btn btn-outline-info" onclick="pwdCheck()">비밀번호 확인</button>
+                                    <button id="check-current-pwd" type="button" class="btn btn-outline-info"
+                                            onclick="pwdCheck()">비밀번호 확인
+                                    </button>
                                 </div>
 
                                 <div class="form-group">
@@ -322,29 +327,27 @@
                     <thead class="thead-light">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">도로명 주소</th>
+                        <th scope="col">상세 주소</th>
+                        <th scope="col">사용중인 주소</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
+                    <tr th:each="address,count : ${member.addresses}">
+                        <th scope="row" th:text="${count.count}"></th>
+                        <td th:text="${address.roadAddress}"></td>
+                        <td th:text="${address.addressDetail}"></td>
+                        <th:block>
+                            <td th:if="${address.addressBased}">
+                                기준주소지
+                            </td>
+                            <td th:unless="${address.addressBased}">
+                                <form th:action="'/members/' + ${member.memberNo} +'/addresses/' +${address.addressNo}"
+                                      method="post">
+                                    <button type="submit" class="btn btn-outline-info">기준 주소지변경</button>
+                                </form>
+                            </td>
+                        </th:block>
                     </tr>
                     </tbody>
                 </table>
