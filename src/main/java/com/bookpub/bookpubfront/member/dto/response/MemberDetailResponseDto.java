@@ -26,4 +26,6 @@ public class MemberDetailResponseDto {
     private Long point;
 
     private List<String> authorities;
+
+    private List<MemberAddressResponseDto> addresses;
 }
