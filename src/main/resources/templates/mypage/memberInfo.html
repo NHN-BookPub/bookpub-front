@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <style>
 
         .control-label {
@@ -321,6 +323,46 @@
 
             <br>
             <h5 class="mb-2 control-label"> 주소</h5>
+
+            <!-- 주소등록 모달창 -->
+
+            <th:block th:if="${member.addresses.size()} != 10">
+            <button class="mb-2 btn btn-outline-primary" data-target="#registerAddress" data-toggle="modal">
+                주소 등록하기
+            </button>
+            </th:block>
+            <div class="modal fade" id="registerAddress" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">주소 등록하기</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} +'/addresses'" class="was-validated"
+                                  method="post">
+                                <div class="form-group">
+                                    <label for="roadAddress">도로명 주소</label>
+                                    <input type="text" class="form-control" id="roadAddress" name="address"
+                                           required readonly>
+                                    <br>
+                                    <button class="btn btn-info" onclick="findAddress()">
+                                        우편번호 찾기
+                                    </button>
+                                    <input type="text" class="form-control" id="address-detail" name="addressDetail"
+                                           placeholder="상세주소를 입력해주세요" min="2" max="100"
+                                           required>
+                                    <div class="valid-feedback">완료</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="check-address btn btn-primary">등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <details open="">
                 <summary>주소 내역 보기</summary>
                 <table id="layerID" class="table table-bordered">
@@ -341,10 +383,15 @@
                             <td th:if="${address.addressBased}">
                                 기준주소지
                             </td>
+                            <
                             <td th:unless="${address.addressBased}">
                                 <form th:action="'/members/' + ${member.memberNo} +'/addresses/' +${address.addressNo}"
                                       method="post">
                                     <button type="submit" class="btn btn-outline-info">기준 주소지변경</button>
+                                </form>
+                                <form th:action="'/members/' + ${member.memberNo} +'/addresses-delete/' +${address.addressNo}"
+                                method="post">
+                                    <button type="submit" class="btn btn-outline-danger">기준 주소지삭제</button>
                                 </form>
                             </td>
                         </th:block>
