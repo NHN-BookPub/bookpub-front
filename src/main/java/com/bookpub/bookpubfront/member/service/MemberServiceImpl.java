@@ -2,6 +2,7 @@ package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -214,5 +215,21 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void modifyMemberAddress(Long memberNo, Long addressNo) {
         memberAdaptor.requestMemberBaseAddressChange(memberNo, addressNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addMemberAddress(Long memberNo, MemberAddressRequestDto requestDto) {
+        memberAdaptor.requestMemberAddressAdd(memberNo, requestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteMemberAddress(Long memberNo, Long addressNo) {
+        memberAdaptor.requestMemberAddressDelete(memberNo, addressNo);
     }
 }

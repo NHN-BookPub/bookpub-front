@@ -2,6 +2,7 @@ package com.bookpub.bookpubfront.member.controller;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
@@ -282,6 +283,22 @@ public class MemberController {
                                             @PathVariable("addressNo") Long addressNo){
 
         memberService.modifyMemberAddress(memberNo, addressNo);
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    @PostMapping("/members/{memberNo}/addresses")
+    public String memberAddAddress(@PathVariable("memberNo") Long memberNo,
+                                   MemberAddressRequestDto requestDto){
+
+        memberService.addMemberAddress(memberNo, requestDto);
+
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    @PostMapping("/members/{memberNo}/addresses-delete/{addressNo}")
+    public String memberDeleteAddress(@PathVariable("memberNo") Long memberNo,
+                                      @PathVariable("addressNo") Long addressNo) {
+        memberService.deleteMemberAddress(memberNo, addressNo);
         return REDIRECT_MY_PAGE + memberNo;
     }
 }
