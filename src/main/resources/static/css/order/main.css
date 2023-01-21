@@ -1,0 +1,117 @@
+#order-main {
+    padding-left: 24px;
+    padding-right: 24px;
+    width: 100%;
+    border-width: 0;
+    border-style: solid;
+    border-color: #e5e7eb;
+}
+
+body {
+    background-color: #f3f3f3;
+}
+
+#header-h1-text {
+    color: #20252b;
+    text-align: center;
+    margin: 60px 0;
+    line-height: 1.2;
+    font-style: normal;
+}
+
+.item-tip {
+    padding: 24px;
+    margin-bottom: 16px;
+    background-color: #fff;
+}
+
+h6 {
+    color: #20252b;
+    font-size: 1.286em;
+    line-height: 1.4;
+    font-style: normal;
+    font-weight: bold;
+    padding-bottom: 20px;
+}
+.bookpub-item{
+    margin: 0;
+    padding: 14px;
+    border: 1px solid rgba(33, 33, 33, 0.15);
+}
+
+.bookpub-item-thumb {
+    padding: 14px;
+    margin: 0;
+
+}
+
+.bookpub-item-thumb > a {
+    display: table;
+    width: 100%;
+    color: #212121;
+    float:none !important;
+}
+
+.item-img-wrap {
+    width: 104px;
+    display: table-cell;
+    vertical-align: top;
+}
+
+.item-img-wrap > img {
+    width: 80px;
+    height: 80px;
+}
+
+.item-info-wrap {
+    display: table-cell;
+    vertical-align: top;
+    word-break: break-all;
+    font-size: 14px;
+}
+
+.item-title {
+    line-height: 1.3;
+    margin-bottom: 4px;
+    display: inline-block;
+}
+
+.item-option > p {
+    margin: 0;
+}
+
+.item-pay {
+    margin-top: 4px;
+}
+
+.order-input-name {
+    padding-right: 5px;
+}
+
+.order-input-phone {
+    padding-left: 5px;
+}
+
+#address {
+    cursor: pointer;
+}
+
+.button-box {
+    margin-top: 7px;
+    gap: 6px;
+    min-width: 475px;
+}
+
+.checkBtn {
+    background-color: white;
+    color: black;
+    border: 1px solid #656363;
+    border-radius: 13px;
+    width: 100px;
+    height: 35px;
+    box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%);
+}
+
+.checkBtn:hover {
+    background-color: #eaeaea;
+}

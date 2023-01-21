@@ -2,7 +2,6 @@ package com.bookpub.bookpubfront.order.dto;
 
 import com.bookpub.bookpubfront.state.OrderState;
 import com.bookpub.bookpubfront.state.anno.StateCode;
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import javax.validation.constraints.NotEmpty;
@@ -31,21 +30,21 @@ public class CreateOrderRequestDto {
     @StateCode(enumClass = OrderState.class)
     private String orderState;
     @Length(max = 200)
-    private String buyerName;
+    private String buyerName; //dz
     @Length(max = 20)
-    private String buyerNumber;
+    private String buyerNumber; //dz
     @Length(max = 200)
-    private String recipientName;
+    private String recipientName; //dz
     @Length(max = 20)
-    private String recipientNumber;
+    private String recipientNumber; //dz
     @NotNull
-    private String addressDetail;
+    private String addressDetail; //dz
     @NotNull
-    private String roadAddress;
+    private String roadAddress; //dz
     @NotNull
-    private LocalDateTime receivedAt;
+    private String receivedAt;
     private boolean packaged;
-    private String orderRequest;
+    private String orderRequest; //dz
     private Long pointAmount;
     private Long couponAmount;
     private Long totalAmount;
