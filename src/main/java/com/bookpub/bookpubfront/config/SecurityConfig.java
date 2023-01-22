@@ -1,20 +1,23 @@
 package com.bookpub.bookpubfront.config;
 
-import com.bookpub.bookpubfront.token.filter.CustomAuthenticationFilter;
+import com.bookpub.bookpubfront.filter.CustomAuthenticationFilter;
+import com.bookpub.bookpubfront.filter.CustomLoginFilter;
+import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
+import com.bookpub.bookpubfront.token.provider.CustomAuthenticationProvider;
+import com.bookpub.bookpubfront.token.service.CustomUserDetailsService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
-import org.apache.catalina.filters.CorsFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.AuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.access.intercept.FilterSecurityInterceptor;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 /**
@@ -28,7 +31,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @Configuration
 public class SecurityConfig {
     private final ObjectMapper objectMapper;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final MemberAdaptor memberAdaptor;
+    private final CustomUserDetailsService userDetailsService;
 
     /**
      * security filterChain 설정
@@ -39,21 +43,24 @@ public class SecurityConfig {
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        AuthenticationManager authenticationManager
+                = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
+
         http.authorizeRequests()
 //                .antMatchers("/", "/login", "/signup").permitAll()
 //                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
-                .anyRequest().permitAll();
-        http.csrf()
+                .anyRequest().permitAll()
+                .and()
+                .csrf()
+                .disable().cors().disable()
+                .formLogin()
+                .disable()
+                .logout()
                 .disable();
-        http.cors().disable();
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterBefore(customAuthenticationFilter(), AnonymousAuthenticationFilter.class);
-
-        http.formLogin()
-                .disable();
-        http.logout().disable();
+        http.addFilterBefore(customLoginFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
@@ -75,6 +82,33 @@ public class SecurityConfig {
      */
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() {
-        return new CustomAuthenticationFilter(objectMapper, redisTemplate);
+        return new CustomAuthenticationFilter();
     }
+
+    @Bean
+    public CustomLoginFilter customLoginFilter(AuthenticationManager authenticationManager) {
+        CustomLoginFilter loginFilter
+                = new CustomLoginFilter(memberAdaptor, authenticationProvider(), objectMapper);
+        loginFilter.setFilterProcessesUrl("/auth");
+        loginFilter.setAuthenticationManager(authenticationManager);
+        loginFilter.setUsernameParameter("id");
+        loginFilter.setPasswordParameter("pwd");
+
+        return loginFilter;
+    }
+
+    @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
+    }
+
+    @Bean
+    public AuthenticationProvider authenticationProvider() {
+        CustomAuthenticationProvider authenticationProvider = new CustomAuthenticationProvider();
+        authenticationProvider.setUserDetailsService(userDetailsService);
+        authenticationProvider.setPasswordEncoder(passwordEncoder());
+
+        return authenticationProvider;
+    }
+
 }
