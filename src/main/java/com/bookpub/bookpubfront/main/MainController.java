@@ -8,14 +8,12 @@ import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.service.ProductService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 메인화면 view 컨트롤러.
@@ -31,6 +29,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 @Controller
 @RequiredArgsConstructor
+@Slf4j
 public class MainController {
 
     private final CategoryService categoryService;
@@ -45,14 +44,10 @@ public class MainController {
      */
     @GetMapping("/")
     public String mainView(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GetParentCategoryWithChildrenResponseDto> parentCategoryWithChildren =
                 categoryService.getParentCategoryWithChildren();
 
-        String userId = (String) authentication.getPrincipal();
-
         model.addAttribute("category", parentCategoryWithChildren);
-        model.addAttribute("userId", userId);
         return "main/index";
     }
 
