@@ -1,16 +1,12 @@
 package com.bookpub.bookpubfront.member.controller;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.service.MemberService;
-import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import java.time.Duration;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -21,7 +17,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -152,27 +147,6 @@ public class MemberController {
         model.addAttribute("sessionId", request.getSession().getId());
 
         return "member/login";
-    }
-
-    /**
-     * 로그인 성공, 실패에 따른 화면을 보여주는 view.
-     *
-     * @param requestDto 로그인 요청 정보가 담겨있는 dto.
-     * @param request    페이지의 요청정보가 담겨있는 객체.
-     * @return 메인화면 또는 로그인화면을 띄워준다.
-     */
-    @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto,
-                              HttpServletRequest request, HttpServletResponse response) {
-        memberService.login(requestDto, request.getSession());
-
-        Cookie cookie = new Cookie(JwtUtil.JWT_SESSION, request.getSession().getId());
-        cookie.setMaxAge((int) Duration.ofDays(1).getSeconds());
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-        return "redirect:/";
     }
 
     /**
