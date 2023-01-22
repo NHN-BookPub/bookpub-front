@@ -10,20 +10,27 @@ import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPasswordRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPhoneRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
+import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -33,7 +40,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * 멤버 어뎁터를 구현하기위한 구현 클래스입니다.
  *
- * @author : 유호철
+ * @author : 유호철, 임태원
  * @since : 1.0
  **/
 @Component
@@ -269,6 +276,31 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 httpEntity,
                 Void.class
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberLoginResponseDto requestAuthMemberInfo(HttpServletRequest request) {
+        HttpSession session = request.getSession();
+        String accessToken = (String) session.getAttribute(JwtUtil.JWT_SESSION);
+
+        if (Objects.isNull(accessToken)) {
+            throw new TokenNotIssuedException();
+        }
+
+        HttpHeaders headers = makeHeader();
+        headers.add(JwtUtil.AUTH_HEADER, accessToken);
+
+        HttpEntity<MemberLoginResponseDto> httpEntity =
+                new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/auth",
+                HttpMethod.GET,
+                httpEntity,
+                MemberLoginResponseDto.class).getBody();
     }
 
 

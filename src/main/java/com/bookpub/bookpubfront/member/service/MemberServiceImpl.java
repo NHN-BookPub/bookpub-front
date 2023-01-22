@@ -1,7 +1,6 @@
 package com.bookpub.bookpubfront.member.service;
 
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -9,19 +8,16 @@ import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
+import com.bookpub.bookpubfront.token.service.CustomUserDetailsService;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import com.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import java.util.Objects;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -38,7 +34,6 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-    private final RedisTemplate<String, String> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
 
@@ -62,39 +57,13 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session) {
-        ResponseEntity<Void> jwtResponse = memberAdaptor.loginRequest(loginMemberRequestDto);
-
-        String accessToken = Objects.requireNonNull(jwtResponse.getHeaders().get("Authorization")).get(0);
-
-        if (Objects.isNull(accessToken)) {
-            throw new TokenNotIssuedException();
-        }
-
-        session.setAttribute(JwtUtil.JWT_SESSION, accessToken);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void logout(HttpServletResponse response, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
-            redisTemplate.opsForHash().delete((String) authentication.getPrincipal(), authentication.getCredentials());
-
             session.removeAttribute(JwtUtil.JWT_SESSION);
-
-            Cookie jwtCookie = Utils.findJwtCookie();
-
-            if (Objects.nonNull(jwtCookie)) {
-                jwtCookie.setMaxAge(0);
-                jwtCookie.setValue(null);
-                jwtCookie.setPath("/");
-                response.addCookie(jwtCookie);
-            }
-
+            session.removeAttribute(CustomUserDetailsService.PRINCIPAL);
+            session.removeAttribute(CustomUserDetailsService.AUTHORITIES);
             SecurityContextHolder.clearContext();
         }
     }

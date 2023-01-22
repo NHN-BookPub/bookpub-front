@@ -2,6 +2,7 @@ package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
@@ -10,6 +11,7 @@ import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
@@ -127,4 +129,6 @@ public interface MemberAdaptor {
     MemberPasswordResponseDto requestMemberPassword(Long memberNo);
 
     void requestMemberPasswordChange(Long memberNo, String password);
+
+    MemberLoginResponseDto requestAuthMemberInfo(HttpServletRequest request);
 }
