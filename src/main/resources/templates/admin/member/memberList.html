@@ -53,9 +53,12 @@
                             <td th:text="${member.isSocial}"></td>
                             <td th:text="${member.isDeleted}"></td>
                             <td>
-                                <form th:action="@{/admin/members/{memberNo}(memberNo=${member.memberNo})}" method="post">
-                                    <button th:if= "${member.isBlocked} == true" class="btn btn-outline-secondary">차단해제</button>
-                                    <button th:unless= "${member.isBlocked} == true" class="btn btn-outline-danger">차단</button>
+                                <form th:action="@{/admin/members/{memberNo}(memberNo=${member.memberNo})}"
+                                      method="post">
+                                    <button th:if="${member.isBlocked} == true" class="btn btn-outline-secondary">차단해제
+                                    </button>
+                                    <button th:unless="${member.isBlocked} == true" class="btn btn-outline-danger">차단
+                                    </button>
                                     </button>
                                 </form>
                                 <!-- 차단 버튼 클릭시 JS 로 처리 -->
@@ -70,13 +73,13 @@
                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}" tabindex="-1">Previous</a>
                             </li>
                             <th:block th:each="pagecount : ${totalPage}">
-                            <li class="page-item">
-                                <a class="page-link"
-                                   th:href="@{ ${uri} + '?page=' + ${pagecount}+
+                                <li class="page-item">
+                                    <a class="page-link"
+                                       th:href="@{ ${uri} + '?page=' + ${pagecount}+
                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}">
-                                    [[${pagecount}]]
-                                </a>
-                            </li>
+                                        [[${pagecount}]]
+                                    </a>
+                                </li>
                             </th:block>
                             <li class="page-item" th:classappend="${!previous} ? 'disabled'">
                                 <a class="page-link" th:href="@{ ${uri} + '?page=' + ${nextPageNo}+

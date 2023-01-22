@@ -2,6 +2,7 @@ package com.bookpub.bookpubfront.member.controller;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
@@ -67,6 +68,7 @@ public class MemberController {
     /**
      * 회원가입 페이지를 연결해주는 메소드.
      *
+     * @param model the model
      * @return 회원가입 페이지 view를 보여줌
      */
     @GetMapping("/signup")
@@ -159,6 +161,7 @@ public class MemberController {
      *
      * @param requestDto 로그인 요청 정보가 담겨있는 dto.
      * @param request    페이지의 요청정보가 담겨있는 객체.
+     * @param response   the response
      * @return 메인화면 또는 로그인화면을 띄워준다.
      */
     @PostMapping("/login")
@@ -178,7 +181,8 @@ public class MemberController {
     /**
      * 로그아웃
      *
-     * @param request HTTP Request.
+     * @param request  HTTP Request.
+     * @param response the response
      * @return 로그아웃 후 메인화면으로 리다이렉트.
      */
     @GetMapping("/logout")
@@ -266,6 +270,52 @@ public class MemberController {
                                          @RequestParam("exchangePwd") String password){
 
         memberService.modifyMemberPassword(memberNo,password);
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+
+    /**
+     * 멤버의 기준주소지를 변경하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 주소번호
+     * @return the string
+     */
+    @PostMapping("/members/{memberNo}/addresses/{addressNo}")
+    public String memberExchangeBaseAddress(@PathVariable("memberNo") Long memberNo,
+                                            @PathVariable("addressNo") Long addressNo){
+
+        memberService.modifyMemberAddress(memberNo, addressNo);
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    /**
+     * 회원의 주소를 추가하기위한 메서드입니다.
+     *
+     * @param memberNo   회원번호
+     * @param requestDto 주소를 등록하기위한 정보.
+     * @return the string
+     */
+    @PostMapping("/members/{memberNo}/addresses")
+    public String memberAddAddress(@PathVariable("memberNo") Long memberNo,
+                                   MemberAddressRequestDto requestDto){
+
+        memberService.addMemberAddress(memberNo, requestDto);
+
+        return REDIRECT_MY_PAGE + memberNo;
+    }
+
+    /**
+     * 회원의 주소를 삭제하기위한 메서드입니다.
+     *
+     * @param memberNo  회원 번호 기입.
+     * @param addressNo 삭제할 주소번호 기압.
+     * @return the string
+     */
+    @PostMapping("/members/{memberNo}/addresses-delete/{addressNo}")
+    public String memberDeleteAddress(@PathVariable("memberNo") Long memberNo,
+                                      @PathVariable("addressNo") Long addressNo) {
+        memberService.deleteMemberAddress(memberNo, addressNo);
         return REDIRECT_MY_PAGE + memberNo;
     }
 }

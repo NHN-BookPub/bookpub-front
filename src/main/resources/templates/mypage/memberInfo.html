@@ -8,6 +8,8 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
     <style>
 
         .control-label {
@@ -203,7 +205,9 @@
                                     <label id="inputLabel" for="authInput">인증번호 기입</label>
                                     <br>
                                     <input type="text" id="authInput" name="auth" required>
-                                    <button id="smsAuthConfirm" class="btn btn-outline-info" type="button" onclick="smsConfirm()">확인</button>
+                                    <button id="smsAuthConfirm" class="btn btn-outline-info" type="button"
+                                            onclick="smsConfirm()">확인
+                                    </button>
                                     <br>
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
@@ -234,7 +238,8 @@
                             <h5 class="modal-title" id="staticBackdropLabel">비밀번호 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} + '/password'" class="was-validated" method="post">
+                            <form th:action="'/members/' + ${member.memberNo} + '/password'" class="was-validated"
+                                  method="post">
                                 <br/>
                                 <div class="form-group">
                                     <label for="currentPwd">현재 비밀번호</label>
@@ -244,7 +249,9 @@
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">영문 대,소 문자,숫자,특수문자 로 8~50자</div>
-                                    <button id="check-current-pwd" type="button" class="btn btn-outline-info" onclick="pwdCheck()">비밀번호 확인</button>
+                                    <button id="check-current-pwd" type="button" class="btn btn-outline-info"
+                                            onclick="pwdCheck()">비밀번호 확인
+                                    </button>
                                 </div>
 
                                 <div class="form-group">
@@ -316,35 +323,78 @@
 
             <br>
             <h5 class="mb-2 control-label"> 주소</h5>
+
+            <!-- 주소등록 모달창 -->
+
+            <th:block th:if="${member.addresses.size()} != 10">
+            <button class="mb-2 btn btn-outline-primary" data-target="#registerAddress" data-toggle="modal">
+                주소 등록하기
+            </button>
+            </th:block>
+            <div class="modal fade" id="registerAddress" data-backdrop="static" tabindex="-1" role="dialog"
+                 aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">주소 등록하기</h5>
+                        </div>
+                        <div class="modal-body">
+                            <form th:action="'/members/' + ${member.memberNo} +'/addresses'" class="was-validated"
+                                  method="post">
+                                <div class="form-group">
+                                    <label for="roadAddress">도로명 주소</label>
+                                    <input type="text" class="form-control" id="roadAddress" name="address"
+                                           required readonly>
+                                    <br>
+                                    <button class="btn btn-info" onclick="findAddress()">
+                                        우편번호 찾기
+                                    </button>
+                                    <input type="text" class="form-control" id="address-detail" name="addressDetail"
+                                           placeholder="상세주소를 입력해주세요" min="2" max="100"
+                                           required>
+                                    <div class="valid-feedback">완료</div>
+                                </div>
+                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                <button type="submit" class="check-address btn btn-primary">등록</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
             <details open="">
                 <summary>주소 내역 보기</summary>
                 <table id="layerID" class="table table-bordered">
                     <thead class="thead-light">
                     <tr>
                         <th scope="col">#</th>
-                        <th scope="col">First</th>
-                        <th scope="col">Last</th>
-                        <th scope="col">Handle</th>
+                        <th scope="col">도로명 주소</th>
+                        <th scope="col">상세 주소</th>
+                        <th scope="col">사용중인 주소</th>
                     </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td>Otto</td>
-                        <td>@mdo</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">2</th>
-                        <td>Jacob</td>
-                        <td>Thornton</td>
-                        <td>@fat</td>
-                    </tr>
-                    <tr>
-                        <th scope="row">3</th>
-                        <td>Larry</td>
-                        <td>the Bird</td>
-                        <td>@twitter</td>
+                    <tr th:each="address,count : ${member.addresses}">
+                        <th scope="row" th:text="${count.count}"></th>
+                        <td th:text="${address.roadAddress}"></td>
+                        <td th:text="${address.addressDetail}"></td>
+                        <th:block>
+                            <td th:if="${address.addressBased}">
+                                기준주소지
+                            </td>
+                            <
+                            <td th:unless="${address.addressBased}">
+                                <form th:action="'/members/' + ${member.memberNo} +'/addresses/' +${address.addressNo}"
+                                      method="post">
+                                    <button type="submit" class="btn btn-outline-info">기준 주소지변경</button>
+                                </form>
+                                <form th:action="'/members/' + ${member.memberNo} +'/addresses-delete/' +${address.addressNo}"
+                                method="post">
+                                    <button type="submit" class="btn btn-outline-danger">기준 주소지삭제</button>
+                                </form>
+                            </td>
+                        </th:block>
                     </tr>
                     </tbody>
                 </table>
