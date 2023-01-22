@@ -5,7 +5,6 @@ import com.bookpub.bookpubfront.filter.CustomLoginFilter;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.token.provider.CustomAuthenticationProvider;
 import com.bookpub.bookpubfront.token.service.CustomUserDetailsService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,7 +29,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
-    private final ObjectMapper objectMapper;
     private final MemberAdaptor memberAdaptor;
     private final CustomUserDetailsService userDetailsService;
 
@@ -88,7 +86,7 @@ public class SecurityConfig {
     @Bean
     public CustomLoginFilter customLoginFilter(AuthenticationManager authenticationManager) {
         CustomLoginFilter loginFilter
-                = new CustomLoginFilter(memberAdaptor, authenticationProvider(), objectMapper);
+                = new CustomLoginFilter(memberAdaptor, authenticationProvider());
         loginFilter.setFilterProcessesUrl("/auth");
         loginFilter.setAuthenticationManager(authenticationManager);
         loginFilter.setUsernameParameter("id");
