@@ -26,7 +26,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberAdaptor memberAdaptor;
     public static final String PRINCIPAL = "principal";
-    public static final String AUTHORITIES = "principal";
+    public static final String AUTHORITIES = "authorities";
 
 
     /**
