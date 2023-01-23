@@ -92,7 +92,6 @@
                         </div>
                     </div>
                 </div>
-                <!--            </div>-->
 
 
                 <br/>
@@ -108,8 +107,6 @@
                             </div>
                             <div class="modal-body">
                                 <form th:action="@{/admin/coupon/coupon-months/modify}" class="was-validated" th:method="post">
-<!--                                    <input type="hidden" name="_method" value="put"/>-->
-
                                     <div class="form-group">
                                         <label for="clickNo">수정할 쿠폰 번호 </label>
                                         <input type="text" id="clickNo" name="monthNo" readonly="true" value="">
@@ -179,7 +176,6 @@
                                 수정
                             </button>
                             <form th:action="@{/admin/coupon/coupon-months/{monthNo}/delete(monthNo=${couponMonth.monthNo})}" class="was-validated" th:method="post">
-<!--                            <input type="hidden" name="_method" value="delete"/>-->
                                 <button type="submit" class="btn btn-primary mb-4 ms-auto">
                                     삭제
                                 </button>
