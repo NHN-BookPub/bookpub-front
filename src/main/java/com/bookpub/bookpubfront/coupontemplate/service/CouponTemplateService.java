@@ -47,5 +47,11 @@ public interface CouponTemplateService {
      */
     void modifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto);
 
-
+    /**
+     * 해당 쿠폰 템플릿이 존재하는지 확인하기 위한 메서드입니다.
+     *
+     * @param templateNo 쿠폰템플릿 번호
+     * @return the boolean
+     */
+    boolean existTemplateCheck(Long templateNo);
 }
