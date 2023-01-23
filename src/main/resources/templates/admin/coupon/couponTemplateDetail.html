@@ -115,20 +115,9 @@
                                     </div>
 
                                     <div class="form-group">
-                                        <label for="addIssuedAt">쿠폰 발급일자</label>
-                                        <input type="datetime-local" id="addIssuedAt" name="issuedAt" required>
-                                    </div>
-
-                                    <div class="form-group">
                                         <label for="addFinishedAt">쿠폰 만료일자</label>
                                         <input type="datetime-local" id="addFinishedAt" name="finishedAt">
                                     </div>
-
-                                    <label>쿠폰 중복 적용 가능여부</label>
-                                    <select name="templateOverlapped" class="form-select">
-                                        <option value="1">가능</option>
-                                        <option value="0">불가능</option>
-                                    </select>
 
                                     <label>쿠폰 묶음할인 가능여부</label>
                                     <select name="templateBundled" class="form-select">
@@ -186,11 +175,10 @@
                     </tr>
 
                     <tr>
-                        <td>발급일자</td>
                         <td>만료일자</td>
                     </tr>
                     <tr>
-                        <td th:text="${#temporals.format(couponTemplate.issuedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:if="${couponTemplate.finishedAt == null}" th:text="'없음'"></td>
                         <td th:text="${#temporals.format(couponTemplate.finishedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                     </tr>
 
@@ -206,11 +194,9 @@
                     </tr>
 
                     <tr>
-                        <td>중복할인 가능여부</td>
                         <td>묶음할인 여부</td>
                     </tr>
                     <tr>
-                        <td th:text="${couponTemplate.templateOverlapped}"></td>
                         <td th:text="${couponTemplate.templateBundled}"></td>
                     </tr>
 
