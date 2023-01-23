@@ -17,8 +17,8 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.AnonymousAuthenticationFilter;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.web.context.SecurityContextPersistenceFilter;
 
 /**
  * Security 설정 클래스.
@@ -60,7 +60,7 @@ public class SecurityConfig {
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
         http.addFilterAt(customLoginFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(customAuthenticationFilter(), AnonymousAuthenticationFilter.class);
+        http.addFilterAfter(customAuthenticationFilter(), SecurityContextPersistenceFilter.class);
 
         return http.build();
     }
