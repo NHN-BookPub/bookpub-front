@@ -54,4 +54,12 @@ public interface ProductAdaptor {
      * @return 유형별 상품들
      */
     List<GetProductByTypeResponseDto> requestProductByType(Integer typeNo, Integer limit);
+
+    /**
+     * 장바구니에 있는 상품 번호를 가지고 상품 정보 API를 부르는 메서드.
+     *
+     * @param productsNo 장바구니에 있는 상품 번호들
+     * @return 징바구니에 있는 상품들
+     */
+    List<GetProductDetailResponseDto> requestProductInCart(List<Long> productsNo);
 }

@@ -10,6 +10,7 @@ import com.bookpub.bookpubfront.utils.PageResponse;
 import com.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -26,6 +27,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author : 박경서, 정유진, 김서현
  * @since : 1.0
  **/
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ProductAdaptorImpl implements ProductAdaptor {
@@ -97,7 +99,6 @@ public class ProductAdaptorImpl implements ProductAdaptor {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/" + productNo)
                 .encode().toUriString();
-
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
@@ -122,6 +123,23 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 HttpMethod.GET,
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<List<GetProductByTypeResponseDto>>() {
+                }
+        ).getBody();
+    }
+
+    @Override
+    public List<GetProductDetailResponseDto> requestProductInCart(List<Long> productsNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/cart")
+                .queryParam("productNo", productsNo)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<List<GetProductDetailResponseDto>>() {
                 }
         ).getBody();
     }
