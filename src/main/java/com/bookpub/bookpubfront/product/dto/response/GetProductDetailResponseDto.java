@@ -1,8 +1,8 @@
 package com.bookpub.bookpubfront.product.dto.response;
 
 import java.time.LocalDateTime;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 
 /**
@@ -36,8 +36,8 @@ public class GetProductDetailResponseDto {
     private boolean policySaved;
     private Integer policySaveRate;
 
-    private Set<String> authors = new HashSet<>();
-    private Set<String> categories = new HashSet<>();
-    private Set<String> tags = new HashSet<>();
-    private Set<String> tagsColors = new HashSet<>();
+    private List<String> authors = new ArrayList<>();
+    private List<String> categories = new ArrayList<>();
+    private List<String> tags = new ArrayList<>();
+    private List<String> tagsColors = new ArrayList<>();
 }

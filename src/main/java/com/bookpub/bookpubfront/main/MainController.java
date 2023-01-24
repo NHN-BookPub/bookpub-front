@@ -2,20 +2,20 @@ package com.bookpub.bookpubfront.main;
 
 import static com.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
 import static com.bookpub.bookpubfront.state.ProductType.NEW;
+
 import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.bookpub.bookpubfront.category.service.CategoryService;
 import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.service.ProductService;
+import com.bookpub.bookpubfront.utils.CartUtils;
 import java.util.List;
+import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
 
 /**
  * 메인화면 view 컨트롤러.
@@ -56,18 +56,22 @@ public class MainController {
         return "main/index";
     }
 
+
     /**
-     * 메인화면 컨트롤러 메서드.
+     * 메인 화면 View 메서드.
      *
-     * @param model 뷰에 보낼 request
+     * @param request HTTP request
+     * @param model   view request 보낼 객체
      * @return 메인화면 뷰
      */
     @GetMapping("/v1")
-    public String mainView2(@PageableDefault Pageable pageable, Model model) {
+    public String mainView2(HttpServletRequest request, Model model) {
         List<GetProductByTypeResponseDto> bestSellers =
                 productService.findProductsByType(BEST_SELLER.getTypeNo(), LIMIT);
         List<GetProductByTypeResponseDto> newBooks =
                 productService.findProductsByType(NEW.getTypeNo(), LIMIT);
+
+        CartUtils.getCountInCart(request, model);
 
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);

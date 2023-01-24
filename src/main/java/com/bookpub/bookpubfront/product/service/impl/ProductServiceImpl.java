@@ -108,4 +108,12 @@ public class ProductServiceImpl implements ProductService {
     public List<GetProductByTypeResponseDto> findProductsByType(Integer typeNo, Integer limit) {
         return productAdaptor.requestProductByType(typeNo, limit);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetProductDetailResponseDto> findProductInCart(List<Long> productsNo) {
+        return productAdaptor.requestProductInCart(productsNo);
+    }
 }
