@@ -92,7 +92,7 @@ public class CartController {
      * @throws JsonProcessingException Json 파싱중 생긴 Exception
      */
     @PostMapping("/order")
-    public @ResponseBody Object testOrder(String cart, HttpServletResponse response)
+    public @ResponseBody Object saveOrderInfo(String cart, HttpServletResponse response)
             throws JsonProcessingException {
         List<Map<String, Object>> jsonData = objectMapper.readValue(cart, new TypeReference<>() {
         });
