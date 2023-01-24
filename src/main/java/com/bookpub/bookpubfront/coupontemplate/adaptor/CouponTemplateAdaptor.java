@@ -44,4 +44,12 @@ public interface CouponTemplateAdaptor {
      * @param modifyRequestDto 수정할 쿠폰템플릿 정보를 담은 dto
      */
     void requestModifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto);
+
+    /**
+     * 쿠폰템플릿이 존재하는지 확인하기 위한 메소드입니다.
+     *
+     * @param templateNo 쿠폰템플릿 번호
+     * @return the boolean
+     */
+    boolean existTemplateCheck(Long templateNo);
 }

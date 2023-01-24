@@ -20,7 +20,5 @@ public class RestCouponTemplateRequestDto {
     private Integer codeNo;
     private String templateName;
     private LocalDateTime finishedAt;
-    private LocalDateTime issuedAt;
-    private boolean templateOverlapped;
     private boolean templateBundled;
 }

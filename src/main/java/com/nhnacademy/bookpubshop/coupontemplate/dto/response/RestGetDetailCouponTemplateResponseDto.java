@@ -1,16 +1,20 @@
-package com.bookpub.bookpubfront.coupontemplate.dto.response;
+package com.nhnacademy.bookpubshop.coupontemplate.dto.response;
 
 import java.time.LocalDateTime;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
- * 쿠폰템플릿을 상세조회하기 위한 정보를 담은 Dto.
+ * front로 파일을 보내기 위해 변환한 Dto.
  *
  * @author : 정유진
  * @since : 1.0
  **/
 @Getter
-public class GetDetailCouponTemplateResponseDto {
+@NoArgsConstructor
+@AllArgsConstructor
+public class RestGetDetailCouponTemplateResponseDto {
     private Long templateNo;
     private boolean policyFixed;
     private Long policyPrice;

@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>BookPub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="/static/js/coupon/couponMonth.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">이달의 쿠폰 상세정보</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">이달의 쿠폰 조회 및 등록, 수정</li>
+                </ol>
+
+                <div align="right">
+                    <button type="button" class="btn btn-primary mb-4 ms-auto" data-toggle="modal" data-target="#add">
+                        등록
+                    </button>
+
+                </div>
+
+                <hr/>
+
+                <!-- Modal -->
+                <div class="modal fade" id="add" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="addCouponMonth" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addCouponMonth">이달의 쿠폰 등록</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/admin/coupon/coupon-months}" class="was-validated" method="post">
+
+                                    <div class="form-group row">
+                                        <label for="templateNo">이달의 쿠폰으로 등록할 쿠폰템플릿 번호</label>
+                                        <input class="col-10" type="text" id="templateNo" placeholder="번호를 입력하세요." name="templateNo" required
+                                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                        <button type="button" class="btn btn-success col-2" onclick="checkTemplateNo()">확인</button>
+                                        <span class="invalid-feedback">
+                                        쿠폰 템플릿 번호를 입력해주세요.
+                                        </span>
+                                        <span class="invalid-feedback no-templateNo" style="display: none">없는 쿠폰템플릿 번호입니다.</span>
+                                        <input type="hidden" id="templateCheck" value="unChecked">
+
+                                    </div>
+
+                                    <div class="form-group row">
+                                        <label for="addQuantity" class="col-2">수량</label>
+                                        <input type="text" class="form-control col" id="addQuantity"
+                                               placeholder="수량을 입력하세요."
+                                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               name="monthQuantity" required>
+                                    </div>
+
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <label for="addOpenedAt">쿠폰 오픈시간</label>
+                                        <input type="datetime-local" id="addOpenedAt" name="openedAt" required>
+                                    </div>
+                                    <br/>
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" class="btn btn-primary" id="submitBtn" disabled="disabled">
+                                        등록
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <br/>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="modifyCoupon" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="couponMonthModify" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="couponMonthModify">이달의 쿠폰 수정</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/admin/coupon/coupon-months/modify}" class="was-validated" th:method="post">
+                                    <div class="form-group">
+                                        <label for="clickNo">수정할 쿠폰 번호 </label>
+                                        <input type="text" id="clickNo" name="monthNo" readonly="true" value="">
+                                    </div>
+
+                                    <br/>
+
+                                    <div class="form-group row">
+                                        <label for="modifyQuantity" class="col-2">수량</label>
+                                        <input type="text" class="form-control col" id="modifyQuantity"
+                                               placeholder="수량을 입력하세요." required
+                                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               name="monthQuantity">
+                                    </div>
+
+                                    <br/>
+
+                                    <div class="form-group">
+                                        <label for="modifyOpenedAt">쿠폰 오픈시간</label>
+                                        <input type="datetime-local" id="modifyOpenedAt" name="openedAt" required>
+                                    </div>
+
+                                    <br/>
+
+                                    <div align="right">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                        <button type="submit" class="btn btn-primary">수정하기</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <br/>
+
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>이달의 쿠폰 번호</th>
+                        <th>쿠폰 템플릿 번호</th>
+                        <th>쿠폰 이름</th>
+                        <th>쿠폰 이미지</th>
+                        <th>쿠폰 오픈 시간</th>
+                        <th>남은 수량</th>
+                        <th>수정/삭제</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="couponMonth : ${couponMonthList}">
+                        <td th:text="${couponMonth.monthNo}"></td>
+                        <td th:text="${couponMonth.templateNo}"></td>
+                        <td th:text="${couponMonth.templateName}"></td>
+                        <td>
+                            <div><img th:src="@{'data:image/*;base64,'+${couponMonth.templateImage}}" alt="이미지 없음"/>
+                            </div>
+                        </td>
+                        <td th:text="${#temporals.format(couponMonth.openedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
+                        <td th:text="${couponMonth.monthQuantity}"></td>
+                        <td>
+                            <button type="button" class="btn btn-primary mb-4 ms-auto" data-toggle="modal"
+                                    data-target="#modifyCoupon"
+                                    th:onclick="|javascript:clickInfo('${couponMonth.monthNo}')|">
+                                수정
+                            </button>
+                            <form th:action="@{/admin/coupon/coupon-months/{monthNo}/delete(monthNo=${couponMonth.monthNo})}" class="was-validated" th:method="post">
+                                <button type="submit" class="btn btn-primary mb-4 ms-auto">
+                                    삭제
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/chart-area-demo.js"></script>
+<script src="/static/js/admin/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+</body>
+</html>
