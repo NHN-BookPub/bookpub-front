@@ -15,9 +15,13 @@ import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSeriali
 import org.springframework.data.redis.serializer.RedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 import org.springframework.session.data.redis.config.annotation.web.http.EnableRedisHttpSession;
-import org.springframework.session.web.http.CookieSerializer;
-import org.springframework.session.web.http.DefaultCookieSerializer;
 
+/**
+ * 레디스를 이용하기위한 config 클래스.
+ *
+ * @author : 임태원
+ * @since : 1.0
+ */
 @EnableRedisHttpSession
 @Configuration
 @ConfigurationProperties(prefix = "bookpub.redis")
@@ -31,7 +35,8 @@ public class RedisConfig implements BeanClassLoaderAware {
     private String database;
     private ClassLoader classLoader;
 
-    /** 레디스에 연결하기 위한 configuration 설정 메소드 빈.
+    /**
+     * 레디스에 연결하기 위한 configuration 설정 메소드 빈.
      *
      * @return 레디스 연결 설정이 들어간 Factory를 반환.
      */
@@ -46,7 +51,8 @@ public class RedisConfig implements BeanClassLoaderAware {
         return new LettuceConnectionFactory(configuration);
     }
 
-    /** 레디스에 키, 밸류 등 값을 넣을 때, 뺄 때 직렬화, 역직렬화를 어떻게 할 지 설정하는 메소드.
+    /**
+     * 레디스에 키, 밸류 등 값을 넣을 때, 뺄 때 직렬화, 역직렬화를 어떻게 할 지 설정하는 메소드.
      *
      * @return redis에 get,put 등을 할 수있게하는 redisTemplate객체를 반환.
      */
@@ -60,16 +66,6 @@ public class RedisConfig implements BeanClassLoaderAware {
         redisTemplate.setHashValueSerializer(new GenericJackson2JsonRedisSerializer());
 
         return redisTemplate;
-    }
-
-    @Bean
-    public CookieSerializer cookieSerializer() {
-        DefaultCookieSerializer serializer = new DefaultCookieSerializer();
-        serializer.setCookieName("SESSION");
-        serializer.setCookieMaxAge(259200);
-        serializer.setCookiePath("/");
-
-        return serializer;
     }
 
     @Bean
