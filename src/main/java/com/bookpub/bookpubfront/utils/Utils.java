@@ -12,9 +12,9 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 /**
- * 중복된 Header 를 반환 하는 유틸클래스입니다.
+ * 중복된 메소드를 관리해주는 클래스입니다.
  *
- * @author : 유호철
+ * @author : 유호철, 임태원
  * @since : 1.0
  */
 public class Utils {
@@ -33,16 +33,21 @@ public class Utils {
         return headers;
     }
 
+    /**
+     * accessCookie 를 찾는 메서드 입니다.
+     *
+     * @return 쿠키의 검색값을 가져옵니다.
+     */
     public static Cookie findJwtCookie() {
         ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
 
-        if(Objects.isNull(request.getCookies())){
+        if (Objects.isNull(request.getCookies())) {
             return null;
         }
 
         return Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(JwtUtil.JWT_SESSION))
+                .filter(cookie -> cookie.getName().equals(JwtUtil.JWT_COOKIE))
                 .findAny()
                 .orElse(null);
     }

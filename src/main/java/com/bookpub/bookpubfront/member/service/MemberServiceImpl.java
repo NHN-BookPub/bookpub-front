@@ -13,8 +13,11 @@ import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+
+import com.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -61,7 +64,10 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
-            session.removeAttribute(JwtUtil.JWT_SESSION);
+            Cookie jwtCookie = Utils.findJwtCookie();
+            jwtCookie.setMaxAge(0);
+            jwtCookie.setValue("");
+            response.addCookie(jwtCookie);
             session.removeAttribute(CustomUserDetailsService.PRINCIPAL);
             session.removeAttribute(CustomUserDetailsService.AUTHORITIES);
             SecurityContextHolder.clearContext();

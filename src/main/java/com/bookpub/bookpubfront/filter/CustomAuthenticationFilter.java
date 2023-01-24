@@ -1,17 +1,18 @@
 package com.bookpub.bookpubfront.filter;
 
-import com.bookpub.bookpubfront.token.util.JwtUtil;
-import java.util.ArrayList;
+import com.bookpub.bookpubfront.utils.Utils;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -25,8 +26,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
-
     private static final String CREDENTIAL = "dummy";
+
     /**
      * 특정 조건에서 필터가 작동하여 로그인 진행.
      *
@@ -35,7 +36,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
      * @param filterChain security의 필터체인 객체.
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
+    protected void doFilterInternal(
+            HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
             HttpSession session = request.getSession(false);
             if (Objects.isNull(session)) {
@@ -43,8 +45,8 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            if (Objects.isNull(session.getAttribute(JwtUtil.JWT_SESSION))) {
-                filterChain.doFilter(request,response);
+            if (Objects.isNull(Utils.findJwtCookie())) {
+                filterChain.doFilter(request, response);
                 return;
             }
 
@@ -55,7 +57,6 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
-
             uploadSecurityContext(principal, authorities);
 
             filterChain.doFilter(request, response);
@@ -70,11 +71,9 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         String concatRoles = authorities.substring(1, authorities.length() - 1);
         String[] roles = concatRoles.split(",");
 
-        List<GrantedAuthority> grantedAuthorities = new ArrayList<>();
-
-        for (String role : roles) {
-            grantedAuthorities.add(new SimpleGrantedAuthority(role.trim()));
-        }
+        List<SimpleGrantedAuthority> grantedAuthorities
+                = Arrays.stream(roles).map(role -> new SimpleGrantedAuthority(role.trim()))
+                .collect(Collectors.toList());
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
                 principal,
@@ -84,6 +83,4 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
         SecurityContextHolder.getContext().setAuthentication(token);
     }
-
-
 }

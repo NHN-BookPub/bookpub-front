@@ -3,30 +3,13 @@ package com.bookpub.bookpubfront.member.adaptor.impl;
 import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNameRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPasswordRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPhoneRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
+import com.bookpub.bookpubfront.member.dto.request.*;
+import com.bookpub.bookpubfront.member.dto.response.*;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
-import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -45,6 +28,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  **/
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MemberAdaptorImpl implements MemberAdaptor {
     private final RestTemplate restTemplate;
     private static final String MEMBER_API = "/api/members/";
@@ -181,9 +165,20 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest) {
         HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
-
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/auth/login",
+                HttpMethod.POST,
+                entity,
+                Void.class
+        );
+    }
+
+    @Override
+    public ResponseEntity<Void> tokenReIssueRequest(String accessToken) {
+        HttpEntity<String> entity = new HttpEntity<>(accessToken, makeHeader());
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/auth/reissue",
                 HttpMethod.POST,
                 entity,
                 Void.class
@@ -282,14 +277,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public MemberLoginResponseDto requestAuthMemberInfo(HttpServletRequest request) {
-        HttpSession session = request.getSession();
-        String accessToken = (String) session.getAttribute(JwtUtil.JWT_SESSION);
-
-        if (Objects.isNull(accessToken)) {
-            throw new TokenNotIssuedException();
-        }
-
+    public MemberLoginResponseDto requestAuthMemberInfo(String accessToken) {
         HttpHeaders headers = makeHeader();
         headers.add(JwtUtil.AUTH_HEADER, accessToken);
 

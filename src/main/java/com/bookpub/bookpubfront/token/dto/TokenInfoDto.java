@@ -18,5 +18,5 @@ public class TokenInfoDto {
     private String memberUUID;
     private String roles;
     private String iat;
-    private String exp;
+    private Long exp;
 }

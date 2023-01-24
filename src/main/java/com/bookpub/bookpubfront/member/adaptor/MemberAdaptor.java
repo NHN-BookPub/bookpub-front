@@ -1,17 +1,10 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
-import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.response.*;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 
@@ -31,7 +24,7 @@ public interface MemberAdaptor {
     /**
      * 멤버 닉네임을 변경하기위한 메서드입니다.
      *
-     * @param memberNo  멤버 번호가 기입.
+     * @param memberNo 멤버 번호가 기입.
      * @param nickname 수정할 닉네임 기입.
      */
     void requestMemberNickNameChange(Long memberNo, String nickname);
@@ -39,8 +32,8 @@ public interface MemberAdaptor {
     /**
      * 이메일을 변경할때 쓰이는 메서드입니다.
      *
-     * @param memberNo   멤버 번호가 기입.
-     * @param email 변경할 이메일 번호가 기입.
+     * @param memberNo 멤버 번호가 기입.
+     * @param email    변경할 이메일 번호가 기입.
      */
     void requestMemberEmailChange(Long memberNo, String email);
 
@@ -81,12 +74,21 @@ public interface MemberAdaptor {
      */
     List<MemberTierStatisticsResponseDto> requestMemberTierStatics();
 
-    /** 로그인을 위해 auth 서버와 통신하는 메소드.
+    /**
+     * 로그인을 위해 auth 서버와 통신하는 메소드.
      *
      * @param loginRequest 로그인을 위한 멤버정보가 들어있는 요청 dto.
      * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
      */
     ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest);
+
+    /**
+     * 유저가 활동중일 때 토큰의 만료기간이 가까워지면 재발급 요청하는 메소드.
+     *
+     * @param accessToken 유저의 인증 토큰.
+     * @return auth 서버에서 재발급된 토큰을 헤더에 담아 응답해 준다.
+     */
+    ResponseEntity<Void> tokenReIssueRequest(String accessToken);
 
     /**
      * 아이디 중복체크를 위해 통신 메소드.
@@ -130,5 +132,5 @@ public interface MemberAdaptor {
 
     void requestMemberPasswordChange(Long memberNo, String password);
 
-    MemberLoginResponseDto requestAuthMemberInfo(HttpServletRequest request);
+    MemberLoginResponseDto requestAuthMemberInfo(String accessToken);
 }

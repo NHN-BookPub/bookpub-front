@@ -23,9 +23,12 @@ public class CustomAuthenticationProvider extends DaoAuthenticationProvider {
      * @throws AuthenticationException 인증 스트림에 대한 인증이 실패한 경우 throw되는 예외.
      */
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(
+            Authentication authentication) throws AuthenticationException {
+
         CustomUserDetails userDetails
-                = (CustomUserDetails) this.getUserDetailsService().loadUserByUsername((String) authentication.getPrincipal());
+                = (CustomUserDetails) this.getUserDetailsService()
+                .loadUserByUsername((String) authentication.getPrincipal());
 
         return new UsernamePasswordAuthenticationToken(
                 userDetails.getUsername(),

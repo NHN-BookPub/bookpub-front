@@ -5,6 +5,7 @@ import com.bookpub.bookpubfront.filter.CustomLoginFilter;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.token.provider.CustomAuthenticationProvider;
 import com.bookpub.bookpubfront.token.service.CustomUserDetailsService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,7 +27,7 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
  * @author : 임태원
  * @since : 1.0
  **/
-@EnableWebSecurity
+@EnableWebSecurity(debug = true)
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
@@ -34,7 +35,7 @@ public class SecurityConfig {
     private final CustomUserDetailsService userDetailsService;
 
     /**
-     * security filterChain 설정
+     * security filterChain 설정.
      *
      * @param http 간단하게 시큐리티 설정을 할 수있도록 제공해주는 파라미터.
      * @return 필터의 설정을 마친 후 필터체인을 리턴.
@@ -59,7 +60,8 @@ public class SecurityConfig {
 
         http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-        http.addFilterAt(customLoginFilter(authenticationManager), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterAt(customLoginFilter(authenticationManager),
+                UsernamePasswordAuthenticationFilter.class);
         http.addFilterAfter(customAuthenticationFilter(), SecurityContextPersistenceFilter.class);
 
         return http.build();
@@ -85,6 +87,11 @@ public class SecurityConfig {
         return new CustomAuthenticationFilter();
     }
 
+//    @Bean
+//    public CustomExpConfirmFilter customExpConfirmFilter() {
+//        return new CustomExpConfirmFilter(memberAdaptor, objectMapper);
+//    }
+
     @Bean
     public CustomLoginFilter customLoginFilter(AuthenticationManager authenticationManager) {
         CustomLoginFilter loginFilter
@@ -98,7 +105,8 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+    public AuthenticationManager authenticationManager(
+            AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 

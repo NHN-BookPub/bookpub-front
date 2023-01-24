@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * Some description here
+ * 프론트와 view가 통신을 하기 위해 필요한 restController.
  *
  * @author : 임태원
  * @since : 1.0
