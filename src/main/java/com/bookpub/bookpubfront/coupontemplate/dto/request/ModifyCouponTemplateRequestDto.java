@@ -43,19 +43,17 @@ public class ModifyCouponTemplateRequestDto {
     @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
     private LocalDateTime finishedAt;
 
-    @NotNull
-    @DateTimeFormat(pattern = "yyyy-MM-dd'T'HH:mm")
-    private LocalDateTime issuedAt;
-
-    @NotNull
-    private boolean templateOverlapped;
-
     private boolean templateBundled;
 
+    /**
+     * 이미지를 제외한 Dto로 변환해주는 메서드입니다.
+     *
+     * @return 서버간 전송을 위해 이미지를 제외한 Dto
+     */
     public RestCouponTemplateRequestDto transform() {
         return new RestCouponTemplateRequestDto(
                 this.getPolicyNo(), this.getTypeNo(), this.getProductNo(), this.getCategoryNo(),
                 this.getCodeNo(), this.getTemplateName(),
-                this.getFinishedAt(), this.getIssuedAt(), this.isTemplateOverlapped(), this.isTemplateBundled());
+                this.getFinishedAt(), this.isTemplateBundled());
     }
 }

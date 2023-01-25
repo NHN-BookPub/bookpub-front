@@ -6,6 +6,7 @@ import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNameRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
@@ -184,20 +185,9 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest) {
         HttpEntity<LoginMemberRequestDto> entity = new HttpEntity<>(loginRequest, makeHeader());
+
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/auth/login",
-                HttpMethod.POST,
-                entity,
-                Void.class
-        );
-    }
-
-    @Override
-    public ResponseEntity<Void> tokenReIssueRequest(String accessToken) {
-        HttpEntity<String> entity = new HttpEntity<>(accessToken, makeHeader());
-
-        return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/auth/reissue",
                 HttpMethod.POST,
                 entity,
                 Void.class
@@ -209,8 +199,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      */
     @Override
     public ResponseEntity<Boolean> idDuplicateCheck(String id) {
-        HttpEntity<IdCheckRequestDto> entity =
-                new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
+        HttpEntity<IdCheckRequestDto> entity = new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
 
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/api/signup/idCheck",
@@ -315,4 +304,43 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     }
 
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestMemberBaseAddressChange(Long memberNo, Long addressNo) {
+        restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses/" + addressNo,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestMemberAddressAdd(Long memberNo, MemberAddressRequestDto requestDto) {
+        HttpEntity<MemberAddressRequestDto> http = new HttpEntity<>(requestDto, makeHeader());
+        restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses",
+                HttpMethod.POST,
+                http,
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestMemberAddressDelete(Long memberNo, Long addressNo) {
+        restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses/" + addressNo,
+                HttpMethod.DELETE,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
 }

@@ -55,4 +55,12 @@ public interface ProductService {
      * @return 유형별 상품
      */
     List<GetProductByTypeResponseDto> findProductsByType(Integer typeNo, Integer limit);
+
+    /**
+     * 장바구니에 있는 상품들을 조회하려는 메서드.
+     *
+     * @param productsNo 장바구니에 있는 상품 번호들
+     * @return 장바구니에 있는 상품들
+     */
+    List<GetProductDetailResponseDto> findProductInCart(List<Long> productsNo);
 }

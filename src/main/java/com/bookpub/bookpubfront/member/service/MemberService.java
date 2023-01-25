@@ -1,5 +1,7 @@
 package com.bookpub.bookpubfront.member.service;
 
+import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -126,4 +128,28 @@ public interface MemberService {
      * @return 회원의 encoding 된 비밀번호 반환.
      */
     MemberPasswordResponseDto getMemberPassword(Long memberNo);
+
+    /**
+     * 회원의 베이스 주소지를 변경하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 기준 주소지가 될 주소번호
+     */
+    void modifyMemberAddress(Long memberNo, Long addressNo);
+
+    /**
+     * 회원의 주소를 추가하기위한 메서드입니다.
+     *
+     * @param memberNo   the member no
+     * @param requestDto the request dto
+     */
+    void addMemberAddress(Long memberNo, MemberAddressRequestDto requestDto);
+
+    /**
+     * 회원의 주소를 삭제하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 주소번호
+     */
+    void deleteMemberAddress(Long memberNo, Long addressNo);
 }

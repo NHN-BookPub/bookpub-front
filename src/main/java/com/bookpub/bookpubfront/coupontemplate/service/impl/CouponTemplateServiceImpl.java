@@ -54,4 +54,12 @@ public class CouponTemplateServiceImpl implements CouponTemplateService {
     public void modifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
         couponTemplateAdaptor.requestModifyCouponTemplate(templateNo, modifyRequestDto);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existTemplateCheck(Long templateNo) {
+        return couponTemplateAdaptor.existTemplateCheck(templateNo);
+    }
 }

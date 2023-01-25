@@ -2,6 +2,8 @@ package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -136,7 +138,36 @@ public interface MemberAdaptor {
      */
     MemberPasswordResponseDto requestMemberPassword(Long memberNo);
 
+    /**
+     * 회원의 비밀번호를 변경할때 사용되는 메서드입니다.
+     *
+     * @param memberNo 회원의 번호
+     * @param password 변경할 raw 패스워드
+     */
     void requestMemberPasswordChange(Long memberNo, String password);
 
-    MemberLoginResponseDto requestAuthMemberInfo(String accessToken);
+    /**
+     * 회원의 베이스 주소를 변경할때 사용되는 메서드입니다.
+     *
+     * @param memberNo  회원 번호
+     * @param addressNo 변경할 raw 패스워드
+     */
+    void requestMemberBaseAddressChange(Long memberNo, Long addressNo);
+
+
+    /**
+     * 회원의 주소를 추가하기위한 메서드입니다.
+     *
+     * @param memberNo   회원번호가 기입됩니다.
+     * @param requestDto 새로 생성될 주소에대한 정보가 들어있습니다.
+     */
+    void requestMemberAddressAdd(Long memberNo, MemberAddressRequestDto requestDto);
+
+    /**
+     * 회원의 주소정보를 삭제하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 주소번호
+     */
+    void requestMemberAddressDelete(Long memberNo, Long addressNo);
 }

@@ -7,7 +7,7 @@ import com.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateR
 import com.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
 import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import java.util.List;
+import com.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -20,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
+import org.springframework.web.client.HttpStatusCodeException;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -32,7 +33,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @RequiredArgsConstructor
 public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
-    private final GateWayConfig gateWayConfig;
     private final RestTemplate restTemplate;
     private static final String COUPON_TEMPLATE_URL = "/api/coupon-templates";
 
@@ -41,7 +41,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      * {@inheritDoc}
      */
     public PageResponse<GetCouponTemplateResponseDto> requestCouponTemplates(Pageable pageable) {
-        String url = UriComponentsBuilder.fromHttpUrl(gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL)
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -49,7 +49,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
 
         ResponseEntity<PageResponse<GetCouponTemplateResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -63,11 +63,11 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     @Override
     public GetDetailCouponTemplateResponseDto requestDetailCouponTemplate(Long templateNo) {
-        String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/details/" + templateNo;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
 
         ResponseEntity<GetDetailCouponTemplateResponseDto> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
@@ -81,7 +81,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     public void requestAddCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) {
 
-        String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -107,7 +107,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     @Override
     public void requestModifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
-        String url = gateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.MULTIPART_FORM_DATA);
@@ -125,19 +125,32 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 Void.class
         );
 
+
         checkError(response);
     }
 
     /**
-     * 헤더를 만들어주는 메소드입니다.
-     *
-     * @return 헤정
+     * {@inheritDoc}
      */
-    private static HttpHeaders makeHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
+    @Override
+    public boolean existTemplateCheck(Long templateNo) {
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
+
+        HttpStatus response;
+        try {
+            response = restTemplate.exchange(
+                    url,
+                    HttpMethod.GET,
+                    new HttpEntity<>(Utils.makeHeader()),
+                    Object.class
+            ).getStatusCode();
+        } catch (HttpStatusCodeException e) {
+            response = HttpStatus.valueOf(e.getRawStatusCode());
+        }
+
+        if (response.is2xxSuccessful())
+            return true;
+        else return false;
     }
 
     /**

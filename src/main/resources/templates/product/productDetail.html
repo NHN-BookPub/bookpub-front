@@ -2,21 +2,18 @@
 <html lang="en">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
     <title>BookPub</title>
-    <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
-    <!-- Bootstrap -->
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
-    <!-- Slick -->
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
-    <!-- nouislider -->
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
-    <!-- Custom stlylesheet -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
     <style>
         .product-detail-price {
@@ -43,6 +40,7 @@
         }
 
     </style>
+
 </head>
 <body>
 <!-- HEADER -->
@@ -57,6 +55,11 @@
                  style="width: 250px; height: 300px">
         </div>
         <div class="col-sm-7">
+            <div class="row mb-3" style="display: none">
+                <p id="productNo" th:text="${product.productNo}"></p>
+            </div>
+
+
             <div class="row mb-3">
                 <label class="col-sm-3">제목</label>
                 <div class="col-sm-9" th:text="${product.title}"></div>
@@ -153,21 +156,15 @@
         </div>
 
         <div class="col-sm-2">
-            <label for="count">수량</label>
-
             <div class="row text-center">
-                <form action="" method="post">
-                    <input type="number" class="form-control" id="count" name="productCount" value="1" min="1" max="99">
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%;">카트에 담기</button>
-                </form>
+                <button class="btn btn-primary" id="confirmStart" style="width: 80%;">장바구니 담기</button>
             </div>
 
-            <br/>
+            <hr/>
 
             <div class="row text-center">
                 <form action="" method="post">
-                    <button type="submit" class="btn btn-info" style="width: 100%">바로 주문</button>
+                    <button type="submit" class="btn btn-info" style="width: 80%">바로 주문</button>
                 </form>
             </div>
         </div>
@@ -246,4 +243,34 @@
 <script src="/static/js/main/nouislider.min.js"></script>
 <script src="/static/js/main/jquery.zoom.min.js"></script>
 <script src="/static/js/main/main.js"></script>
+
+<script>
+    const productNo = $('#productNo').text();
+
+    $().ready(function () {
+        $("#confirmStart").click(function () {
+            console.log(productNo)
+            Swal.fire({
+                title: '카트에 담으시겠습니까?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/cart/add",
+                        data: {"productNo": productNo},
+                        dataType: "json"
+                    })
+                }
+            })
+        });
+    });
+</script>
 </html>
