@@ -1,19 +1,23 @@
 package com.bookpub.bookpubfront.filter;
 
+import static com.bookpub.bookpubfront.utils.Utils.AUTHENTICATION;
+import static com.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
+
+import com.bookpub.bookpubfront.dto.AuthDto;
+import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.Utils;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Collectors;
 import javax.servlet.FilterChain;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
 
@@ -26,10 +30,10 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @Slf4j
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
-    private static final String CREDENTIAL = "dummy";
+    private final RedisTemplate<String, AuthDto> redisTemplate;
 
     /**
-     * 특정 조건에서 필터가 작동하여 로그인 진행.
+     * 인증된 사용자면 로그인 상태 유지.
      *
      * @param request     요청 정보 객체.
      * @param response    응답 정보 객체.
@@ -39,25 +43,42 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
-            HttpSession session = request.getSession(false);
-            if (Objects.isNull(session)) {
+            if (request.getRequestURI().contains(".js")
+                    || request.getRequestURI().contains(".css")
+                    || request.getRequestURI().contains(".png")) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            if (Objects.isNull(Utils.findJwtCookie())) {
+            Cookie sessionCookie = Utils.findCookie(SESSION_COOKIE);
+            if (Objects.isNull(sessionCookie)) {
+                filterChain.doFilter(request, response);
+                return;
+            }
+            String sessionId = Objects.requireNonNull(sessionCookie).getValue();
+
+            AuthDto auth =
+                    (AuthDto) redisTemplate.opsForHash().get(AUTHENTICATION, sessionId);
+
+            if (Objects.isNull(auth)) {
                 filterChain.doFilter(request, response);
                 return;
             }
 
-            String principal = (String) session.getAttribute("principal");
-            String authorities = (String) session.getAttribute("authorities");
-
-            if (Objects.isNull(principal) || Objects.isNull(authorities)) {
+            if (Objects.isNull(Utils.findCookie(JwtUtil.JWT_COOKIE))) {
                 filterChain.doFilter(request, response);
                 return;
             }
-            uploadSecurityContext(principal, authorities);
+
+            List<SimpleGrantedAuthority> authorities = Utils.makeAuthorities(auth.getAuthorities());
+
+            SecurityContext context = SecurityContextHolder.getContext();
+            context.setAuthentication(new UsernamePasswordAuthenticationToken(
+                    auth.getMemberNo(),
+                    auth.getMemberPwd(),
+                    authorities)
+            );
+
 
             filterChain.doFilter(request, response);
         } catch (Exception e) {
@@ -65,22 +86,5 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
         } finally {
             SecurityContextHolder.clearContext();
         }
-    }
-
-    private static void uploadSecurityContext(String principal, String authorities) {
-        String concatRoles = authorities.substring(1, authorities.length() - 1);
-        String[] roles = concatRoles.split(",");
-
-        List<SimpleGrantedAuthority> grantedAuthorities
-                = Arrays.stream(roles).map(role -> new SimpleGrantedAuthority(role.trim()))
-                .collect(Collectors.toList());
-
-        UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(
-                principal,
-                CREDENTIAL,
-                grantedAuthorities
-        );
-
-        SecurityContextHolder.getContext().setAuthentication(token);
     }
 }
