@@ -1,9 +1,13 @@
 package com.bookpub.bookpubfront.main;
 
+import static com.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
+import static com.bookpub.bookpubfront.state.ProductType.NEW;
+
 import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.bookpub.bookpubfront.category.service.CategoryService;
 import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.service.ProductService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -11,11 +15,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
-import java.util.List;
-
-import static com.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
-import static com.bookpub.bookpubfront.state.ProductType.NEW;
 
 /**
  * 메인화면 view 컨트롤러.
