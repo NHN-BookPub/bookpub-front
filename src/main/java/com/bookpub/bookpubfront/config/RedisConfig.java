@@ -70,6 +70,11 @@ public class RedisConfig implements BeanClassLoaderAware {
         return redisTemplate;
     }
 
+    /**
+     * 쿠키의 기본 설정을 해주는 bean 등록 메소드.
+     *
+     * @return CookieSerializer.
+     */
     @Bean
     public CookieSerializer cookieSerializer() {
         DefaultCookieSerializer serializer = new DefaultCookieSerializer();
@@ -79,12 +84,17 @@ public class RedisConfig implements BeanClassLoaderAware {
 
         return serializer;
     }
-
+    
     @Bean
     public RedisSerializer<Object> springSessionDefaultRedisSerializer() {
         return new GenericJackson2JsonRedisSerializer(objectMapper());
     }
 
+    /**
+     * parsing에 이용하는 ObjectMapper 빈 등록 메소드.
+     *
+     * @return ObjectMapper.
+     */
     @Bean
     public ObjectMapper objectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
