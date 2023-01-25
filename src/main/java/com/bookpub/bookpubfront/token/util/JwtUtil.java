@@ -1,6 +1,5 @@
 package com.bookpub.bookpubfront.token.util;
 
-import java.util.Base64;
 import java.util.Date;
 import javax.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
@@ -20,22 +19,17 @@ public class JwtUtil {
     public static final String EXP_HEADER = "X-Expire";
     public static final String TOKEN_TYPE = "Bearer ";
     public static final Long MILL_SEC = 1000L;
-
-    private static final Base64.Decoder decoder = Base64.getUrlDecoder();
-
-
-    /**
-     * 토큰을 복호화해주는 메소드.
-     *
-     * @param jwt accessToken 정보.
-     * @return 복호화 된 정보를 리턴해준다.
-     */
-    public static String decodeJwt(String jwt) {
-        String payload = jwt.split("\\.")[1];
-
-        return new String(decoder.decode(payload));
+    
+    private JwtUtil() {
     }
 
+    /**
+     * jwt를 보관용 cookie를 만드는 메소드.
+     *
+     * @param accessToken 유저 인증 토큰.
+     * @param expireTime  만료시간.
+     * @return Cookie.
+     */
     public static Cookie makeJwtCookie(String accessToken, Long expireTime) {
         Long now = new Date().getTime();
         int maxAge = (int) ((expireTime - now) / MILL_SEC);
