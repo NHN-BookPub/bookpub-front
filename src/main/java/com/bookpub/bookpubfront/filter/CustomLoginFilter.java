@@ -1,6 +1,7 @@
 package com.bookpub.bookpubfront.filter;
 
 import static com.bookpub.bookpubfront.token.util.JwtUtil.makeJwtCookie;
+
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
@@ -13,7 +14,6 @@ import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -31,7 +31,6 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final MemberAdaptor memberAdaptor;
-    private final AuthenticationProvider provider;
 
     @Override
     public Authentication attemptAuthentication(
@@ -62,7 +61,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
 
         response.addCookie(cookie);
 
-        return provider.authenticate(token);
+        return getAuthenticationManager().authenticate(token);
     }
 
     @Override
