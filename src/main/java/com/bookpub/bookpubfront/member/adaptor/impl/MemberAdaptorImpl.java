@@ -36,8 +36,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-;
-
 /**
  * 멤버 어뎁터를 구현하기위한 구현 클래스입니다.
  *
@@ -194,12 +192,18 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
     }
 
+    @Override
+    public ResponseEntity<Void> tokenReIssueRequest(String accessToken) {
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public ResponseEntity<Boolean> idDuplicateCheck(String id) {
-        HttpEntity<IdCheckRequestDto> entity = new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
+        HttpEntity<IdCheckRequestDto> entity =
+                new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
 
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/api/signup/idCheck",

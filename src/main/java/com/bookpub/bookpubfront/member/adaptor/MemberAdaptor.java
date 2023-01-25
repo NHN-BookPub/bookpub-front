@@ -1,7 +1,6 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
@@ -170,4 +169,12 @@ public interface MemberAdaptor {
      * @param addressNo 주소번호
      */
     void requestMemberAddressDelete(Long memberNo, Long addressNo);
+
+    /**
+     * shop서버에 accessToken을 보내 멤버의 정보를 얻어오는 메소드.
+     *
+     * @param accessToken accessToken -> 추후 없어질 예정.
+     * @return 인증받은 유저의 정보.
+     */
+    MemberLoginResponseDto requestAuthMemberInfo(String accessToken);
 }
