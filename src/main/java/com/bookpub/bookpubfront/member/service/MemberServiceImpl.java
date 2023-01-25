@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.member.service;
 
+import com.bookpub.bookpubfront.dto.AuthDto;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
@@ -10,7 +11,6 @@ import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import com.bookpub.bookpubfront.utils.Utils;
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, AuthDto> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
 
@@ -63,39 +63,31 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session) {
-        ResponseEntity<Void> jwtResponse = memberAdaptor.loginRequest(loginMemberRequestDto);
-
-        String accessToken = Objects.requireNonNull(jwtResponse.getHeaders().get("Authorization")).get(0);
-
-        if (Objects.isNull(accessToken)) {
-            throw new TokenNotIssuedException();
-        }
-
-        session.setAttribute(JwtUtil.JWT_SESSION, accessToken);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void logout(HttpServletResponse response, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
-            redisTemplate.opsForHash().delete((String) authentication.getPrincipal(), authentication.getCredentials());
-
-            session.removeAttribute(JwtUtil.JWT_SESSION);
-
-            Cookie jwtCookie = Utils.findJwtCookie();
-
-            if (Objects.nonNull(jwtCookie)) {
-                jwtCookie.setMaxAge(0);
-                jwtCookie.setValue(null);
-                jwtCookie.setPath("/");
-                response.addCookie(jwtCookie);
+            Cookie jwtCookie = Utils.findCookie(JwtUtil.JWT_COOKIE);
+            if (Objects.isNull(jwtCookie)) {
+                SecurityContextHolder.clearContext();
+                return;
             }
 
+            Cookie sessionCookie = Utils.findCookie(Utils.SESSION_COOKIE);
+            if (Objects.isNull(session)) {
+                SecurityContextHolder.clearContext();
+                return;
+            }
+
+            jwtCookie.setMaxAge(0);
+            jwtCookie.setValue("");
+            sessionCookie.setMaxAge(0);
+            sessionCookie.setValue("");
+
+            redisTemplate.opsForHash().delete(Utils.AUTHENTICATION, Utils.SESSION_COOKIE);
+
+            response.addCookie(jwtCookie);
+            response.addCookie(sessionCookie);
             SecurityContextHolder.clearContext();
         }
     }

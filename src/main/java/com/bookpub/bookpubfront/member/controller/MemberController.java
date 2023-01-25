@@ -1,17 +1,13 @@
 package com.bookpub.bookpubfront.member.controller;
 
 import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.bookpub.bookpubfront.member.service.MemberService;
-import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import java.time.Duration;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -22,7 +18,6 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -37,7 +32,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
-    private static final  String REDIRECT_MY_PAGE = "redirect:/members/";
+    private static final String REDIRECT_MY_PAGE = "redirect:/members/";
+    private static final String MEMBER = "member";
     private final MemberService memberService;
 
     /**
@@ -90,7 +86,7 @@ public class MemberController {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
 
-        model.addAttribute("member", memberInfo);
+        model.addAttribute(MEMBER, memberInfo);
 
         return "member/signupComplete";
     }
@@ -107,7 +103,7 @@ public class MemberController {
                                   Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
 
-        model.addAttribute("member", member);
+        model.addAttribute(MEMBER, member);
 
         return "admin/member/memberInfo";
     }
@@ -137,7 +133,7 @@ public class MemberController {
     public String memberInfo(@PathVariable("memberNo") Long memberNo,
                              Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
-        model.addAttribute("member", member);
+        model.addAttribute(MEMBER, member);
 
         return "mypage/memberInfo";
     }
@@ -157,29 +153,7 @@ public class MemberController {
     }
 
     /**
-     * 로그인 성공, 실패에 따른 화면을 보여주는 view.
-     *
-     * @param requestDto 로그인 요청 정보가 담겨있는 dto.
-     * @param request    페이지의 요청정보가 담겨있는 객체.
-     * @param response   the response
-     * @return 메인화면 또는 로그인화면을 띄워준다.
-     */
-    @PostMapping("/login")
-    public String loginSubmit(@ModelAttribute LoginMemberRequestDto requestDto,
-                              HttpServletRequest request, HttpServletResponse response) {
-        memberService.login(requestDto, request.getSession());
-
-        Cookie cookie = new Cookie(JwtUtil.JWT_SESSION, request.getSession().getId());
-        cookie.setMaxAge((int) Duration.ofDays(1).getSeconds());
-        cookie.setPath("/");
-
-        response.addCookie(cookie);
-
-        return "redirect:/";
-    }
-
-    /**
-     * 로그아웃
+     * 로그아웃.
      *
      * @param request  HTTP Request.
      * @param response the response
@@ -202,7 +176,7 @@ public class MemberController {
      */
     @PostMapping("/members/{memberNo}/name")
     public String memberExchangeName(@PathVariable("memberNo") Long memberNo,
-                                      @RequestParam("exchangeName") String name) {
+                                     @RequestParam("exchangeName") String name) {
         memberService.modifyMemberName(memberNo, name);
 
 
@@ -267,9 +241,9 @@ public class MemberController {
      */
     @PostMapping("/members/{memberNo}/password")
     public String memberExchangePassword(@PathVariable("memberNo") Long memberNo,
-                                         @RequestParam("exchangePwd") String password){
+                                         @RequestParam("exchangePwd") String password) {
 
-        memberService.modifyMemberPassword(memberNo,password);
+        memberService.modifyMemberPassword(memberNo, password);
         return REDIRECT_MY_PAGE + memberNo;
     }
 
@@ -283,7 +257,7 @@ public class MemberController {
      */
     @PostMapping("/members/{memberNo}/addresses/{addressNo}")
     public String memberExchangeBaseAddress(@PathVariable("memberNo") Long memberNo,
-                                            @PathVariable("addressNo") Long addressNo){
+                                            @PathVariable("addressNo") Long addressNo) {
 
         memberService.modifyMemberAddress(memberNo, addressNo);
         return REDIRECT_MY_PAGE + memberNo;
@@ -298,7 +272,7 @@ public class MemberController {
      */
     @PostMapping("/members/{memberNo}/addresses")
     public String memberAddAddress(@PathVariable("memberNo") Long memberNo,
-                                   MemberAddressRequestDto requestDto){
+                                   MemberAddressRequestDto requestDto) {
 
         memberService.addMemberAddress(memberNo, requestDto);
 

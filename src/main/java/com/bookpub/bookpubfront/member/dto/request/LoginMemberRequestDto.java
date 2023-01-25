@@ -14,5 +14,4 @@ import lombok.Getter;
 public class LoginMemberRequestDto {
     private String id;
     private String pwd;
-    private String sessionId;
 }

@@ -11,8 +11,6 @@ import com.bookpub.bookpubfront.utils.CartUtils;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -45,17 +43,12 @@ public class MainController {
      */
     @GetMapping("/")
     public String mainView(Model model) {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         List<GetParentCategoryWithChildrenResponseDto> parentCategoryWithChildren =
                 categoryService.getParentCategoryWithChildren();
 
-        String userId = (String) authentication.getPrincipal();
-
         model.addAttribute("category", parentCategoryWithChildren);
-        model.addAttribute("userId", userId);
         return "main/index";
     }
-
 
     /**
      * 메인 화면 View 메서드.

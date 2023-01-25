@@ -1,6 +1,7 @@
 package com.bookpub.bookpubfront.member.adaptor.impl;
 
 import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
@@ -14,17 +15,21 @@ import com.bookpub.bookpubfront.member.dto.request.ModifyMemberPhoneRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
@@ -34,11 +39,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * 멤버 어뎁터를 구현하기위한 구현 클래스입니다.
  *
- * @author : 유호철
+ * @author : 유호철, 임태원
  * @since : 1.0
  **/
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MemberAdaptorImpl implements MemberAdaptor {
     private final RestTemplate restTemplate;
     private static final String MEMBER_API = "/api/members/";
@@ -48,7 +54,8 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest) {
+    public ResponseEntity<SignupMemberResponseDto> signupRequest(
+            SignupMemberRequestDto signupRequest) {
 
         HttpEntity<SignupMemberRequestDto> entity = new HttpEntity<>(signupRequest, makeHeader());
 
@@ -112,7 +119,8 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      */
     @Override
     public PageResponse<MemberResponseDto> requestMembers(Pageable pageable) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + "/api/admin/members")
+        String url = UriComponentsBuilder
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/api/admin/members")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -184,12 +192,18 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
     }
 
+    @Override
+    public ResponseEntity<Void> tokenReIssueRequest(String accessToken) {
+        return null;
+    }
+
     /**
      * {@inheritDoc}
      */
     @Override
     public ResponseEntity<Boolean> idDuplicateCheck(String id) {
-        HttpEntity<IdCheckRequestDto> entity = new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
+        HttpEntity<IdCheckRequestDto> entity =
+                new HttpEntity<>(new IdCheckRequestDto(id), makeHeader());
 
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/api/signup/idCheck",
@@ -204,7 +218,8 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      */
     @Override
     public ResponseEntity<Boolean> nickDuplicateCheck(String nickname) {
-        HttpEntity<NickCheckRequestDto> entity = new HttpEntity<>(new NickCheckRequestDto(nickname), makeHeader());
+        HttpEntity<NickCheckRequestDto> entity =
+                new HttpEntity<>(new NickCheckRequestDto(nickname), makeHeader());
 
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/api/signup/nickCheck",
@@ -219,7 +234,8 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      */
     @Override
     public void requestMemberNameChange(Long memberNo, String name) {
-        HttpEntity<ModifyMemberNameRequestDto> entity = new HttpEntity<>(new ModifyMemberNameRequestDto(name), makeHeader());
+        HttpEntity<ModifyMemberNameRequestDto> entity =
+                new HttpEntity<>(new ModifyMemberNameRequestDto(name), makeHeader());
 
         restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/name",
@@ -234,7 +250,8 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      */
     @Override
     public void requestMemberPhoneChange(Long memberNo, String phone) {
-        HttpEntity<ModifyMemberPhoneRequestDto> httpEntity = new HttpEntity<>(new ModifyMemberPhoneRequestDto(phone), makeHeader());
+        HttpEntity<ModifyMemberPhoneRequestDto> httpEntity =
+                new HttpEntity<>(new ModifyMemberPhoneRequestDto(phone), makeHeader());
 
         restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/phone",
@@ -271,6 +288,25 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 Void.class
         );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberLoginResponseDto requestAuthMemberInfo(String accessToken) {
+        HttpHeaders headers = makeHeader();
+        headers.add(JwtUtil.AUTH_HEADER, accessToken);
+
+        HttpEntity<MemberLoginResponseDto> httpEntity =
+                new HttpEntity<>(headers);
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/auth",
+                HttpMethod.GET,
+                httpEntity,
+                MemberLoginResponseDto.class).getBody();
+    }
+
 
     /**
      * {@inheritDoc}

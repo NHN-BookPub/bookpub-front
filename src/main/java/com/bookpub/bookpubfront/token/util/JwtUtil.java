@@ -1,9 +1,8 @@
 package com.bookpub.bookpubfront.token.util;
 
-import java.util.Base64;
-import lombok.RequiredArgsConstructor;
+import java.util.Date;
+import javax.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Component;
 
 /**
@@ -12,33 +11,33 @@ import org.springframework.stereotype.Component;
  * @author : 임태원
  * @since : 1.0
  **/
-@ConfigurationProperties(prefix = "bookpub.jwt")
-@RequiredArgsConstructor
 @Component
 @Slf4j
 public class JwtUtil {
-    private String secret;
-    public static final String JWT_SESSION = "JWT";
-    private static final Base64.Decoder decoder = Base64.getUrlDecoder();
+    public static final String JWT_COOKIE = "bookpub_accessToken";
+    public static final String AUTH_HEADER = "Authorization";
+    public static final String EXP_HEADER = "X-Expire";
+    public static final String TOKEN_TYPE = "Bearer ";
+    public static final Long MILL_SEC = 1000L;
+
+    private JwtUtil() {
+    }
 
     /**
-     * 토큰을 복호화해주는 메소드.
+     * jwt를 보관용 cookie를 만드는 메소드.
      *
-     * @param jwt accessToken 정보.
-     * @return 복호화 된 정보를 리턴해준다.
+     * @param accessToken 유저 인증 토큰.
+     * @param expireTime  만료시간.
+     * @return Cookie.
      */
-    public static String decodeJwt(String jwt) {
-        String jsonWebToken = jwt.split(" ")[1];
-        String payload = jsonWebToken.split("\\.")[1];
+    public static Cookie makeJwtCookie(String accessToken, Long expireTime) {
+        Long now = new Date().getTime();
+        int maxAge = (int) ((expireTime - now) / MILL_SEC);
 
-        return new String(decoder.decode(payload));
-    }
-
-    public String getSecret() {
-        return secret;
-    }
-
-    public void setSecret(String secret) {
-        this.secret = secret;
+        Cookie cookie = new Cookie(JwtUtil.JWT_COOKIE, accessToken);
+        cookie.setSecure(true);
+        cookie.setHttpOnly(true);
+        cookie.setMaxAge(maxAge);
+        return cookie;
     }
 }
