@@ -19,7 +19,7 @@ public class JwtUtil {
     public static final String EXP_HEADER = "X-Expire";
     public static final String TOKEN_TYPE = "Bearer ";
     public static final Long MILL_SEC = 1000L;
-    
+
     private JwtUtil() {
     }
 
