@@ -1,14 +1,23 @@
 package com.bookpub.bookpubfront.token.service;
 
+import static com.bookpub.bookpubfront.utils.Utils.AUTHENTICATION;
+import static com.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
+
+import com.bookpub.bookpubfront.dto.AuthDto;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.bookpub.bookpubfront.member.exception.MemberNotFoundException;
-import com.bookpub.bookpubfront.token.CustomUserDetails;
+import com.bookpub.bookpubfront.utils.Utils;
+import java.util.List;
 import java.util.Objects;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,8 +34,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 @Slf4j
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberAdaptor memberAdaptor;
-    public static final String PRINCIPAL = "principal";
-    public static final String AUTHORITIES = "authorities";
+    private final RedisTemplate<String, AuthDto> redisTemplate;
 
 
     /**
@@ -41,18 +49,31 @@ public class CustomUserDetailsService implements UserDetailsService {
         ServletRequestAttributes servletRequestAttributes
                 = (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
+        HttpServletResponse response = servletRequestAttributes.getResponse();
 
-        MemberLoginResponseDto memberLoginResponseDto
+        String sessionId = request.getSession().getId();
+        Cookie cookie = new Cookie(SESSION_COOKIE, sessionId);
+        response.addCookie(cookie);
+
+        MemberLoginResponseDto member
                 = memberAdaptor.requestAuthMemberInfo(accessToken);
 
-        if (Objects.isNull(memberLoginResponseDto)) {
+        if (Objects.isNull(member)) {
             throw new MemberNotFoundException();
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute(PRINCIPAL, String.valueOf(memberLoginResponseDto.getMemberNo()));
-        session.setAttribute(AUTHORITIES, memberLoginResponseDto.getAuthorities().toString());
+        List<SimpleGrantedAuthority> authorities =
+                Utils.makeAuthorities(member.getAuthorities());
 
-        return new CustomUserDetails(memberLoginResponseDto);
+        AuthDto authDto = new AuthDto(
+                member.getMemberNo().toString(),
+                member.getMemberPwd(),
+                member.getAuthorities());
+
+        redisTemplate.opsForHash().put(AUTHENTICATION, sessionId, authDto);
+
+        return new User(member.getMemberNo().toString(),
+                member.getMemberPwd(),
+                authorities);
     }
 }
