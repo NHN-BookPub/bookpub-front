@@ -1,14 +1,15 @@
 package com.bookpub.bookpubfront.config;
 
+import com.bookpub.bookpubfront.dto.AuthDto;
 import com.bookpub.bookpubfront.filter.CustomAuthenticationFilter;
 import com.bookpub.bookpubfront.filter.CustomLoginFilter;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.token.provider.CustomAuthenticationProvider;
 import com.bookpub.bookpubfront.token.service.CustomUserDetailsService;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
@@ -27,12 +28,13 @@ import org.springframework.security.web.context.SecurityContextPersistenceFilter
  * @author : 임태원
  * @since : 1.0
  **/
-@EnableWebSecurity(debug = true)
+@EnableWebSecurity
 @RequiredArgsConstructor
 @Configuration
 public class SecurityConfig {
     private final MemberAdaptor memberAdaptor;
     private final CustomUserDetailsService userDetailsService;
+    private final RedisTemplate<String, AuthDto> redisTemplate;
 
     /**
      * security filterChain 설정.
@@ -84,18 +86,20 @@ public class SecurityConfig {
      */
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() {
-        return new CustomAuthenticationFilter();
+        return new CustomAuthenticationFilter(redisTemplate);
     }
 
-//    @Bean
-//    public CustomExpConfirmFilter customExpConfirmFilter() {
-//        return new CustomExpConfirmFilter(memberAdaptor, objectMapper);
-//    }
-
+    /**
+     * UsernamePasswordAuthenticationFilter를 상속받는 필터
+     * 로그인 폼에서 id,pwd를 request로 auth서버와 통신하여 jwt를 발급받는 필터.
+     *
+     * @param authenticationManager token발행을 위한 로직이 실행되게 도와주는 클래스.
+     * @return 커스텀한 로그인 필터.
+     */
     @Bean
     public CustomLoginFilter customLoginFilter(AuthenticationManager authenticationManager) {
         CustomLoginFilter loginFilter
-                = new CustomLoginFilter(memberAdaptor, authenticationProvider());
+                = new CustomLoginFilter(memberAdaptor);
         loginFilter.setFilterProcessesUrl("/auth");
         loginFilter.setAuthenticationManager(authenticationManager);
         loginFilter.setUsernameParameter("id");
@@ -104,12 +108,25 @@ public class SecurityConfig {
         return loginFilter;
     }
 
+    /**
+     * login필터에 들어갈 authenticationManager의 빈 등록 메소드.
+     *
+     * @param authenticationConfiguration authenticationManger를 관리하는 config 클래스.
+     * @return authentication manager.
+     * @throws Exception authentication manager를 가져오는 과정에서 발생되는 에러.
+     */
     @Bean
     public AuthenticationManager authenticationManager(
             AuthenticationConfiguration authenticationConfiguration) throws Exception {
         return authenticationConfiguration.getAuthenticationManager();
     }
 
+    /**
+     * authentication manager가 실행시킬 authenticate의 구현을 담당한 provider.
+     * manager는 등록된 provider를 순차탐색하여 적절한 provider를 선택하여 실행시킨다.
+     *
+     * @return 커스텀 한 authenticationProvider.
+     */
     @Bean
     public AuthenticationProvider authenticationProvider() {
         CustomAuthenticationProvider authenticationProvider = new CustomAuthenticationProvider();
