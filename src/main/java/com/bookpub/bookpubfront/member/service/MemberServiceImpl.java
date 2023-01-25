@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.member.service;
 
+import com.bookpub.bookpubfront.dto.AuthDto;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
@@ -8,19 +9,18 @@ import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.token.service.CustomUserDetailsService;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import com.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
-
-import com.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -37,6 +37,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
+    private final RedisTemplate<String, AuthDto> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
 
@@ -64,12 +65,27 @@ public class MemberServiceImpl implements MemberService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
-            Cookie jwtCookie = Utils.findJwtCookie();
+            Cookie jwtCookie = Utils.findCookie(JwtUtil.JWT_COOKIE);
+            if (Objects.isNull(jwtCookie)) {
+                SecurityContextHolder.clearContext();
+                return;
+            }
+
+            Cookie sessionCookie = Utils.findCookie(Utils.SESSION_COOKIE);
+            if (Objects.isNull(session)) {
+                SecurityContextHolder.clearContext();
+                return;
+            }
+
             jwtCookie.setMaxAge(0);
             jwtCookie.setValue("");
+            sessionCookie.setMaxAge(0);
+            sessionCookie.setValue("");
+
+            redisTemplate.opsForHash().delete(Utils.AUTHENTICATION, Utils.SESSION_COOKIE);
+
             response.addCookie(jwtCookie);
-            session.removeAttribute(CustomUserDetailsService.PRINCIPAL);
-            session.removeAttribute(CustomUserDetailsService.AUTHORITIES);
+            response.addCookie(sessionCookie);
             SecurityContextHolder.clearContext();
         }
     }
@@ -155,7 +171,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public void modifyMemberName(Long memberNo,
-                                 String name){
+                                 String name) {
         memberAdaptor.requestMemberNameChange(memberNo, name);
     }
 
