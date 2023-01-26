@@ -62,6 +62,21 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         return checkError(response).getBody();
     }
 
+    @Override
+    public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
+            @Min(0) Integer page, Long memberNo) {
+        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
+                + "/member?page=" + page + "&size=10&no=" + memberNo;
+
+        ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
+                restTemplate.exchange(url,
+                        HttpMethod.GET,
+                        new HttpEntity<>(getHttpHeaders()),
+                        new ParameterizedTypeReference<>() {});
+
+        return checkError(response).getBody();
+    }
+
     /**
      * {@inheritDoc}
      */

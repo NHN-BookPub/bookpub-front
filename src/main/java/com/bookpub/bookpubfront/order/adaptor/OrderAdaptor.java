@@ -34,6 +34,16 @@ public interface OrderAdaptor {
     PageResponse<GetOrderListResponseDto> getAllOrdersRequest(@Min(0) Integer page);
 
     /**
+     * 회원번호로 주문목록을 조회합니다.
+     *
+     * @param page 페이지 번호입니다.
+     * @param memberNo 회원번호입니다.
+     * @return 페이지를 반환합니다.
+     */
+    PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
+            @Min(0) Integer page, Long memberNo);
+
+    /**
      * 주문을 상세조회하기 위한 메서드입니다.
      *
      * @param orderNo 주문번호입니다.
