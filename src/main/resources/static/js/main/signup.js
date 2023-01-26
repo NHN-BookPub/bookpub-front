@@ -122,6 +122,7 @@ function idCheckFunc() {
                     $('.id-ok').css("display", "inline-block");
                     $('.id-duplicate').css("display", "none");
                     idCheck.value = "1";
+                    document.getElementById("memberId").readOnly=true;
                     if (allCheck()) {
                         $("#submitBtn").removeAttr("disabled");
                     }
@@ -154,6 +155,7 @@ function nickCheckFunc() {
                     $('.nick-ok').css("display", "inline-block");
                     $('.nick-duplicate').css("display", "none");
                     nicknameCheck.value = "1";
+                    document.getElementById("nickname").readOnly=true;
                     if (allCheck()) {
                         $("#submitBtn").removeAttr("disabled");
                     }
@@ -202,7 +204,7 @@ function smsConfirm() {
     const authInput = document.getElementById('authInput');
     if (authInput.value === authMessage) {
         alert("인증에 성공하였습니다.");
-        phone.readable = true;
+        phone.readOnly = true;
         authInput.disabled = true;
         confirmBtn.css("display", "none");
     } else {
