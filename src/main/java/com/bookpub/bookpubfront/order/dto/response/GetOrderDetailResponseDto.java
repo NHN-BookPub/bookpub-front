@@ -1,9 +1,10 @@
-package com.bookpub.bookpubfront.order.dto;
+package com.bookpub.bookpubfront.order.dto.response;
 
 import com.bookpub.bookpubfront.product.dto.response.GetProductListForOrderResponseDto;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Builder;
 import lombok.Getter;
 
 /**
@@ -14,6 +15,8 @@ import lombok.Getter;
  **/
 @Getter
 public class GetOrderDetailResponseDto {
+
+    @Builder
     public GetOrderDetailResponseDto(Long orderNo,
                                      String orderState,
                                      String buyerName,
@@ -52,25 +55,25 @@ public class GetOrderDetailResponseDto {
         this.totalAmount = totalAmount;
     }
 
-    private Long orderNo;
+    private final Long orderNo;
     private List<GetProductListForOrderResponseDto> orderProducts = new ArrayList<>();
-    private String orderState;
-    private String buyerName;
-    private String buyerNumber;
-    private String recipientName;
-    private String recipientNumber;
-    private String addressBase;
-    private String addressDetail;
-    private LocalDateTime createdAt;
-    private LocalDateTime receivedAt;
-    private String invoiceNo;
-    private boolean packaged;
-    private Long packageAmount;
-    private Long deliveryAmount;
-    private String orderRequest;
-    private Long pointAmount;
-    private Long couponAmount;
-    private Long totalAmount;
+    private final String orderState;
+    private final String buyerName;
+    private final String buyerNumber;
+    private final String recipientName;
+    private final String recipientNumber;
+    private final String addressBase;
+    private final String addressDetail;
+    private final LocalDateTime createdAt;
+    private final LocalDateTime receivedAt;
+    private final String invoiceNo;
+    private final boolean packaged;
+    private final Long packageAmount;
+    private final Long deliveryAmount;
+    private final String orderRequest;
+    private final Long pointAmount;
+    private final Long couponAmount;
+    private final Long totalAmount;
 
     public void addProducts(List<GetProductListForOrderResponseDto> products) {
         this.orderProducts = products;

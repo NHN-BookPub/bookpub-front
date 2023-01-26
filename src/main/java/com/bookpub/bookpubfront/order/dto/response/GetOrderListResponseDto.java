@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.order.dto;
+package com.bookpub.bookpubfront.order.dto.response;
 
 import com.bookpub.bookpubfront.product.dto.response.GetProductListForOrderResponseDto;
 import java.time.LocalDateTime;

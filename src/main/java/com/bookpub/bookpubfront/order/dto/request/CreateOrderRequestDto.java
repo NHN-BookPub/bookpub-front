@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.order.dto;
+package com.bookpub.bookpubfront.order.dto.request;
 
 import com.bookpub.bookpubfront.state.OrderState;
 import com.bookpub.bookpubfront.state.anno.StateCode;
@@ -42,10 +42,10 @@ public class CreateOrderRequestDto {
     @NotNull
     private String roadAddress; //dz
     @NotNull
-    private String receivedAt;
-    private boolean packaged;
+    private String receivedAt; //dz
+    private boolean packaged; //dz
     private String orderRequest; //dz
-    private Long pointAmount;
-    private Long couponAmount;
-    private Long totalAmount;
+    private Long pointAmount; //dz
+    private Long couponAmount; //dz
+    private Long totalAmount; //dz
 }
