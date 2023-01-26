@@ -1,10 +1,13 @@
 package com.bookpub.bookpubfront.order.adaptor.impl;
 
+import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
-import com.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
-import com.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
-import com.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.bookpub.bookpubfront.order.dto.response.GetAddressResponseDto;
+import com.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -12,7 +15,12 @@ import java.util.List;
 import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -50,7 +58,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(getHttpHeaders()),
-                        new ParameterizedTypeReference<>(){});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         return checkError(response).getBody();
     }
@@ -61,20 +70,22 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(getHttpHeaders()),
-                        new ParameterizedTypeReference<GetOrderDetailResponseDto>() {});
+                        new ParameterizedTypeReference<GetOrderDetailResponseDto>() {
+                        });
 
         return checkError(response).getBody();
     }
 
-//    @Override
-//    public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
-//        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-//                +
-//    }
-
-
-
-
+    @Override
+    public List<GetAddressResponseDto> getMemberAddresses() {
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/address",
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<List<GetAddressResponseDto>>() {
+                }
+        ).getBody();
+    }
 
     private <T> ResponseEntity<T> checkError(ResponseEntity<T> response) {
         HttpStatus status = response.getStatusCode();
