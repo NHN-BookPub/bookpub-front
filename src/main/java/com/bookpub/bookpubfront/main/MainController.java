@@ -3,8 +3,6 @@ package com.bookpub.bookpubfront.main;
 import static com.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
 import static com.bookpub.bookpubfront.state.ProductType.NEW;
 
-import com.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
-import com.bookpub.bookpubfront.category.service.CategoryService;
 import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.service.ProductService;
 import com.bookpub.bookpubfront.utils.CartUtils;
@@ -31,24 +29,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 @RequiredArgsConstructor
 public class MainController {
 
-    private final CategoryService categoryService;
     private final ProductService productService;
     private static final Integer LIMIT = 6;
-
-    /**
-     * 메인화면에 연결해주는 controller get 메소드.
-     *
-     * @param model html에 동적인 값을 넘겨주는 객체.
-     * @return 메인화면 뷰
-     */
-    @GetMapping("/")
-    public String mainView(Model model) {
-        List<GetParentCategoryWithChildrenResponseDto> parentCategoryWithChildren =
-                categoryService.getParentCategoryWithChildren();
-
-        model.addAttribute("category", parentCategoryWithChildren);
-        return "main/index";
-    }
 
     /**
      * 메인 화면 View 메서드.
@@ -57,7 +39,7 @@ public class MainController {
      * @param model   view request 보낼 객체
      * @return 메인화면 뷰
      */
-    @GetMapping("/v1")
+    @GetMapping("/")
     public String mainView2(HttpServletRequest request, Model model) {
         List<GetProductByTypeResponseDto> bestSellers =
                 productService.findProductsByType(BEST_SELLER.getTypeNo(), LIMIT);
