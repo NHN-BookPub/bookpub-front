@@ -21,102 +21,267 @@
     <script src="/static/js/order/order.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
 
+    <script>
+        function revert() {
+            let arrow = $('#arrow');
+            let option = $('#img-option');
+            if (option.val() === '1') {
+                option.val('2')
+                arrow.css("transform", "rotate(360deg)")
+            } else {
+                option.val('1')
+                arrow.css("transform", "rotate(180deg)")
+            }
+        }
+    </script>
+
+    <script>
+        var modal = document.getElementById("member_address");
+        function myAddress() {
+            modal.style.display = "flex"
+        }
+    </script>
+
+
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
 <div id="order-main">
-    <div id="order-body">
-        <h1 id="header-h1-text">
-            결제하기
-        </h1>
-        <div class="row container-md" id="order-description">
-            <div class="item-tip">
-                <h6>주문 상품 정보</h6>
-                <div class="row">
-                    <div class="col-xs-12">
-                        <div class="bookpub-item-thumb">
-                            <a class="md3" href="#" target="_blank">
-                                <div class="item-img-wrap">
-                                    <img src="/static/img/main/bookpub-logo-black.png">
+    <div class="contents_inner">
+        <h1 id="header-h1-text">주문/결제</h1>
+        <div class="cart_body_payment">
+            <!--            주문 컨테이너-->
+            <div class="cart_body_inner">
+                <section>
+                    <!--                    주문상품 컨테이너-->
+                    <div class="payment_body_wrap">
+                        <details class="item-tip tbl_prod_wrap ordering" open="">
+                            <summary onclick="revert()">
+                                <span style="font-size: 23px;">주문 상품</span>
+                                <span class="prod_cnt" th:text="x개"></span>
+                                <div class="img-wrapper">
+                                    <img id="arrow" class="btn-img" src="/static/img/main/down-arrow.svg">
+                                    <input id="img-option" type="hidden" value="1">
                                 </div>
-                                <div class="item-info-wrap">
-                                    <span class="item-title">북펍 상품</span>
-                                    <div class="item-option">
-                                        <p>1개</p>
-                                    </div>
-                                    <div class="item-pay">
-                                        <span>25000원</span>
-                                    </div>
+                            </summary>
+                            <table class="tbl_prod">
+                                <thead class="hidden">
+                                <tr>
+                                    <th scope="col">상품정보</th>
+                                    <th scope="col">#</th>
+                                    <th scope="col">수량</th>
+                                    <th scope="col">금액</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="prod">
+                                        <div class="prod_area">
+                                            <div class="bookpub-item-thumb size_sm">
+                                                <a target="_blank" href="#">
+                                    <span class="item-img-wrap">
+                                        <img src="/static/img/main/bookpub-logo-black.png">
+                                    </span>
+                                                </a>
+                                            </div>
+                                            <div class="prod_info size_sm">
+                                <span class="prod_info">
+                                    <span class="prod_name">
+                                        <span class="prod_name">도서명 받아오기</span>
+                                    </span>
+                                </span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="badge_box"></div>
+                                    </td>
+                                    <td>
+                                        <span class="prd_num"> 3개 </span>
+                                    </td>
+                                    <td>
+                        <span class="price">
+                            <span>51,300원</span>
+                        </span>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </details>
+                    </div>
+                    <!--                    주문자 정보입력 컨테이너-->
+                    <div class="payment_body_wrap"
+                         th:style="${#authentication.getPrincipal() == 'anonymousUser' ? 'display:block' : 'display:none'}">
+                        <div class="tbl_row_wrap">
+                            <table>
+                                <colgroup>
+                                    <col style="width: 210px">
+                                    <col style="width: auto">
+                                </colgroup>
+                                <tr>
+                                    <th scope="row" class="has_ip">주문자 정보 입력</th>
+                                    <td class="col-box-wrapper">
+                                        <div class="form_col_group">
+                                            <div class="col_box">
+                                                <input type="text" class="form_ip" placeholder="주문인 이름을 입력해주세요."
+                                                       title="이름 입력"
+                                                       maxlength="10"
+                                                       data-order-info-info="input_name">
+                                            </div>
+                                            <div class="col_box"
+                                                 style="display: flex; flex-direction: column; gap: 4px">
+                                                <input type="tel" class="form_ip" placeholder="휴대폰 번호를 ‘-’없이 입력해주세요"
+                                                       title="휴대폰 번호 입력"
+                                                       maxlength="11" data-order-info-info="input_phone">
+                                                <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <!--                    비회원 배송지 정보 컨테이너-->
+                    <div class="payment_body_wrap"
+                         th:style="${#authentication.getPrincipal() == 'anonymousUser' ? 'display:block' : 'display:none'}">
+                        <div class="tbl_row_wrap">
+                            <table>
+                                <colgroup>
+                                    <col style="width: 210px">
+                                    <col style="width: auto">
+                                </colgroup>
+                                <tr>
+                                    <th scope="row" class="has_ip">수령인 정보 입력</th>
+                                    <td class="col-box-wrapper">
+                                        <div class="form_col_group">
+                                            <div class="col_box">
+                                                <input type="text" class="form_ip" placeholder="수령인 이름을 입력해주세요."
+                                                       title="이름 입력"
+                                                       maxlength="10"
+                                                       data-order-info-info="input_name">
+                                            </div>
+                                            <div class="col_box"
+                                                 style="display: flex; flex-direction: column; gap: 4px">
+                                                <input type="tel" class="form_ip" placeholder="휴대폰 번호를 ‘-’없이 입력해주세요"
+                                                       title="휴대폰 번호 입력"
+                                                       maxlength="11" data-order-info-info="input_phone">
+                                                <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>
+                                            </div>
+                                            <div class="col_box">
+                                                <input type="text" class="form_ip" name="roadAddress"
+                                                       placeholder="도로명주소" required
+                                                       onclick="findAddress()">
+                                            </div>
+                                            <div class="col_box">
+                                                <input type="text" class="form_ip"
+                                                       name="detailAddress"
+                                                       placeholder="상세주소"
+                                                       required>
+                                            </div>
+                                            <div class="col_box btn_box">
+                                                <div class="btn_wrapper"
+                                                     th:style="${#authentication.getPrincipal() == 'anonymousUser' ? 'display:block' : 'display:none'}">
+                                                    <input class="checkBtn" type="button" onclick="myAddress()"
+                                                           value="내 주소 보기"><br>
+                                                </div>
+                                                <div class="btn_wrapper">
+                                                    <input class="checkBtn" type="button" onclick="findAddress()"
+                                                           value="우편번호 찾기"><br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+            <!--            결제컨테이너-->
+            <div class="cart_info_wrap" style="top:0;">
+                <div class="payments_info_area">
+                    <div class="payments_info_box">
+                        <h2 class="hidden">결제금액</h2>
+                        <ul class="payments_info_list">
+                            <li class="payments_info_item">
+                                <p class="label2">상품금액</p>
+                                <div class="right_box">
+                                    <span class="price">
+                                        <span class="val spot" data-amount="commodity">15,300</span>
+                                        <span class="unit">원</span>
+                                    </span>
                                 </div>
-                            </a>
-
-                        </div>
+                            </li>
+                            <li class="payments_info_item" data-amount-area="deliveryFee">
+                                <p class="label2">배송비</p>
+                                <div class="right_box">
+                                    <span class="price">
+                                        <span class="val" data-amount="deliveryFee">0</span>
+                                        <span class="unit">원</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="payments_info_item" data-amount-area="present">
+                                <p class="label2">선물포장</p>
+                                <div class="right_box">
+                                    <span class="price">
+                                        <span class="val" data-amount="present">0</span>
+                                        <span class="unit">원</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="payments_info_item" data-amount-area="couponDiscount">
+                                <p class="label2">쿠폰할인</p>
+                                <div class="right_box">
+                                    <span class="price">
+                                        <span class="val" data-amount="couponDiscount">0</span>
+                                        <span class="unit">원</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="payments_info_item" data-amount-area="pointDiscount">
+                                <p class="label2">포인트 사용</p>
+                                <div class="right_box">
+                                    <span class="price">
+                                        <span class="val" data-amount="pointDiscount">0</span>
+                                        <span class="unit">원</span>
+                                    </span>
+                                </div>
+                            </li>
+                        </ul>
                     </div>
+                    <div class="payments_info_box"
+                         style="margin-top: 12px; padding-top: 20px; border-top: 1px solid #eaeaea">
+                        <ul class="payments_info_list">
+                            <li class="payments_info_item total">
+                                <p class="label2">최종결제금액</p>
+                                <div class="right_box">
+                                    <span class="price2">
+                                        <span class="val" style="font-size:20px" data-amount="totalAmount">15,300</span>
+                                        <span class="unit">원</span>
+                                    </span>
+                                </div>
+                            </li>
+                            <li class="payments_info_item point" style="justify-content: space-between;">
+                                <p class="label2">적립예정포인트</p>
+                                <span class="price2">
+                                    <span class="point" data-amount="savingPoint">850</span>
+                                    <span class="point-unit">P</span>
+                                </span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="btn_wrap full">
+                    <button type="button" class="btn btn-primary"
+                            id="btnOrderProcess"><span
+                            class="text">결제하기</span>
+                    </button>
                 </div>
             </div>
         </div>
-        <div class="row container-md" id="orderer-info">
-            <div class="item-tip">
-                <div class="order-detail">
-                    <h6>주문자 정보</h6>
-                </div>
-                <div class="row row-orderer-detail">
-                    <div class="row">
-                        <div class="col-xs-6 mb-3 order-input-name">
-                        <input class="form-control" id="orderer-name" type="text" name="buyerName"
-                               placeholder="이름" required>
-                        <div class="invalid-feedback">주문인 이름을 입력해주세요</div>
-                    </div>
-                        <div class="col-xs-6 mb-3 order-input-phone">
-                            <input class="form-control" id="orderer-phone" type="text" name="buyerNumber"
-                                   placeholder="연락처" required>
-                            <div class="invalid-feedback">주문인 전화번호를 입력해주세요</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="row container-md" id="recipient-info">
-            <div class="item-tip">
-                <div class="order-detail">
-                    <h6>배송 정보</h6>
-                </div>
-                <div class="row row-recipient-detail">
-                    <div class="row">
-                        <div class="col-xs-6 mb-3 order-input-name">
-                            <input class="form-control" id="recipient-name" type="text" name="recipientName"
-                                   placeholder="이름" required>
-                            <div class="invalid-feedback">수령인 이름을 입력해주세요</div>
-                        </div>
-                        <div class="col-xs-6 mb-3 order-input-phone">
-                            <input class="form-control" id="recipient-phone" type="text" name="recipientNumber"
-                                   placeholder="연락처" required>
-                            <div class="invalid-feedback">수령인 전화번호를 입력해주세요</div>
-                        </div>
-                        <div>
-                            <div class="col-xs-9 mb-3">
-                                <input class="form-control" type="text" id="address" name="roadAddress" placeholder="도로명주소" required
-                                       onclick="findAddress()">
-                                <div class="invalid-feedback">주소를 입력해주세요.</div>
-                            </div>
-                            <div class="col-xs-9 mb-3">
-                                <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소"
-                                       required>
-                                <div class="invalid-feedback">상세주소를 입력해주세요.</div>
-                            </div>
-                            <div class="button-box">
-                                <input class="checkBtn" type="button" onclick="findAddress()" value="우편번호 찾기"><br>
-                            </div>
-                        </div>
-                        <div class="col-xs-9 mb-3" style="margin-top: 20px;">
-                            <input class="form-control" id="order-request" type="text" name="orderRequest"
-                                   placeholder="배송시 요청사항">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
     </div>
 </div>
 
@@ -131,6 +296,29 @@
 <script src="/static/js/main/nouislider.min.js"></script>
 <script src="/static/js/main/jquery.zoom.min.js"></script>
 <script src="/static/js/main/main.js"></script>
-
 </body>
+
+<div id="member_address" class="modal-overlay">
+    <div id="modal_box">
+        <h2>test</h2>
+    </div>
+</div>
+<script>
+    var modal = document.getElementById("member_address");
+
+    modal.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay")) {
+            modal.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal.style.display === "flex" && e.key === "Escape") {
+            modal.style.display = "none"
+        }
+    })
+</script>
+
+
 </html>
