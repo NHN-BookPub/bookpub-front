@@ -1,9 +1,11 @@
 package com.bookpub.bookpubfront.product.adaptor;
 
+import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
 import com.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -43,4 +45,21 @@ public interface ProductAdaptor {
      * @return 상품 상세 정보
      */
     GetProductDetailResponseDto requestProductDetail(Long productNo);
+
+    /**
+     * 상품 유형을 가지고 메인페이지에서 보여줄 상품 API 부르는 메서드.
+     *
+     * @param typeNo 유형 번호
+     * @param limit  제한 갯수
+     * @return 유형별 상품들
+     */
+    List<GetProductByTypeResponseDto> requestProductByType(Integer typeNo, Integer limit);
+
+    /**
+     * 장바구니에 있는 상품 번호를 가지고 상품 정보 API를 부르는 메서드.
+     *
+     * @param productsNo 장바구니에 있는 상품 번호들
+     * @return 징바구니에 있는 상품들
+     */
+    List<GetProductDetailResponseDto> requestProductInCart(List<Long> productsNo);
 }

@@ -892,10 +892,16 @@ textarea.input {
   color: #D10024;
 }
 
-.product .product-img .product-label>span.new {
+.product .product-img .product-label > span.new {
   background-color: #D10024;
   border-color: #D10024;
   color: #FFF;
+}
+
+.product .product-img .product-label > span.best {
+  background-color: #F0F921;
+  border-color: #F0F921;
+  color: #000;
 }
 
 .product .product-body {

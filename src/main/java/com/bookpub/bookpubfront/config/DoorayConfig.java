@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * Some description here
+ * 두레이 훅을 이용하기위한 config 클래스.
  *
  * @author : 임태원
  * @since : 1.0

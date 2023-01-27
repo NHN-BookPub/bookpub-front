@@ -1,16 +1,16 @@
 package com.bookpub.bookpubfront.member.service;
 
+import com.bookpub.bookpubfront.dto.AuthDto;
 import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.token.exception.TokenNotIssuedException;
 import com.bookpub.bookpubfront.token.util.JwtUtil;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import com.bookpub.bookpubfront.utils.Utils;
@@ -39,7 +39,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisTemplate<String, AuthDto> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
 
@@ -63,39 +63,31 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void login(LoginMemberRequestDto loginMemberRequestDto, HttpSession session) {
-        ResponseEntity<Void> jwtResponse = memberAdaptor.loginRequest(loginMemberRequestDto);
-
-        String accessToken = Objects.requireNonNull(jwtResponse.getHeaders().get("Authorization")).get(0);
-
-        if (Objects.isNull(accessToken)) {
-            throw new TokenNotIssuedException();
-        }
-
-        session.setAttribute(JwtUtil.JWT_SESSION, accessToken);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public void logout(HttpServletResponse response, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
-            redisTemplate.opsForHash().delete((String) authentication.getPrincipal(), authentication.getCredentials());
-
-            session.removeAttribute(JwtUtil.JWT_SESSION);
-
-            Cookie jwtCookie = Utils.findJwtCookie();
-
-            if (Objects.nonNull(jwtCookie)) {
-                jwtCookie.setMaxAge(0);
-                jwtCookie.setValue(null);
-                jwtCookie.setPath("/");
-                response.addCookie(jwtCookie);
+            Cookie jwtCookie = Utils.findCookie(JwtUtil.JWT_COOKIE);
+            if (Objects.isNull(jwtCookie)) {
+                SecurityContextHolder.clearContext();
+                return;
             }
 
+            Cookie sessionCookie = Utils.findCookie(Utils.SESSION_COOKIE);
+            if (Objects.isNull(session)) {
+                SecurityContextHolder.clearContext();
+                return;
+            }
+
+            jwtCookie.setMaxAge(0);
+            jwtCookie.setValue("");
+            sessionCookie.setMaxAge(0);
+            sessionCookie.setValue("");
+
+            redisTemplate.opsForHash().delete(Utils.AUTHENTICATION, Utils.SESSION_COOKIE);
+
+            response.addCookie(jwtCookie);
+            response.addCookie(sessionCookie);
             SecurityContextHolder.clearContext();
         }
     }
@@ -105,8 +97,8 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void modifyMemberNickName(Long memberNo, ModifyMemberNickNameRequestDto dto) {
-        memberAdaptor.requestMemberNickNameChange(memberNo, dto);
+    public void modifyMemberNickName(Long memberNo, String nickname) {
+        memberAdaptor.requestMemberNickNameChange(memberNo, nickname);
     }
 
 
@@ -114,8 +106,8 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void modifyMemberEmail(Long memberNo, ModifyMemberEmailRequestDto dto) {
-        memberAdaptor.requestMemberEmailChange(memberNo, dto);
+    public void modifyMemberEmail(Long memberNo, String email) {
+        memberAdaptor.requestMemberEmailChange(memberNo, email);
     }
 
 
@@ -160,13 +152,76 @@ public class MemberServiceImpl implements MemberService {
         return memberAdaptor.requestMemberTierStatics();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean idDuplicateCheck(String id) {
         return Boolean.TRUE.equals(memberAdaptor.idDuplicateCheck(id).getBody());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean nickDuplicateCheck(String nickname) {
         return Boolean.TRUE.equals(memberAdaptor.nickDuplicateCheck(nickname).getBody());
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberName(Long memberNo,
+                                 String name){
+        memberAdaptor.requestMemberNameChange(memberNo, name);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberPhone(Long memberNo, String phone) {
+        memberAdaptor.requestMemberPhoneChange(memberNo, phone);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberPassword(Long memberNo, String password) {
+        memberAdaptor.requestMemberPasswordChange(memberNo, password);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public MemberPasswordResponseDto getMemberPassword(Long memberNo) {
+        return memberAdaptor.requestMemberPassword(memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyMemberAddress(Long memberNo, Long addressNo) {
+        memberAdaptor.requestMemberBaseAddressChange(memberNo, addressNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addMemberAddress(Long memberNo, MemberAddressRequestDto requestDto) {
+        memberAdaptor.requestMemberAddressAdd(memberNo, requestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteMemberAddress(Long memberNo, Long addressNo) {
+        memberAdaptor.requestMemberAddressDelete(memberNo, addressNo);
     }
 }

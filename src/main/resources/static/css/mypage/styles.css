@@ -122,12 +122,12 @@ a {
 
 /* Expander menu */
 .expander {
-    width: calc(var(--nav--width) + 9.25rem);
+    width: calc(var(--nav--width) + 7.25rem);
 }
 
 /* Add padding body*/
 .body-pd {
-    padding: 0 0 0 15rem;
+    padding: 0 0 0 7rem;
 }
 
 /* Active links menu */

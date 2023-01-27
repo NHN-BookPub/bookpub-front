@@ -15,6 +15,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class MemberDetailResponseDto {
     private Long memberNo;
+    private String memberName;
     private String tierName;
     private String nickname;
     private String gender;
@@ -23,5 +24,8 @@ public class MemberDetailResponseDto {
     private String phone;
     private String email;
     private Long point;
-    private List<String> authority;
+
+    private List<String> authorities;
+
+    private List<MemberAddressResponseDto> addresses;
 }

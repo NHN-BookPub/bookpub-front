@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.product.service.impl;
 
+import com.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
 import com.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
@@ -25,6 +26,9 @@ public class ProductServiceImpl implements ProductService {
 
     private final ProductAdaptor productAdaptor;
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createCategory(InputProductFormRequestDto dto, List<Integer> tagList) {
         dto.setSalePrice(dto.getProductPrice(), dto.getSaleRate());
@@ -73,18 +77,43 @@ public class ProductServiceImpl implements ProductService {
         productAdaptor.requestCreateProduct(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<GetProductListResponseDto> findAllProducts(Pageable pageable) {
         return productAdaptor.requestProducts(pageable);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void setProductDeleted(Long productNo) {
         productAdaptor.requestSetProductDeleted(productNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GetProductDetailResponseDto findProduct(Long productNo) {
         return productAdaptor.requestProductDetail(productNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetProductByTypeResponseDto> findProductsByType(Integer typeNo, Integer limit) {
+        return productAdaptor.requestProductByType(typeNo, limit);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetProductDetailResponseDto> findProductInCart(List<Long> productsNo) {
+        return productAdaptor.requestProductInCart(productsNo);
     }
 }

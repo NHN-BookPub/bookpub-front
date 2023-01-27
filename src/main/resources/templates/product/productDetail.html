@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BookPub</title>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        .product-detail-price {
+            color: #ff6666;
+            font-size: 20px;
+        }
+
+        .product-badge {
+            background-color: #FFB437;
+            border: solid;
+            border-color: #F89B00;
+            color: black;
+        }
+
+        .product-info-head {
+            text-align: center;
+            font-size: 18px;
+            background-color: #ebebeb;
+        }
+
+        .product-info-body {
+            padding-left: 3%;
+            font-size: 18px;
+        }
+
+    </style>
+
+</head>
+<body>
+<!-- HEADER -->
+<th:block th:include="main/fragments/rootHeader"></th:block>
+<!-- /HEADER -->
+
+<div class="container" style="padding-top: 3%">
+
+    <div class="row">
+        <div class="col-sm-3">
+            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img-thumbnail" alt=""
+                 style="width: 250px; height: 300px">
+        </div>
+        <div class="col-sm-7">
+            <div class="row mb-3" style="display: none">
+                <p id="productNo" th:text="${product.productNo}"></p>
+            </div>
+
+
+            <div class="row mb-3">
+                <label class="col-sm-3">제목</label>
+                <div class="col-sm-9" th:text="${product.title}"></div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">저자</label>
+                <div class="col-sm-9">
+                    <span th:each="author : ${product.authors}">
+                        <span style="font-size: 14px" th:text="${author}"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">카테고리</label>
+                <div class="col-sm-9">
+                    <span th:each="category : ${product.categories}">
+                        <span style="font-size: 14px" th:text="${category}"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">태그</label>
+                <div class="col-sm-9">
+                    <span th:each="tag: ${product.tags}">
+                        <span class="badge bg-info product-badge" th:text="${tag}"></span>
+                    </span>
+                </div>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">출판사</label>
+                <div class="col-sm-9">
+                    <span th:text="${product.productPublisher}"></span>
+                </div>
+            </div>
+
+            <div class="row" mb-3>
+                <label class="col-sm-3">출판일</label>
+                <div class="col-sm-9">
+                    <span th:text="${#temporals.format(product.publishDate, 'yyyy년 MM월 dd일')}"></span>
+                </div>
+            </div>
+
+            <div class="row" mb-3>
+                <label class="col-sm-3">리뷰</label>
+                <div class="col-sm-9">
+                    <i class="fa fa-star" style="color: #fd7e14"></i>
+                    <i class="fa fa-star" style="color: #fd7e14"></i>
+                    <i class="fa fa-star" style="color: #fd7e14"></i>
+                    <i class="fa fa-star" style="color: #fd7e14"></i>
+                    <i class="fa fa-star" style="color: #fd7e14"></i>
+                    <strong style="font-size: 22px">5점</strong> <i>회원리뷰(7건)</i>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">정가</label>
+                <del class="col-sm-9 product-old-price" th:text="${product.productPrice}+'원'"></del>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">판매가</label>
+                <h3 class="col-sm-9 product-detail-price"
+                    th:text="${product.salesPrice}+'원 (' + ${product.salesRate} +'% 할인)'"></h3>
+            </div>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">포인트</label>
+                <div class="col-sm-9">
+                    <div th:if="${product.policySaved}">
+                        <span th:text="${product.policyMethod} +'의 ' + ${product.policySaveRate} + '% 적립'"></span>
+                    </div>
+                    <div th:unless="${product.policySaved}">
+                        <span style="color: red">포인트 적립 X</span>
+                    </div>
+                </div>
+            </div>
+
+            <hr/>
+
+            <div class="row mb-3">
+                <label class="col-sm-3">배송비</label>
+                <div class="col-sm-9">
+                    <p th:text="${deliveryFee} + '원'"></p>
+                    <i><span th:text="${free} + '원 이상 주문시 무료'" style="font-size: 12px"></span></i>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="col-sm-2">
+            <div class="row text-center">
+                <button class="btn btn-primary" id="confirmStart" style="width: 80%;">장바구니 담기</button>
+            </div>
+
+            <hr/>
+
+            <div class="row text-center">
+                <form action="" method="post">
+                    <button type="submit" class="btn btn-info" style="width: 80%">바로 주문</button>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <hr/>
+
+    <div class="row">
+        <div>
+            <h2 style="padding-bottom: 2%">책 정보</h2>
+
+            <table style="width: 80%;" class="table table-bordered">
+                <colgroup>
+                    <col width="170">
+                    <col width="*">
+                </colgroup>
+                <tbody>
+                <tr style="border: 1px">
+                    <th class="product-info-head">발행일</th>
+                    <td th:text="${#temporals.format(product.publishDate, 'yyyy년 MM월 dd일')}"
+                        class="product-info-body"></td>
+                </tr>
+
+                <tr>
+                    <th class="product-info-head">페이지 수</th>
+                    <td th:text="${product.pageCount} +'쪽'" class="product-info-body"></td>
+                </tr>
+
+                <tr>
+                    <th class="product-info-head">ISBN</th>
+                    <td th:text="${product.productIsbn}" class="product-info-body"></td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+
+    <hr/>
+
+    <div class="row">
+        <div>
+            <h2 style="padding-bottom: 2%">책 설명</h2>
+
+            <p th:text="${product.productDescription}" style="font-size: 18px"></p>
+        </div>
+
+    </div>
+
+    <hr/>
+
+    <div class="row" style="background-color: #d0e9c6">
+        리뷰
+    </div>
+
+    <hr/>
+
+    <div class="row" style="background-color: #86b7fe">
+        문의
+
+    </div>
+
+</div>
+
+<!-- FOOTER -->
+<th:block th:include="main/fragments/rootFooter"></th:block>
+<!-- /FOOTER -->
+
+
+</body>
+<!-- jQuery Plugins -->
+<script src="/static/js/main/jquery.min.js"></script>
+<script src="/static/js/main/bootstrap.min.js"></script>
+<script src="/static/js/main/slick.min.js"></script>
+<script src="/static/js/main/nouislider.min.js"></script>
+<script src="/static/js/main/jquery.zoom.min.js"></script>
+<script src="/static/js/main/main.js"></script>
+
+<script>
+    const productNo = $('#productNo').text();
+
+    $().ready(function () {
+        $("#confirmStart").click(function () {
+            console.log(productNo)
+            Swal.fire({
+                title: '카트에 담으시겠습니까?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/cart/add",
+                        data: {"productNo": productNo},
+                        dataType: "json"
+                    })
+                }
+            })
+        });
+    });
+</script>
+</html>

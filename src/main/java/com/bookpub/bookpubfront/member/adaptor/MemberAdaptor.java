@@ -1,14 +1,15 @@
 package com.bookpub.bookpubfront.member.adaptor;
 
 import com.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberEmailRequestDto;
-import com.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNameRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
+import com.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
@@ -30,18 +31,18 @@ public interface MemberAdaptor {
     /**
      * 멤버 닉네임을 변경하기위한 메서드입니다.
      *
-     * @param memberNo  멤버 번호가 기입.
-     * @param requestDto 수정할 닉네임 기입.
+     * @param memberNo 멤버 번호가 기입.
+     * @param nickname 수정할 닉네임 기입.
      */
-    void requestMemberNickNameChange(Long memberNo, ModifyMemberNickNameRequestDto requestDto);
+    void requestMemberNickNameChange(Long memberNo, String nickname);
 
     /**
      * 이메일을 변경할때 쓰이는 메서드입니다.
      *
-     * @param memberNo   멤버 번호가 기입.
-     * @param requestDto 변경할 이메일 번호가 기입.
+     * @param memberNo 멤버 번호가 기입.
+     * @param email    변경할 이메일 번호가 기입.
      */
-    void requestMemberEmailChange(Long memberNo, ModifyMemberEmailRequestDto requestDto);
+    void requestMemberEmailChange(Long memberNo, String email);
 
     /**
      * 멤버의 상세정보를 받기위하여 쓰이는 메서드입니다.
@@ -80,12 +81,21 @@ public interface MemberAdaptor {
      */
     List<MemberTierStatisticsResponseDto> requestMemberTierStatics();
 
-    /** 로그인을 위해 auth 서버와 통신하는 메소드.
+    /**
+     * 로그인을 위해 auth 서버와 통신하는 메소드.
      *
      * @param loginRequest 로그인을 위한 멤버정보가 들어있는 요청 dto.
      * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
      */
     ResponseEntity<Void> loginRequest(LoginMemberRequestDto loginRequest);
+
+    /**
+     * 유저가 활동중일 때 토큰의 만료기간이 가까워지면 재발급 요청하는 메소드.
+     *
+     * @param accessToken 유저의 인증 토큰.
+     * @return auth 서버에서 재발급된 토큰을 헤더에 담아 응답해 준다.
+     */
+    ResponseEntity<Void> tokenReIssueRequest(String accessToken);
 
     /**
      * 아이디 중복체크를 위해 통신 메소드.
@@ -102,4 +112,69 @@ public interface MemberAdaptor {
      * @return 중복여부 true, false
      */
     ResponseEntity<Boolean> nickDuplicateCheck(String nickname);
+
+    /**
+     * 회원의 이름을 수정하기위한 메서드입니다.
+     *
+     * @param memberNo 회원 번호 기입
+     * @param name     회원 명
+     */
+    void requestMemberNameChange(Long memberNo, String name);
+
+    /**
+     * 회원의 휴대폰 번호를 수정하기위한 메서드입니다.
+     *
+     * @param memberNo 회원 번호 기입
+     * @param phone    휴대전화 번호 기입
+     */
+    void requestMemberPhoneChange(Long memberNo, String phone);
+
+    /**
+     * 회원의 비밀 번호를 받기위해 사용되는 메서드 입니다.
+     *
+     * @param memberNo 회원의 번호가 기입.
+     * @return 회원의 encoding 된 값이 반환됩니다.
+     */
+    MemberPasswordResponseDto requestMemberPassword(Long memberNo);
+
+    /**
+     * 회원의 비밀번호를 변경할때 사용되는 메서드입니다.
+     *
+     * @param memberNo 회원의 번호
+     * @param password 변경할 raw 패스워드
+     */
+    void requestMemberPasswordChange(Long memberNo, String password);
+
+    /**
+     * 회원의 베이스 주소를 변경할때 사용되는 메서드입니다.
+     *
+     * @param memberNo  회원 번호
+     * @param addressNo 변경할 raw 패스워드
+     */
+    void requestMemberBaseAddressChange(Long memberNo, Long addressNo);
+
+
+    /**
+     * 회원의 주소를 추가하기위한 메서드입니다.
+     *
+     * @param memberNo   회원번호가 기입됩니다.
+     * @param requestDto 새로 생성될 주소에대한 정보가 들어있습니다.
+     */
+    void requestMemberAddressAdd(Long memberNo, MemberAddressRequestDto requestDto);
+
+    /**
+     * 회원의 주소정보를 삭제하기위한 메서드입니다.
+     *
+     * @param memberNo  회원번호
+     * @param addressNo 주소번호
+     */
+    void requestMemberAddressDelete(Long memberNo, Long addressNo);
+
+    /**
+     * shop서버에 accessToken을 보내 멤버의 정보를 얻어오는 메소드.
+     *
+     * @param accessToken accessToken -> 추후 없어질 예정.
+     * @return 인증받은 유저의 정보.
+     */
+    MemberLoginResponseDto requestAuthMemberInfo(String accessToken);
 }
