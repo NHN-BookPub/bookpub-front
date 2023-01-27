@@ -43,12 +43,15 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     protected void doFilterInternal(
             HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) {
         try {
+            log.warn("error");
+
             if (request.getRequestURI().contains(".js")
                     || request.getRequestURI().contains(".css")
                     || request.getRequestURI().contains(".png")) {
                 filterChain.doFilter(request, response);
                 return;
             }
+            log.warn("error2");
 
             Cookie sessionCookie = Utils.findCookie(SESSION_COOKIE);
             if (Objects.isNull(sessionCookie)) {
@@ -56,7 +59,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
             String sessionId = Objects.requireNonNull(sessionCookie).getValue();
-
+            log.warn(sessionId);
             AuthDto auth =
                     (AuthDto) redisTemplate.opsForHash().get(AUTHENTICATION, sessionId);
 
@@ -64,6 +67,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 filterChain.doFilter(request, response);
                 return;
             }
+            log.warn(auth.toString());
 
             if (Objects.isNull(Utils.findCookie(JwtUtil.JWT_COOKIE))) {
                 filterChain.doFilter(request, response);
@@ -71,13 +75,15 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             }
 
             List<SimpleGrantedAuthority> authorities = Utils.makeAuthorities(auth.getAuthorities());
-
+            log.warn(authorities.toString());
             SecurityContext context = SecurityContextHolder.getContext();
             context.setAuthentication(new UsernamePasswordAuthenticationToken(
                     auth.getMemberNo(),
                     auth.getMemberPwd(),
                     authorities)
             );
+
+            log.warn(context.toString());
 
 
             filterChain.doFilter(request, response);
