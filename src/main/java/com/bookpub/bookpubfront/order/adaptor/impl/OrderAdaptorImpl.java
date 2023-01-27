@@ -62,7 +62,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
             Pageable pageable, Long memberNo) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "/member?page=" + pageable.getOffset() + "&size=10&no=" + pageable.getPageSize();
+                + "/member?page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize() + "&no=" + memberNo;
 
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
