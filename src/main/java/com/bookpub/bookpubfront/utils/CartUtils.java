@@ -28,11 +28,11 @@ public class CartUtils {
         Cookie[] cookies = request.getCookies();
         Integer count = 0;
 
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().contains(PRODUCT)) {
-                count++;
-            }
-        }
+//        for (Cookie cookie : cookies) {
+//            if (cookie.getName().contains(PRODUCT)) {
+//                count++;
+//            }
+//        }
 
         model.addAttribute("cartCount", count);
     }
