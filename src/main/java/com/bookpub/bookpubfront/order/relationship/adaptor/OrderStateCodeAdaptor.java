@@ -2,7 +2,6 @@ package com.bookpub.bookpubfront.order.relationship.adaptor;
 
 import com.bookpub.bookpubfront.order.relationship.dto.CreateOrderStateCodeRequestDto;
 import com.bookpub.bookpubfront.order.relationship.dto.GetOrderStateCodeResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 /**
@@ -31,11 +30,9 @@ public interface OrderStateCodeAdaptor {
      * 주문상태코드를 등록합니다.
      *
      * @param requestDto 등록용 Dto
-     * @throws JsonProcessingException Json 변환시 발생할 수 있는 예외.
      */
     void createOrderStateCodeRequest(
-            CreateOrderStateCodeRequestDto requestDto)
-            throws JsonProcessingException;
+            CreateOrderStateCodeRequestDto requestDto);
 
     /**
      * 사용여부를 수정합니다.

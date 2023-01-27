@@ -1,11 +1,11 @@
 package com.bookpub.bookpubfront.order.relationship.adaptor.impl;
 
 import static com.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
+import static com.bookpub.bookpubfront.utils.Utils.checkError;
+import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.order.relationship.adaptor.OrderProductStateCodeAdaptor;
 import com.bookpub.bookpubfront.order.relationship.dto.CreateOrderProductStateCodeRequestDto;
 import com.bookpub.bookpubfront.order.relationship.dto.GetOrderProductStateCodeResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,7 +22,6 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAdaptor {
-    private final ObjectMapper mapper;
     private final RestTemplate restTemplate;
     private static final String ORDER_PRODUCT_URL = getGatewayUrl() + "/api/state/orderproducts";
 
@@ -34,10 +33,10 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
         ResponseEntity<List<GetOrderProductStateCodeResponseDto>> response =
                 restTemplate.exchange(ORDER_PRODUCT_URL,
                         HttpMethod.GET,
-                        new HttpEntity<>(getHttpHeaders()),
-                        new ParameterizedTypeReference<List<GetOrderProductStateCodeResponseDto>>() {});
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<>() {});
 
-        return checkError(response).getBody();
+        return (List<GetOrderProductStateCodeResponseDto>) checkError(response).getBody();
     }
 
     /**
@@ -49,10 +48,10 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
         ResponseEntity<GetOrderProductStateCodeResponseDto> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
-                        new HttpEntity<>(getHttpHeaders()),
-                        new ParameterizedTypeReference<GetOrderProductStateCodeResponseDto>() {});
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<>() {});
 
-        return checkError(response).getBody();
+        return (GetOrderProductStateCodeResponseDto) checkError(response).getBody();
     }
 
     /**
@@ -60,13 +59,12 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
      */
     @Override
     public void createOrderProductStateCodeRequest(
-            CreateOrderProductStateCodeRequestDto requestDto)
-            throws JsonProcessingException {
-        String url = ORDER_PRODUCT_URL;
-        String request = mapper.writeValueAsString(requestDto);
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, getHttpHeaders());
+            CreateOrderProductStateCodeRequestDto requestDto) {
+        HttpEntity<CreateOrderProductStateCodeRequestDto> httpEntity =
+                new HttpEntity<>(requestDto, makeHeader());
+
         ResponseEntity<Void> response =
-                restTemplate.exchange(url,
+                restTemplate.exchange(ORDER_PRODUCT_URL,
                         HttpMethod.POST,
                         httpEntity,
                         Void.class);
@@ -83,40 +81,9 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
         ResponseEntity<Void> response =
                 restTemplate.exchange(url,
                         HttpMethod.PUT,
-                        new HttpEntity<>(getHttpHeaders()),
+                        new HttpEntity<>(makeHeader()),
                         Void.class);
 
         checkError(response);
-    }
-
-    /**
-     * 에러를 체크하기 위한 메서드입니다.
-     * 400, 500번대 에러를 거릅니다.
-     *
-     * @param response ResponseEntity 받습니다.
-     * @return 에러가 없으면 그대로 반환합니다.
-     * @param <T> 지네릭 타입입니다.
-     */
-    private <T> ResponseEntity<T> checkError(ResponseEntity<T> response) {
-        HttpStatus status = response.getStatusCode();
-
-        if (status.is4xxClientError() || status.is5xxServerError()) {
-            throw new RuntimeException();
-        }
-
-        return response;
-    }
-
-
-    /**
-     * 콘텐트 타입이 지정된 헤더를 반환하는 메서드입니다.
-     *
-     * @return JSon 헤더를 반환합니다.
-     */
-    private HttpHeaders getHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
     }
 }

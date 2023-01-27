@@ -4,7 +4,6 @@ import com.bookpub.bookpubfront.pricepolicy.adaptor.PricePolicyAdaptor;
 import com.bookpub.bookpubfront.pricepolicy.dto.CreatePricePolicyRequestDto;
 import com.bookpub.bookpubfront.pricepolicy.dto.GetPricePolicyResponseDto;
 import com.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -24,7 +23,7 @@ public class PricePolicyServiceImpl implements PricePolicyService {
      * {@inheritDoc}
      */
     @Override
-    public void createPricePolicy(CreatePricePolicyRequestDto requestDto) throws JsonProcessingException {
+    public void createPricePolicy(CreatePricePolicyRequestDto requestDto){
         pricePolicyAdaptor.createOrderStateCodeRequest(requestDto);
     }
 

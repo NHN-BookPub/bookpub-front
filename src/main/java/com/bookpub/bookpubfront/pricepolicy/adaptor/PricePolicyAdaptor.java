@@ -2,7 +2,6 @@ package com.bookpub.bookpubfront.pricepolicy.adaptor;
 
 import com.bookpub.bookpubfront.pricepolicy.dto.CreatePricePolicyRequestDto;
 import com.bookpub.bookpubfront.pricepolicy.dto.GetPricePolicyResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 /**
@@ -22,26 +21,24 @@ public interface PricePolicyAdaptor {
     /**
      * 번호로 가격정책을 조회합니다.
      *
-     * @param codeNo
-     * @return
+     * @param codeNo 번호
+     * @return 가격정책을 반환합니다.
      */
     GetPricePolicyResponseDto getPricePolicyByCodeNoRequest(Integer codeNo);
 
     /**
      * 가격정책을 등록합니다.
      *
-     * @param requestDto
-     * @throws JsonProcessingException
+     * @param requestDto dto
      */
     void createOrderStateCodeRequest(
-            CreatePricePolicyRequestDto requestDto)
-            throws JsonProcessingException;
+            CreatePricePolicyRequestDto requestDto);
 
     /**
      * 가격정책의 가격을 수정합니다.
      *
-     * @param codeNo
-     * @param fee
+     * @param codeNo 번호
+     * @param fee 수정할 가격
      */
     void modifyPricePolicyFeeUsedRequest(Integer codeNo, Long fee);
 }

@@ -2,7 +2,6 @@ package com.bookpub.bookpubfront.pricepolicy.service;
 
 import com.bookpub.bookpubfront.pricepolicy.dto.CreatePricePolicyRequestDto;
 import com.bookpub.bookpubfront.pricepolicy.dto.GetPricePolicyResponseDto;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import java.util.List;
 
 /**
@@ -16,9 +15,8 @@ public interface PricePolicyService {
      * 가격정책을 등록합니다.
      *
      * @param requestDto 등록을 위한 Dto.
-     * @throws JsonProcessingException Json 매핑시 가능한 예외.
      */
-    void createPricePolicy(CreatePricePolicyRequestDto requestDto) throws JsonProcessingException;
+    void createPricePolicy(CreatePricePolicyRequestDto requestDto);
 
     /**
      * 가격정책의 가격을 수정합니다.
