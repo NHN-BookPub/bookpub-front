@@ -4,7 +4,6 @@ import com.bookpub.bookpubfront.product.dto.response.GetProductListForOrderRespo
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -16,7 +15,6 @@ import lombok.NoArgsConstructor;
  **/
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 public class GetOrderListResponseDto {
     private Long orderNo;
     private List<GetProductListForOrderResponseDto> orderProducts = new ArrayList<>();
