@@ -34,16 +34,12 @@
             }
         }
     </script>
-
     <script>
-        var modal = document.getElementById("member_address");
-
         function myAddress() {
+            var modal = document.getElementById("member_addresses");
             modal.style.display = "flex"
         }
     </script>
-
-
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
@@ -127,13 +123,14 @@
                                                        title="이름 입력"
                                                        maxlength="10"
                                                        data-order-info-info="input_name"
-                                                       th:value="${#authentication.getPrincipal()!='anonymousUser' ? member : ''}">
+                                                       th:value="${#authentication.getPrincipal()!='anonymousUser' ? member.memberName : ''}">
                                             </div>
                                             <div class="col_box"
                                                  style="display: flex; flex-direction: column; gap: 4px">
                                                 <input type="tel" class="form_ip" placeholder="휴대폰 번호를 ‘-’없이 입력해주세요"
                                                        title="휴대폰 번호 입력"
-                                                       maxlength="11" data-order-info-info="input_phone">
+                                                       maxlength="11" data-order-info-info="input_phone"
+                                                       th:value="${#authentication.getPrincipal()!='anonymousUser' ? member.phone : ''}">
                                                 <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>
                                             </div>
                                         </div>
@@ -232,7 +229,9 @@
                                     <td>
                                         <div class="number_value_box size_def">
                                         <span class="point">
-                                            <span id="userPoint" class="val fc_spot">7000</span>
+                                            <span id="userPoint"
+                                                  class="val fc_spot"
+                                                  th:text="${#authentication.getPrincipal() != 'anonymousUser' ?member.point :'0'}"></span>
                                             <span class="unit">원</span>
                                         </span>
                                         </div>
@@ -383,7 +382,7 @@
             <!-- 선물포장 선택 버튼-->
             <div class="gift_choose_wrap">
                 <div class="gift_choose">
-                    <span style="padding-left: 13px;">🎁선물 포장 옵션 <strong>(+2000)</strong></span>
+                    <span style="padding-left: 13px;">🎁 선물 포장 옵션 <strong>(+2000)</strong></span>
                     <input style="width: 17px; height: 17px; margin: 0;" type="checkbox" onclick="gift()" id="gift">
                 </div>
             </div>
@@ -406,6 +405,7 @@
     }
 </script>
 
+
 <th:block th:include="main/fragments/rootFooter"></th:block>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
@@ -418,7 +418,7 @@
 <script src="/static/js/main/main.js"></script>
 </body>
 
-<div id="member_address" class="modal-overlay">
+<div id="member_addresses" class="modal-overlay">
     <div id="modal_box">
         <h2>회원 주소 목록</h2>
         <table class="member-address-tbl">
@@ -427,18 +427,19 @@
                 <th class="member-address">상세 주소</th>
                 <th class="member-address">기준 주소</th>
             </tr>
-            <tr th:each="address, num : ${address}" th:id="'address' + ${num.index}"
+            <tr th:each="address, num : ${member.addresses}" th:id="'address' + ${num.index}"
                 class="address-info" onclick="saveAddress(this.id)">
-                <td class="member-address" th:id="'roadAddr' + ${num.index}" th:text="${address.getRoadAddress()}"></td>
+                <td class="member-address" th:id="'roadAddr' + ${num.index}"
+                    th:text="${address.roadAddress}"></td>
                 <td class="member-address" th:id="'detailAddr' + ${num.index}"
-                    th:text="${address.getAddressDetail()}"></td>
-                <td class="member-address" th:text="${address.isAddressMemberBased()}"></td>
+                    th:text="${address.addressDetail}"></td>
+                <td class="member-address" th:text="${address.addressBased}"></td>
             </tr>
         </table>
     </div>
 </div>
 <script>
-    var modal = document.getElementById("member_address");
+    var modal = document.getElementById("member_addresses");
 
     modal.addEventListener("click", e => {
         const evTarget = e.target
@@ -453,6 +454,5 @@
         }
     })
 </script>
-
 
 </html>

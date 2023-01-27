@@ -17,7 +17,7 @@ function saveAddress(id) {
     document.getElementById("roadAddress").value = roadText
     document.getElementById("detailAddress").value = detailText
 
-    var modal = document.getElementById("member_address");
+    var modal = document.getElementById("member_addresses");
     modal.style.display = 'none';
 }
 

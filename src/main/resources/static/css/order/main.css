@@ -340,7 +340,7 @@ summary {
     gap: 10px;
 }
 
-#member_address {
+#member_addresses {
     display: none;
     position: fixed;
     z-index: 999;
