@@ -57,6 +57,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             if (Objects.isNull(sessionCookie)) {
                 log.warn("session Cookie null");
                 filterChain.doFilter(request, response);
+                log.warn("error 1223");
                 return;
             }
             String sessionId = Objects.requireNonNull(sessionCookie).getValue();
