@@ -208,7 +208,7 @@ summary {
     line-height: 24px;
     letter-spacing: -0.01em;
     font-weight: 700;
-    padding: 24px 10px 12px 24px;
+    padding: 24px 10px 12px 42px;
     vertical-align: top;
 }
 
@@ -216,11 +216,11 @@ summary {
     font-size: 15px;
     line-height: 23px;
     letter-spacing: -0.01em;
-    padding: 12px 30px 12px 10px;
+    padding: 12px 30px 12px 60px;
 
     text-align: left;
-    color: #767676;
-    font-weight: 400;
+    color: black;
+    font-weight: 500;
 }
 
 .form_col_group {
@@ -353,12 +353,75 @@ summary {
 
 #modal_box {
     position: absolute;
-    top: calc(50vh - 100px);
-    left: calc(50vw - 200px);
+    top: calc(50vh - 420px);
+    left: calc(50vw - 308px);
     background-color: white;
-    display: flex; justify-content: center;
-    align-items: center;
+    display: flex;
+    justify-content: start;
     border-radius: 10px;
-    width: 400px;
-    height: 200px;
+    width: 650px;
+    height: 850px;
+    align-items: center;
+    padding: 30px;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.member-address {
+    font-size: 16px;
+    padding: 16px 7px;
+    text-align: center;
+}
+
+.member-address-tbl {
+    border: 1px solid black;
+    width: 100%;
+}
+
+.address_header {
+    border: 1px solid black;
+}
+
+.address-info {
+    border-bottom: 1px solid black;
+}
+
+#address0:hover, #address1:hover, #address2:hover, #address3:hover, #address4:hover,
+#address5:hover, #address6:hover, #address7:hover, #address8:hover, #address9:hover {
+    background-color: #e2e2e2;
+    cursor: pointer;
+}
+
+.number_value_box {
+    padding: 0 35px;
+    margin-left: 50px;
+}
+
+.input_price_box {
+    max-width: 300px;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+}
+
+.gift_choose_wrap {
+    width: 273px;
+    position: absolute;
+    right: 0;
+    top: 380px;
+    border: 1px solid #b2b1b1;
+    border-radius: 12px;
+    background-color: #fff;
+}
+
+.gift_choose {
+    padding: 13px;
+    border-radius: 10px;
+    background: #fff;
+    font-size: 15px;
+    font-weight: 500;
+    display: flex;
+    gap: 11px;
+    align-items: center;
 }

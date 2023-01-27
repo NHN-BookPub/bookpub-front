@@ -19,6 +19,6 @@ public class OrderServiceImpl implements OrderService {
     private final OrderAdaptor orderAdaptor;
     @Override
     public List<GetAddressResponseDto> getMemberAddresses() {
-        return null;
+        return orderAdaptor.getMemberAddresses();
     }
 }

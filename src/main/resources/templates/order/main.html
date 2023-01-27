@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -37,6 +37,7 @@
 
     <script>
         var modal = document.getElementById("member_address");
+
         function myAddress() {
             modal.style.display = "flex"
         }
@@ -53,11 +54,11 @@
             <!--            주문 컨테이너-->
             <div class="cart_body_inner">
                 <section>
-                    <!--                    주문상품 컨테이너-->
+                    <!-- 주문상품 컨테이너-->
                     <div class="payment_body_wrap">
                         <details class="item-tip tbl_prod_wrap ordering" open="">
                             <summary onclick="revert()">
-                                <span style="font-size: 23px;">주문 상품</span>
+                                <span style="font-size: 19px;">주문 상품</span>
                                 <span class="prod_cnt" th:text="x개"></span>
                                 <div class="img-wrapper">
                                     <img id="arrow" class="btn-img" src="/static/img/main/down-arrow.svg">
@@ -109,9 +110,8 @@
                             </table>
                         </details>
                     </div>
-                    <!--                    주문자 정보입력 컨테이너-->
-                    <div class="payment_body_wrap"
-                         th:style="${#authentication.getPrincipal() == 'anonymousUser' ? 'display:block' : 'display:none'}">
+                    <!-- 주문인 정보입력 컨테이너-->
+                    <div class="payment_body_wrap">
                         <div class="tbl_row_wrap">
                             <table>
                                 <colgroup>
@@ -119,14 +119,15 @@
                                     <col style="width: auto">
                                 </colgroup>
                                 <tr>
-                                    <th scope="row" class="has_ip">주문자 정보 입력</th>
+                                    <th scope="row" class="has_ip">주문인 정보 입력</th>
                                     <td class="col-box-wrapper">
                                         <div class="form_col_group">
                                             <div class="col_box">
                                                 <input type="text" class="form_ip" placeholder="주문인 이름을 입력해주세요."
                                                        title="이름 입력"
                                                        maxlength="10"
-                                                       data-order-info-info="input_name">
+                                                       data-order-info-info="input_name"
+                                                       th:value="${#authentication.getPrincipal()!='anonymousUser' ? member : ''}">
                                             </div>
                                             <div class="col_box"
                                                  style="display: flex; flex-direction: column; gap: 4px">
@@ -141,9 +142,8 @@
                             </table>
                         </div>
                     </div>
-                    <!--                    비회원 배송지 정보 컨테이너-->
-                    <div class="payment_body_wrap"
-                         th:style="${#authentication.getPrincipal() == 'anonymousUser' ? 'display:block' : 'display:none'}">
+                    <!-- 배송지 정보 컨테이너-->
+                    <div class="payment_body_wrap">
                         <div class="tbl_row_wrap">
                             <table>
                                 <colgroup>
@@ -168,19 +168,19 @@
                                                 <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>
                                             </div>
                                             <div class="col_box">
-                                                <input type="text" class="form_ip" name="roadAddress"
+                                                <input type="text" class="form_ip" name="roadAddress" id="roadAddress"
                                                        placeholder="도로명주소" required
                                                        onclick="findAddress()">
                                             </div>
                                             <div class="col_box">
-                                                <input type="text" class="form_ip"
+                                                <input type="text" class="form_ip" id="detailAddress"
                                                        name="detailAddress"
                                                        placeholder="상세주소"
                                                        required>
                                             </div>
                                             <div class="col_box btn_box">
                                                 <div class="btn_wrapper"
-                                                     th:style="${#authentication.getPrincipal() == 'anonymousUser' ? 'display:block' : 'display:none'}">
+                                                     th:style="${#authentication.getPrincipal() != 'anonymousUser' ? 'display:block' : 'display:none'}">
                                                     <input class="checkBtn" type="button" onclick="myAddress()"
                                                            value="내 주소 보기"><br>
                                                 </div>
@@ -195,12 +195,111 @@
                             </table>
                         </div>
                     </div>
+                    <!-- 쿠폰 사용 컨테이너-->
+                    <div class="payment_body_wrap">
+                        <div class="tbl_row_wrap">
+                            <table>
+                                <colgroup>
+                                    <col style="width: 210px">
+                                    <col style="width: auto">
+                                </colgroup>
+                                <tr>
+                                    <th scope="row" class="has_ip">할인쿠폰</th>
+                                </tr>
+                                <td class="col-box-wrapper">
+                                    <div class="col-box">
 
+                                    </div>
+                                </td>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 포인트 사용 컨테이너-->
+                    <div class="payment_body_wrap">
+                        <div class="tbl_row_wrap">
+                            <table>
+                                <colgroup>
+                                    <col style="width: 210px">
+                                    <col style="width: auto">
+                                </colgroup>
+                                <tr>
+                                    <th scope="row" class="has_ip">포인트</th>
+                                </tr>
+                                <tr>
+                                    <th scope="row" class="has_ip" style="font-size: 17px;padding-left: 80px;">
+                                        <label for="tbl-point">포인트 잔액</label>
+                                    </th>
+                                    <td>
+                                        <div class="number_value_box size_def">
+                                        <span class="point">
+                                            <span id="userPoint" class="val fc_spot">7000</span>
+                                            <span class="unit">원</span>
+                                        </span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="input_btn_price_box">
+                                            <div class="input_price_box">
+                                                <input type="text" id="tbl-point" class="form_ip" value="0"
+                                                       style="text-align: end; font-weight: 500; padding-right: 10px">
+                                                <span class="unit">원</span>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="btn_wrapper" style="margin-left: 25px">
+                                            <input class="checkBtn" type="button"
+                                                   onclick="usePoint()" value="포인트 사용"><br>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                    <!-- 배송일자 지정 컨테이너-->
+                    <div class="payment_body_wrap">
+                        <table>
+                            <colgroup>
+                                <col style="width: 210px">
+                                <col style="width: auto">
+                            </colgroup>
+                            <tr>
+                                <th scope="row" class="has_ip">배송일자 지정</th>
+                                <td class="col-box-wrapper">
+                                    <div class="form_col_group">
+                                        <div class="col_box">
+                                            <input type="datetime-local" class="form_ip" id="datetime" name="datetime">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <!-- 배송 요청사항 컨테이너-->
+                    <div class="payment_body_wrap">
+                        <table>
+                            <colgroup>
+                                <col style="width: 210px">
+                                <col style="width: auto">
+                            </colgroup>
+                            <tr>
+                                <th scope="row" class="has_ip">배송 요청사항</th>
+                                <td class="col-box-wrapper">
+                                    <div class="form_col_group">
+                                        <div class="col_box">
+                                            <input type="text" class="form_ip" placeholder="배송 요청사항을 입력해주세요."
+                                                   title="요청사항">
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </section>
             </div>
 
-            <!--            결제컨테이너-->
-            <div class="cart_info_wrap" style="top:0;">
+            <!-- 결제컨테이너-->
+            <div class="cart_info_wrap">
                 <div class="payments_info_area">
                     <div class="payments_info_box">
                         <h2 class="hidden">결제금액</h2>
@@ -227,7 +326,7 @@
                                 <p class="label2">선물포장</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" data-amount="present">0</span>
+                                        <span class="val" id="gift-price">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                 </div>
@@ -245,7 +344,7 @@
                                 <p class="label2">포인트 사용</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" data-amount="pointDiscount">0</span>
+                                        <span id="usePoint" class="val" data-amount="pointDiscount">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                 </div>
@@ -281,10 +380,31 @@
                     </button>
                 </div>
             </div>
+            <!-- 선물포장 선택 버튼-->
+            <div class="gift_choose_wrap">
+                <div class="gift_choose">
+                    <span style="padding-left: 13px;">🎁선물 포장 옵션 <strong>(+2000)</strong></span>
+                    <input style="width: 17px; height: 17px; margin: 0;" type="checkbox" onclick="gift()" id="gift">
+                </div>
+            </div>
         </div>
     </div>
 </div>
 
+
+<script>
+    document.getElementById('datetime').value = new Date().toISOString().substring(0, 19);
+</script>
+<script>
+    function gift() {
+        let giftOption = document.getElementById('gift');
+        if (giftOption.checked === true) {
+            document.getElementById("gift-price").innerText = "2000";
+        } else {
+            document.getElementById("gift-price").innerText = "0";
+        }
+    }
+</script>
 
 <th:block th:include="main/fragments/rootFooter"></th:block>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
@@ -300,7 +420,21 @@
 
 <div id="member_address" class="modal-overlay">
     <div id="modal_box">
-        <h2>test</h2>
+        <h2>회원 주소 목록</h2>
+        <table class="member-address-tbl">
+            <tr class="address_header">
+                <th class="member-address">도로명 주소</th>
+                <th class="member-address">상세 주소</th>
+                <th class="member-address">기준 주소</th>
+            </tr>
+            <tr th:each="address, num : ${address}" th:id="'address' + ${num.index}"
+                class="address-info" onclick="saveAddress(this.id)">
+                <td class="member-address" th:id="'roadAddr' + ${num.index}" th:text="${address.getRoadAddress()}"></td>
+                <td class="member-address" th:id="'detailAddr' + ${num.index}"
+                    th:text="${address.getAddressDetail()}"></td>
+                <td class="member-address" th:text="${address.isAddressMemberBased()}"></td>
+            </tr>
+        </table>
     </div>
 </div>
 <script>
