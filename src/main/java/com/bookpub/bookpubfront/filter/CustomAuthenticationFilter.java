@@ -55,6 +55,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
 
             Cookie sessionCookie = Utils.findCookie(SESSION_COOKIE);
             if (Objects.isNull(sessionCookie)) {
+                log.warn("session Cookie null");
                 filterChain.doFilter(request, response);
                 return;
             }

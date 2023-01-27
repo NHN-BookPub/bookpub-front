@@ -6,6 +6,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -20,6 +21,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
  * @author : 유호철, 임태원
  * @since : 1.0
  */
+@Slf4j
 public class Utils {
     public static final String AUTHENTICATION = "SPRING_SECURITY_CONTEXT";
     public static final String SESSION_COOKIE = "auth-session";
@@ -48,11 +50,15 @@ public class Utils {
     public static Cookie findCookie(String cookieName) {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        log.warn("servletRequestAtt null : {}", servletRequestAttributes);
         HttpServletRequest request = servletRequestAttributes.getRequest();
+        log.warn("request null : {}", request);
 
         if (Objects.isNull(request.getCookies())) {
             return null;
         }
+
+        log.warn("---------");
 
         return Arrays.stream(request.getCookies())
                 .filter(cookie -> cookie.getName().equals(cookieName))
@@ -76,8 +82,8 @@ public class Utils {
      * 400, 500번대 에러를 거릅니다.
      *
      * @param response ResponseEntity 받습니다.
+     * @param <T>      지네릭 타입입니다.
      * @return 에러가 없으면 그대로 반환합니다.
-     * @param <T> 지네릭 타입입니다.
      */
     public static <T> ResponseEntity<T> checkError(ResponseEntity response) {
         HttpStatus status = response.getStatusCode();
