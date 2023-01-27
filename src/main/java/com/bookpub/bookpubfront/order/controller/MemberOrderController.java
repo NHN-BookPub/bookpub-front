@@ -2,10 +2,10 @@ package com.bookpub.bookpubfront.order.controller;
 
 import com.bookpub.bookpubfront.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -21,9 +21,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MemberOrderController {
     private final OrderService orderService;
 
-    @GetMapping("/list/{page}")
-    public String orderListView(Model model, @PathVariable Integer page) {
-        model.addAttribute("orderList", orderService.getOrderListByMemberNo(397L, page));
+    @GetMapping("/list")
+    public String orderListView(Model model, Pageable pageable) {
+        model.addAttribute("orderList", orderService.getOrderListByMemberNo(397L, pageable));
 
         return "mypage/orderList";
     }

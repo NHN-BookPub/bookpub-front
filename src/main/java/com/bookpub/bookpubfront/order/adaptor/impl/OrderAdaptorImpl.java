@@ -1,5 +1,7 @@
 package com.bookpub.bookpubfront.order.adaptor.impl;
 
+import static com.bookpub.bookpubfront.utils.Utils.checkError;
+import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
@@ -8,12 +10,9 @@ import com.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.bookpub.bookpubfront.state.OrderState;
 import com.bookpub.bookpubfront.state.anno.StateCode;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.List;
-import javax.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.*;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -27,7 +26,6 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class OrderAdaptorImpl implements OrderAdaptor {
-    private final ObjectMapper mapper;
     private final RestTemplate restTemplate;
     private static final String ORDER_URL = "/api/orders";
 
@@ -35,11 +33,9 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void createOrderRequest(CreateOrderRequestDto requestDto)
-            throws JsonProcessingException {
-        String request = mapper.writeValueAsString(requestDto);
+    public void createOrderRequest(CreateOrderRequestDto requestDto) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL;
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, getHttpHeaders());
+        HttpEntity<CreateOrderRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.POST, httpEntity, Void.class);
 
@@ -50,31 +46,31 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getAllOrdersRequest(@Min(0) Integer page) {
+    public PageResponse<GetOrderListResponseDto> getAllOrdersRequest(Pageable pageable) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "?page=" + page + "&size=10";
+                + "?page=" + pageable.getOffset() + "&size=" + pageable.getPageSize()     ;
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
-                        new HttpEntity<>(getHttpHeaders()),
+                        new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>(){});
 
-        return checkError(response).getBody();
+        return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
     }
 
     @Override
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
-            @Min(0) Integer page, Long memberNo) {
+            Pageable pageable, Long memberNo) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "/member?page=" + page + "&size=10&no=" + memberNo;
+                + "/member?page=" + pageable.getOffset() + "&size=10&no=" + pageable.getPageSize();
 
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
-                        new HttpEntity<>(getHttpHeaders()),
+                        new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>() {});
 
-        return checkError(response).getBody();
+        return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
     }
 
     /**
@@ -85,10 +81,11 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL + "/" + orderNo;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
-                        new HttpEntity<>(getHttpHeaders()),
-                        new ParameterizedTypeReference<GetOrderDetailResponseDto>() {});
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<>() {
+                        });
 
-        return checkError(response).getBody();
+        return (GetOrderDetailResponseDto) checkError(response).getBody();
     }
 
     /**
@@ -100,7 +97,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 + "/" + orderNo + "/invoice?no=" + invoiceNo;
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
-                        new HttpEntity<>(getHttpHeaders()),
+                        new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>() {});
 
         checkError(response);
@@ -118,40 +115,9 @@ public class OrderAdaptorImpl implements OrderAdaptor {
 
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
-                        new HttpEntity<>(getHttpHeaders()),
+                        new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>() {});
 
         checkError(response);
-    }
-
-    /**
-     * 에러를 체크하기 위한 메서드입니다.
-     * 400, 500번대 에러를 거릅니다.
-     *
-     * @param response ResponseEntity 받습니다.
-     * @return 에러가 없으면 그대로 반환합니다.
-     * @param <T> 지네릭 타입입니다.
-     */
-    private <T> ResponseEntity<T> checkError(ResponseEntity<T> response) {
-        HttpStatus status = response.getStatusCode();
-
-        if (status.is4xxClientError() || status.is5xxServerError()) {
-            throw new RuntimeException();
-        }
-
-        return response;
-    }
-
-
-    /**
-     * 콘텐트 타입이 지정된 헤더를 반환하는 메서드입니다.
-     *
-     * @return JSon 헤더를 반환합니다.
-     */
-    private HttpHeaders getHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
     }
 }

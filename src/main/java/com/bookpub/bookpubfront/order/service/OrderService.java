@@ -4,7 +4,7 @@ import com.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
 import com.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
 import com.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 주문 어답터와 연결되는 서비스입니다.
@@ -17,10 +17,8 @@ public interface OrderService {
      * 주문을 등록합니다.
      *
      * @param requestDto 등록에 필요한 Dto.
-     * @throws JsonProcessingException Json 매핑시 발생가능한 예외.
      */
-    void createOrder(CreateOrderRequestDto requestDto)
-            throws JsonProcessingException;
+    void createOrder(CreateOrderRequestDto requestDto);
 
     /**
      * 송장번호를 수정합니다.
@@ -49,17 +47,17 @@ public interface OrderService {
     /**
      * 모든 주문의 리스트를 반환합니다.
      *
-     * @param page 페이지 넘버.
+     * @param pageable 페이지.
      * @return 페이지 객체.
      */
-    PageResponse<GetOrderListResponseDto> getOrderList(Integer page);
+    PageResponse<GetOrderListResponseDto> getOrderList(Pageable pageable);
 
     /**
      * 회원 번호로 모든 주문 리스트를 반환합니다.
      *
      * @param memberNo 회원번호.
-     * @param page 페이지 넘버.
+     * @param pageable 페이지.
      * @return 페이지 객체.
      */
-    PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Integer page);
+    PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Pageable pageable);
 }

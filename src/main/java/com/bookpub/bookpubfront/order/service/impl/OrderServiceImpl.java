@@ -6,8 +6,8 @@ import com.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
 import com.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.bookpub.bookpubfront.order.service.OrderService;
 import com.bookpub.bookpubfront.utils.PageResponse;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,8 +25,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public void createOrder(CreateOrderRequestDto requestDto)
-            throws JsonProcessingException {
+    public void createOrder(CreateOrderRequestDto requestDto) {
         orderAdaptor.createOrderRequest(requestDto);
     }
 
@@ -58,15 +57,15 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getOrderList(Integer page) {
-        return orderAdaptor.getAllOrdersRequest(page);
+    public PageResponse<GetOrderListResponseDto> getOrderList(Pageable pageable) {
+        return orderAdaptor.getAllOrdersRequest(pageable);
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Integer page) {
-        return orderAdaptor.getAllOrdersByMemberNoRequest(page, memberNo);
+    public PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Pageable pageable) {
+        return orderAdaptor.getAllOrdersByMemberNoRequest(pageable, memberNo);
     }
 }
