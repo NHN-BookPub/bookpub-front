@@ -1,6 +1,5 @@
 package com.bookpub.bookpubfront.utils;
 
-import com.bookpub.bookpubfront.token.util.JwtUtil;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
