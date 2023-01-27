@@ -3,6 +3,7 @@ package com.bookpub.bookpubfront.utils;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ui.Model;
 
 /**
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
  * @author : 박경서
  * @since : 1.0
  **/
+@Slf4j
 public class CartUtils {
 
     private static final String PRODUCT = "product";
@@ -25,7 +27,9 @@ public class CartUtils {
      * @param model   view 요청을 담을 객체
      */
     public static void getCountInCart(HttpServletRequest request, Model model) {
+        log.warn("실행");
         Cookie[] cookies = request.getCookies();
+        log.warn("cookies : {}", cookies);
         Integer count = 0;
 
         for (Cookie cookie : cookies) {
