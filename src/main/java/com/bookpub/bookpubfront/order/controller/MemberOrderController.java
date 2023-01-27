@@ -24,11 +24,12 @@ public class MemberOrderController {
     @GetMapping("/list")
     public String orderListView(Model model, Pageable pageable) {
         model.addAttribute("orderList", orderService.getOrderListByMemberNo(397L, pageable));
+        model.addAttribute("nowPage", pageable.getPageNumber());
 
         return "mypage/orderList";
     }
 
-    @GetMapping()
+    @GetMapping
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
