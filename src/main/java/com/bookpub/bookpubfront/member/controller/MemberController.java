@@ -141,14 +141,10 @@ public class MemberController {
     /**
      * 로그인 화면을 보여주는 메소드.
      *
-     * @param model   html에 동적인 정보를 전달해주는 객체.
-     * @param request 페이지의 요청정보가 담겨있는 객체.
      * @return 로그인 화면.
      */
     @GetMapping("/login")
-    public String loginPageForm(Model model, HttpServletRequest request) {
-        model.addAttribute("sessionId", request.getSession().getId());
-
+    public String loginPageForm() {
         return "member/login";
     }
 
