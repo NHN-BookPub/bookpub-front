@@ -1,9 +1,6 @@
 package com.bookpub.bookpubfront.order.service.impl;
 
-import com.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
-import com.bookpub.bookpubfront.order.dto.response.GetAddressResponseDto;
 import com.bookpub.bookpubfront.order.service.OrderService;
-import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -16,9 +13,4 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class OrderServiceImpl implements OrderService {
-    private final OrderAdaptor orderAdaptor;
-    @Override
-    public List<GetAddressResponseDto> getMemberAddresses() {
-        return orderAdaptor.getMemberAddresses();
-    }
 }

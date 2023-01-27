@@ -1,12 +1,10 @@
 package com.bookpub.bookpubfront.order.adaptor;
 
 import com.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
-import com.bookpub.bookpubfront.order.dto.response.GetAddressResponseDto;
 import com.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import java.util.List;
 import javax.validation.constraints.Min;
 
 /**
@@ -22,6 +20,4 @@ public interface OrderAdaptor {
     PageResponse<GetOrderListResponseDto> getAllOrdersRequest(@Min(0) Integer page);
 
     GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo);
-
-    List<GetAddressResponseDto> getMemberAddresses();
 }

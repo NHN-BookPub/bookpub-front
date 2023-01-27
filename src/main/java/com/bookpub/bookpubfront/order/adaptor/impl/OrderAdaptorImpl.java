@@ -1,11 +1,8 @@
 package com.bookpub.bookpubfront.order.adaptor.impl;
 
-import static com.bookpub.bookpubfront.utils.Utils.makeHeader;
-
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
-import com.bookpub.bookpubfront.order.dto.response.GetAddressResponseDto;
 import com.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.bookpub.bookpubfront.utils.PageResponse;
@@ -74,17 +71,6 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                         });
 
         return checkError(response).getBody();
-    }
-
-    @Override
-    public List<GetAddressResponseDto> getMemberAddresses() {
-        return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/api/address",
-                HttpMethod.GET,
-                new HttpEntity<>(makeHeader()),
-                new ParameterizedTypeReference<List<GetAddressResponseDto>>() {
-                }
-        ).getBody();
     }
 
     private <T> ResponseEntity<T> checkError(ResponseEntity<T> response) {
