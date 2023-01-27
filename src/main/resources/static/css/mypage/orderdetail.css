@@ -389,3 +389,28 @@
     margin-top: 8px;
 }
 
+.btn_page_prev {
+    background: url("/static/img.mypage/page_prev.png") center no-repeat;
+    width: 24px;
+    height: 24px;
+}
+
+.btn_page_next {
+    background: url("/static/img.mypage/page_next.png") center no-repeat;
+    width: 24px;
+    height: 24px;
+}
+
+.pagination {
+    display: block;
+    text-align: center;
+    font-size: 0;
+    margin-top: 30px;
+}
+
+.page_num {
+    display: inline-block;
+    margin: 0 8px;
+    box-sizing: border-box;
+    vertical-align: top;
+}

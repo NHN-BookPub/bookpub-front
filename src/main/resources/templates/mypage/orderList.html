@@ -1,10 +1,148 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>주문목록</title>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BookPub - 주문 목록</title>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
 </head>
 <body>
-    <h1>라영 안녕</h1>
+<!-- HEADER -->
+<th:block th:include="main/fragments/rootHeader"></th:block>
+<!-- /HEADER -->
+</br>
+
+<div class="container">
+    <section class="section_wrap">
+        <h3>주문 목록</h3>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+            <div class="order_summary_box" th:each="order : ${orderList.getContent()}">
+                <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
+                <div class="box_header"
+                     th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
+                    <div class="label">
+                        <span class="order_date"
+                              th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd')}"></span>
+                        <span class="gap">|</span>
+                        <span class="order_num">주문번호 <span class="num" th:text="${order.getOrderNo()}"></span></span>
+                        <span class="gap">|</span>
+                        <span class="order_num">송장번호 <span class="num" th:text="${order.getInvoiceNo()}"></span></span>
+                        <span class="gap">|</span>
+                        <span class="order_num">상태 <span class="num" th:text="${order.getOrderState()}"></span></span>
+                        <span class="gap">|</span>
+                        <span class="order_num">결제금액 <span class="num"
+                                                           th:text="${order.getTotalAmount()}"></span></span>
+                        <span class="gap">|</span>
+                        <span class="order_num">배송일 <span class="num"
+                                                          th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
+                    </div>
+                    <div class="right_box">
+                        <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span
+                                class="ico_arw_white"></span></button>
+                    </div>
+                </div>
+                <table class="tbl_prod">
+                    <colgroup>
+                        <col />
+                        <col style="width: 164px;" />
+                        <col style="width: 180px;" />
+                        <col style="width: 130px;" />
+                    </colgroup>
+                    <thead class="hidden">
+                    <tr>
+                        <th scope="col">상품정보</th>
+                        <th scope="col">금액</th>
+                        <th scope="col">배송정보</th>
+                        <th scope="col"></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="product : ${order.getOrderProducts()}">
+                        <td class="prod_img">
+                            <div class="prod_area horizontal">
+                                <div class="prod_thumb_box size_sm">
+                                        <span class="img_box">
+                                            <!-- 이미지 박스 -->
+                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img_thumbnail"/>
+                                        </span>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td class="prod">
+                                <span class="badge_sm badge_bookpub">
+                                    <span class="text">BookPub 직배송!</span>
+                                </span>
+                            <a href="/">
+                                <h3 th:text="${product.getTitle()}"></h3>
+                            </a>
+                            <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
+                        </td>
+
+                        <td class="prod">
+                                <span class="price">
+                                    <span class="val" th:text="${product.getSalesPrice()}"></span>
+                                    <span class="unit">원</span>
+                                </span>
+                        </td>
+
+                        <td class="prod">
+                            <div class="btn_wrap full">
+                            </div>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+        </br>
+        </br>
+    </section>
+
+    <div style="display: flex; flex-direction: column; gap: 15px">
+        <div class="pagination">
+            <button class="btn_page_prev" th:onclick="|location.href='../orders/list?page='+ ${nowPage -1} + '&size=10'|">
+                <span class="hidden">이전</span>
+            </button>
+<!--            <div class="page_num" th:each="page : ${#numbers.sequence(0, orderList.getTotalPages() -1 )}">-->
+<!--                <a th:href="'?page='+ ${page} + '&size=10'" title="현재페이지" th:text="${page} + 1"></a>-->
+<!--            </div>-->
+            <button class="btn_page_next" th:onclick="|location.href='../orders/list?page='+ ${nowPage + 1} + '&size=10'|">
+                <span class="hidden">다음</span>
+            </button>
+        </div>
+    </div>
+<!--    th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|"-->
+
+
+</div>
+</br>
+</br>
+
+<!-- FOOTER -->
+<th:block th:include="main/fragments/rootFooter"></th:block>
+<!-- /FOOTER -->
+
+<!-- jQuery Plugins -->
+<script src="/static/js/main/jquery.min.js"></script>
+<script src="/static/js/main/bootstrap.min.js"></script>
+<script src="/static/js/main/slick.min.js"></script>
+<script src="/static/js/main/nouislider.min.js"></script>
+<script src="/static/js/main/jquery.zoom.min.js"></script>
 </body>
 </html>
