@@ -44,24 +44,28 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         ResponseEntity<Void> jwtResponse
                 = memberAdaptor.loginRequest(loginMemberRequestDto);
 
-        Long expireTime = Long.parseLong(
-                Objects.requireNonNull(
-                        jwtResponse.getHeaders().get(JwtUtil.EXP_HEADER)).get(0)
-        );
-
-        String accessToken =
-                Objects.requireNonNull(jwtResponse.getHeaders().get("Authorization"))
-                        .get(0).substring(JwtUtil.TOKEN_TYPE.length());
+        Long expireTime = getExpireTime(jwtResponse);
+        String accessToken = getAccessToken(jwtResponse);
 
         UsernamePasswordAuthenticationToken token =
                 new UsernamePasswordAuthenticationToken(accessToken, password);
 
-        Cookie cookie =
-                makeJwtCookie(accessToken, expireTime);
+        Cookie cookie = makeJwtCookie(accessToken, expireTime);
 
         response.addCookie(cookie);
 
         return getAuthenticationManager().authenticate(token);
+    }
+
+    private static String getAccessToken(ResponseEntity<Void> jwtResponse) {
+        return Objects.requireNonNull(jwtResponse.getHeaders()
+                .get("Authorization")).get(0).substring(JwtUtil.TOKEN_TYPE.length());
+    }
+
+    private static Long getExpireTime(ResponseEntity<Void> jwtResponse) {
+        return Long.parseLong(
+                Objects.requireNonNull(
+                        jwtResponse.getHeaders().get(JwtUtil.EXP_HEADER)).get(0));
     }
 
     @Override
