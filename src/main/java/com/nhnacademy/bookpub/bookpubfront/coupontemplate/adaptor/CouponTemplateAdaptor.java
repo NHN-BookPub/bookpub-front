@@ -1,10 +1,11 @@
-package com.nhnacademy.bookpub.bookpubfront.coupontemplate.adaptor;
+package com.bookpub.bookpubfront.coupontemplate.adaptor;
 
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
+import com.bookpub.bookpubfront.utils.PageResponse;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -52,4 +53,12 @@ public interface CouponTemplateAdaptor {
      * @return the boolean
      */
     boolean existTemplateCheck(Long templateNo);
+
+    /**
+     * 오브젝트 스토리지 접근을 위해 정보를 받아오는 메서드입니다.
+     *
+     * @param templateNo 템플릿 번호
+     * @return 스토리지 접근을 위한 정보를 담은 Dto
+     */
+    GetDownloadInfo requestDownloadFile(Long templateNo);
 }

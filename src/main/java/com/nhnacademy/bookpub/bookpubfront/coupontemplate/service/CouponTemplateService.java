@@ -1,10 +1,10 @@
 package com.nhnacademy.bookpub.bookpubfront.coupontemplate.service;
 
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
+import com.bookpub.bookpubfront.utils.PageResponse;
 import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 
@@ -54,4 +54,21 @@ public interface CouponTemplateService {
      * @return the boolean
      */
     boolean existTemplateCheck(Long templateNo);
+
+    /**
+     * 오브젝트 스토리지 접근을 위한 정보를 반환하기 위한 메서드입니다.
+     *
+     * @param templateNo 템플릿 번호
+     * @return 스토리지 접근을 위한 정보를 담은 Dto
+     */
+    GetDownloadInfo downloadInfo(Long templateNo);
+
+    /**
+     * 파일을 다운로드 받을 때 사용하는 메서드입니다.
+     *
+     * @param path  파일 경로
+     * @param token 오브젝트 스토리지 접근을 위한 토큰
+     * @return 파일
+     */
+    byte[] downloadFile(String path, String token);
 }

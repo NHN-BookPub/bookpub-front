@@ -1,14 +1,16 @@
-package com.nhnacademy.bookpub.bookpubfront.coupontemplate.adaptor.impl;
+package com.bookpub.bookpubfront.coupontemplate.adaptor.impl;
 
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.adaptor.CouponTemplateAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
-import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
+import com.bookpub.bookpubfront.config.GateWayConfig;
+import com.bookpub.bookpubfront.coupontemplate.adaptor.CouponTemplateAdaptor;
+import com.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
+import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
+import com.bookpub.bookpubfront.utils.PageResponse;
+import com.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -30,6 +32,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author : 정유진
  * @since : 1.0
  **/
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
@@ -151,6 +154,24 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         if (response.is2xxSuccessful())
             return true;
         else return false;
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GetDownloadInfo requestDownloadFile(Long templateNo) {
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo + "/download";
+
+        ResponseEntity<GetDownloadInfo> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                GetDownloadInfo.class
+        );
+
+        checkError(response);
+
+        return response.getBody();
     }
 
     /**
