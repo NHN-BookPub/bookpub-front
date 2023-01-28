@@ -15,7 +15,6 @@ import com.bookpub.bookpubfront.utils.PageResponse;
 import java.io.IOException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -33,7 +32,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
  **/
 @Controller
 @RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/admin")
 public class AdminCouponTemplateController {
     private final CouponTemplateService couponTemplateService;
@@ -54,8 +52,6 @@ public class AdminCouponTemplateController {
         List<GetCouponTypeResponseDto> couponTypeList = couponTypeService.getCouponTypes();
         List<GetCouponStateCodeResponseDto> couponStateCodeList = couponStateCodeService.getCouponStateCodes();
         List<GetCouponPolicyResponseDto> couponPolicyList = couponPolicyService.getCouponPolicies();
-
-        log.info(couponTemplates.getContent().get(0).getTemplateImage());
 
         model.addAttribute("couponTypeList", couponTypeList);
         model.addAttribute("couponStateCodeList", couponStateCodeList);
