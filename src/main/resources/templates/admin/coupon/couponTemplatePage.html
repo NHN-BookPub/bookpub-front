@@ -121,7 +121,8 @@
 
                                     <div class="form-group">
                                         <label for="fileUpload">쿠폰 이미지</label>
-                                        <input type="file" id="fileUpload" name="templateImage" accept="image/*"/>
+<!--                                        <input type="file" id="fileUpload" name="templateImage" accept="image/*"/>-->
+                                            <input type="file" id="fileUpload" name="templateImage"/>
                                     </div>
 
                                     <div class="form-group">
@@ -210,8 +211,9 @@
                         <tr th:each="couponTemplate : ${couponTemplateList}">
                             <td th:text="${couponTemplate.templateNo}"></td>
                             <td th:text="${couponTemplate.templateName}"></td>
-                            <td><img class="img-fluid"
-                                     th:src="@{'data:image/*;base64,'+${couponTemplate.templateImage}}" alt="이미지 없음"/>
+                            <td>
+                                <img class="img-fluid"
+                                     th:src="${couponTemplate.templateImage}" alt="이미지 없음"/>
                             </td>
                             <td th:text="${#temporals.format(couponTemplate.finishedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td>

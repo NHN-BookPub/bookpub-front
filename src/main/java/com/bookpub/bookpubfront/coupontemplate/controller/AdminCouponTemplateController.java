@@ -81,12 +81,10 @@ public class AdminCouponTemplateController {
         List<GetCouponStateCodeResponseDto> couponStateCodeList = couponStateCodeService.getCouponStateCodes();
         List<GetCouponPolicyResponseDto> couponPolicyList = couponPolicyService.getCouponPolicies();
 
-
         model.addAttribute("couponTemplate", couponTemplate);
         model.addAttribute("couponTypeList", couponTypeList);
         model.addAttribute("couponStateCodeList", couponStateCodeList);
         model.addAttribute("couponPolicyList", couponPolicyList);
-
 
         return "admin/coupon/couponTemplateDetail";
     }
