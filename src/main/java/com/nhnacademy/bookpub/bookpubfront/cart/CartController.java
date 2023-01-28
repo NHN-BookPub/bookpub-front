@@ -1,19 +1,20 @@
-package com.bookpub.bookpubfront.cart;
+package com.nhnacademy.bookpub.bookpubfront.cart;
 
-import com.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
-import com.bookpub.bookpubfront.product.service.ProductService;
-import com.bookpub.bookpubfront.utils.CartUtils;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
+import java.util.Objects;
+import java.util.Set;
 import javax.servlet.http.Cookie;
-import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -33,32 +34,34 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @RequiredArgsConstructor
 public class CartController {
 
-    private static final String PRODUCT = "product";
+    private static final String CART = "CART";
     private final ProductService productService;
     private final ObjectMapper objectMapper;
+    private final CartUtils cartUtils;
+    private final RedisTemplate<String, Object> redisTemplate;
 
     /**
      * 장바구니를 View 메서드.
      *
-     * @param request HttpServletRequest
-     * @param model   view 요청을 보낼 request
+     * @param model view 요청을 보낼 request
      * @return 장바구니 화면
      */
     @GetMapping
-    public String cartView(HttpServletRequest request, Model model) {
-        CartUtils.getCountInCart(request, model);
+    public String cartView(@CookieValue(name = CART, required = false) Cookie cookie,
+                           Model model) {
+        if (Objects.nonNull(redisTemplate.opsForSet().size(cookie.getValue()))) {
+            Set<Object> objects = redisTemplate.opsForSet().members(cookie.getValue());
 
-        Cookie[] cookies = request.getCookies();
-        List<Long> productsNo = new ArrayList<>();
-
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().contains(PRODUCT)) {
-                productsNo.add(Long.parseLong(cookie.getValue()));
+            List<Long> productNos = new ArrayList<>();
+            for (Object object : objects) {
+                productNos.add(Long.valueOf(object.toString()));
             }
-        }
 
-        List<GetProductDetailResponseDto> products = productService.findProductInCart(productsNo);
-        model.addAttribute("products", products);
+            cartUtils.getCountInCart(cookie.getValue(), model);
+
+            List<GetProductDetailResponseDto> products = productService.findProductInCart(productNos);
+            model.addAttribute("products", products);
+        }
 
         return "cart/shoppingCart";
     }
@@ -67,18 +70,12 @@ public class CartController {
      * 장바구니에 쿠키를 저장하는 메서드.
      *
      * @param productNo 상품 번호
-     * @param response  HttpServletResponse
      * @return 상품 번호
      */
-    @PostMapping("/add")
-    public @ResponseBody Object addProductToCart(Long productNo,
-                                                 HttpServletResponse response) {
-        String uuid = UUID.randomUUID().toString();
-
-        Cookie cookie = new Cookie(uuid + "-" + PRODUCT, String.valueOf(productNo));
-        cookie.setPath("/");
-        cookie.setMaxAge(86400);
-        response.addCookie(cookie);
+    @PostMapping
+    public @ResponseBody Object addProductToCart(@CookieValue(name = CART) Cookie cookie,
+                                                 Long productNo) {
+        redisTemplate.opsForSet().add(cookie.getValue(), productNo);
 
         return productNo;
     }
@@ -113,10 +110,4 @@ public class CartController {
         return jsonData;
     }
 
-    @GetMapping("/order")
-    public String order(@CookieValue(value = "orderInfo", required = false) String orderInfo, Model model) {
-        model.addAttribute("info", orderInfo);
-
-        return "cart/tmp";
-    }
 }
