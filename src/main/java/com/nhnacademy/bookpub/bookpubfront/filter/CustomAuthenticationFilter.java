@@ -6,6 +6,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
+import java.io.IOException;
 import java.util.List;
 import java.util.Objects;
 import javax.servlet.FilterChain;

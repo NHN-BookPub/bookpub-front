@@ -1,12 +1,13 @@
-package com.bookpub.bookpubfront.interceptor;
+package com.nhnacademy.bookpub.bookpubfront.interceptor;
 
-import static com.bookpub.bookpubfront.token.util.JwtUtil.JWT_COOKIE;
-import static com.bookpub.bookpubfront.token.util.JwtUtil.MILL_SEC;
 
-import com.bookpub.bookpubfront.annotation.Auth;
-import com.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.bookpub.bookpubfront.token.util.JwtUtil;
-import com.bookpub.bookpubfront.utils.Utils;
+import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.JWT_COOKIE;
+import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.MILL_SEC;
+
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
+import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
+import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;

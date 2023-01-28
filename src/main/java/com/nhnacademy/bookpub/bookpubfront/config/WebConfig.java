@@ -1,6 +1,6 @@
-package com.bookpub.bookpubfront.config;
+package com.nhnacademy.bookpub.bookpubfront.config;
 
-import com.bookpub.bookpubfront.interceptor.TokenCheckInterceptor;
+import com.nhnacademy.bookpub.bookpubfront.interceptor.TokenCheckInterceptor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
