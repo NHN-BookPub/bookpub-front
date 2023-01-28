@@ -144,18 +144,20 @@
                                 <div class="form-group">
                                     <label for="change_nickname">닉네임 기입</label>
                                     <input type="text" class="form-control"
+                                           id="nickname"
                                            placeholder="닉네임을 입력해주세요" name="exchangeNickname"
                                            pattern="^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$"
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.</div>
                                 </div>
+                                <button class="btn btn-outline-success" type="button" onclick="nickCheckFunc()">중복확인</button>
 
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                                <button type="submit" class="btn btn-primary nickname-btn">등록</button>
+                                <button type="submit" id="nick-submit" class="btn btn-primary nickname-btn" disabled>등록</button>
                             </form>
                         </div>
-                    </div>
+                    </div>임
                 </div>
             </div>
             <!-- 닉네임 변경모달           -->
@@ -383,7 +385,6 @@
                             <td th:if="${address.addressBased}">
                                 기준주소지
                             </td>
-                            <
                             <td th:unless="${address.addressBased}">
                                 <form th:action="'/members/' + ${member.memberNo} +'/addresses/' +${address.addressNo}"
                                       method="post">
