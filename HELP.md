@@ -1,7 +1,8 @@
 # Read Me First
 The following was discovered as part of building this project:
 
-* The original package name 'com.bookpub.bookpub-front' is invalid and this project uses 'com.bookpub.bookpubfront' instead.
+* The original package name 'com.nhnacademy.bookpub.bookpub-front' is invalid and this project uses '
+  com.nhnacademy.bookpub.bookpubfront' instead.
 
 # Getting Started
 
