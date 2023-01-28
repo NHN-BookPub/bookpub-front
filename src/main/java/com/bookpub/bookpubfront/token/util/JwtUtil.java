@@ -1,6 +1,5 @@
 package com.bookpub.bookpubfront.token.util;
 
-import java.util.Date;
 import javax.servlet.http.Cookie;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -31,13 +30,12 @@ public class JwtUtil {
      * @return Cookie.
      */
     public static Cookie makeJwtCookie(String accessToken, Long expireTime) {
-        Long now = new Date().getTime();
-        int maxAge = (int) ((expireTime - now) / MILL_SEC);
+        String tokenInfo = accessToken + "." + expireTime;
 
-        Cookie cookie = new Cookie(JwtUtil.JWT_COOKIE, accessToken);
+        Cookie cookie = new Cookie(JwtUtil.JWT_COOKIE, tokenInfo);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(maxAge);
+        cookie.setMaxAge(-1);
         return cookie;
     }
 }
