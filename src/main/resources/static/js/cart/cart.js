@@ -58,7 +58,7 @@ function order() {
 
         success: function () {
             alert('결제하러가기')
-            window.location = '/cart/order';
+            window.location = '/orders';
         }
     })
 }
