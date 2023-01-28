@@ -214,7 +214,6 @@
                             <td>
                                 <img class="img-fluid"
                                      th:src="${couponTemplate.templateImage}" alt="이미지 없음"/>
-<!--                                     th:src="@{'data:image/*;base64,'+${couponTemplate.templateImage}}" alt="이미지 없음"/>-->
                             </td>
                             <td th:text="${#temporals.format(couponTemplate.finishedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
                             <td>
