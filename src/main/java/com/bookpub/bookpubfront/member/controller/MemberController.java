@@ -1,5 +1,6 @@
 package com.bookpub.bookpubfront.member.controller;
 
+import com.bookpub.bookpubfront.annotation.Auth;
 import com.bookpub.bookpubfront.config.GateWayConfig;
 import com.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
 import com.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
@@ -119,7 +120,8 @@ public class MemberController {
     public String adminMemberBlock(@PathVariable("memberNo") Long memberNo,
                                    Pageable pageable) {
         memberService.memberBlock(memberNo);
-        return "redirect:/admin/members?page=" + pageable.getPageNumber() + "?size=" + pageable.getPageSize();
+        return "redirect:/admin/members?page="
+                + pageable.getPageNumber() + "?size=" + pageable.getPageSize();
     }
 
     /**
@@ -129,12 +131,11 @@ public class MemberController {
      * @param model    모델.
      * @return 멤버의 개인정보 페이지로 이동.
      */
+    @Auth
     @GetMapping("/members/{memberNo}")
-    public String memberInfo(@PathVariable("memberNo") Long memberNo,
-                             Model model) {
+    public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
         model.addAttribute(MEMBER, member);
-
         return "mypage/memberInfo";
     }
 
