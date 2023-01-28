@@ -1,10 +1,11 @@
 package com.nhnacademy.bookpub.bookpubfront.coupontemplate.service;
 
-import com.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
-import com.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.io.IOException;
 import org.springframework.data.domain.Pageable;
 

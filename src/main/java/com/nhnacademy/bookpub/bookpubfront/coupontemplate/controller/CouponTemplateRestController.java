@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.coupontemplate.controller;
 
-import com.bookpub.bookpubfront.coupontemplate.service.CouponTemplateService;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.service.CouponTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.core.io.Resource;

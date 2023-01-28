@@ -1,8 +1,9 @@
-package com.bookpub.bookpubfront.test;
+package com.nhnacademy.bookpub.bookpubfront.test;
 
-import static com.bookpub.bookpubfront.utils.Utils.findCookie;
-import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.token.util.JwtUtil;
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.findCookie;
+
+import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import java.util.List;
 import javax.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;

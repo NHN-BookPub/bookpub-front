@@ -1,14 +1,14 @@
-package com.bookpub.bookpubfront.coupontemplate.adaptor.impl;
+package com.nhnacademy.bookpub.bookpubfront.coupontemplate.adaptor.impl;
 
-import com.bookpub.bookpubfront.config.GateWayConfig;
-import com.bookpub.bookpubfront.coupontemplate.adaptor.CouponTemplateAdaptor;
-import com.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
-import com.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
-import com.bookpub.bookpubfront.utils.PageResponse;
-import com.bookpub.bookpubfront.utils.Utils;
+import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.adaptor.CouponTemplateAdaptor;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.CreateCouponTemplateRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;

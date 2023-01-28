@@ -1,4 +1,4 @@
-package com.bookpub.bookpubfront.coupontemplate.dto.response;
+package com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
