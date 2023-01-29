@@ -57,17 +57,38 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         return getAuthenticationManager().authenticate(token);
     }
 
+    /**
+     * response 헤더에서 accessToken 파싱하는 메소드.
+     *
+     * @param jwtResponse auth서버와의 통신 결과.
+     * @return accessToken.
+     */
     private static String getAccessToken(ResponseEntity<Void> jwtResponse) {
         return Objects.requireNonNull(jwtResponse.getHeaders()
                 .get("Authorization")).get(0).substring(JwtUtil.TOKEN_TYPE.length());
     }
 
+    /**
+     * response 헤더에서 exp 파싱하는 메소드.
+     *
+     * @param jwtResponse auth와의 통신 결과.
+     * @return exp time.
+     */
     private static Long getExpireTime(ResponseEntity<Void> jwtResponse) {
         return Long.parseLong(
                 Objects.requireNonNull(
                         jwtResponse.getHeaders().get(JwtUtil.EXP_HEADER)).get(0));
     }
 
+    /**
+     * 성공시 실행되는 메소드.
+     *
+     * @param request    request.
+     * @param response   response.
+     * @param chain      필터체인.
+     * @param authResult 인증결과.
+     * @throws IOException sendRedirect하며 발생할 수 있는 exception.
+     */
     @Override
     protected void successfulAuthentication(
             HttpServletRequest request, HttpServletResponse response,

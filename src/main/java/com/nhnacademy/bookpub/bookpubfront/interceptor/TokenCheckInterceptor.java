@@ -39,7 +39,8 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws IOException {
-        if (!(handler instanceof HandlerMethod) || haveAuthAnnotation((HandlerMethod) handler)) {
+        if (!(handler instanceof HandlerMethod)
+                || notHaveAuthAnnotation((HandlerMethod) handler)) {
             return true;
         }
 
@@ -107,7 +108,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
      * @param handler @RequestMapping, @GetMapping, @PostMapping등이 붙은 메소드의 정보를 추상화한 객체.
      * @return 해당 메소드가 이 인터셉터에 걸리는지 안걸리는지.
      */
-    private static boolean haveAuthAnnotation(HandlerMethod handler) {
+    private static boolean notHaveAuthAnnotation(HandlerMethod handler) {
         Auth loginRequired = handler.getMethodAnnotation(Auth.class);
 
         return Objects.isNull(loginRequired);
