@@ -48,7 +48,6 @@ public class MainController {
      * @param model    model
      * @return 메인 홈페이지
      */
-    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     @GetMapping("/")
     public String mainView(@CookieValue(name = CART, required = false) Cookie cookie,
                            HttpServletResponse response,
