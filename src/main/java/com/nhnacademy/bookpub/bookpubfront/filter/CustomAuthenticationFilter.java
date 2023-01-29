@@ -51,19 +51,19 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             }
 
             Cookie sessionCookie = Utils.findCookie(SESSION_COOKIE);
-            if (notExistCookie(request, response, filterChain, sessionCookie)) {
+            if (isExistCookie(request, response, filterChain, sessionCookie)) {
                 return;
             }
 
             Cookie jwtCookie = Utils.findCookie(JwtUtil.JWT_COOKIE);
-            if (notExistCookie(request, response, filterChain, jwtCookie)) {
+            if (isExistCookie(request, response, filterChain, jwtCookie)) {
                 return;
             }
 
             String sessionId = Objects.requireNonNull(sessionCookie).getValue();
             AuthDto auth =
                     (AuthDto) redisTemplate.opsForHash().get(AUTHENTICATION, sessionId);
-            if (notExistLoginData(request, response, filterChain, auth)) {
+            if (isExistLoginData(request, response, filterChain, auth)) {
                 return;
             }
 
@@ -96,10 +96,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
      * @throws IOException      doFilter 발생가능 에러.
      * @throws ServletException doFilter 발생가능 에러.
      */
-    private static boolean notExistLoginData(HttpServletRequest request,
-                                             HttpServletResponse response,
-                                             FilterChain filterChain,
-                                             AuthDto auth) throws IOException, ServletException {
+    private static boolean isExistLoginData(HttpServletRequest request,
+                                            HttpServletResponse response,
+                                            FilterChain filterChain,
+                                            AuthDto auth) throws IOException, ServletException {
         if (Objects.isNull(auth)) {
             filterChain.doFilter(request, response);
             return true;
@@ -118,10 +118,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
      * @throws IOException      doFilter 발생가능 에러.
      * @throws ServletException doFilter 발생가능 에러.
      */
-    private static boolean notExistCookie(HttpServletRequest request,
-                                          HttpServletResponse response,
-                                          FilterChain filterChain,
-                                          Cookie cookie) throws IOException, ServletException {
+    private static boolean isExistCookie(HttpServletRequest request,
+                                         HttpServletResponse response,
+                                         FilterChain filterChain,
+                                         Cookie cookie) throws IOException, ServletException {
         if (Objects.isNull(cookie)) {
             filterChain.doFilter(request, response);
             return true;
