@@ -2,7 +2,6 @@ package com.nhnacademy.bookpub.bookpubfront.tier.adaptor.impl;
 
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -15,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -44,15 +42,13 @@ public class TierAdaptorImpl implements TierAdaptor {
     public void requestAddTier(CreateTierRequestDto createRequestDto) throws JsonProcessingException {
         String request = objectMapper.writeValueAsString(createRequestDto);
 
-        String url = gateway.getGatewayUrl() + TIER_URI;
+        String url = GateWayConfig.getGatewayUrl() + TIER_URI;
         HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(url,
+       restTemplate.exchange(url,
                 HttpMethod.POST,
                 httpEntity,
                 Void.class);
-
-        checkError(response);
     }
 
     /**
@@ -64,16 +60,13 @@ public class TierAdaptorImpl implements TierAdaptor {
     public void requestModifyTier(ModifyTierRequestDto modifyTierRequestDto) throws JsonProcessingException {
         String request = objectMapper.writeValueAsString(modifyTierRequestDto);
 
-        String url = gateway.getGatewayUrl() + TIER_URI;
+        String url = GateWayConfig.getGatewayUrl() + TIER_URI;
         HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(url,
+        restTemplate.exchange(url,
                 HttpMethod.PUT,
                 httpEntity,
                 Void.class);
-
-
-        checkError(response);
     }
 
     /**
@@ -83,7 +76,7 @@ public class TierAdaptorImpl implements TierAdaptor {
      */
     @Override
     public List<TierResponseDto> requestTierList() {
-        String url = gateway.getGatewayUrl() + TIER_URI;
+        String url = GateWayConfig.getGatewayUrl() + TIER_URI;
 
 
         ResponseEntity<List<TierResponseDto>> response = restTemplate.exchange(url,
@@ -91,8 +84,6 @@ public class TierAdaptorImpl implements TierAdaptor {
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
-
-        checkError(response);
 
         return response.getBody();
     }
@@ -103,7 +94,7 @@ public class TierAdaptorImpl implements TierAdaptor {
     @Override
     public TierResponseDto requestTier(Integer tierNo) {
 
-        String url = gateway.getGatewayUrl() + TIER_URI + "/" + tierNo;
+        String url = GateWayConfig.getGatewayUrl() + TIER_URI + "/" + tierNo;
 
         ResponseEntity<TierResponseDto> response = restTemplate.exchange(url,
                 HttpMethod.GET,
@@ -111,17 +102,7 @@ public class TierAdaptorImpl implements TierAdaptor {
                 new ParameterizedTypeReference<TierResponseDto>() {
                 });
 
-        checkError(response);
-
         return response.getBody();
     }
 
-    // 이부분은 정리가 필요하다
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
-    }
 }
