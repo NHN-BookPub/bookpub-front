@@ -3,8 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="/static/css/main/styles.css"/>
-    <link rel="stylesheet" href="/static/css/main/gnbFooter.css"/>
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link rel="stylesheet" href="/static/css/main/signupComplete.css"/>
 </head>
 <body>
@@ -43,5 +53,7 @@
         <a href="/" class="btnSubmit">메인 화면으로 가기</a>
     </div>
 </div>
+<th:block th:include="main/fragments/rootFooter"/>
 </body>
 </html>
+

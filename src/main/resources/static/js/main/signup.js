@@ -122,6 +122,7 @@ function idCheckFunc() {
                     $('.id-ok').css("display", "inline-block");
                     $('.id-duplicate').css("display", "none");
                     idCheck.value = "1";
+                    document.getElementById("memberId").readOnly = true;
                     if (allCheck()) {
                         $("#submitBtn").removeAttr("disabled");
                     }
@@ -154,6 +155,7 @@ function nickCheckFunc() {
                     $('.nick-ok').css("display", "inline-block");
                     $('.nick-duplicate').css("display", "none");
                     nicknameCheck.value = "1";
+                    document.getElementById("nickname").readOnly = true;
                     if (allCheck()) {
                         $("#submitBtn").removeAttr("disabled");
                     }
@@ -191,23 +193,21 @@ function smsAuth() {
                 $('#smsAuthConfirm').css("display", "inline-block");
                 $('#authInput').css("display", "inline-block");
                 $('#inputLabel').css("display", "inline-block");
-
+                document.getElementById("phone").readOnly = true;
             },
         })
     }
 }
 
 function smsConfirm() {
-    const phone = document.getElementById('phone');
     const authInput = document.getElementById('authInput');
     if (authInput.value === authMessage) {
         alert("인증에 성공하였습니다.");
-        phone.readable = true;
         authInput.disabled = true;
         confirmBtn.css("display", "none");
     } else {
         alert("인증에 실패하였습니다.")
-        authInput.value='';
+        authInput.value = '';
     }
 }
 

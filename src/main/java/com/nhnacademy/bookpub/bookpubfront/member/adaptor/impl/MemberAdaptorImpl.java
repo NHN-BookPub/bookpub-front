@@ -194,7 +194,12 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
     @Override
     public ResponseEntity<Void> tokenReIssueRequest(String accessToken) {
-        return null;
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/auth/reissue",
+                HttpMethod.POST,
+                new HttpEntity<>(accessToken, makeHeader()),
+                Void.class
+        );
     }
 
     /**

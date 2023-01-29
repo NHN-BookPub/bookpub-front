@@ -4,6 +4,7 @@ import com.nhn.dooray.client.DoorayHook;
 import com.nhnacademy.bookpub.bookpubfront.config.DoorayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import java.util.Random;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -26,6 +27,7 @@ public class MemberRestController {
     private final MemberService memberService;
     private final DoorayConfig doorayConfig;
     private final PasswordEncoder passwordEncoder;
+    private final Random random = new Random();
 
     /**
      * id 중복체크 restController.
@@ -56,15 +58,15 @@ public class MemberRestController {
      */
     @PostMapping("/smsSend")
     public String doorayMessage() {
-        String authenticateMessage = UUID.randomUUID().toString();
+        String authNumber = Integer.toString(random.nextInt(89998) + 10001);
         doorayConfig.doorayHookSender().send(
                 DoorayHook.builder()
                         .botName("bookpub")
-                        .text(authenticateMessage)
+                        .text(authNumber)
                         .build()
         );
 
-        return authenticateMessage;
+        return authNumber;
     }
 
     /**
