@@ -63,7 +63,10 @@ public class MainController {
                 productService.findProductsByType(BEST_SELLER.getTypeNo(), LIMIT);
         List<GetProductByTypeResponseDto> newBooks =
                 productService.findProductsByType(NEW.getTypeNo(), LIMIT);
-        cartUtils.getCountInCart(cookie.getValue(), model);
+
+        if (Objects.nonNull(cookie)) {
+            cartUtils.getCountInCart(cookie.getValue(), model);
+        }
 
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);

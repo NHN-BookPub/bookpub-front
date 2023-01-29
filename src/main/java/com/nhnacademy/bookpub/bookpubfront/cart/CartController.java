@@ -49,12 +49,15 @@ public class CartController {
     @GetMapping
     public String cartView(@CookieValue(name = CART, required = false) Cookie cookie,
                            Model model) {
-        if (Objects.nonNull(redisTemplate.opsForSet().size(cookie.getValue()))) {
+        if (Objects.nonNull(cookie)) {
             Set<Object> objects = redisTemplate.opsForSet().members(cookie.getValue());
 
             List<Long> productNos = new ArrayList<>();
-            for (Object object : objects) {
-                productNos.add(Long.valueOf(object.toString()));
+
+            if (Objects.nonNull(objects)) {
+                for (Object object : objects) {
+                    productNos.add(Long.valueOf(object.toString()));
+                }
             }
 
             cartUtils.getCountInCart(cookie.getValue(), model);
