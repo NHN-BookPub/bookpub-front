@@ -56,7 +56,7 @@ public class TierController {
      * @return 메인페이지로이동.
      * @throws JsonProcessingException objectMapper 발생시키는에러.
      */
-    @PostMapping("/admin/tiers/add")
+    @PostMapping("/admin/tiers")
     public String tierAddForm(@ModelAttribute CreateTierRequestDto createTierRequestDto)
             throws JsonProcessingException {
         tierService.createTier(createTierRequestDto);
@@ -87,7 +87,7 @@ public class TierController {
      * @return 등급 메인페이지로 이동
      * @throws JsonProcessingException objectMapper 발생시키는에러.
      */
-    @PutMapping("/admin/tiers/modify")
+    @PutMapping("/admin/tiers")
     public String tierModify(@ModelAttribute ModifyTierRequestDto modifyTierRequestDto)
             throws JsonProcessingException {
         tierService.modifyTier(modifyTierRequestDto);

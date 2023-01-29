@@ -14,4 +14,6 @@ import lombok.NoArgsConstructor;
 public class TierResponseDto {
     private Integer tierNo;
     private String tierName;
+    private Integer tierValue;
+    private Long tierPrice;
 }

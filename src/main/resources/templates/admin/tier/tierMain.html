@@ -15,26 +15,32 @@
         <main>
             <div class="container-fluid px-4">
                 <div class="card-header" style="justify-content: center">
-                    Tier List
-                    <a class="btn btn-outline-primary flex-grow-1" th:href="'/admin/tiers/add'">등급생성</a>
+                    <h1 class="mb-3 sm">Tier List</h1>
+                </div>
+                <div>
+                <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">등급생성</a>
                 </div>
                 <div class="card-body">
                     <div class="dataTable-top">
                     </div>
                     <div class="dataTable-container">
-                        <table>
-                            <thead>
+                        <table class="table table-bordered">
+                            <thead class="thead-light">
                             <tr>
-                                <td>번호</td>
-                                <td>등급명</td>
-                                <td>수정</td>
+                                <th scope="col">번호</th>
+                                <th scope="col">등급명</th>
+                                <th scope="col">등급 값</th>
+                                <th scope="col">등급 필요 금액</th>
+                                <th scope="col">수정</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr th:each="tier, index : ${tiers}">
                                 <td th:text="${index.count}"></td>
                                 <td th:text="${tier.tierName}"></td>
-                                <td><a class="w-auto btn-sm btn-primary btn-lg" th:href="@{|/admin/tiers/${tier.tierNo}|}">수정</a></td>
+                                <td th:text="${tier.tierValue}"></td>
+                                <td th:text="${tier.tierPrice}"></td>
+                                <td><a class=" btn-sm btn-primary" th:href="@{|/admin/tiers/${tier.tierNo}|}">수정</a></td>
                             </tr>
                             </tbody>
                         </table>

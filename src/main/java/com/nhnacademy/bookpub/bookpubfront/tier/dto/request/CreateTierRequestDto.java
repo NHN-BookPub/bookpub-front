@@ -14,4 +14,7 @@ import lombok.Getter;
 public class CreateTierRequestDto {
     private String tierName;
 
+    private Integer tierValue;
+
+    private Long tierPrice;
 }
