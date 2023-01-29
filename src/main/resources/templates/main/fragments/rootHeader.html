@@ -1,12 +1,20 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
 
     <style>
-        ul.nav li.dropdown:hover > ul.dropdown-menu {
-            display: block;
-            margin: 0;
+        #category-list-div {
+            min-width: 15rem;
+        }
+
+        #nav-category:hover > #category-list-div {
+            display: flex;
+        }
+
+        .ma-r {
+            margin-right: 0.2rem;
         }
     </style>
 </head>
@@ -99,7 +107,29 @@
             <div id="responsive-nav">
                 <ul class="main-nav nav navbar-nav">
                     <li class="active"><a href="/">홈</a></li>
-                    <li><a href="/categories">분야찾기</a></li>
+
+                    <li id="nav-category">
+                        <a href="#">분야찾기</a>
+                        <div id="category-list-div" class="dropdown-menu" style="padding: 0">
+                            <div
+                                style="width: 14rem; align-items: center; display: flex; flex-direction: column"
+                                th:each="parent: ${category}"
+                                th:classappend="${parentStat.last ? '' : 'ma-r'}">
+                                <div
+                                    style="background-color: #D10024; width: 100%; padding: 1rem; text-align: center">
+                                    <a class="fw-bolder bg-black"
+                                       th:href="@{/category/{id}(id=${parent.categoryNo})}"
+                                       th:text="${parent.categoryName}"
+                                       style="color: white; font-weight: bold; font-size: 1.5rem"></a>
+                                </div>
+                                <div th:each="child: ${parent.childList}"
+                                     style="margin-top: 1rem; margin-bottom: 1rem">
+                                    <a th:href="@{/category/{id}(id=${child.categoryNo})}"
+                                       th:text="${child.categoryName}"></a>
+                                </div>
+                            </div>
+                        </div>
+                    </li>
                     <li><a href="#">베스트셀러</a></li>
                     <li><a href="#">신간도서</a></li>
                     <li class="dropdown">
