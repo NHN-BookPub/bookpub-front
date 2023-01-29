@@ -4,6 +4,7 @@ import static com.nhnacademy.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
 import static com.nhnacademy.bookpub.bookpubfront.state.ProductType.NEW;
 
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import java.util.List;
@@ -34,6 +35,7 @@ public class MainController {
 
     private final ProductService productService;
     private final CartUtils cartUtils;
+    private final CategoryUtils categoryUtils;
     private static final Integer LIMIT = 6;
     private static final String CART = "CART";
 
@@ -46,6 +48,7 @@ public class MainController {
      * @param model    model
      * @return 메인 홈페이지
      */
+    @SuppressWarnings("checkstyle:VariableDeclarationUsageDistance")
     @GetMapping("/")
     public String mainView(@CookieValue(name = CART, required = false) Cookie cookie,
                            HttpServletResponse response,
@@ -61,10 +64,12 @@ public class MainController {
 
         List<GetProductByTypeResponseDto> bestSellers =
                 productService.findProductsByType(BEST_SELLER.getTypeNo(), LIMIT);
+
         List<GetProductByTypeResponseDto> newBooks =
                 productService.findProductsByType(NEW.getTypeNo(), LIMIT);
         cartUtils.getCountInCart(cookie.getValue(), model);
 
+        categoryUtils.categoriesView(model);
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);
 

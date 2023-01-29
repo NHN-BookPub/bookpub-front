@@ -4,6 +4,7 @@ import static com.nhnacademy.bookpub.bookpubfront.state.DeliveryFeeType.DELIVERY
 import static com.nhnacademy.bookpub.bookpubfront.state.DeliveryFeeType.DELIVERY_FREE_FEE_STANDARD;
 
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import javax.servlet.http.Cookie;
@@ -28,6 +29,7 @@ public class ProductController {
 
     private final ProductService productService;
     private final CartUtils cartUtils;
+    private final CategoryUtils categoryUtils;
     private static final String CART = "CART";
 
     /**
@@ -45,6 +47,7 @@ public class ProductController {
         GetProductDetailResponseDto product = productService.findProduct(productNo);
 
         cartUtils.getCountInCart(cookie.getValue(), model);
+        categoryUtils.categoriesView(model);
         model.addAttribute("product", product);
         model.addAttribute("free", DELIVERY_FREE_FEE_STANDARD.getFee());
         model.addAttribute("deliveryFee", DELIVERY_FEE.getFee());

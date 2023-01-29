@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import java.util.ArrayList;
@@ -38,6 +39,7 @@ public class CartController {
     private final ProductService productService;
     private final ObjectMapper objectMapper;
     private final CartUtils cartUtils;
+    private final CategoryUtils categoryUtils;
     private final RedisTemplate<String, Object> redisTemplate;
 
     /**
@@ -58,8 +60,10 @@ public class CartController {
             }
 
             cartUtils.getCountInCart(cookie.getValue(), model);
+            categoryUtils.categoriesView(model);
 
-            List<GetProductDetailResponseDto> products = productService.findProductInCart(productNos);
+            List<GetProductDetailResponseDto> products =
+                    productService.findProductInCart(productNos);
             model.addAttribute("products", products);
         }
 
@@ -93,16 +97,16 @@ public class CartController {
             throws JsonProcessingException {
         List<Map<String, Object>> jsonData = objectMapper.readValue(cart, new TypeReference<>() {
         });
-        String orderInfo = "";
+        StringBuilder sb = new StringBuilder();
 
         for (Map<String, Object> tmp : jsonData) {
             String productNo = String.valueOf(tmp.get("productNo"));
             String count = String.valueOf(tmp.get("count"));
 
-            orderInfo += productNo + "-" + count + "/";
+            sb.append(productNo).append("-").append(count).append("/");
         }
 
-        Cookie cookie = new Cookie("orderInfo", orderInfo);
+        Cookie cookie = new Cookie("orderInfo", sb.toString());
         cookie.setPath("/");
         cookie.setMaxAge(86400);
         response.addCookie(cookie);
