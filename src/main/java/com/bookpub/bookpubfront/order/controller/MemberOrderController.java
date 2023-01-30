@@ -3,6 +3,7 @@ package com.bookpub.bookpubfront.order.controller;
 import com.bookpub.bookpubfront.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +23,7 @@ public class MemberOrderController {
     private final OrderService orderService;
 
     @GetMapping("/list")
-    public String orderListView(Model model, Pageable pageable) {
+    public String orderListView(Model model, @PageableDefault  Pageable pageable) {
         model.addAttribute("orderList", orderService.getOrderListByMemberNo(397L, pageable));
         model.addAttribute("nowPage", pageable.getPageNumber());
 
