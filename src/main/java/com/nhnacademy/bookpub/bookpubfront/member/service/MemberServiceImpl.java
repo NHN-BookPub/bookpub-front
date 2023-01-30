@@ -1,8 +1,11 @@
 package com.nhnacademy.bookpub.bookpubfront.member.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -10,7 +13,10 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.member.exception.OauthMemberParsingException;
+import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
+import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
@@ -41,6 +47,7 @@ public class MemberServiceImpl implements MemberService {
     private final RedisTemplate<String, AuthDto> redisTemplate;
     private final PasswordEncoder passwordEncoder;
     private final MemberAdaptor memberAdaptor;
+    private final ObjectMapper objectMapper;
 
     /**
      * {@inheritDoc}
@@ -62,17 +69,33 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
+    public SignupMemberResponseDto signup(OauthMemberCreateRequestDto signupMemberRequestDto) {
+        String originPwd = signupMemberRequestDto.getPwd();
+        String encodePwd = passwordEncoder.encode(originPwd);
+
+        signupMemberRequestDto.setEncodePwd(encodePwd);
+
+        ResponseEntity<SignupMemberResponseDto> exchange
+                = memberAdaptor.signupRequest(signupMemberRequestDto);
+
+        return exchange.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void logout(HttpServletResponse response, HttpSession session) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
-            Cookie jwtCookie = Utils.findCookie(JwtUtil.JWT_COOKIE);
+            Cookie jwtCookie = CookieUtil.findCookie(JwtUtil.JWT_COOKIE);
             if (Objects.isNull(jwtCookie)) {
                 SecurityContextHolder.clearContext();
                 return;
             }
 
-            Cookie sessionCookie = Utils.findCookie(Utils.SESSION_COOKIE);
+            Cookie sessionCookie = CookieUtil.findCookie(Utils.SESSION_COOKIE);
             if (Objects.isNull(session)) {
                 SecurityContextHolder.clearContext();
                 return;
@@ -172,7 +195,7 @@ public class MemberServiceImpl implements MemberService {
      */
     @Override
     public void modifyMemberName(Long memberNo,
-                                 String name){
+                                 String name) {
         memberAdaptor.requestMemberNameChange(memberNo, name);
     }
 
@@ -222,5 +245,20 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void deleteMemberAddress(Long memberNo, Long addressNo) {
         memberAdaptor.requestMemberAddressDelete(memberNo, addressNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public OauthMemberRequestDto oauthMemberParsing(String oauthMember) {
+        OauthMemberRequestDto oauthMemberRequestDto;
+        try {
+            oauthMemberRequestDto
+                    = objectMapper.readValue(oauthMember, OauthMemberRequestDto.class);
+        } catch (JsonProcessingException e) {
+            throw new OauthMemberParsingException();
+        }
+
+        return oauthMemberRequestDto;
     }
 }

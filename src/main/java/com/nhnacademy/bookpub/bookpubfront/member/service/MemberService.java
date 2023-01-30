@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.member.service;
 
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -8,6 +9,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +32,13 @@ public interface MemberService {
      */
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
+    /**
+     * oauth 회원정보를 저장 요청하는 메소드.
+     *
+     * @param signupMemberRequestDto 멤버 정보를 담아 요청보내는 DTO
+     * @return 저장된 멤버 정보의 일부를 반환받는 DTO
+     */
+    SignupMemberResponseDto signup(OauthMemberCreateRequestDto signupMemberRequestDto);
 
     /**
      * 회원 로그아웃 메소드.
@@ -43,7 +52,7 @@ public interface MemberService {
      * 멤버의 닉네임을 적어야하는 메서드입니다.
      *
      * @param memberNo 멤버 번호.
-     * @param nickname      수정할 닉네임 기입.
+     * @param nickname 수정할 닉네임 기입.
      */
     void modifyMemberNickName(Long memberNo, String nickname);
 
@@ -51,7 +60,7 @@ public interface MemberService {
      * 멤버의 이메일 정보를 수정해야하는 메서드입니다.
      *
      * @param memberNo 멤버 번호가 기입.
-     * @param email      멤버가 수정할 이메일 정보.
+     * @param email    멤버가 수정할 이메일 정보.
      */
     void modifyMemberEmail(Long memberNo, String email);
 
@@ -86,7 +95,7 @@ public interface MemberService {
     MemberStatisticsResponseDto memberStatistics();
 
     /**
-     * 회원의 등급별 통계를 반환
+     * 회원의 등급별 통계를 반환.
      *
      * @return the list
      */
@@ -151,4 +160,12 @@ public interface MemberService {
      * @param addressNo 주소번호
      */
     void deleteMemberAddress(Long memberNo, Long addressNo);
+
+    /**
+     * string 타입으로 들어온 유저정보를 dto로 파싱합니다.
+     *
+     * @param oauthMember 로그인하려는 유저 정보.
+     * @return dto.
+     */
+    OauthMemberRequestDto oauthMemberParsing(String oauthMember);
 }
