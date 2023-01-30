@@ -55,7 +55,7 @@ public class TagController {
     public String addTag(@ModelAttribute AddTagRequestDto request) {
         tagService.addTag(request);
 
-        return "redirect:/admin/tagList";
+        return "redirect:/admin/tags";
     }
 
     /**
@@ -68,7 +68,7 @@ public class TagController {
     public String modifyTag(@ModelAttribute ModifyTagRequestDto request) {
         tagService.modifyTag(request);
 
-        return "redirect:/admin/tagList";
+        return "redirect:/admin/tags";
     }
 
     /**
@@ -81,6 +81,6 @@ public class TagController {
     public String deleteTag(@PathVariable Integer tagNo) {
         tagService.deleteTag(tagNo);
 
-        return "redirect:/admin/tagList";
+        return "redirect:/admin/tags";
     }
 }
