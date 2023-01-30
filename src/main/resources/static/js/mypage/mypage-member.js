@@ -89,6 +89,30 @@ function pwdCheck() {
     })
 }
 
+function nickCheckFunc() {
+    let value = document.getElementById("nickname").value;
+        $.ajax({
+            type: "post",
+            async: true,
+            url: "/nickCheck",
+            data: {"nickname": value},
+            success: function (result) {
+                if (result === false) {
+                    document.getElementById("nick-submit")
+                        .disabled = false;
+                    document.document.getElementById("nickname")
+                        .disabled = true;
+
+                    alert("이용가능한 닉네임 입니다.");
+                } else {
+                    alert("이미 사용하는 닉네임 입니다.");
+                    document.getElementById("nickname")
+                        .value = '';
+                }
+            }
+        })
+}
+
 function findAddress() {
     new daum.Postcode({
         oncomplete: function (data) {
