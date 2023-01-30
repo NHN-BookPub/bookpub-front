@@ -47,14 +47,24 @@
                                     onclick=location.href='/signup'>회원가입
                             </button>
                         </div>
+                        <div style="display: flex;flex-direction: column;gap: 7px;padding: 20px 0;">
+                            <button type="button" class="btn btn-outline-dark float-right"
+                                    style="background-color: #0bc759;" id="naver">
+                                <img style="width: 20px; margin-right: 2px;" src="/static/img/main/naver.png">네이버 로그인
+                            </button>
+                            <button type="button" class="btn btn-outline-dark float-right"
+                                    style="background-color: #fee401;" id="kakao">
+                                <img style="width: 25px" src="/static/img/main/kakao.png">카카오 로그인
+                            </button>
+                            <button type="button" class="btn btn-outline-dark float-right"
+                                    style="background-color: #c9c5c5;" id="github">
+                                <img style="width: 20px;margin-right: 2px;" src="/static/img/main/github.png">
+                                깃허브 로그인
+                            </button>
+                        </div>
+
 
                     </form>
-
-                    <!-- oauth login-->
-                    <div id="oauth-login-container">
-                        <a href="javascript:void(0)" id="github">깃허브 로그인</a>
-                    </div>
-
                     <script src="/static/js/member/login.js"></script>
                     <div id="name"></div>
                     <script>startApp();</script>
