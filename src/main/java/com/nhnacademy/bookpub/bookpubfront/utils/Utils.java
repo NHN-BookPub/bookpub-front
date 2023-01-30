@@ -1,11 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.utils;
 
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
@@ -26,7 +24,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 public class Utils {
     public static final String AUTHENTICATION = "SPRING_SECURITY_CONTEXT";
     public static final String SESSION_COOKIE = "auth-session";
-
+    public static final String DOMAIN = "domain";
 
     private Utils() {
     }
@@ -51,26 +49,6 @@ public class Utils {
         }
 
         return headers;
-    }
-
-    /**
-     * accessCookie 를 찾는 메서드 입니다.
-     *
-     * @return 쿠키의 검색값을 가져옵니다.
-     */
-    public static Cookie findCookie(String cookieName) {
-        ServletRequestAttributes servletRequestAttributes =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest request = servletRequestAttributes.getRequest();
-
-        if (Objects.isNull(request.getCookies())) {
-            return null;
-        }
-
-        return Arrays.stream(request.getCookies())
-                .filter(cookie -> cookie.getName().equals(cookieName))
-                .findAny()
-                .orElse(null);
     }
 
     /**

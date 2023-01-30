@@ -1,6 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.test;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.findCookie;
+import static com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil.findCookie;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 /**
- * 게이트웨이와의 테스트를 위해 만들어둔 controller
+ * 게이트웨이와의 테스트를 위해 만들어둔 controller.
  *
  * @author : 유호철
  * @since : 1.0

@@ -7,7 +7,7 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * member Request DTO개체
+ * member Request DTO개체.
  *
  * @author : 임태원
  * @since : 1.0
@@ -21,7 +21,7 @@ public class SignupMemberRequestDto {
     private String name;
 
     @NotBlank
-    @Pattern(regexp = "^.*(?=.*[a-z])(?=.*[a-z\\d])(?=.{2,8}).*$",
+    @Pattern(regexp = "^[a-zA-Z\\d]{2,8}$",
             message = "닉네임은 영어는 필수 숫자는 선택으로 2글자 이상 8글자 이하로 입력해주세요.")
     private String nickname;
 
@@ -34,7 +34,7 @@ public class SignupMemberRequestDto {
     private String gender;
 
     @NotBlank
-    @Pattern(regexp = "^.*(?=.*[a-z])(?=.*\\d)(?=.{5,20}).*$",
+    @Pattern(regexp = "^[a-z0-9_-]{5,20}$",
             message = "아이디는 영어와 숫자를 섞어 5글자에서 20글자로 입력해주세요.")
     private String memberId;
 

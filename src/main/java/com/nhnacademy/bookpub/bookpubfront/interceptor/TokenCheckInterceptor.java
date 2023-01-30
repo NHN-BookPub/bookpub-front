@@ -7,7 +7,7 @@ import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.MILL_SEC;
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
-import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
+import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
@@ -44,7 +44,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Cookie jwtCookie = Utils.findCookie(JWT_COOKIE);
+        Cookie jwtCookie = CookieUtil.findCookie(JWT_COOKIE);
 
         if (unauthorizedAccess(response, jwtCookie)) {
             return false;
