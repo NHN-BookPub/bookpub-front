@@ -61,4 +61,13 @@ public class TierServiceImpl implements TierService {
     public TierResponseDto getTier(Integer tierNo){
         return tierAdapter.requestTier(tierNo);
     }
+
+    /**
+     * {@inheritDoc}
+     *
+     */
+    @Override
+    public Boolean getTierName(String tierName) {
+        return tierAdapter.requestTierName(tierName);
+    }
 }
