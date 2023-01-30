@@ -38,7 +38,7 @@ import org.springframework.web.bind.annotation.SessionAttribute;
 public class MemberController {
     private static final String REDIRECT_MY_PAGE = "redirect:/members/";
     private static final String MEMBER = "member";
-    private static final String AUTH_MEMBER = "authMember";
+    private static final String AUTH_MEMBER = "oauthMember";
     private final MemberService memberService;
 
     /**

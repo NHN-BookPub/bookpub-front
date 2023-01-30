@@ -1,6 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.oauth.factory;
 
-import com.nhnacademy.bookpub.bookpubfront.oauth.exception.NotAllowedOAuthServiceException;
+import com.nhnacademy.bookpub.bookpubfront.oauth.exception.NotAllowedOauthServiceException;
 import com.nhnacademy.bookpub.bookpubfront.oauth.service.GitHubService;
 import com.nhnacademy.bookpub.bookpubfront.oauth.service.KakaoService;
 import com.nhnacademy.bookpub.bookpubfront.oauth.service.NaverService;
@@ -39,7 +39,7 @@ public class OauthFactory {
             log.warn("service 실행");
             return naverService;
         } else {
-            throw new NotAllowedOAuthServiceException();
+            throw new NotAllowedOauthServiceException();
         }
     }
 }
