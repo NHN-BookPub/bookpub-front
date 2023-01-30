@@ -7,10 +7,10 @@ import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.exception.MemberNotFoundException;
+import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import java.util.Objects;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
@@ -52,8 +52,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         HttpServletResponse response = servletRequestAttributes.getResponse();
 
         String sessionId = request.getSession().getId();
-        Cookie cookie = new Cookie(SESSION_COOKIE, sessionId);
-        response.addCookie(cookie);
+        CookieUtil.makeCookie(response, SESSION_COOKIE, sessionId);
 
         MemberLoginResponseDto member
                 = memberAdaptor.requestAuthMemberInfo(accessToken);
