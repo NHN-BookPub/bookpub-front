@@ -25,6 +25,13 @@ public class MemberOrderController {
     private final OrderService orderService;
     private final MemberService memberService;
 
+    /**
+     * 멤버의 주문 리스트 조회를 위한 메소드입니다.
+     *
+     * @param model 모델.
+     * @param pageable 페이징.
+     * @return 주문리스트 뷰를 반환합니다.
+     */
     @GetMapping("/list")
     public String orderListView(Model model, Pageable pageable) {
         model.addAttribute("orderList", orderService.getOrderListByMemberNo(397L, pageable));
@@ -32,6 +39,13 @@ public class MemberOrderController {
         return "mypage/orderList";
     }
 
+    /**
+     * 주문 상세 뷰를 위한 메소드입니다.
+     *
+     * @param model 모델.
+     * @param orderNo 주문번호.
+     * @return 주문상세 뷰를 반환합니다.
+     */
     @GetMapping("/detail")
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
