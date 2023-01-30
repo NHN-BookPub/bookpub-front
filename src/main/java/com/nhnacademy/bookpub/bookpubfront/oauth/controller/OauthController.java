@@ -48,8 +48,10 @@ public class OauthController {
         OauthService oauthService = oauthFactory.getMatchedService(cookie.getValue());
         CookieUtil.deleteCookie(response, Utils.DOMAIN);
 
-        String token = oauthService.getToken(code);
-        Map<String, Object> userInfo = oauthService.getUserInfo(token);
+        String token =
+                oauthService.getToken(oauthService.tokenRequestUrl(code));
+        Map<String, Object> userInfo =
+                oauthService.getUserInfo(token, oauthService.userInfoRequestUrl());
 
         OauthMemberRequestDto oauthMemberRequestDto = oauthService.convertDto(userInfo);
         boolean oauthMember = oauthService.isOauthMember(oauthMemberRequestDto.getId());

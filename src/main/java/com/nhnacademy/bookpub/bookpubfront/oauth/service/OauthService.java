@@ -1,9 +1,11 @@
 package com.nhnacademy.bookpub.bookpubfront.oauth.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.config.KeyConfig;
 import com.nhnacademy.bookpub.bookpubfront.oauth.adaptor.OauthAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.oauth.exception.TokenParsingException;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -35,7 +37,32 @@ public abstract class OauthService {
      * @param code 로그인을 통해 받은 code.
      * @return 인증된 사용자라는 증거인 accessToken.
      */
-    public abstract String getToken(String code);
+    public abstract String tokenRequestUrl(String code);
+
+    /**
+     * oauth에 사용자의 정보를 요청할 url을 빌드 하는 메소드.
+     *
+     * @return ㅕserInfoRequestUrl.
+     */
+    public abstract String userInfoRequestUrl();
+
+    /**
+     * {@inheritDoc}
+     */
+    public String getToken(String tokenRequestUrl) {
+        ResponseEntity<String> tokenResponse = oauthAdaptor.getToken(tokenRequestUrl);
+
+        Map token;
+
+        try {
+            token = objectMapper.readValue(tokenResponse.getBody(), Map.class);
+        } catch (JsonProcessingException e) {
+            throw new TokenParsingException();
+        }
+
+        return (String) token.get("access_token");
+    }
+
 
     /**
      * 발급받은 토큰을 사용해 oauth 로그인 유저 정보를 가져오는 메소드.
@@ -43,7 +70,18 @@ public abstract class OauthService {
      * @param token code를 통해 반환받은 토큰.
      * @return 유저정보.
      */
-    public abstract Map<String, Object> getUserInfo(String token);
+    public Map<String, Object> getUserInfo(String token, String userInfoRequestUrl) {
+        Map<String, Object> userInfo;
+
+        try {
+            ResponseEntity<String> kakaoUser = oauthAdaptor.getUser(userInfoRequestUrl, token);
+            userInfo = objectMapper.readValue(kakaoUser.getBody(), Map.class);
+        } catch (JsonProcessingException e) {
+            throw new TokenParsingException();
+        }
+
+        return userInfo;
+    }
 
     /**
      * map 형태를 dto형태로 변환시켜주는 메소드.

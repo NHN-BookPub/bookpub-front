@@ -28,7 +28,7 @@ public class OauthRestController {
      * oauth에 맞는 url을 제작하는 메소드..
      *
      * @param oauthName 사용한 도메인.
-     * @param response 응답.
+     * @param response  응답.
      * @return 적합한 url.
      */
     @GetMapping("/redirectUrl")

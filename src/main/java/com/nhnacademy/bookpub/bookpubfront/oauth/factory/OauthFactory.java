@@ -1,6 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.oauth.factory;
 
+import com.nhnacademy.bookpub.bookpubfront.oauth.exception.NotAllowedOAuthServiceException;
 import com.nhnacademy.bookpub.bookpubfront.oauth.service.GitHubService;
+import com.nhnacademy.bookpub.bookpubfront.oauth.service.KakaoService;
+import com.nhnacademy.bookpub.bookpubfront.oauth.service.NaverService;
 import com.nhnacademy.bookpub.bookpubfront.oauth.service.OauthService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -18,6 +21,8 @@ import org.springframework.stereotype.Component;
 @Slf4j
 public class OauthFactory {
     private final GitHubService gitHubService;
+    private final KakaoService kakaoService;
+    private final NaverService naverService;
 
     /**
      * 선택한 버튼에 맞게 OauthService가 생성되는 메소드.
@@ -28,7 +33,13 @@ public class OauthFactory {
     public OauthService getMatchedService(String oauthName) {
         if (oauthName.equalsIgnoreCase("GITHUB")) {
             return gitHubService;
+        } else if (oauthName.equalsIgnoreCase("KAKAO")) {
+            return kakaoService;
+        } else if (oauthName.equalsIgnoreCase("NAVER")) {
+            log.warn("service 실행");
+            return naverService;
+        } else {
+            throw new NotAllowedOAuthServiceException();
         }
-        return null;
     }
 }
