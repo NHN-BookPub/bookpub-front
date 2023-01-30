@@ -3,9 +3,9 @@ package com.nhnacademy.bookpub.bookpubfront.oauth.service;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.BOOKPUB;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.CLIENT_ID;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.CLIENT_SECRET;
-import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.GITHUB;
-import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.GITHUB_EMAIL;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.HTTPS;
+import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.KAKAO;
+import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.KAKAO_EMAIL;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.REDIRECT_URI;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,91 +14,81 @@ import com.nhnacademy.bookpub.bookpubfront.oauth.adaptor.OauthAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * github의 api 명세에 맞춰 로직이 실행되는 클래스입니다.
+ * kakao의 api 명세에 맞춰 로직이 실행되는 클래스입니다.
  *
  * @author : 임태원
  * @since : 1.0
  **/
 @Service
-@ConfigurationProperties(prefix = "oauth.github")
+@ConfigurationProperties(prefix = "oauth.kakao")
 @Slf4j
-public class GitHubService extends OauthService {
+public class KakaoService extends OauthService {
     private String clientId;
     private String secret;
     private String redirectUri;
 
-    public GitHubService(OauthAdaptor oauthAdaptor,
-                         ObjectMapper objectMapper,
-                         KeyConfig keyConfig) {
+    public KakaoService(OauthAdaptor oauthAdaptor,
+                        ObjectMapper objectMapper,
+                        KeyConfig keyConfig) {
         super(oauthAdaptor, objectMapper, keyConfig);
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String makeAuthUrl() {
         return UriComponentsBuilder.newInstance()
                 .scheme(HTTPS)
-                .host(GITHUB)
-                .path("login/oauth/authorize")
-                .queryParam(CLIENT_ID, clientId)
+                .host(KAKAO)
+                .path("oauth/authorize")
                 .queryParam(REDIRECT_URI, redirectUri)
+                .queryParam("response_type", "code")
+                .queryParam(CLIENT_ID, clientId)
                 .build().toUriString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String tokenRequestUrl(String code) {
         return UriComponentsBuilder.newInstance()
                 .scheme(HTTPS)
-                .host(GITHUB)
-                .path("login/oauth/access_token")
-                .queryParam(CLIENT_ID, clientId)
-                .queryParam(CLIENT_SECRET, secret)
+                .host(KAKAO)
+                .path("oauth/token")
+                .queryParam("grant_type", "authorization_code")
                 .queryParam("code", code)
                 .queryParam(REDIRECT_URI, redirectUri)
+                .queryParam(CLIENT_ID, clientId)
+                .queryParam(CLIENT_SECRET, secret)
                 .build().toUriString();
     }
 
-    /**
-     * {@inheritDoc}
-     */
     @Override
     public String userInfoRequestUrl() {
         return UriComponentsBuilder.newInstance()
                 .scheme(HTTPS)
-                .host("api." + GITHUB)
-                .path("user")
+                .host("kapi.kakao.com")
+                .path("v2/user/me")
                 .build().toUriString();
     }
 
-
-    /**
-     * 반환받은 userResponse를 원하는 형태의 dto로 변환시켜주는 메소드.
-     *
-     * @param userResponse oauth서비스로부터 반환받은 정보.
-     * @return 원하는 dto.
-     */
     @Override
-    public OauthMemberRequestDto convertDto(Map<String, Object> userResponse) {
-        String email = (String) userResponse.get("email");
-        int pwd = (int) userResponse.get("id");
+    public OauthMemberRequestDto convertDto(Map<String, Object> userInfo) {
+        Map<String, String> kakaoAccount
+                = (Map) userInfo.get("kakao_account");
+
+        String email = kakaoAccount.get("email");
+        long pwd = (long) userInfo.get("id");
 
         if (Objects.nonNull(email)) {
-            email = email.split("@")[0] + GITHUB_EMAIL;
+            email = email.split("@")[0] + KAKAO_EMAIL;
             return new OauthMemberRequestDto(email, String.valueOf(pwd));
         }
 
-        String login = (String) userResponse.get("login");
+        String login = UUID.randomUUID().toString().replace("-", "");
         String convertEmail = login + BOOKPUB;
 
         return new OauthMemberRequestDto(convertEmail, String.valueOf(pwd));
