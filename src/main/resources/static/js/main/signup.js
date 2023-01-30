@@ -1,8 +1,8 @@
 let emptyReg = /\s/g;
 let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
-let idReg = /^.*(?=.*[a-z])(?=.*\d)(?=^.{5,20}).*$/;
+let idReg = /^[a-z0-9_-]{5,20}$/;
 let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
-let nickReg = /^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$/;
+let nickReg = /^[a-zA-Z\\d]{2,8}$/;
 let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
@@ -115,7 +115,7 @@ function idCheckFunc() {
         $.ajax({
             type: "post",
             async: true,
-            url: "./idCheck",
+            url: "/idCheck",
             data: {"id": id},
             success: function (result) {
                 if (result === false) {
@@ -148,7 +148,7 @@ function nickCheckFunc() {
         $.ajax({
             type: "post",
             async: true,
-            url: "./nickCheck",
+            url: "/nickCheck",
             data: {"nickname": nickname},
             success: function (result) {
                 if (result === false) {
@@ -184,7 +184,7 @@ function smsAuth() {
         $.ajax({
             type: "post",
             async: false,
-            url: "./smsSend",
+            url: "/smsSend",
             success: function (result) {
                 alert("인증번호가 전송되었습니다");
                 authMessage = result;
