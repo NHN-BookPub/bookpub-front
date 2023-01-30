@@ -45,7 +45,7 @@ public class TierAdaptorImpl implements TierAdaptor {
         String url = GateWayConfig.getGatewayUrl() + TIER_URI;
         HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHeader());
 
-       restTemplate.exchange(url,
+        restTemplate.exchange(url,
                 HttpMethod.POST,
                 httpEntity,
                 Void.class);
@@ -103,6 +103,17 @@ public class TierAdaptorImpl implements TierAdaptor {
                 });
 
         return response.getBody();
+    }
+
+    @Override
+    public Boolean requestTierName(String tierName) {
+
+        String url = GateWayConfig.getGatewayUrl() + TIER_URI + "/check-tierName?tierName=" + tierName;
+
+        return restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                Boolean.class).getBody();
     }
 
 }

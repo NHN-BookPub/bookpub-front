@@ -21,4 +21,6 @@ public interface TierAdaptor {
     List<TierResponseDto> requestTierList();
 
     TierResponseDto requestTier(Integer tierNo);
+
+    Boolean requestTierName(String tierName);
 }
