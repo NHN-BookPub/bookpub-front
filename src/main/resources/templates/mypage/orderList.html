@@ -87,7 +87,7 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                            <a href="/">
+                            <a th:href="|../../../products/view/${product.getProductNo()}|">
                                 <h3 th:text="${product.getTitle()}"></h3>
                             </a>
                             <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
@@ -116,15 +116,19 @@
 
     <div style="display: flex; flex-direction: column; gap: 15px">
         <div class="pagination">
-            <button class="btn_page_prev" th:onclick="|location.href='../orders/list?page='+ ${nowPage -1} + '&size=10'|">
-                <span class="hidden">이전</span>
-            </button>
+            <div th:if="${nowPage != 0}">
+                <button class="btn_page_prev" th:onclick="|location.href='../orders/list?page='+ ${nowPage -1} + '&size=10'|">
+                    <span class="hidden">이전</span>
+                </button>
+            </div>
 <!--            <div class="page_num" th:each="page : ${#numbers.sequence(0, orderList.getTotalPages() -1 )}">-->
 <!--                <a th:href="'?page='+ ${page} + '&size=10'" title="현재페이지" th:text="${page} + 1"></a>-->
 <!--            </div>-->
-            <button class="btn_page_next" th:onclick="|location.href='../orders/list?page='+ ${nowPage + 1} + '&size=10'|">
-                <span class="hidden">다음</span>
-            </button>
+            <div th:if="${nowPage == (orderList.getTotalPages() / 10)}">
+                <button class="btn_page_next" th:onclick="|location.href='../orders/list?page='+ ${nowPage + 1} + '&size=10'|">
+                    <span class="hidden">다음</span>
+                </button>
+            </div>
         </div>
     </div>
 <!--    th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|"-->
