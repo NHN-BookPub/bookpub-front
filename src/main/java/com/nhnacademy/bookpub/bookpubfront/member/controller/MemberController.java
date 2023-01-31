@@ -1,13 +1,14 @@
 package com.nhnacademy.bookpub.bookpubfront.member.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -35,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class MemberController {
     private static final String REDIRECT_MY_PAGE = "redirect:/members/";
     private static final String MEMBER = "member";
+    private static final String AUTH_MEMBER = "oauthMember";
     private final MemberService memberService;
 
     /**
@@ -65,13 +67,27 @@ public class MemberController {
     /**
      * 회원가입 페이지를 연결해주는 메소드.
      *
-     * @param model the model
      * @return 회원가입 페이지 view를 보여줌
      */
     @GetMapping("/signup")
-    public String signupPageForm(Model model) {
-        model.addAttribute("url", GateWayConfig.getGatewayUrl() + "/api/signup");
+    public String signupPageForm() {
         return "member/signupPage";
+    }
+
+    /**
+     * oauth 회원가입 페이지를 연결해주는 메소드.
+     *
+     * @param model   model.
+     * @param request 요청.
+     * @return oauth 회원의 가입 페이지.
+     */
+    @GetMapping("/oauth/signup")
+    public String oauthSignupPageForm(Model model, HttpServletRequest request) {
+        OauthMemberRequestDto oauthMember
+                = (OauthMemberRequestDto) request.getAttribute(AUTH_MEMBER);
+
+        model.addAttribute(AUTH_MEMBER, oauthMember);
+        return "member/oauthSignupPage";
     }
 
     /**
@@ -84,6 +100,24 @@ public class MemberController {
     @PostMapping("/signup")
     public String signupComplete(@Valid SignupMemberRequestDto signupMemberRequestDto,
                                  Model model) {
+        SignupMemberResponseDto memberInfo
+                = memberService.signup(signupMemberRequestDto);
+
+        model.addAttribute(MEMBER, memberInfo);
+
+        return "member/signupComplete";
+    }
+
+    /**
+     * 회원가입 정보로 통신한 후 성공페이지를 띄워주는 메소드.
+     *
+     * @param signupMemberRequestDto 회원가입 정보를 담고있다.
+     * @param model                  html에 동적인 정보를 전달해주는 객체.
+     * @return 성공, 실패 페이지를 보여준다.
+     */
+    @PostMapping("/oauth/signup")
+    public String oauthSignupComplete(@Valid OauthMemberCreateRequestDto signupMemberRequestDto,
+                                      Model model) {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
 

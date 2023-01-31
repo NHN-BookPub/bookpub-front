@@ -7,14 +7,14 @@ import lombok.Getter;
 import org.hibernate.validator.constraints.Length;
 
 /**
- * member Request DTO개체.
+ * oauth member Request DTO개체.
  *
  * @author : 임태원
  * @since : 1.0
  **/
 @Getter
 @AllArgsConstructor
-public class SignupMemberRequestDto {
+public class OauthMemberCreateRequestDto {
     @NotBlank
     @Pattern(regexp = "^.*(?=.*[가-힣a-z])(?=.{2,200}).*$",
             message = "이름은 한글 또는 영어 2글자 이상 200글자 이하로 입력해주세요.")
@@ -22,7 +22,7 @@ public class SignupMemberRequestDto {
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z\\d]{2,8}$",
-            message = "닉네임은 영어나 숫자로 2글자 이상 8글자 이하로 입력해주세요.")
+            message = "닉네임은 영어는 필수 숫자는 선택으로 2글자 이상 8글자 이하로 입력해주세요.")
     private String nickname;
 
     @NotBlank
@@ -32,15 +32,7 @@ public class SignupMemberRequestDto {
     @NotBlank
     @Length(min = 2, max = 2, message = "성별의 길이는 2글자로 입력해주세요")
     private String gender;
-
-    @NotBlank
-    @Pattern(regexp = "^[a-z0-9_-]{5,20}$",
-            message = "아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.")
     private String memberId;
-
-    @NotBlank
-    @Pattern(regexp = "^.*(?=.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$",
-            message = "패스워드는 대문자, 소문자, 숫자, 특수문자로 구성된 8글자에서 20글자로 입력해주세요.")
     private String pwd;
 
     @NotBlank
@@ -53,10 +45,14 @@ public class SignupMemberRequestDto {
 
     @NotBlank
     private String address;
-
     @NotBlank
     private String detailAddress;
 
+    /**
+     * 비밀번호를 인코딩한 값으로 세팅해주는 메소드.
+     *
+     * @param encodePwd 암호화된 비번.
+     */
     public void setEncodePwd(String encodePwd) {
         this.pwd = encodePwd;
     }

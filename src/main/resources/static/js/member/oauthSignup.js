@@ -1,13 +1,10 @@
 let emptyReg = /\s/g;
 let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
-let idReg = /^[a-z0-9_-]{5,20}$/;
-let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
 let nickReg = /^[a-zA-Z\\d]{2,8}$/;
 let birthReg = /^\d{6}$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 const nicknameCheck = $("#nickname-check");
-const idCheck = $("#id-check");
 
 let authMessage;
 let confirmBtn = $('#smsAuthConfirm');
@@ -32,15 +29,6 @@ window.addEventListener('load', () => {
     });
 }, false);
 
-
-function idPattern() {
-    let idVal = document.getElementById('memberId').value;
-    if (!idReg.test(idVal) || emptyReg.test(idVal)) {
-        alert('아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.')
-        return false;
-    }
-    return true;
-}
 
 function nicknamePattern() {
     let nickVal = document.getElementById('nickname').value;
@@ -71,7 +59,6 @@ function phonePattern() {
 
 function check() {
     nicknamePattern();
-    idPattern();
     emailPattern();
     phonePattern();
 
@@ -86,59 +73,8 @@ function check() {
         alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
         return false;
     }
-
-    const pwdVal = document.getElementById('pwd').value;
-    const pwdOkVal = document.getElementById('pwd-check').value;
-
-    if (!pwdReg.test(pwdVal) || emptyReg.test(pwdVal)) {
-        alert('비밀번호는 영대소문자,숫자,특수문자로 구성된 8글자 이상 20글자 이하로 생성하세요.')
-        return false;
-    } else {
-        if (pwdOkVal) {
-            if (pwdVal !== pwdOkVal) {
-                alert('비밀번호가 일치하지 않습니다.')
-                return false;
-            }
-        } else {
-            alert('비밀번호확인을 입력하세요.')
-            return false;
-        }
-    }
-
 }
 
-
-function idCheckFunc() {
-    const id = $("#memberId").val();
-    if (idPattern()) {
-        $.ajax({
-            type: "post",
-            async: true,
-            url: "/idCheck",
-            data: {"id": id},
-            success: function (result) {
-                if (result === false) {
-                    $('.id-ok').css("display", "inline-block");
-                    $('.id-duplicate').css("display", "none");
-                    idCheck.value = "1";
-                    document.getElementById("memberId").readOnly = true;
-                    if (allCheck()) {
-                        $("#submitBtn").removeAttr("disabled");
-                    }
-                } else {
-                    $('.id-duplicate').css("display", "inline-block");
-                    $('.id-ok').css("display", "none");
-                    alert("이미 사용하는 아이디 입니다.");
-                    $('#memberId').val('');
-                }
-            },
-        })
-    } else {
-        $('.id-duplicate').css("display", "inline-block");
-        $('.id-ok').css("display", "none");
-        $('#memberId').val('');
-    }
-}
 
 function nickCheckFunc() {
     const nickname = $("#nickname").val();
@@ -174,7 +110,7 @@ function nickCheckFunc() {
 }
 
 function allCheck() {
-    return idCheck.value === "1" && nicknameCheck.value === "1";
+    return nicknameCheck.value === "1";
 }
 
 
