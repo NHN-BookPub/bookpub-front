@@ -78,7 +78,7 @@ public class AuthorAdaptorImpl implements AuthorAdaptor {
         String url = GateWayConfig.getGatewayUrl() + AUTHOR_URI + "/" + request.getModifyAuthorNo();
 
         RestModifyAuthorRequestDto dto = new RestModifyAuthorRequestDto(
-                request.getModifyAuthorName());
+                request.getModifyAuthorName(), request.getModifyMainBook());
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,

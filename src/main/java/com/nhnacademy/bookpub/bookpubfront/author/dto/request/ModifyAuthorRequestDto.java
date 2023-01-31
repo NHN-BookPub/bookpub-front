@@ -15,4 +15,5 @@ public class ModifyAuthorRequestDto {
 
     private Integer modifyAuthorNo;
     private String modifyAuthorName;
+    private String modifyMainBook;
 }

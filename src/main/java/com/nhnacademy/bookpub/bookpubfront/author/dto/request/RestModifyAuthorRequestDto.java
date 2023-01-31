@@ -14,4 +14,5 @@ import lombok.Getter;
 public class RestModifyAuthorRequestDto {
 
     private String authorName;
+    private String mainBook;
 }
