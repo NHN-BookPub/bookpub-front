@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.product.service;
 
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
@@ -63,4 +64,21 @@ public interface ProductService {
      * @return 장바구니에 있는 상품들
      */
     List<GetProductDetailResponseDto> findProductInCart(List<Long> productsNo);
+
+    /**
+     * 장바구니에서 주문하는 상품들을 가져오는 메소드.
+     *
+     * @param products 주문하는 상품들.
+     * @return 상품에 대한 정보.
+     */
+    List<OrderProductDto> orderProductInCart(List<String> products);
+
+    /**
+     * dto를 주문용 dto로 변환시켜주는 메소드.
+     *
+     * @param product 상품.
+     * @param count 개수.
+     * @return 상품이 몇개인지 알 수 있는 dto.
+     */
+    OrderProductDto convertDto(GetProductDetailResponseDto product, int count);
 }

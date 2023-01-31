@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.product.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
@@ -10,6 +11,7 @@ import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -115,5 +117,48 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public List<GetProductDetailResponseDto> findProductInCart(List<Long> productsNo) {
         return productAdaptor.requestProductInCart(productsNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<OrderProductDto> orderProductInCart(List<String> products) {
+        List<OrderProductDto> orderProductList = new ArrayList<>();
+
+        List<Long> productNos =
+                products.stream()
+                        .map(s -> Long.parseLong(s.split("-")[0]))
+                        .collect(Collectors.toList());
+
+        List<Integer> productCounts =
+                products.stream()
+                        .map(s -> Integer.parseInt(s.split("-")[1]))
+                        .collect(Collectors.toList());
+
+        List<GetProductDetailResponseDto> productsDtos =
+                productAdaptor.requestProductInCart(productNos);
+
+
+        for (int i = 0; i < productCounts.size(); i++) {
+            orderProductList.add(convertDto(productsDtos.get(i), productCounts.get(i)));
+        }
+
+        return orderProductList;
+    }
+
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public OrderProductDto convertDto(GetProductDetailResponseDto product, int count) {
+        return OrderProductDto.builder()
+                .title(product.getTitle())
+                .salesPrice(product.getSalesPrice())
+                .productNo(product.getProductNo())
+                .categoriesNo(product.getCategoriesNo())
+                .count(count)
+                .build();
     }
 }
