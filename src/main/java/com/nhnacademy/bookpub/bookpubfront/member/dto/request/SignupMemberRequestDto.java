@@ -16,7 +16,7 @@ import org.hibernate.validator.constraints.Length;
 @AllArgsConstructor
 public class SignupMemberRequestDto {
     @NotBlank
-    @Pattern(regexp = "^.*(?=.*[가-힣a-z])(?=.{2,200}).*$",
+    @Pattern(regexp = "^[가-힣a-z]{2,200}$",
             message = "이름은 한글 또는 영어 2글자 이상 200글자 이하로 입력해주세요.")
     private String name;
 
