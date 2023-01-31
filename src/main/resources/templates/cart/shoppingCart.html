@@ -39,7 +39,8 @@
         </thead>
         <tbody id="cart">
         <tr th:each="product: ${products}">
-            <td><input type="checkbox" id="checked" name="product" checked></td>
+            <td>
+                <input type="checkbox" id="checked" name="product" checked></td>
             <td>
                 <b id="productNo" th:text="${product.productNo}" style="display: none"></b>
                 <div class="row">
