@@ -40,4 +40,12 @@ public interface PricePolicyService {
      * @return 가격정책 리스트.
      */
     List<GetPricePolicyResponseDto> getPricePolicies();
+
+    /**
+     * 정책명으로 조회합니다.
+     *
+     * @param name 정책명.
+     * @return 정책리스트.
+     */
+    List<GetPricePolicyResponseDto> getPricePoliciesByName(String name);
 }

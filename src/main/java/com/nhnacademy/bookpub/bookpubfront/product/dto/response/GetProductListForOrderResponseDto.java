@@ -16,4 +16,5 @@ public class GetProductListForOrderResponseDto {
     private String title;
     private Long salesPrice;
     private Integer productAmount;
+    private String stateCode;
 }

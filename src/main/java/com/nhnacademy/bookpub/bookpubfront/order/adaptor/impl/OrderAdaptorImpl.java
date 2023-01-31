@@ -7,6 +7,7 @@ import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
@@ -49,16 +50,16 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getAllOrdersRequest(Pageable pageable) {
+    public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
                 + "?page=" + pageable.getOffset() + "&size=" + pageable.getPageSize()     ;
-        ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
+        ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>(){});
 
-        return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
+        return (PageResponse<GetOrderListForAdminResponseDto>) checkError(response).getBody();
     }
 
     @Override

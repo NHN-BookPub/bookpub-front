@@ -50,10 +50,6 @@
                         <span class="order_num">배송일 <span class="num"
                                                           th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
                     </div>
-                    <div class="right_box">
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span
-                                class="ico_arw_white"></span></button>
-                    </div>
                 </div>
                 <table class="tbl_prod">
                     <colgroup>
@@ -102,6 +98,9 @@
 
                         <td class="prod">
                             <div class="btn_wrap full">
+                                <div class="right_box">
+                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
+                                </div>
                             </div>
                         </td>
                     </tr>

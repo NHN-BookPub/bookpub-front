@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.service.impl;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -57,7 +58,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getOrderList(Pageable pageable) {
+    public PageResponse<GetOrderListForAdminResponseDto> getOrderList(Pageable pageable) {
         return orderAdaptor.getAllOrdersRequest(pageable);
     }
 

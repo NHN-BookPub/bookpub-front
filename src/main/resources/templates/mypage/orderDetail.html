@@ -39,12 +39,7 @@
                         <span class="gap">|</span>
                         <span class="order_num">송장번호 <span class="num" th:text="${orderDetail.getInvoiceNo()}"></span></span>
                         <span class="gap">|</span>
-                        <span class="order_num">상태 <span class="num" th:text="${orderDetail.getOrderState()}"></span></span>
-                    </div>
-                    <div class="right_box">
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">반품 신청</span><span class="ico_arw_white"></span></button>
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">교환 신청</span><span class="ico_arw_white"></span></button>
+                        <span class="order_num"><span class="num" th:text="${orderDetail.getOrderState()}"></span></span>
                     </div>
                 </div>
             </div>
@@ -86,7 +81,7 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                <a href="/">
+                                <a th:href="|../../products/view/${product.getProductNo()}|">
                                     <h3 th:text="${product.getTitle()}"></h3>
                                 </a>
                                 <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
@@ -95,13 +90,19 @@
 
                             <td class="prod">
                                 <span class="price">
+                                    <div class="order_num" th:if="${!product.getStateCode().equals('결제완료')}">
+                                        <span class="order_num" th:text="${product.getStateCode()}"></span>
+                                    </div>
                                     <span class="val" th:text="${product.getSalesPrice()}"></span>
                                     <span class="unit">원</span>
                                 </span>
                             </td>
 
                             <td class="prod">
-                                <div class="btn_wrap full">
+                                <div class="right_box">
+                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
+                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">반품 신청</span><span class="ico_arw_white"></span></button>
+                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">교환 신청</span><span class="ico_arw_white"></span></button>
                                 </div>
                             </td>
                         </tr>
