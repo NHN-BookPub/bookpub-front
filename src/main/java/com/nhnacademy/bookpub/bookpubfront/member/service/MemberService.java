@@ -9,7 +9,6 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
@@ -110,7 +109,7 @@ public interface MemberService {
     boolean idDuplicateCheck(String id);
 
     /**
-     *  nickname 중복체크 메소드.
+     * nickname 중복체크 메소드.
      *
      * @param nickname 회원가입 하고자 하는 닉네임.
      * @return true, false
@@ -172,12 +171,4 @@ public interface MemberService {
      * @param addressNo 주소번호
      */
     void deleteMemberAddress(Long memberNo, Long addressNo);
-
-    /**
-     * string 타입으로 들어온 유저정보를 dto로 파싱합니다.
-     *
-     * @param oauthMember 로그인하려는 유저 정보.
-     * @return dto.
-     */
-    OauthMemberRequestDto oauthMemberParsing(String oauthMember);
 }

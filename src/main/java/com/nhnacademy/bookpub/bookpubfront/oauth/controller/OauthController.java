@@ -10,10 +10,10 @@ import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,6 +30,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Slf4j
 public class OauthController {
     private final OauthFactory oauthFactory;
+    private static final String AUTH_MEMBER = "oauthMember";
+
 
     /**
      * oauth 도메인의 redirect 위치. oauth 사용자 정보를 가져오는 로직이 수행됩니다.
@@ -39,7 +41,8 @@ public class OauthController {
      */
     @GetMapping("/code")
     public String authLogin(@RequestParam String code,
-                            HttpServletRequest request, HttpServletResponse response) {
+                            HttpServletRequest request, HttpServletResponse response,
+                            Model model) {
         Cookie cookie = CookieUtil.findCookie(Utils.DOMAIN);
         if (Objects.isNull(cookie)) {
             return "redirect:/";
@@ -57,13 +60,11 @@ public class OauthController {
         boolean oauthMember = oauthService.isOauthMember(oauthMemberRequestDto.getId());
 
         if (!oauthMember) {
-            request.setAttribute("oauthMember", oauthMemberRequestDto);
+            request.setAttribute(AUTH_MEMBER, oauthMemberRequestDto);
             return "forward:/oauth/signup";
         }
 
-        HttpSession session = request.getSession();
-        session.setAttribute("oauthMember", oauthMemberRequestDto.toString());
-
-        return "redirect:/oauth/login";
+        model.addAttribute(AUTH_MEMBER, oauthMemberRequestDto);
+        return "member/popup";
     }
 }

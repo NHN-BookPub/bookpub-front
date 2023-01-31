@@ -10,7 +10,6 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberRespo
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
-import java.util.Objects;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.SessionAttribute;
 
 /**
  * 멤버를 다루는 멤버 컨트롤러입니다.
@@ -126,23 +124,6 @@ public class MemberController {
         model.addAttribute(MEMBER, memberInfo);
 
         return "member/signupComplete";
-    }
-
-    /**
-     * oauth 로그인 페이지 컨트롤러.
-     *
-     * @param oauthMember oauth로 가입한 회원.
-     * @param model       model.
-     * @return 로그인 정보가 있으면 로그인 팝업, 아니라면 메인페이지로 redirect.
-     */
-    @GetMapping("/oauth/login")
-    public String oauthLogin(@SessionAttribute(required = false) String oauthMember, Model model) {
-        if (Objects.isNull(oauthMember)) {
-            return "redirect:/";
-        }
-
-        model.addAttribute(AUTH_MEMBER, memberService.oauthMemberParsing(oauthMember));
-        return "member/popup";
     }
 
     /**
