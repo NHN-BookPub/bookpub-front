@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>등급 등록페이</title>
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <form class="form was-validated" method="post" action="/admin/pricepolicies" id="pricePolicyDto" name="pricePolicyDto">
+                    <div class="form-group">
+                        <label>가격정책</label>
+                        </br>
+                        <input name="policyName" type="text" placeholder="정책명을 입력해주세요." id="policyName"
+                               min="2"
+                               max="3"
+                               required>
+                        <div class="valid-feedback">완료</div>
+                        <div class="invalid-feedback">배송비 | 포장비</div>
+                    </div>
+                    <div class="form-group">
+                        <input name="policyFee" type="text" placeholder="금액을 입력해주세요" id="policyFee"
+                               pattern="^[0-9]+$"
+                               required>
+                        <div class="valid-feedback">완료</div>
+                        <div class="invalid-feedback">숫자만 입력해주세요</div>
+                    </div>
+                    <input type="submit" class="btn-primary" value="등록">
+                </form>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 관리</title>
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="card-header" style="justify-content: center">
+                    <h1 class="mb-3 sm">주문 목록</h1>
+                </div>
+                <div>
+                    <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">가격정책조회</a>
+                    <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문상태조회</a>
+                    <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문조회</a>
+                </div>
+                <div class="card-body">
+                    <div style="display: flex; flex-direction: column; gap: 8px">
+                        <div class="order_summary_box" th:each="order : ${orderList.getContent()}">
+                            <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
+                            <div class="box_header"
+                                 th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
+                                <div class="label">
+                        <span class="order_date"
+                              th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd HH:mm')}"></span>
+                                    <span class="gap">|</span>
+                                    <span class="order_num">회원ID <span class="num" th:text="${order.getMemberId()}"></span></span>
+                                    <span class="gap">|</span>
+                                    <span class="order_num">주문번호 <span class="num" th:text="${order.getOrderNo()}"></span></span>
+                                    <span class="gap">|</span>
+                                    <span class="order_num">송장번호 <span class="num" th:text="${order.getInvoiceNo()}"></span></span>
+                                    <span class="gap">|</span>
+                                    <span class="order_num">상태 <span class="num" th:text="${order.getOrderState()}"></span></span>
+                                    <span class="gap">|</span>
+                                    <span class="order_num">결제금액 <span class="num"
+                                                                       th:text="${order.getTotalAmount()}"></span></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+</div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+</html>
