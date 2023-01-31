@@ -101,9 +101,21 @@ public interface MemberService {
      */
     List<MemberTierStatisticsResponseDto> memberTierStatistics();
 
+    /**
+     * id 중복체크 메소드.
+     *
+     * @param id 회원가입 하고자 하는 id.
+     * @return true, false
+     */
     boolean idDuplicateCheck(String id);
 
-    boolean nickDuplicateCheck(String id);
+    /**
+     *  nickname 중복체크 메소드.
+     *
+     * @param nickname 회원가입 하고자 하는 닉네임.
+     * @return true, false
+     */
+    boolean nickDuplicateCheck(String nickname);
 
     /**
      * 멤버에 이름을 수정할때 쓰이는 메서드입니다.

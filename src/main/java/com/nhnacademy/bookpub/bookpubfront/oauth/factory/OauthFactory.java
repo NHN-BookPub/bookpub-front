@@ -36,7 +36,6 @@ public class OauthFactory {
         } else if (oauthName.equalsIgnoreCase("KAKAO")) {
             return kakaoService;
         } else if (oauthName.equalsIgnoreCase("NAVER")) {
-            log.warn("service 실행");
             return naverService;
         } else {
             throw new NotAllowedOauthServiceException();

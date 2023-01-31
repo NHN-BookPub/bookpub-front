@@ -48,6 +48,11 @@ public class OauthMemberCreateRequestDto {
     @NotBlank
     private String detailAddress;
 
+    /**
+     * 비밀번호를 인코딩한 값으로 세팅해주는 메소드.
+     *
+     * @param encodePwd 암호화된 비번.
+     */
     public void setEncodePwd(String encodePwd) {
         this.pwd = encodePwd;
     }

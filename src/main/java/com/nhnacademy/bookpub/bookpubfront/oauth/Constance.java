@@ -6,21 +6,27 @@ package com.nhnacademy.bookpub.bookpubfront.oauth;
  * @author : 임태원
  * @since : 1.0
  **/
-public class Constance {
+public enum Constance {
+    HTTPS("https"),
+    GITHUB("github.com"),
+    KAKAO("kauth.kakao.com"),
+    NAVER("nid.naver.com"),
+    CLIENT_ID("client_id"),
+    CLIENT_SECRET("client_secret"),
+    REDIRECT_URI("redirect_uri"),
+    BOOKPUB_EMAIL("@bookpub.com"),
+    GITHUB_EMAIL("@github.com"),
+    NAVER_EMAIL("@naver.com"),
+    KAKAO_EMAIL("@kakao.com");
 
-    private Constance() {
+    private final String value;
+
+
+    Constance(String value) {
+        this.value = value;
     }
 
-    public static final String HTTPS = "https";
-    public static final String GITHUB = "github.com";
-    public static final String KAKAO = "kauth.kakao.com";
-    public static final String NAVER = "nid.naver.com";
-    public static final String CLIENT_ID = "client_id";
-    public static final String CLIENT_SECRET = "client_secret";
-    public static final String REDIRECT_URI = "redirect_uri";
-    public static final String BOOKPUB = "@bookpub.com";
-    public static final String GITHUB_EMAIL = "@github.com";
-    public static final String NAVER_EMAIL = "@naver.com";
-    public static final String KAKAO_EMAIL = "@kakao.com";
-
+    public String getValue() {
+        return value;
+    }
 }

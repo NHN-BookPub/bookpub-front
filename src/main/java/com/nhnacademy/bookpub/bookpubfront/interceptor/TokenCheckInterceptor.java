@@ -36,6 +36,15 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
     private static final Long RENEW_TIME = Duration.ofMinutes(15).toSeconds();
     private final MemberAdaptor memberAdaptor;
 
+    /**
+     * 컨트롤러 진입 전에 실행되는 메소드.
+     *
+     * @param request 요청
+     * @param response 응답
+     * @param handler 핸들러
+     * @return true, false
+     * @throws IOException  sendError에서 발생할 수 있는 에러.
+     */
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws IOException {
