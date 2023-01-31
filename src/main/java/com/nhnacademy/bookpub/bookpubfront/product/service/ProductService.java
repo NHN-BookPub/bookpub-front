@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.product.service;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -77,8 +78,17 @@ public interface ProductService {
      * dto를 주문용 dto로 변환시켜주는 메소드.
      *
      * @param product 상품.
-     * @param count 개수.
+     * @param count   개수.
      * @return 상품이 몇개인지 알 수 있는 dto.
      */
     OrderProductDto convertDto(GetProductDetailResponseDto product, int count);
+
+    /**
+     * 카테고리별 상품 조회 메서드
+     *
+     * @param categoryNo 카테고리 번호
+     * @param pageable   페이징 정보
+     * @return 페이징 정보를 담은 상품들
+     */
+    PageResponse<GetProductByCategoryResponseDto> findProductByCategory(Integer categoryNo, Pageable pageable);
 }
