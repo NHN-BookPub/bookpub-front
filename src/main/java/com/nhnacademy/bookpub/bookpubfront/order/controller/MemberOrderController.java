@@ -50,6 +50,7 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
+        model.addAttribute("member", memberService.getMember(memberNo));
         model.addAttribute("orderList", orderService.getOrderListByMemberNo(memberNo, pageable));
         model.addAttribute("nowPage", pageable.getPageNumber());
 
@@ -65,6 +66,13 @@ public class MemberOrderController {
      */
     @GetMapping()
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
+        Long memberNo = Long.parseLong(
+                (String) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal());
+
+        model.addAttribute("member", memberService.getMember(memberNo));
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "mypage/orderDetail";
