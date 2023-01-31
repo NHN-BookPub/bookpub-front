@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDt
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
@@ -160,5 +161,13 @@ public class ProductServiceImpl implements ProductService {
                 .categoriesNo(product.getCategoriesNo())
                 .count(count)
                 .build();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> findProductByCategory(Integer categoryNo, Pageable pageable) {
+        return productAdaptor.requestProductsByCategory(categoryNo, pageable);
     }
 }
