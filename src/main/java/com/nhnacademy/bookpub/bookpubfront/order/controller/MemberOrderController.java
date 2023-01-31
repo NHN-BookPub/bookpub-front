@@ -1,10 +1,12 @@
 package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -33,8 +35,12 @@ public class MemberOrderController {
      * @return 주문리스트 뷰를 반환합니다.
      */
     @GetMapping("/list")
-    public String orderListView(Model model, Pageable pageable) {
-        model.addAttribute("orderList", orderService.getOrderListByMemberNo(397L, pageable));
+    @Auth
+    public String orderListView(Model model, @PageableDefault Pageable pageable) {
+        Long memberNo = Long.parseLong((String)SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+        model.addAttribute("orderList", orderService.getOrderListByMemberNo(memberNo, pageable));
+        model.addAttribute("nowPage", pageable.getPageNumber());
 
         return "mypage/orderList";
     }
@@ -46,7 +52,7 @@ public class MemberOrderController {
      * @param orderNo 주문번호.
      * @return 주문상세 뷰를 반환합니다.
      */
-    @GetMapping("/detail")
+    @GetMapping()
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
@@ -59,7 +65,7 @@ public class MemberOrderController {
      * @param model view에 데이터 전달해주는 클래스.
      * @return order view.
      */
-    @GetMapping
+    @GetMapping("/order")
     public String memberOrder(Model model) {
         String principal =
                 (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
