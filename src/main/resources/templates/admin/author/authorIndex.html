@@ -40,8 +40,10 @@
                         <div class="form-group">
                             <label for="addMainBook">대표작</label>
                             <input type="text" class="form-control" id="addMainBook"
+                                   placeholder="대표작"
                                    name="mainBook">
                         </div>
+                        <br/>
                         <button type="button" class="btn btn-light" data-dismiss="modal"
                                 style="margin-left:70%;">취소
                         </button>
@@ -74,6 +76,15 @@
                                    maxlength="20" required>
                             <div class="invalid-feedback">최소 1글자, 최대 200글자</div>
                         </div>
+
+                        <div class="form-group">
+                            <label for="modifyMainBook">대표작</label>
+                            <input type="text" class="form-control" id="modifyMainBook"
+                                   placeholder="변경할 대표작"
+                                   name="modifyMainBook" maxlength="100">
+                            <div class="invalid-feedback">최대 100글자</div>
+                        </div>
+                        </br>
 
                         <button type="button" class="btn btn-light" data-dismiss="modal"
                                 style="margin-left:70%;">취소
