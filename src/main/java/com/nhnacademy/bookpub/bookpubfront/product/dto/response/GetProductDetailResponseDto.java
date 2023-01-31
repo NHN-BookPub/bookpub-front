@@ -37,6 +37,7 @@ public class GetProductDetailResponseDto {
     private Integer policySaveRate;
 
     private List<String> authors = new ArrayList<>();
+    private List<Integer> categoriesNo = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
     private List<String> tagsColors = new ArrayList<>();
