@@ -22,7 +22,7 @@ public class OauthMemberCreateRequestDto {
 
     @NotBlank
     @Pattern(regexp = "^[a-zA-Z\\d]{2,8}$",
-            message = "닉네임은 영어는 필수 숫자는 선택으로 2글자 이상 8글자 이하로 입력해주세요.")
+            message = "닉네임은 영어나 숫자로 2글자 이상 8글자 이하로 입력해주세요.")
     private String nickname;
 
     @NotBlank

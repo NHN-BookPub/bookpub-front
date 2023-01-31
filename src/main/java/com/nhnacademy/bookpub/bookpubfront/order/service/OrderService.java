@@ -24,7 +24,7 @@ public interface OrderService {
     /**
      * 송장번호를 수정합니다.
      *
-     * @param orderNo 주문번호.
+     * @param orderNo   주문번호.
      * @param invoiceNo 송장번호.
      */
     void modifyInvoiceNo(Long orderNo, String invoiceNo);
@@ -32,7 +32,7 @@ public interface OrderService {
     /**
      * 상태코드를 수정합니다.
      *
-     * @param orderNo 주문번호.
+     * @param orderNo  주문번호.
      * @param codeName 코드명.
      */
     void modifyStateCode(Long orderNo, String codeName);
