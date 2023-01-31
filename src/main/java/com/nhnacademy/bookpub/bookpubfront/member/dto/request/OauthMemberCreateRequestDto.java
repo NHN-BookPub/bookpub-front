@@ -26,7 +26,7 @@ public class OauthMemberCreateRequestDto {
     private String nickname;
 
     @NotBlank
-    @Pattern(regexp = "^.*(?=.*\\d)(?=.{6}).*$", message = "생년월일은 숫자로 6글자 입력해주세요")
+    @Pattern(regexp = "^\\d{6}$", message = "생년월일은 숫자로 6글자 입력해주세요")
     private String birth;
 
     @NotBlank

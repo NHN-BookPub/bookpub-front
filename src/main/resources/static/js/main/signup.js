@@ -3,12 +3,11 @@ let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
 let idReg = /^[a-z0-9_-]{5,20}$/;
 let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
 let nickReg = /^[a-zA-Z\\d]{2,8}$/;
-let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
+let birthReg = /^\d{6}$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 const nicknameCheck = $("#nickname-check");
 const idCheck = $("#id-check");
-const emailCheck = $("#email-check");
 
 let authMessage;
 let confirmBtn = $('#smsAuthConfirm');
@@ -37,7 +36,7 @@ window.addEventListener('load', () => {
 function idPattern() {
     let idVal = document.getElementById('memberId').value;
     if (!idReg.test(idVal) || emptyReg.test(idVal)) {
-        alert('아이디는 영소문자,숫자로 구성된 5글자 이상, 20글자 이하로 생성해주세요.')
+        alert('아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.')
         return false;
     }
     return true;
@@ -46,7 +45,7 @@ function idPattern() {
 function nicknamePattern() {
     let nickVal = document.getElementById('nickname').value;
     if (!nickReg.test(nickVal) || emptyReg.test(nickVal)) {
-        alert('닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.')
+        alert('닉네임은 영어나 숫자로 2글자 이상 8글자 이하로 입력해주세요.')
         return false;
     }
     return true;

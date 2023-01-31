@@ -1,7 +1,7 @@
 let emptyReg = /\s/g;
 let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
 let nickReg = /^[a-zA-Z\\d]{2,8}$/;
-let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
+let birthReg = /^\d{6}$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 const nicknameCheck = $("#nickname-check");
@@ -33,7 +33,7 @@ window.addEventListener('load', () => {
 function nicknamePattern() {
     let nickVal = document.getElementById('nickname').value;
     if (!nickReg.test(nickVal) || emptyReg.test(nickVal)) {
-        alert('닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.')
+        alert('닉네임은 영어나 숫자로 2글자 이상 8글자 이하로 입력해주세요.')
         return false;
     }
     return true;
