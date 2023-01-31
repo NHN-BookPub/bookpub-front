@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.product.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -62,4 +63,13 @@ public interface ProductAdaptor {
      * @return 징바구니에 있는 상품들
      */
     List<GetProductDetailResponseDto> requestProductInCart(List<Long> productsNo);
+
+    /**
+     * 카테고리별로 상품을 조회 API를 부르는 메서드.
+     *
+     * @param categoryNo 카테고리 번호
+     * @param pageable   페이징 정보
+     * @return 카테고리별 상품들
+     */
+    PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable);
 }

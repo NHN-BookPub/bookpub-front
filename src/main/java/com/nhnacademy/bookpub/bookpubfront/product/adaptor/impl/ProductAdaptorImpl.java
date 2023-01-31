@@ -4,6 +4,7 @@ import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -15,7 +16,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -49,7 +49,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -88,7 +88,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -127,6 +127,9 @@ public class ProductAdaptorImpl implements ProductAdaptor {
         ).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetProductDetailResponseDto> requestProductInCart(List<Long> productsNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
@@ -145,16 +148,23 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     }
 
     /**
-     * 4xx or 5xx 상태코드를 다루는 메서드.
-     *
-     * @param response 상태 코드
-     * @param <T>      모든 타입
+     * {@inheritDoc}
      */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus status = response.getStatusCode();
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/product/categories/" + categoryNo)
+                .encode()
+                .toUriString();
 
-        if (status.is4xxClientError() || status.is5xxServerError()) {
-            throw new RuntimeException();
-        }
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {
+                }
+        ).getBody();
     }
+
+
 }
