@@ -199,8 +199,10 @@ summary {
 
 .prod_cnt {
     position: absolute;
-    left: 320px;
-    font-weight: 400;
+    left: 177px;
+    font-size: 25px;
+    font-weight: 550;
+    top: 64px;
 }
 
 .has_ip {
@@ -424,4 +426,12 @@ summary {
     display: flex;
     gap: 11px;
     align-items: center;
+}
+
+#badge {
+    background-color: #8853e6;
+    color: white;
+    width: 8em;
+    padding: 8px 10px;
+    border-radius: 50px;
 }

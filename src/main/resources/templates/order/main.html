@@ -40,6 +40,7 @@
             modal.style.display = "flex"
         }
     </script>
+    <script src="../../static/js/order/order.js"></script>
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
@@ -55,7 +56,7 @@
                         <details class="item-tip tbl_prod_wrap ordering" open="">
                             <summary onclick="revert()">
                                 <span style="font-size: 19px;">주문 상품</span>
-                                <span class="prod_cnt" th:text="x개"></span>
+                                <span class="prod_cnt" id="totalCnt"></span>
                                 <div class="img-wrapper">
                                     <img id="arrow" class="btn-img" src="/static/img/main/down-arrow.svg">
                                     <input id="img-option" type="hidden" value="1">
@@ -71,35 +72,35 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <tr>
+                                <tr th:each="product : ${products}">
                                     <td class="prod">
                                         <div class="prod_area">
                                             <div class="bookpub-item-thumb size_sm">
                                                 <a target="_blank" href="#">
-                                    <span class="item-img-wrap">
-                                        <img src="/static/img/main/bookpub-logo-black.png">
-                                    </span>
+                                                    <span class="item-img-wrap">
+                                                        <img src="/static/img/main/no-image.png">
+                                                    </span>
                                                 </a>
                                             </div>
                                             <div class="prod_info size_sm">
-                                <span class="prod_info">
-                                    <span class="prod_name">
-                                        <span class="prod_name">도서명 받아오기</span>
-                                    </span>
-                                </span>
+                                                <span class="prod_info">
+                                                    <span class="prod_name">
+                                                        <span class="prod_name" th:text="${product.title}"></span>
+                                                    </span>
+                                                </span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>
-                                        <div class="badge_box"></div>
+                                        <div class="badge_box">
+                                            <div id="badge">bookpub 배송</div>
+                                        </div>
                                     </td>
                                     <td>
-                                        <span class="prd_num"> 3개 </span>
+                                        <span class="prd_num" th:text="${product.count}"></span>
                                     </td>
                                     <td>
-                        <span class="price">
-                            <span>51,300원</span>
-                        </span>
+                                        <span class="price product-price" th:text="${product.totalPrice}"></span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -307,7 +308,7 @@
                                 <p class="label2">상품금액</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val spot" data-amount="commodity">15,300</span>
+                                        <span class="val spot" id="commodity" th:text="${totalPrice}"></span>
                                         <span class="unit">원</span>
                                     </span>
                                 </div>
@@ -334,7 +335,7 @@
                                 <p class="label2">쿠폰할인</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" data-amount="couponDiscount">0</span>
+                                        <span class="val" id="couponDiscount">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                 </div>
@@ -357,7 +358,7 @@
                                 <p class="label2">최종결제금액</p>
                                 <div class="right_box">
                                     <span class="price2">
-                                        <span class="val" style="font-size:20px" data-amount="totalAmount">15,300</span>
+                                        <span class="val" style="font-size:20px" id="totalAmount" th:text="${totalPrice}"></span>
                                         <span class="unit">원</span>
                                     </span>
                                 </div>
@@ -365,7 +366,7 @@
                             <li class="payments_info_item point" style="justify-content: space-between;">
                                 <p class="label2">적립예정포인트</p>
                                 <span class="price2">
-                                    <span class="point" data-amount="savingPoint">850</span>
+                                    <span class="point" id="savingPoint">0</span>
                                     <span class="point-unit">P</span>
                                 </span>
                             </li>
@@ -393,16 +394,6 @@
 
 <script>
     document.getElementById('datetime').value = new Date().toISOString().substring(0, 19);
-</script>
-<script>
-    function gift() {
-        let giftOption = document.getElementById('gift');
-        if (giftOption.checked === true) {
-            document.getElementById("gift-price").innerText = "2000";
-        } else {
-            document.getElementById("gift-price").innerText = "0";
-        }
-    }
 </script>
 
 
