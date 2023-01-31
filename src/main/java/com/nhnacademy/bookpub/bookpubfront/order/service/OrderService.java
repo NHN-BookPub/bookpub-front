@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.service;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import org.springframework.data.domain.Pageable;
@@ -50,7 +51,7 @@ public interface OrderService {
      * @param pageable 페이지.
      * @return 페이지 객체.
      */
-    PageResponse<GetOrderListResponseDto> getOrderList(Pageable pageable);
+    PageResponse<GetOrderListForAdminResponseDto> getOrderList(Pageable pageable);
 
     /**
      * 회원 번호로 모든 주문 리스트를 반환합니다.

@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
@@ -29,7 +30,7 @@ public interface OrderAdaptor {
      * @param pageable 페이지.
      * @return 페이지를 반환합니다.(사이즈는 10으로 고정됩니다.)
      */
-    PageResponse<GetOrderListResponseDto> getAllOrdersRequest(Pageable pageable);
+    PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable);
 
     /**
      * 회원번호로 주문목록을 조회합니다.
