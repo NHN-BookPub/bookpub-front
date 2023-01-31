@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.pricepolicy.controller;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.CreatePricePolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
 import com.nhnacademy.bookpub.bookpubfront.state.PricePolicyState;
+import java.util.Arrays;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -21,9 +22,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin/pricepolicies")
 public class PricePolicyController {
     private final PricePolicyService pricePolicyService;
-    private static final String SHIPPING = "shipping";
-    private static final String PACKAGING = "packaging";
-    private static final String POLICY = "policies";
 
     /**
      * 가격정책 메인페이지 뷰를 보여줍니다.
@@ -33,9 +31,9 @@ public class PricePolicyController {
      */
     @GetMapping
     public String pricePolicyView(Model model) {
-        model.addAttribute(POLICY, pricePolicyService.getPricePolicies());
+        model.addAttribute("policies", pricePolicyService.getPricePolicies());
 
-        return "admin/pricepolicy/pricePolicyMain";
+        return "admin/pricepolicies/pricePolicyMain";
     }
 
     /**
@@ -47,14 +45,14 @@ public class PricePolicyController {
      */
     @GetMapping("/{policyName}")
     public String individualPolicyView(Model model, @PathVariable String policyName) {
-        if(policyName.equals(SHIPPING)) {
-            model.addAttribute(POLICY, pricePolicyService.getPricePoliciesByName(PricePolicyState.SHIPPING.getName()));
-        }
-        if(policyName.equals(PACKAGING)) {
-            model.addAttribute(POLICY, pricePolicyService.getPricePoliciesByName(PricePolicyState.PACKAGING.getName()));
-        }
+        model.addAttribute("policies", pricePolicyService.getPricePoliciesByName(
+                Arrays.stream(PricePolicyState.values())
+                        .filter(policy -> policy.name().equals(policyName.toUpperCase()))
+                        .findFirst()
+                        .orElseThrow()
+                        .getName()));
 
-        return "admin/pricepolicy/pricePolicyMain";
+        return "admin/pricepolicies/pricePolicyMain";
     }
 
     /**
@@ -65,7 +63,6 @@ public class PricePolicyController {
      */
     @PostMapping
     public String addPricePolicy(@ModelAttribute CreatePricePolicyRequestDto pricePolicyDto) {
-        log.info("dto = {}", pricePolicyDto);
         pricePolicyService.createPricePolicy(pricePolicyDto);
 
         return "redirect:/admin/pricepolicies";
@@ -78,6 +75,6 @@ public class PricePolicyController {
      */
     @GetMapping("/add")
     public String addPricePolicyView() {
-        return "admin/pricepolicy/pricePolicyAdd";
+        return "admin/pricepolicies/pricePolicyAdd";
     }
 }
