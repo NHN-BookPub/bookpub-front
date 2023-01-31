@@ -13,6 +13,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.request.ModifyMemberNickNa
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.ModifyMemberPasswordRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.ModifyMemberPhoneRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.NickCheckRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
@@ -21,6 +22,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
@@ -61,6 +63,24 @@ public class MemberAdaptorImpl implements MemberAdaptor {
 
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/api/signup",
+                HttpMethod.POST,
+                entity,
+                SignupMemberResponseDto.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<SignupMemberResponseDto> signupRequest(
+            OauthMemberCreateRequestDto signupRequest) {
+
+        HttpEntity<OauthMemberCreateRequestDto> entity =
+                new HttpEntity<>(signupRequest, makeHeader());
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + "/api/oauth/signup",
                 HttpMethod.POST,
                 entity,
                 SignupMemberResponseDto.class

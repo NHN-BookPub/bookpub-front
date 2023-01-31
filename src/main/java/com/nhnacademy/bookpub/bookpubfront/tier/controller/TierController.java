@@ -39,15 +39,6 @@ public class TierController {
         return "admin/tier/tierMain";
     }
 
-    /**
-     * 등급을 추가하는 View 로 가게해준다.
-     *
-     * @return 등급 등록페이지
-     */
-    @GetMapping("/admin/tiers/add")
-    public String tierAddFormMain(){
-        return "admin/tier/tierAdd";
-    }
 
     /**
      * 등급을 추가할때쓰이는 폼 POST 이다

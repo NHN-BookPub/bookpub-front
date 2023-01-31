@@ -25,23 +25,22 @@
                     <table class="table table-striped">
                         <thead>
                         <tr>
-                            <th>번호</th>
-                            <th>회원 등급</th>
-                            <th>회원 아이디</th>
-                            <th>회원 닉네임</th>
-                            <th>회원 성별</th>
-                            <th>회원 생년</th>
-                            <th>회원 월일</th>
-                            <th>회원 이메일</th>
-                            <th>회원 포인트 잔액</th>
-                            <th>소셜 가입 여부</th>
-                            <th>회원 탈퇴 여부</th>
-                            <th>회원 차단 여부</th>
+                            <th scope="col">회원 등급</th>
+                            <th scope="col">회원 아이디</th>
+                            <th scope="col">회원 닉네임</th>
+                            <th scope="col">회원 이름</th>
+                            <th scope="col">회원 성별</th>
+                            <th scope="col">회원 생년</th>
+                            <th scope="col">회원 월일</th>
+                            <th scope="col">회원 이메일</th>
+                            <th scope="col">회원 포인트 잔액</th>
+                            <th scope="col">소셜 가입 여부</th>
+                            <th scope="col">회원 탈퇴 여부</th>
+                            <th scope="col">회원 차단 여부</th>
                         </tr>
                         </thead>
                         <tbody>
-                        <tr th:each="member, index : ${content}">
-                            <td th:text="${index.count}"></td>
+                        <tr th:each="member : ${content}">
                             <td th:text="${member.tier}"></td>
                             <td th:text="${member.memberId}"></td>
                             <td th:text="${member.nickname}"></td>
@@ -49,6 +48,7 @@
                             <td th:text="${member.gender}"></td>
                             <td th:text="${member.birthYear}"></td>
                             <td th:text="${member.birthMonth}"></td>
+                            <td th:text="${member.email}"></td>
                             <td th:text="${member.point}"></td>
                             <td th:text="${member.isSocial}"></td>
                             <td th:text="${member.isDeleted}"></td>
@@ -59,7 +59,6 @@
                                     </button>
                                     <button th:unless="${member.isBlocked} == true" class="btn btn-outline-danger">차단
                                     </button>
-                                    </button>
                                 </form>
                                 <!-- 차단 버튼 클릭시 JS 로 처리 -->
                             </td>
@@ -69,20 +68,22 @@
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
                             <li class="page-item" th:classappend="${!previous} ? 'disabled'">
-                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${previousPageNo}+
+                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum -1}+
                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}" tabindex="-1">Previous</a>
                             </li>
-                            <th:block th:each="pagecount : ${totalPage}">
-                                <li class="page-item">
+                            <th:block th:with="
+                            start=${(pageNum/5)*5 + 1},
+                            end=(${(totalPage ==0) ? 1 : (start + (4) < totalPage ? start + 4 : totalPage)})">
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}">
                                     <a class="page-link"
-                                       th:href="@{ ${uri} + '?page=' + ${pagecount}+
-                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}">
-                                        [[${pagecount}]]
+                                       th:href="@{ ${uri} + '?page=' + ${page - 1}+
+                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}"
+                                       th:text="${page}">
                                     </a>
                                 </li>
                             </th:block>
-                            <li class="page-item" th:classappend="${!previous} ? 'disabled'">
-                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${nextPageNo}+
+                            <li class="page-item" th:classappend="${!next} ? 'disabled'">
+                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum + 1}+
                                  ${#strings.isEmpty(size) ? '' : '&size=' + size}}">Next</a>
                             </li>
                         </ul>

@@ -5,7 +5,6 @@ import com.nhnacademy.bookpub.bookpubfront.config.DoorayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import java.util.Random;
-import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;

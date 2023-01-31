@@ -5,6 +5,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
 
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
+import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.io.IOException;
 import java.util.List;
@@ -50,12 +51,12 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
                 return;
             }
 
-            Cookie sessionCookie = Utils.findCookie(SESSION_COOKIE);
+            Cookie sessionCookie = CookieUtil.findCookie(SESSION_COOKIE);
             if (notExistCookie(request, response, filterChain, sessionCookie)) {
                 return;
             }
 
-            Cookie jwtCookie = Utils.findCookie(JwtUtil.JWT_COOKIE);
+            Cookie jwtCookie = CookieUtil.findCookie(JwtUtil.JWT_COOKIE);
             if (notExistCookie(request, response, filterChain, jwtCookie)) {
                 return;
             }

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>회원가입</title>
+    <!-- jQury cdn-->
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+          integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+
+    <link rel="stylesheet" href="/static/css/main/signup.css">
+    <script src="/static/js/member/oauthSignup.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+
+</head>
+
+<body>
+<div class="container">
+    <div class="input-form-backgroud row">
+        <div class="input-form col-md-12 mx-auto">
+            <h4 class="mb-3">회원가입</h4>
+            <form class="validation-form" novalidate action="/oauth/signup" method="post">
+                <div class="mb-3">
+                    <label for="name">이름</label>
+                    <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
+                           value="" required>
+                    <div class="invalid-feedback">
+                        이름을 입력해주세요.
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-6 mb-3">
+                        <label for="gender">성별</label>
+                        <select class="custom-select d-block w-100" id="gender" name="gender" required>
+                            <option>남성</option>
+                            <option>여성</option>
+                        </select>
+                        <div class="invalid-feedback">
+                            성별을 입력해주세요.
+                        </div>
+                    </div>
+                    <div class="col-md-6 mb-3">
+                        <label for="birth">생년월일</label>
+                        <input type="text" class="form-control" id="birth" name="birth" placeholder="6글자 (981008)"
+                               value=""
+                               required>
+                        <div class="invalid-feedback">
+                            생년월일을 입력해주세요.
+                        </div>
+                    </div>
+                </div>
+                <div class="mb-3" style="margin-bottom: 0.4rem !important;">
+                    <label for="nickname">닉네임</label>
+                    <input type="text" class="form-control" id="nickname" name="nickname"
+                           placeholder="영어+숫자 2~8글자" value="" required>
+                    <span class="nick-duplicate">닉네임을 다시 입력해주세요.</span>
+                    <span class="nick-ok">사용 가능한 닉네임 입니다.</span>
+                    <input id="nickname-check" type="hidden" value="0">
+                    <div class="invalid-feedback">
+                        별명을 입력해주세요.
+                    </div>
+                    <div class="button-box">
+                        <button class="checkBtn" type="button" onclick="nickCheckFunc()">중복확인</button>
+                    </div>
+                </div>
+
+                <input type="text" class="form-control" id="memberId" name="memberId"
+                       th:value="${oauthMember.id}" hidden="hidden">
+                <input type="password" class="form-control" id="pwd" name="pwd"
+                       th:value="${oauthMember.pwd}" hidden="hidden">
+
+                <div class="mb-3">
+                    <label for="email">이메일</label>
+                    <input type="email" class="form-control" id="email" name="email" placeholder="you@email.com"
+                           value="" required>
+                    <div class="invalid-feedback">
+                        이메일을 입력해주세요.
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <label for="phone">전화번호</label>
+                    <input type="text" class="form-control" id="phone" name="phone" placeholder="01012345678" value=""
+                           required>
+                    <div class="invalid-feedback">
+                        전화번호를 입력해주세요.
+                    </div>
+                    <div class="button-box">
+                        <div class="confirm-box">
+                            <label id="inputLabel" for="authInput">인증번호 입력</label>
+                            <input type="text" id="authInput" name="auth" required>
+                            <button id="smsAuthConfirm" type="button" onclick="smsConfirm()">확인</button>
+                        </div>
+                        <button id="smsAuthSend" type="button" onclick="smsAuth()">인증번호 전송</button>
+                    </div>
+                </div>
+
+                <div>
+                    <div class="mb-3">
+                        <label for="address">도로명 주소</label>
+                        <input class="form-control" type="text" id="address"
+                               name="address" placeholder="도로명주소" required onclick="findAddress()">
+                        <div class="invalid-feedback">주소를 입력해주세요.</div>
+
+                    </div>
+                    <div class="mb-3">
+                        <label for="detailAddress">상세주소</label>
+                        <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소"
+                               required>
+                        <div class="invalid-feedback">상세주소를 입력해주세요.</div>
+                    </div>
+                    <div class="button-box">
+                        <input class="checkBtn" type="button" onclick="findAddress()" value="우편번호 찾기"><br>
+                    </div>
+                </div>
+
+                <hr class="mb-4">
+                <div class="custom-control custom-checkbox">
+                    <input type="checkbox" class="custom-control-input" id="aggrement" required>
+                    <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
+                </div>
+                <div class="mb-4"></div>
+                <button class="btn btn-primary btn-lg btn-block" id="submitBtn" type="submit" disabled="disabled">가입
+                    완료
+                </button>
+            </form>
+        </div>
+    </div>
+    <footer class="my-3 text-center text-small">
+        <p class="mb-1" style="color: white">&copy; 2023 BOOKPUB</p>
+    </footer>
+</div>
+</body>
+</html>

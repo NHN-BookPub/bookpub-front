@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <style>
+        body {
+            width: 100vh;
+            height: 100vh;
+        }
+
+        #container {
+            position: fixed;
+            z-index: 999;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background: rgba(0, 0, 0, 0.8);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #popup-box {
+            width: 30em;
+            height: 20em;
+            background-color: white;
+        }
+
+        .btn {
+            width: 120px;
+            height: 40px;
+        }
+
+    </style>
+
+    <script>
+        function notLogin() {
+            window.location.href = "/";
+        }
+    </script>
+</head>
+<body>
+<div id="container">
+    <div id="popup-box">
+        <form action="/auth" method="post" style="height: 100%">
+            <input name="id" th:value="${oauthMember.id}" hidden="hidden">
+            <input name="pwd" th:value="${oauthMember.pwd}" hidden="hidden">
+            <div style="display: flex; flex-direction: column; justify-content: center; align-items: center;
+                    height: 100%; width: 100%; gap: 40px;">
+                <div id="text-container" style="display: flex; flex-direction: column">
+                    <span>사용자 정보가 있습니다.</span>
+                    <span>로그인 하시겠습니까?</span>
+                </div>
+                <div style="display: flex; gap: 7px">
+                    <button class="btn" type="submit">예</button>
+                    <button class="btn" type="button" onclick="notLogin()">아니요</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+</body>
+</html>
