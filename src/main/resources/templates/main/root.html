@@ -114,7 +114,7 @@
                                                 <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
                                                         class="tooltipp">Like</span></button>
                                                 <button class="quick-view"
-                                                        th:onclick="'location.href=\''+ @{/products/view/{productNo}(productNo=${newBook.productNo})} + '\''">
+                                                        th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
                                                     <i class="fa fa-eye"></i><span class="tooltipp">Information</span>
                                                 </button>
                                             </div>
@@ -181,7 +181,7 @@
                                                         class="tooltipp">Like</span></button>
 
                                                 <button class="quick-view"
-                                                        th:onclick="'location.href=\''+ @{/products/view/{productNo}(productNo=${bestSeller.productNo})} + '\''">
+                                                        th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSeller.productNo})} + '\''">
                                                     <i class="fa fa-eye"></i><span class="tooltipp">Information</span>
                                                 </button>
                                             </div>

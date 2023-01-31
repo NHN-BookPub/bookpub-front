@@ -118,13 +118,13 @@
                                 <div
                                     style="background-color: #D10024; width: 100%; padding: 1rem; text-align: center">
                                     <a class="fw-bolder bg-black"
-                                       th:href="@{/category/{id}(id=${parent.categoryNo})}"
+                                       th:href="@{/categories/{id}(id=${parent.categoryNo})}"
                                        th:text="${parent.categoryName}"
                                        style="color: white; font-weight: bold; font-size: 1.5rem"></a>
                                 </div>
                                 <div th:each="child: ${parent.childList}"
                                      style="margin-top: 1rem; margin-bottom: 1rem">
-                                    <a th:href="@{/category/{id}(id=${child.categoryNo})}"
+                                    <a th:href="@{/categories/{id}(id=${child.categoryNo})}"
                                        th:text="${child.categoryName}"></a>
                                 </div>
                             </div>

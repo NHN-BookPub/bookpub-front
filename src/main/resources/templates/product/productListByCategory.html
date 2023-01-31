@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>BookPub</title>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <style>
+        .product-detail-price {
+            color: #ff6666;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+<th:block th:include="main/fragments/rootHeader"></th:block>
+
+
+<div class="container" style="padding-top: 1%; padding-bottom: 3%">
+    <h2 style="padding-top: 2%;" th:text="'카테고리 : [' + ${categoryName} + ']'"></h2>
+
+    <hr/>
+    <br/>
+
+    <div th:each="product: ${products}">
+        <div class="well well-lg" style="width: 90%; margin: auto">
+            <div class="row">
+                <div class="col-sm-3">
+                    <a th:href="@{/products/{productNo}(productNo=${product.productNo})}">
+                        <img class="img-thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+                    </a>
+                </div>
+
+                <div class="col-sm-3">
+                    <h4 th:text="'-' + ${product.title} + '-'"></h4>
+                    <div class="row" style="padding-left: 10px">
+                        <label>카테고리 : </label>
+                        <span th:each="category: ${product.categories}">
+                            <span th:text="${category}"></span>
+                        </span>
+                    </div>
+                    <div class="row" style="padding-left: 10px">
+                        <label>저자 : </label>
+                        <span th:each="author: ${product.authors}">
+                            <span th:text="${author}"></span>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-sm-5">
+                    <div class="row" style="text-align: right">
+                        <label>판매 가격</label>
+                        <p class="product-detail-price"
+                           th:text="${product.salesPrice} + '원 [' + ${product.salesRate + '% 할인]'}"></p>
+
+                        <br/>
+
+                        <button class="btn btn-info"
+                                th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${product.productNo})} + '\''">
+                            View Info
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <br/>
+
+    </div>
+
+    <div>
+
+        <nav style="text-align: center">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/categories/{categoryNo}?(categoryNo=${categoryNo}, page=(${currentPage}-1))}">Previous</a>
+                </li>
+                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link"
+                           th:href="@{/categories/{categoryNo}?(categoryNo=${categoryNo}, page=(${page-1}))}"
+                           th:text="${page}"></a></li>
+                </th:block>
+                <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/categories/{categoryNo}?(categoryNo=${categoryNo}, page=(${currentPage}+1))}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+<th:block th:include="main/fragments/rootFooter"></th:block>
+</body>
+</html>
