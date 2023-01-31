@@ -89,4 +89,21 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
 
         checkError(response);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetPricePolicyResponseDto> getPoliciesByName(String name) {
+        String url = ORDER_PRODUCT_URL + "/" + name;
+
+        ResponseEntity<List<GetPricePolicyResponseDto>> response =
+                restTemplate.exchange(url,
+                        HttpMethod.GET,
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<>() {
+                        });
+
+        return (List<GetPricePolicyResponseDto>) checkError(response).getBody();
+    }
 }

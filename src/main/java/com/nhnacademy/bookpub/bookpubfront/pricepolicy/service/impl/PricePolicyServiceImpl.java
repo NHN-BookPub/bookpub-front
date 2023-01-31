@@ -50,4 +50,12 @@ public class PricePolicyServiceImpl implements PricePolicyService {
     public List<GetPricePolicyResponseDto> getPricePolicies() {
         return pricePolicyAdaptor.getAllPricePolicyCodeRequest();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetPricePolicyResponseDto> getPricePoliciesByName(String name) {
+        return pricePolicyAdaptor.getPoliciesByName(name);
+    }
 }
