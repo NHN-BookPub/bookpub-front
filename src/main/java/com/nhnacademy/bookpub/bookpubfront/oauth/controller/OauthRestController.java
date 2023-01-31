@@ -31,7 +31,7 @@ public class OauthRestController {
      * @param response  응답.
      * @return 적합한 url.
      */
-    @GetMapping("/redirectUrl")
+    @GetMapping("/redirect-url")
     public String getRedirectUrl(String oauthName, HttpServletResponse response) {
         OauthService oauthService = oauthFactory.getMatchedService(oauthName);
         CookieUtil.makeCookie(response, Utils.DOMAIN, oauthName);
