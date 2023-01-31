@@ -23,7 +23,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @Controller
 @RequiredArgsConstructor
-@RequestMapping("/admin")
+@RequestMapping("/admin/authors")
 public class AdminAuthorController {
 
     private final AuthorService authorService;
@@ -35,7 +35,7 @@ public class AdminAuthorController {
      * @param model    view 로 정보를 보낼 request
      * @return 관리자 목록
      */
-    @GetMapping("/authors")
+    @GetMapping
     public String findAllAuthors(@PageableDefault Pageable pageable, Model model) {
         PageResponse<GetAuthorResponseDto> authors = authorService.getAuthors(pageable);
 
@@ -57,7 +57,7 @@ public class AdminAuthorController {
      * @return 저자 목록으로 redirect
      */
 
-    @PostMapping("/add/author")
+    @PostMapping("/add")
     public String addAuthor(@ModelAttribute AddAuthorRequestDto request) {
         authorService.addAuthor(request);
 
@@ -70,7 +70,7 @@ public class AdminAuthorController {
      * @param request 수정 폼에서 입력된 값을 받는 DTO.
      * @return 저자 목록으로 redirect
      */
-    @PostMapping("/modify/author")
+    @PostMapping("/modify")
     public String modifyAuthor(@ModelAttribute ModifyAuthorRequestDto request) {
         authorService.modifyAuthor(request);
 
