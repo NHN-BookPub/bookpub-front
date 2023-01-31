@@ -1,6 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.oauth.service;
 
-import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.BOOKPUB;
+import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.BOOKPUB_EMAIL;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.CLIENT_ID;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.CLIENT_SECRET;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.GITHUB;
@@ -45,11 +45,11 @@ public class GitHubService extends OauthService {
     @Override
     public String makeAuthUrl() {
         return UriComponentsBuilder.newInstance()
-                .scheme(HTTPS)
-                .host(GITHUB)
+                .scheme(HTTPS.getValue())
+                .host(GITHUB.getValue())
                 .path("login/oauth/authorize")
-                .queryParam(CLIENT_ID, clientId)
-                .queryParam(REDIRECT_URI, redirectUri)
+                .queryParam(CLIENT_ID.getValue(), clientId)
+                .queryParam(REDIRECT_URI.getValue(), redirectUri)
                 .build().toUriString();
     }
 
@@ -59,13 +59,13 @@ public class GitHubService extends OauthService {
     @Override
     public String tokenRequestUrl(String code) {
         return UriComponentsBuilder.newInstance()
-                .scheme(HTTPS)
-                .host(GITHUB)
+                .scheme(HTTPS.getValue())
+                .host(GITHUB.getValue())
                 .path("login/oauth/access_token")
-                .queryParam(CLIENT_ID, clientId)
-                .queryParam(CLIENT_SECRET, secret)
+                .queryParam(CLIENT_ID.getValue(), clientId)
+                .queryParam(CLIENT_SECRET.getValue(), secret)
                 .queryParam("code", code)
-                .queryParam(REDIRECT_URI, redirectUri)
+                .queryParam(REDIRECT_URI.getValue(), redirectUri)
                 .build().toUriString();
     }
 
@@ -75,8 +75,8 @@ public class GitHubService extends OauthService {
     @Override
     public String userInfoRequestUrl() {
         return UriComponentsBuilder.newInstance()
-                .scheme(HTTPS)
-                .host("api." + GITHUB)
+                .scheme(HTTPS.getValue())
+                .host("api." + GITHUB.getValue())
                 .path("user")
                 .build().toUriString();
     }
@@ -94,12 +94,12 @@ public class GitHubService extends OauthService {
         int pwd = (int) userResponse.get("id");
 
         if (Objects.nonNull(email)) {
-            email = email.split("@")[0] + GITHUB_EMAIL;
+            email = email.split("@")[0] + GITHUB_EMAIL.getValue();
             return new OauthMemberRequestDto(email, String.valueOf(pwd));
         }
 
         String login = (String) userResponse.get("login");
-        String convertEmail = login + BOOKPUB;
+        String convertEmail = login + BOOKPUB_EMAIL.getValue();
 
         return new OauthMemberRequestDto(convertEmail, String.valueOf(pwd));
     }

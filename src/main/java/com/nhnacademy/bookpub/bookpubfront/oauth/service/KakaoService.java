@@ -1,6 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.oauth.service;
 
-import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.BOOKPUB;
+import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.BOOKPUB_EMAIL;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.CLIENT_ID;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.CLIENT_SECRET;
 import static com.nhnacademy.bookpub.bookpubfront.oauth.Constance.HTTPS;
@@ -40,36 +40,44 @@ public class KakaoService extends OauthService {
         super(oauthAdaptor, objectMapper, keyConfig);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String makeAuthUrl() {
         return UriComponentsBuilder.newInstance()
-                .scheme(HTTPS)
-                .host(KAKAO)
+                .scheme(HTTPS.getValue())
+                .host(KAKAO.getValue())
                 .path("oauth/authorize")
-                .queryParam(REDIRECT_URI, redirectUri)
+                .queryParam(REDIRECT_URI.getValue(), redirectUri)
                 .queryParam("response_type", "code")
-                .queryParam(CLIENT_ID, clientId)
+                .queryParam(CLIENT_ID.getValue(), clientId)
                 .build().toUriString();
     }
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String tokenRequestUrl(String code) {
         return UriComponentsBuilder.newInstance()
-                .scheme(HTTPS)
-                .host(KAKAO)
+                .scheme(HTTPS.getValue())
+                .host(KAKAO.getValue())
                 .path("oauth/token")
                 .queryParam("grant_type", "authorization_code")
                 .queryParam("code", code)
-                .queryParam(REDIRECT_URI, redirectUri)
-                .queryParam(CLIENT_ID, clientId)
-                .queryParam(CLIENT_SECRET, secret)
+                .queryParam(REDIRECT_URI.getValue(), redirectUri)
+                .queryParam(CLIENT_ID.getValue(), clientId)
+                .queryParam(CLIENT_SECRET.getValue(), secret)
                 .build().toUriString();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public String userInfoRequestUrl() {
         return UriComponentsBuilder.newInstance()
-                .scheme(HTTPS)
+                .scheme(HTTPS.getValue())
                 .host("kapi.kakao.com")
                 .path("v2/user/me")
                 .build().toUriString();
@@ -84,12 +92,12 @@ public class KakaoService extends OauthService {
         long pwd = (long) userInfo.get("id");
 
         if (Objects.nonNull(email)) {
-            email = email.split("@")[0] + KAKAO_EMAIL;
+            email = email.split("@")[0] + KAKAO_EMAIL.getValue();
             return new OauthMemberRequestDto(email, String.valueOf(pwd));
         }
 
         String login = UUID.randomUUID().toString().replace("-", "");
-        String convertEmail = login + BOOKPUB;
+        String convertEmail = login + BOOKPUB_EMAIL.getValue();
 
         return new OauthMemberRequestDto(convertEmail, String.valueOf(pwd));
     }
