@@ -21,6 +21,8 @@
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
@@ -86,7 +88,8 @@
                                 <div th:each="newBook :${newBooks}" style="padding: 15px !important;">
                                     <div class="product">
                                         <div class="product-img">
-                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt=""
+                                                 th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
                                             <div class="product-label">
                                                 <span class="sale" th:if="${newBook.salesRate} != 0"
                                                       th:text="'-'+${newBook.salesRate} +'%'"></span>
@@ -98,7 +101,7 @@
                                                 <span class="product-category" th:text="${category}"></span>
                                             </div>
                                             <h3 class="product-name">
-                                                <a th:href="@{/products/view/{productNo}(productNo=${newBook.productNo})}"
+                                                <a th:href="@{/products/{productNo}(productNo=${newBook.productNo})}"
                                                    th:text="${newBook.title}"></a>
                                             </h3>
                                             <del class="product-old-price" th:text="${newBook.productPrice}+'원'"></del>
@@ -151,7 +154,8 @@
                                 <div th:each="bestSeller :${bestSellers}" style="padding: 15px !important;">
                                     <div class="product">
                                         <div class="product-img">
-                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt=""
+                                                 th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSeller.productNo})} + '\''">
                                             <div class="product-label">
                                                 <span class="sale" th:if="${bestSeller.salesRate} != 0"
                                                       th:text="'-'+${bestSeller.salesRate} +'%'"></span>
@@ -163,12 +167,13 @@
                                                 <span class="product-category" th:text="${category}"></span>
                                             </div>
                                             <h3 class="product-name">
-                                                <a th:href="@{/products/view/{productNo}(productNo=${bestSeller.productNo})}"
+                                                <a th:href="@{/products/{productNo}(productNo=${bestSeller.productNo})}"
                                                    th:text="${bestSeller.title}"></a>
                                             </h3>
                                             <del class="product-old-price"
                                                  th:text="${bestSeller.productPrice}+'원'"></del>
-                                            <h4 class="product-price" th:text="${bestSeller.salesPrice}+'원'"></h4>
+                                            <h4 id="money" class="product-price"
+                                                th:text="${bestSeller.salesPrice}+'원'"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
