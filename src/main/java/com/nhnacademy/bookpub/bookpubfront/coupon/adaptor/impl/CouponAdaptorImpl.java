@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @RequiredArgsConstructor
 public class CouponAdaptorImpl implements CouponAdaptor {
+
     private final RestTemplate restTemplate;
     private static final String COUPON_URL = "/api/coupons";
 
@@ -36,7 +37,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public void requestAddCoupon(CreateCouponRequestDto createRequestDto) {
         String url = GateWayConfig.getGatewayUrl() + COUPON_URL;
 
-        HttpEntity<CreateCouponRequestDto> entity = new HttpEntity<>(createRequestDto, Utils.makeHeader());
+        HttpEntity<CreateCouponRequestDto> entity = new HttpEntity<>(createRequestDto,
+                Utils.makeHeader());
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
@@ -51,7 +53,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey, String search) {
+    public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
+            String search) {
         String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -67,6 +70,56 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 new ParameterizedTypeReference<>() {
                 }
         );
+
+        checkError(response);
+
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
+            Long memberNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                                + "/positive")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+
+        ResponseEntity<PageResponse<GetCouponResponseDto>> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
+
+        checkError(response);
+
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable,
+            Long memberNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                                + "/negative")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+
+        ResponseEntity<PageResponse<GetCouponResponseDto>> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
 
         checkError(response);
 

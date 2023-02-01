@@ -13,6 +13,7 @@ import org.springframework.data.domain.Pageable;
  **/
 
 public interface CouponAdaptor {
+
     /**
      * 쿠폰을 등록하기 위한 메서드입니다.
      *
@@ -28,5 +29,24 @@ public interface CouponAdaptor {
      * @param search    검색어
      * @return 쿠폰 Dto 정보를 담은 페이지
      */
-    PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey, String search);
+    PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
+            String search);
+
+    /**
+     * 멤버의 사용가능한 쿠폰 페이지를 조회하기 위한 메소드입니다.
+     *
+     * @param pageable 페이지 정보
+     * @param memberNo 멤버 번호
+     * @return 멤버의 사용가능한 쿠폰 DTO 정보를 담은 페이지
+     */
+    PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable, Long memberNo);
+
+    /**
+     * 멤버의 사용 불가능한 쿠폰 페이지를 조회하기 위한 메소드입니다.
+     *
+     * @param pageable 페이지 정보
+     * @param memberNo 멤버 번호
+     * @return 멤버의 사용 불가능한 쿠폰 DTO 정보를 담은 페이지
+     */
+    PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable, Long memberNo);
 }
