@@ -4,7 +4,7 @@
 
 /* VARIABLES CSS */
 :root {
-    --nav--width: 92px;
+    --nav--width: 16rem;
 
     /* Colores */
     --first-color: #0c5df4;
@@ -26,8 +26,9 @@
     box-sizing: border-box;
 }
 
-.myPageBody {
-    padding-left: 1rem;
+#body-pd > .myPageBody {
+    padding-left: 15rem;
+    padding-right: 6rem;
 }
 
 body {
@@ -69,6 +70,7 @@ a {
 
 /* NAV */
 .nav {
+    padding-left: 11rem;
     height: 100%;
     display: flex;
     flex-direction: column;
@@ -121,13 +123,14 @@ a {
 }
 
 /* Expander menu */
-.expander {
-    width: calc(var(--nav--width) + 7.25rem);
-}
+/*.expander {*/
+/*    width: calc(var(--nav--width) + 7.25rem);*/
+/*}*/
 
 /* Add padding body*/
 .body-pd {
-    padding: 0 0 0 7rem;
+    padding-left: 16rem;
+    padding-right: 6rem;
 }
 
 /* Active links menu */
@@ -142,17 +145,18 @@ a {
 
 .collapse__link {
     justify-self: flex-end;
-    transition: .5;
+    transition: .5s;
 }
 
 .collapse__menu {
     display: none;
-    padding: .75rem 2.25rem;
+    padding: .1rem 2.25rem;
 }
 
 .collapse__sublink {
     color: var(--sub-color);
     font-size: var(--small-font-size);
+    white-space: nowrap;
 }
 
 .collapse__sublink:hover {
