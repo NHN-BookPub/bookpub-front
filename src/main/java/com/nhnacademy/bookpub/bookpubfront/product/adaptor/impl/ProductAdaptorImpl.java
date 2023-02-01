@@ -78,12 +78,12 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestSetProductDeleted(Long productNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/deleted/" + productNo)
+                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/" + productNo)
                 .encode().toUriString();
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
-                HttpMethod.PUT,
+                HttpMethod.DELETE,
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );
@@ -153,7 +153,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/product/categories/" + categoryNo)
+                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "-categories/" + categoryNo)
                 .encode()
                 .toUriString();
 
