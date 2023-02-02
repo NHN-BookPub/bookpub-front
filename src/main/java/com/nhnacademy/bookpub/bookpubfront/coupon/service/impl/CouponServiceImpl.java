@@ -37,11 +37,17 @@ public class CouponServiceImpl implements CouponService {
         return couponAdaptor.requestCoupons(pageable, searchKey, search);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<GetCouponResponseDto> getPositiveCoupons(Pageable pageable, Long memberNo) {
         return couponAdaptor.requestPositiveCoupons(pageable, memberNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<GetCouponResponseDto> getNegativeCoupons(Pageable pageable, Long memberNo) {
         return couponAdaptor.requestNegativeCoupons(pageable, memberNo);
