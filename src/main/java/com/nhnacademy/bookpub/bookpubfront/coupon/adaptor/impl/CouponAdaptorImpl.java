@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
@@ -11,7 +12,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -26,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @RequiredArgsConstructor
 public class CouponAdaptorImpl implements CouponAdaptor {
+
     private final RestTemplate restTemplate;
     private static final String COUPON_URL = "/api/coupons";
 
@@ -36,7 +37,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public void requestAddCoupon(CreateCouponRequestDto createRequestDto) {
         String url = GateWayConfig.getGatewayUrl() + COUPON_URL;
 
-        HttpEntity<CreateCouponRequestDto> entity = new HttpEntity<>(createRequestDto, Utils.makeHeader());
+        HttpEntity<CreateCouponRequestDto> entity = new HttpEntity<>(createRequestDto,
+                Utils.makeHeader());
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
@@ -51,7 +53,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey, String search) {
+    public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
+            String search) {
         String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -74,16 +77,52 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     }
 
     /**
-     * 에러 체크를 위한 메소드입니다.
-     *
-     * @param response
-     * @param <T>
+     * {@inheritDoc}
      */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
+    @Override
+    public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
+            Long memberNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                                + "/positive")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
 
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
+        ResponseEntity<PageResponse<GetCouponResponseDto>> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
+
+        checkError(response);
+
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable,
+            Long memberNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                                + "/negative")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+
+        ResponseEntity<PageResponse<GetCouponResponseDto>> response = restTemplate.exchange(url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
+
+        checkError(response);
+
+        return response.getBody();
     }
 }
