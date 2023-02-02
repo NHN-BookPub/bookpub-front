@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
@@ -11,7 +12,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -124,19 +124,5 @@ public class CouponAdaptorImpl implements CouponAdaptor {
         checkError(response);
 
         return response.getBody();
-    }
-
-    /**
-     * 에러 체크를 위한 메소드입니다.
-     *
-     * @param response
-     * @param <T>
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
     }
 }
