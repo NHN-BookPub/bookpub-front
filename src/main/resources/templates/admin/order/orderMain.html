@@ -25,12 +25,13 @@
                 <div class="card-header" style="justify-content: center">
                     <h1 class="mb-3 sm">주문 목록</h1>
                 </div>
-                <div>
-                    <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">가격정책조회</a>
-                    <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문상태조회</a>
-                    <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문조회</a>
-                </div>
-                <div class="card-body">
+
+                <div class="card-body" style="display: flex;flex-direction: column;">
+                    <div style="display: flex;gap: 7px;padding-bottom: 13px;">
+                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">가격정책조회</a>
+                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문상태조회</a>
+                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문조회</a>
+                    </div>
                     <div style="display: flex; flex-direction: column; gap: 8px">
                         <div class="order_summary_box" th:each="order : ${orderList.getContent()}">
                             <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
@@ -57,18 +58,7 @@
                 </div>
             </div>
         </main>
-        <footer class="py-4 bg-light mt-auto">
-            <div class="container-fluid px-4">
-                <div class="d-flex align-items-center justify-content-between small">
-                    <div class="text-muted">Copyright &copy; Your Website 2022</div>
-                    <div>
-                        <a href="#">Privacy Policy</a>
-                        &middot;
-                        <a href="#">Terms &amp; Conditions</a>
-                    </div>
-                </div>
-            </div>
-        </footer>
+        <th:block th:include="admin/fragments/adminFooter"/>
     </div>
 </div>
 </body>

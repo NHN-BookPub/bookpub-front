@@ -12,6 +12,7 @@ import lombok.Getter;
 public class GetProductListResponseDto {
     private Long productNo;
     private String title;
+    private String thumbnail;
     private Integer productStock;
     private Long salesPrice;
     private Integer saleRate;

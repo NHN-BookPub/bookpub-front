@@ -14,6 +14,7 @@ import lombok.Getter;
 public class GetProductByCategoryResponseDto {
     private Long productNo;
     private String title;
+    private String thumbnail;
     private Long salesPrice;
     private Integer salesRate;
     private final List<String> categories = new ArrayList<>();

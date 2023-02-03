@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 public class GetProductListForOrderResponseDto {
     private Long productNo;
     private String title;
+    private String thumbnail;
     private Long salesPrice;
     private Integer productAmount;
     private String stateCode;

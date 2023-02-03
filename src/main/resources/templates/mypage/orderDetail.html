@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns="http://www.w3.org/1999/html">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -15,14 +15,11 @@
     <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
 </head>
 <body>
-<th:block th:include="mypage/fragments/mypageHeader"></th:block>
 <th:block th:include="mypage/fragments/mypageSidebar"></th:block>
 </br>
-    <div class="container">
-
-    <section class="section_wrap">
+    <div class="body-pd">
             <h3>주문/배송 조회 상세</h3>
-            <div class="order_summary_box">
+        <div class="order_summary_box">
                 <div class="box_header">
                     <div class="label">
                         <span class="order_date" th:text="${#temporals.format(orderDetail.getCreatedAt, 'yyyy.MM.dd')}"></span>
@@ -43,10 +40,10 @@
 
                 <table class="tbl_prod">
                     <colgroup>
-                        <col />
-                        <col style="width: 164px;" />
-                        <col style="width: 180px;" />
-                        <col style="width: 130px;" />
+                        <col style="width: 4rem"/>
+                        <col style="width: 18rem;" />
+                        <col style="width: 4rem;" />
+                        <col style="width: 4rem;" />
                     </colgroup>
                     <thead class="hidden">
                     <tr>
@@ -59,12 +56,14 @@
                     <tbody>
                         <tr th:each="product : ${orderDetail.getOrderProducts()}">
                             <td class="prod_img">
-                                <div class="prod_area horizontal">
-                                    <div class="prod_thumb_box size_sm">
-                                        <span class="img_box">
-                                            <!-- 이미지 박스 -->
-                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" class="img_thumbnail"/>
-                                        </span>
+                                <div>
+                                    <div>
+                                    <span class="img_box" th:if="${#strings.isEmpty(product.getThumbnail)}">
+                                        <img class="img_thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg">
+                                    </span>
+                                        <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                        <img class="img_thumbnail" th:src="@{'data:image/*;base64,' + ${product.getThumbnail()}}" alt="No image">
+                                    </span>
                                     </div>
                                 </div>
                             </td>
@@ -101,10 +100,10 @@
                     </tbody>
                 </table>
             </div>
-    </section>
     </div>
 
-    <div class="container">
+
+    <div class="body-pd">
         <div style="margin-top: 50px;">
             <!-- 배송정보 -->
             <div class="title_wrap title_size_md">
@@ -173,7 +172,7 @@
         </div>
     </div>
 
-    <div class="container">
+    <div class="body-pd">
         <div style="margin-top: 50px;">
             <div class="title_wrap title_size_md">
                 <h3>결제</h3>
