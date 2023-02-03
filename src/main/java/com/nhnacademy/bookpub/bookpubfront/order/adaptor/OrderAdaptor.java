@@ -1,9 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.order.adaptor;
 
-import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -22,7 +22,7 @@ public interface OrderAdaptor {
      *
      * @param requestDto 생성을 위한 Dto.
      */
-    void createOrderRequest(CreateOrderRequestDto requestDto);
+    Long createOrderRequest(CreateOrderRequestDto requestDto);
 
     /**
      * 관리자가 모든 주문을 조회하기 위한 메서드입니다.
