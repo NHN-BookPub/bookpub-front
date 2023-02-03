@@ -26,7 +26,6 @@ public class CreateOrderRequestDto {
     private Map<Long, Integer> productAmounts;
     @NotEmpty
     private Map<Long, Long> productCouponAmounts;
-    @NotEmpty
     private Map<Long, String> orderProductReasons;
     @StateCode(enumClass = OrderState.class)
     private String orderState;

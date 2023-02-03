@@ -1,11 +1,12 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
-import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -36,7 +37,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public void requestAddCoupon(CreateCouponRequestDto createRequestDto) {
         String url = GateWayConfig.getGatewayUrl() + COUPON_URL;
 
-        HttpEntity<CreateCouponRequestDto> entity = new HttpEntity<>(createRequestDto, Utils.makeHeader());
+        HttpEntity<CreateCouponRequestDto> entity =
+                new HttpEntity<>(createRequestDto, makeHeader());
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
@@ -63,7 +65,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
         ResponseEntity<PageResponse<GetCouponResponseDto>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 }
         );
@@ -76,8 +78,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     /**
      * 에러 체크를 위한 메소드입니다.
      *
-     * @param response
-     * @param <T>
+     * @param response 응답.
+     * @param <T>      제네릭.
      */
     private static <T> void checkError(ResponseEntity<T> response) {
         HttpStatus statusCode = response.getStatusCode();
