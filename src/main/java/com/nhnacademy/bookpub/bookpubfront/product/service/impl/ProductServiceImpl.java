@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.product.service.impl;
 
+import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
@@ -14,7 +15,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -25,6 +29,7 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductAdaptor productAdaptor;
@@ -124,7 +129,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public List<OrderProductDto> orderProductInCart(List<String> products) {
+    public List<OrderProductDto> orderProductInCart(List<String> products, boolean isLoginUser) {
         List<OrderProductDto> orderProductList = new ArrayList<>();
 
         List<Long> productNos =
@@ -145,9 +150,13 @@ public class ProductServiceImpl implements ProductService {
             orderProductList.add(convertDto(productsDtos.get(i), productCounts.get(i)));
         }
 
+        if (isLoginUser) {
+            orderProductList
+                    .forEach(p -> p.addCouponInfo(availableCouponProduct(p.getProductNo())));
+        }
+
         return orderProductList;
     }
-
 
     /**
      * {@inheritDoc}
@@ -169,5 +178,17 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> findProductByCategory(Integer categoryNo, Pageable pageable) {
         return productAdaptor.requestProductsByCategory(categoryNo, pageable);
+    }
+
+    @Override
+    public List<GetOrderCouponResponseDto> availableCouponProduct(Long productNo) {
+        Long memberNo = Long.parseLong(
+                (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+
+
+        ResponseEntity<List<GetOrderCouponResponseDto>> listResponseEntity =
+                productAdaptor.requestOrderCoupons(productNo, memberNo);
+
+        return listResponseEntity.getBody();
     }
 }

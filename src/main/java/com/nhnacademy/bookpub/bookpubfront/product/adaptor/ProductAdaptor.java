@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.product.adaptor;
 
+import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
@@ -8,6 +9,7 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListRe
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 /**
  * API 서버와 연동을 위한 상품 어댑터 인터페이스.
@@ -72,4 +74,15 @@ public interface ProductAdaptor {
      * @return 카테고리별 상품들
      */
     PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable);
+
+
+    /**
+     * 상품별 쿠폰 리스트를 얻어오는 메소드.
+     *
+     * @param productNo 상품번호.
+     * @param memberNo 로그인한 유저 No.
+     * @return 상품 별 쿠폰 리스트.
+     */
+    ResponseEntity<List<GetOrderCouponResponseDto>> requestOrderCoupons(Long productNo,
+                                                                        Long memberNo);
 }

@@ -1,6 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.product.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
@@ -166,5 +169,25 @@ public class ProductAdaptorImpl implements ProductAdaptor {
         ).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public ResponseEntity<List<GetOrderCouponResponseDto>> requestOrderCoupons(
+            Long productNo, Long memberNo) {
 
+        String requestUrl = UriComponentsBuilder
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/api/coupons/members/"
+                        + memberNo + "/order")
+                .queryParam("productNo", productNo)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                requestUrl,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
+    }
 }
