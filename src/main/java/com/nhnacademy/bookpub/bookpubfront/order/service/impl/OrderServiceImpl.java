@@ -1,14 +1,21 @@
 package com.nhnacademy.bookpub.bookpubfront.order.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -19,15 +26,73 @@ import org.springframework.stereotype.Service;
  **/
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class OrderServiceImpl implements OrderService {
+    private static final String PRODUCT_COUPON_DIVIDER = "-";
+    private static final String DIVIDER = "\\|";
+    private static final String ANONYMOUS = "anonymousUser";
     private final OrderAdaptor orderAdaptor;
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createOrder(CreateOrderRequestDto requestDto) {
-        orderAdaptor.createOrderRequest(requestDto);
+    public Long createOrder(OrderFormRequestDto requestDto, List<String> productInfoList) {
+        String principal =
+                (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        Long memberNo = null;
+
+        if (!principal.equals(ANONYMOUS)) {
+            memberNo = Long.parseLong(principal);
+        }
+
+        List<Long> productNos = new ArrayList<>();
+        Map<Long, Integer> productCount = new HashMap<>();
+        Map<Long, Long> productAmountMap = new HashMap<>();
+        Map<Long, Long> productCoupon = new HashMap<>();
+        Map<Long, Long> productSaleAmount = new HashMap<>();
+
+        for (String productCouponInfo : productInfoList) {
+            parsingAndInput(productNos, productCount, productAmountMap,
+                    productCoupon, productSaleAmount, productCouponInfo);
+        }
+
+        CreateOrderRequestDto createOrderRequestDto = CreateOrderRequestDto.builder()
+                .orderInfo(requestDto)
+                .memberNo(memberNo)
+                .productNos(productNos)
+                .productCount(productCount)
+                .productAmount(productAmountMap)
+                .productCoupon(productCoupon)
+                .productSaleAmount(productSaleAmount)
+                .build();
+
+        return orderAdaptor.createOrderRequest(createOrderRequestDto);
+    }
+
+    private static void parsingAndInput(List<Long> productNos,
+                                        Map<Long, Integer> productCount,
+                                        Map<Long, Long> productAmountMap,
+                                        Map<Long, Long> productCoupon,
+                                        Map<Long, Long> productSaleAmount,
+                                        String productCouponInfo) {
+        String productSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[0];
+        String couponSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[1];
+
+        String[] productInfo = productSection.split(DIVIDER);
+        String[] couponInfo = couponSection.split(DIVIDER);
+
+        Long productNo = Long.parseLong(productInfo[0]);
+        Integer productCnt = Integer.parseInt(productInfo[1]);
+        Long productAmount = Long.parseLong(productInfo[2]);
+        final Long couponNo = Long.parseLong(couponInfo[0]);
+        final Long couponDiscount = Long.parseLong(couponInfo[2]);
+
+        productNos.add(productNo);
+        productCount.put(productNo, productCnt);
+        productAmountMap.put(productNo, productAmount);
+        productCoupon.put(productNo, couponNo);
+        productSaleAmount.put(productNo, couponDiscount);
     }
 
     /**
@@ -66,7 +131,8 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Pageable pageable) {
+    public PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo,
+                                                                        Pageable pageable) {
         return orderAdaptor.getAllOrdersByMemberNoRequest(pageable, memberNo);
     }
 }
