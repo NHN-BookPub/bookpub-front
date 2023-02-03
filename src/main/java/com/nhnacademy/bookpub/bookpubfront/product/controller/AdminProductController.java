@@ -16,18 +16,16 @@ import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.tag.dto.GetTagResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.tag.service.TagService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 관리자페이지에서 상품과 관련된 컨트롤러.
@@ -104,8 +102,22 @@ public class AdminProductController {
      */
     @PostMapping("/add")
     public String addProduct(@ModelAttribute InputProductFormRequestDto inputProduct,
-                             @RequestParam(value = "tagList", required = false) List<Integer> tagList) {
-        productService.createCategory(inputProduct, tagList);
+                             @RequestParam(value = "tagList", required = false) List<Integer> tagList,
+                             @RequestPart(required = false) MultipartFile thumbnail,
+                             @RequestPart(required = false) MultipartFile detail,
+                             @RequestPart(required = false) MultipartFile ebook) {
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        if (thumbnail != null) {
+            fileMap.put("thumbnail", thumbnail);
+        }
+        if (detail != null) {
+            fileMap.put("detail", detail);
+        }
+        if (ebook != null) {
+            fileMap.put("ebook", ebook);
+        }
+
+        productService.createCategory(inputProduct, tagList, fileMap);
 
         return REDIRECT;
     }
