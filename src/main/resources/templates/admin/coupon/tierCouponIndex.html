@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BookPub</title>
+  <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css"
+        rel="stylesheet"/>
+
+  <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+  <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
+          crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+  <style>
+    td, th {
+      text-align: center;
+    }
+  </style>
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+  <th:block th:include="admin/fragments/adminHeader"/>
+  <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+  <div class="modal fade" id="tierCouponAddModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">등급 쿠폰 등록</h3>
+        </div>
+        <div class="modal-body">
+          <form action="/admin/coupon/tier-coupons" class="was-validated" method="post">
+            <div class="form-group">
+              <label for="addTierNo">등급 번호</label>
+              <input type="text" class="form-control" id="addTierNo" placeholder="등급 번호"
+                     name="tierNo" required>
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">필수 입력 항목입니다.</div>
+            </div>
+
+            <br/>
+
+            <div class="form-group">
+              <label for="addTemplateNo">쿠폰 템플릿 번호</label>
+              <input type="text" class="form-control" id="addTemplateNo" name="templateNo" required>
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">필수 입력 항목입니다.</div>
+            </div>
+            <button type="button" class="btn btn-light" data-dismiss="modal"
+                    style="margin-left:70%;">취소
+            </button>
+            <button type="submit" class="btn btn-primary">등록</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal fade" id="tierCouponModifyModal" role="dialog">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h3 class="modal-title">등급 쿠폰 수정</h3>
+        </div>
+        <div class="modal-body">
+          <form action="#" class="was-validated" method="post">
+            <div class="form-group">
+              <label for="modifyTemplateNo">변경할 쿠폰 템플릿 번호</label>
+              <input type="text" class="form-control" id="modifyTemplateNo"
+                     placeholder="변경할 쿠폰 템플릿 번호" name="template" required>
+              <div class="valid-feedback">Valid.</div>
+              <div class="invalid-feedback">필수 입력 항목입니다.</div>
+            </div>
+
+            <button type="button" class="btn btn-light" data-dismiss="modal"
+                    style="margin-left:70%;">취소
+            </button>
+            <button class="btn btn-primary">등록</button>
+
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid px-4">
+        <h1 class="mt-4">등급 쿠폰 목록</h1>
+        <ol class="breadcrumb mb-4">
+          <li class="breadcrumb-item active">등급 쿠폰 등록, 삭제</li>
+        </ol>
+
+        <hr/>
+
+        <div align="right">
+          <button class="btn btn-primary float-right" data-toggle="modal"
+                  data-target="#tierCouponAddModal">쿠폰 등록
+          </button>
+        </div>
+
+
+        <br/>
+
+        <div>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th>등급 번호</th>
+              <th>등급 이름</th>
+              <th>쿠폰 번호</th>
+              <th>쿠폰 이름</th>
+              <th>삭제</th>
+            </tr>
+            </thead>
+            <tbod>
+              <tr th:each="tierCoupon : ${tierCouponList}">
+                <td th:text="${tierCoupon.tierNo}"></td>
+                <td th:text="${tierCoupon.tierName}"></td>
+                <td th:text="${tierCoupon.templateNo}"></td>
+                <td th:text="${tierCoupon.templateName}"></td>
+                <td align="center">
+                  <form
+                      th:action="@{/admin/coupon/tier-coupons/delete?(tierNo=${tierCoupon.tierNo}, templateNo=${tierCoupon.templateNo})}"
+                      , method="post">
+                    <button type="submit" class="btn btn-danger btn-sm">삭제</button>
+                  </form>
+                </td>
+              </tr>
+            </tbod>
+          </table>
+
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/coupon/tier-coupons?(page=(${currentPage}-1))}">Previous</a>
+              </li>
+              <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                  <a class="page-link" th:href="@{/admin/coupon/tier-coupons?(page=(${page-1}))}"
+                     th:text="${page}"></a></li>
+              </th:block>
+              <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/coupon/tier-coupons?(page=(${currentPage}+1))}">Next</a>
+              </li>
+            </ul>
+          </nav>
+
+        </div>
+
+      </div>
+
+    </main>
+
+
+    <th:block th:include="admin/fragments/adminFooter"/>
+  </div>
+
+</div>
+
+</body>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</html>
