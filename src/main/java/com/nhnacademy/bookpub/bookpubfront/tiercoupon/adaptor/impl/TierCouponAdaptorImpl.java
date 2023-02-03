@@ -88,8 +88,7 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
                 url,
                 HttpMethod.DELETE,
                 new HttpEntity<>(makeHeader()),
-                new ParameterizedTypeReference<>() {
-                }
+                Void.class
         );
 
         checkError(response);
