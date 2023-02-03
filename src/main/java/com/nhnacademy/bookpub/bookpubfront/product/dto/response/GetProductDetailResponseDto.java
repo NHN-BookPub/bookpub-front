@@ -16,6 +16,9 @@ public class GetProductDetailResponseDto {
     private Long productNo;
     private String productIsbn;
     private String title;
+    private String thumbnail;
+    private String detail;
+    private String ebook;
     private String productPublisher;
     private Integer pageCount;
     private String productDescription;
