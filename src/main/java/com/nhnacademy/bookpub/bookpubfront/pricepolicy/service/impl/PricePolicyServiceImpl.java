@@ -1,8 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.adaptor.PricePolicyAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.CreatePricePolicyRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.GetPricePolicyResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.request.CreatePricePolicyRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetPricePolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -11,7 +12,7 @@ import org.springframework.stereotype.Service;
 /**
  * 가격정책 서비스의 구현체입니다.
  *
- * @author : 여운석
+ * @author : 여운석, 임태원
  * @since : 1.0
  **/
 @Service
@@ -23,7 +24,7 @@ public class PricePolicyServiceImpl implements PricePolicyService {
      * {@inheritDoc}
      */
     @Override
-    public void createPricePolicy(CreatePricePolicyRequestDto requestDto){
+    public void createPricePolicy(CreatePricePolicyRequestDto requestDto) {
         pricePolicyAdaptor.createOrderStateCodeRequest(requestDto);
     }
 
@@ -57,5 +58,10 @@ public class PricePolicyServiceImpl implements PricePolicyService {
     @Override
     public List<GetPricePolicyResponseDto> getPricePoliciesByName(String name) {
         return pricePolicyAdaptor.getPoliciesByName(name);
+    }
+
+    @Override
+    public List<GetOrderPolicyResponseDto> getOrderRequestPolicy() {
+        return pricePolicyAdaptor.getShipAndPackagePolicy();
     }
 }

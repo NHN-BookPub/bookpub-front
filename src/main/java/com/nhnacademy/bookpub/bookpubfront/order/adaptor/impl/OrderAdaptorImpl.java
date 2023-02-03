@@ -5,10 +5,10 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -37,13 +37,15 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void createOrderRequest(CreateOrderRequestDto requestDto) {
+    public Long createOrderRequest(CreateOrderRequestDto requestDto) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL;
         HttpEntity<CreateOrderRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url, HttpMethod.POST, httpEntity, Void.class);
+        ResponseEntity<Long> response =
+                restTemplate.exchange(url, HttpMethod.POST, httpEntity, Long.class);
 
         checkError(response);
+
+        return response.getBody();
     }
 
     /**
@@ -52,12 +54,13 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "?page=" + pageable.getOffset() + "&size=" + pageable.getPageSize()     ;
+                + "?page=" + pageable.getOffset() + "&size=" + pageable.getPageSize();
         ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>(){});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         return (PageResponse<GetOrderListForAdminResponseDto>) checkError(response).getBody();
     }
@@ -66,13 +69,15 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
             Pageable pageable, Long memberNo) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "/member?page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize() + "&no=" + memberNo;
+                + "/member?page=" + pageable.getPageNumber()
+                + "&size=" + pageable.getPageSize() + "&no=" + memberNo;
 
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
     }
@@ -102,7 +107,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         checkError(response);
     }
@@ -120,7 +126,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         checkError(response);
     }

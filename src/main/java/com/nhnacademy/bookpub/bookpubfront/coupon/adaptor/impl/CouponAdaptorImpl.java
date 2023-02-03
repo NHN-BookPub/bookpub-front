@@ -1,6 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
@@ -37,8 +39,8 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public void requestAddCoupon(CreateCouponRequestDto createRequestDto) {
         String url = GateWayConfig.getGatewayUrl() + COUPON_URL;
 
-        HttpEntity<CreateCouponRequestDto> entity = new HttpEntity<>(createRequestDto,
-                Utils.makeHeader());
+        HttpEntity<CreateCouponRequestDto> entity =
+                new HttpEntity<>(createRequestDto, makeHeader());
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,

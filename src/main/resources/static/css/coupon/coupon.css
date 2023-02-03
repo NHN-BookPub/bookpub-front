@@ -1,0 +1,112 @@
+html, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, form, dl, dt, dd, ol, ul, li, input, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    vertical-align: top;
+    background: transparent;
+}
+
+.popup-tit {
+    padding: 20px;
+    font-size: 24px;
+    font-family: "Musinsa", sans-serif !important;
+}
+
+.popup-cont {
+    padding: 0 20px 20px;
+}
+
+.table-col {
+    border-top: 1px solid #000000;
+}
+
+.n-table {
+    width: 100%;
+    font-family: "Apple SD Gothic Neo", "Noto Sans KR", sans-serif;
+    line-height: 1.5;
+    font-size: 14px;
+    border-collapse: collapse;
+    table-layout: fixed;
+}
+
+.th-css {
+    height: 52px;
+    border-bottom: 1px solid #000000;
+    font-size: 16px;
+    vertical-align: middle;
+    font-weight: normal;
+}
+
+.td-css {
+    height: 70px;
+    padding: 10px;
+    box-sizing: border-box;
+    border-bottom: 1px solid #f5f5f5;
+    text-align: center;
+    vertical-align: middle;
+    word-break: break-all;
+}
+
+.n-coupon-popup .n-table.table-col > td {
+    border-bottom: none;
+}
+
+.coupon-price-area {
+    text-align: center;
+    padding: 10px 0;
+    display: flex;
+    gap: 25px;
+    align-items: center;
+    justify-content: center;
+    height: 95px;
+}
+
+.n-coupon-popup .n-btn.btn-sm {
+    min-width: 60px;
+    white-space: nowrap;
+}
+
+ul, li {
+    list-style: none;
+}
+
+.n-btn-group {
+    min-height: 32px;
+    text-align: center;
+    padding-top: 20px;
+    clear: both;
+    position: relative;
+}
+
+.n-coupon-popup .n-btn-group {
+    padding-bottom: 40px;
+}
+
+.n-prd-row {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.coupon-product-cnt, .coupon-sale-price, .coupon-sale-price {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.info-list {
+    margin-bottom: 10px;
+    padding-top: 10px;
+}
+
+.info-list li {
+    position: relative;
+    padding-left: 8px;
+    color: #333;
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 18px;
+}

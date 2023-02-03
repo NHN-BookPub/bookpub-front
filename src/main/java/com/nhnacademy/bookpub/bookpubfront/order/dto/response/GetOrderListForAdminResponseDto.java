@@ -1,4 +1,4 @@
-package com.nhnacademy.bookpub.bookpubfront.order.dto;
+package com.nhnacademy.bookpub.bookpubfront.order.dto.response;
 
 import java.time.LocalDateTime;
 import lombok.Getter;

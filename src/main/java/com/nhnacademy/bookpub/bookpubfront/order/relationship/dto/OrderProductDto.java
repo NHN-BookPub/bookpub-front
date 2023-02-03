@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.order.relationship.dto;
 
+import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponResponseDto;
 import java.util.List;
 import lombok.Builder;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public class OrderProductDto {
     private List<Integer> categoriesNo;
     private int count;
     private long totalPrice;
+    private List<GetOrderCouponResponseDto> couponList;
 
     /**
      * OrderProductDto의 생성자 입니다.
@@ -41,5 +43,9 @@ public class OrderProductDto {
         this.categoriesNo = categoriesNo;
         this.count = count;
         this.totalPrice = this.salesPrice * this.count;
+    }
+
+    public void addCouponInfo(List<GetOrderCouponResponseDto> couponList) {
+        this.couponList = couponList;
     }
 }

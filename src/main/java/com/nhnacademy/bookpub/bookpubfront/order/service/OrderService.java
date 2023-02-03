@@ -1,10 +1,11 @@
 package com.nhnacademy.bookpub.bookpubfront.order.service;
 
-import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListForAdminResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -19,7 +20,7 @@ public interface OrderService {
      *
      * @param requestDto 등록에 필요한 Dto.
      */
-    void createOrder(CreateOrderRequestDto requestDto);
+    Long createOrder(OrderFormRequestDto requestDto, List<String> productInfo);
 
     /**
      * 송장번호를 수정합니다.
