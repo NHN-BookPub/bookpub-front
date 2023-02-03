@@ -128,13 +128,13 @@
 	var priceInputMax = document.getElementById('price-max'),
 			priceInputMin = document.getElementById('price-min');
 
-	priceInputMax.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
-
-	priceInputMin.addEventListener('change', function(){
-		updatePriceSlider($(this).parent() , this.value)
-	});
+	// priceInputMax.addEventListener('change', function(){
+	// 	updatePriceSlider($(this).parent() , this.value)
+	// });
+	//
+	// priceInputMin.addEventListener('change', function(){
+	// 	updatePriceSlider($(this).parent() , this.value)
+	// });
 
 	function updatePriceSlider(elem , value) {
 		if ( elem.hasClass('price-min') ) {

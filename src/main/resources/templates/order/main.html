@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -40,14 +40,23 @@
             modal.style.display = "flex"
         }
     </script>
+    <script>
+        function showCoupon() {
+            var modal = document.getElementById("coupon");
+            modal.style.display = "flex"
+        }
+    </script>
     <script src="../../static/js/order/order.js"></script>
+    <link rel="stylesheet" href="../../static/css/order/main.css">
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
 <div id="order-main">
     <div class="contents_inner">
         <h1 id="header-h1-text">주문/결제</h1>
-        <div class="cart_body_payment">
+
+        <form method="post" action="/orders/order" class="cart_body_payment">
+            <input type="hidden" name="productCoupon[]" id="product-coupon-result" value="">
             <!--            주문 컨테이너-->
             <div class="cart_body_inner">
                 <section>
@@ -73,6 +82,11 @@
                                 </thead>
                                 <tbody>
                                 <tr th:each="product : ${products}">
+                                    <input type="hidden"
+                                           th:id="${product.productNo}"
+                                           th:value="${product.productNo}+'|'+
+                                           ${product.count}+'|'+
+                                           ${product.totalPrice}" name="order-product">
                                     <td class="prod">
                                         <div class="prod_area">
                                             <div class="bookpub-item-thumb size_sm">
@@ -198,15 +212,16 @@
                         <div class="tbl_row_wrap">
                             <table>
                                 <colgroup>
-                                    <col style="width: 210px">
-                                    <col style="width: auto">
+                                    <col style="width: 100%">
                                 </colgroup>
                                 <tr>
                                     <th scope="row" class="has_ip">할인쿠폰</th>
                                 </tr>
                                 <td class="col-box-wrapper">
-                                    <div class="col-box">
-
+                                    <div class="col-box" style="gap: 13px;display: flex;align-items: center;">
+                                        <span style=" padding-left: 7rem;font-size: 18px; color: #0000004d;" th:text="${#authentication.getPrincipal()!='anonymousUser'
+                                        ? '사용할 수 있는 쿠폰이 있는지 확인하세요' : '비회원은 쿠폰을 사용할 수 없습니다'}"></span>
+                                        <button th:if="${#authentication.getPrincipal()!='anonymousUser'}" id="coupon-use" type="button" onclick="showCoupon()">쿠폰사용</button>
                                     </div>
                                 </td>
                             </table>
@@ -298,6 +313,219 @@
                 </section>
             </div>
 
+            <!--주소입력 모달창-->
+            <div id="member_addresses" class="modal-overlay2"
+                 th:if="${#authentication.getPrincipal()!='anonymousUser'}">
+                <div class="modal_box">
+                    <h2>회원 주소 목록</h2>
+                    <table class="member-address-tbl">
+                        <tr class="address_header">
+                            <th class="member-address">도로명 주소</th>
+                            <th class="member-address">상세 주소</th>
+                            <th class="member-address">기준 주소</th>
+                        </tr>
+                        <tr th:each="address, num : ${member.addresses}" th:id="'address' + ${num.index}"
+                            class="address-info" onclick="saveAddress(this.id)">
+                            <td class="member-address" th:id="'roadAddr' + ${num.index}"
+                                th:text="${address.roadAddress}"></td>
+                            <td class="member-address" th:id="'detailAddr' + ${num.index}"
+                                th:text="${address.addressDetail}"></td>
+                            <td class="member-address" th:text="${address.addressBased}"></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            <!--주소 모달 js-->
+            <script>
+                var modal1 = document.getElementById("member_addresses");
+
+                modal1.addEventListener("click", e => {
+                    const evTarget = e.target
+                    if (evTarget.classList.contains("modal-overlay2")) {
+                        modal1.style.display = "none"
+                    }
+                })
+
+                window.addEventListener("keyup", e => {
+                    if (modal1.style.display === "flex" && e.key === "Escape") {
+                        modal1.style.display = "none"
+                    }
+                })
+            </script>
+            <!--쿠폰 적용 모달창-->
+            <div id="coupon" class="modal-overlay">
+                <div class="modal_box2" style="display: block">
+                    <div>
+                        <!-- 컨텐츠 영역 -->
+
+                        <div class="n-coupon-popup">
+                            <h1 class="popup-tit">COUPON</h1>
+                            <div class="popup-cont" style="overflow-y: auto; height: 45rem;">
+                                <!--쿠폰 리스트-->
+                                <table class="n-table table-col">
+                                    <colgroup>
+                                        <col style="width:282px">
+                                        <col style="width:314px;">
+                                        <col style="width:90px">
+                                        <col style="width:100px">
+                                    </colgroup>
+                                    <thead>
+                                    <tr>
+                                        <th class="th-css" scope="col">상품명</th>
+                                        <th class="th-css" scope="col">판매가</th>
+                                        <th class="th-css" scope="col">쿠폰 선택</th>
+                                        <th class="th-css" scope="col">할인금액</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="product : ${products}">
+                                        <td class="td-css">
+                                            <div class="n-prd-row">
+                                                <span class="img-block">
+                                                    <img src="/static/img/main/no-image.png"
+                                                         alt="no-image" style="width: 50px; height: 60px">
+                                                </span>
+                                                <ul class="info">
+                                                    <li class="name" th:text="${product.title}"></li>
+                                                    <li class="coupon-info"
+                                                        th:id="'apply_coupon' + ${product.productNo}"></li>
+                                                </ul>
+                                            </div>
+                                        </td>
+                                        <td class="coupon-price-area td-css">
+                                            <div class="coupon-sale-price">
+                                                <span>판매가</span>
+                                                <strong class="font-w-noraml"
+                                                        th:text="${product.salesPrice}"></strong>
+                                            </div>
+                                            <div>
+                                                <span class="operation">X</span>
+                                            </div>
+                                            <div class="coupon-product-cnt">
+                                                <span>수량</span>
+                                                <strong th:text="${product.count} + '개'"></strong>
+                                            </div>
+                                            <div>
+                                                <span class="operation">=</span>
+                                            </div>
+                                            <div class="coupon-sale-price">
+                                                <span class="coupon-total-price">총 판매가</span>
+                                                <strong th:text="${product.totalPrice}"></strong>
+                                            </div>
+                                        </td>
+                                        <td class="td-css">
+                                            <a href="javascript:void(0)"
+                                               th:id="'coupon_avail_button' + ${product.productNo}"
+                                               th:onclick="selectCoupon([[${product}]]);" class="btn-default">쿠폰
+                                                선택</a>
+                                            <a href="javascript:void(0)"
+                                               th:id="'dc_cancel_button' + ${product.productNo}"
+                                               style="display:none"
+                                               th:onclick="cancelCoupon([[${product}]]);" class="btn-default">취소</a>
+                                        </td>
+                                        <td class="td-css">
+                                                <span class="product-per-coupon"
+                                                      th:id="'price' + ${product.productNo}"></span>
+                                        </td>
+                                        <input type="hidden" th:id="${product.productNo} + 'coupon'"
+                                               name="coupon-apply">
+                                    </tr>
+                                    </tbody>
+                                </table>
+
+
+                                <ul class="info-list">
+                                    <li>쿠폰 적용 시 한 주문, 한 상품에 한해서만 적용됩니다. (복수발급 쿠폰 제외)</li>
+                                    <li>각 쿠폰은 사용기한이 정해져 있습니다.</li>
+                                    <li>주문 후 반품/환불/취소의 경우 사용하신 쿠폰은 소멸됩니다.</li>
+                                    <li>쿠폰 적용품목이 한정된 쿠폰은 해당 품목에서만 사용가능 합니다.</li>
+                                    <li>할인/적립(%) 쿠폰은 적립금할인 등을 제외한 실제 결제금액에 적용됩니다.</li>
+                                    <li>해당 상품에 대한 쿠폰은 해당 상품만 구매시 적용이 가능합니다.</li>
+                                </ul>
+
+                                <div class="n-btn-group">
+                                    <a href="javascript:void(0)" onclick="applyCouponOrder()"
+                                       class="n-btn btn-accent">쿠폰 적용</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--쿠폰 적용 모달창 js-->
+            <script>
+                var modal = document.getElementById("coupon");
+
+                modal.addEventListener("click", e => {
+                    const evTarget = e.target
+                    if (evTarget.classList.contains("modal-overlay")) {
+                        modal.style.display = "none"
+                    }
+                })
+
+                window.addEventListener("keyup", e => {
+                    if (modal.style.display === "flex" && e.key === "Escape") {
+                        modal.style.display = "none"
+                    }
+                })
+            </script>
+            <!--쿠폰 선택 모달창-->
+            <div id="coupon-select" class="modal-overlay3">
+                <div class="modal_box" style="display: block">
+                    <div>
+                        <h1 class="layer-tit">적용 가능 쿠폰 리스트</h1>
+                        <div class="layer-cont" style="overflow-y: auto;height: 50rem;">
+                            <p>해당 상품에 적용 가능한 쿠폰 입니다. 쿠폰을 선택해주세요.</p>
+                            <!--쿠폰 리스트-->
+                            <table class="n-table table-col">
+                                <colgroup>
+                                    <col style="width:*">
+                                    <col style="width:110px">
+                                    <col style="width:100px">
+                                    <col style="width:145px">
+                                </colgroup>
+                                <thead>
+                                <tr>
+                                    <th class="coupon-th" scope="col">쿠폰명</th>
+                                    <th class="coupon-th" scope="col">적용 가능 수량</th>
+                                    <th class="coupon-th" scope="col">할인율</th>
+                                    <th class="coupon-th" scope="col">할인금액</th>
+                                </tr>
+                                </thead>
+                                <tbody id="coupon-list">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="n-btn-group">
+                            <a href="javascript:void(0)" onclick="hideModal()" class="n-btn btn-lighter">취소</a>
+                            <a href="javascript:void(0)" onclick="applyCoupon()" class="n-btn btn-accent">쿠폰선택</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!--쿠폰 선택 모달 js-->
+            <script>
+                var modal3 = document.getElementById("coupon-select");
+
+                modal3.addEventListener("click", e => {
+                    const evTarget = e.target
+                    if (evTarget.classList.contains("modal-overlay3")) {
+                        modal3.style.display = "none"
+                    }
+                })
+
+                window.addEventListener("keyup", e => {
+                    if (modal3.style.display === "flex" && e.key === "Escape") {
+                        modal3.style.display = "none"
+                    }
+                })
+
+                function hideModal() {
+                    modal3.style.display = "none"
+                }
+            </script>
+
+
             <!-- 결제컨테이너-->
             <div class="cart_info_wrap">
                 <div class="payments_info_area">
@@ -308,18 +536,19 @@
                                 <p class="label2">상품금액</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val spot" id="commodity" th:text="${totalPrice}"></span>
+                                        <span class="val spot" id="commodity">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                 </div>
                             </li>
-                            <li class="payments_info_item" data-amount-area="deliveryFee">
+                            <li class="payments_info_item">
                                 <p class="label2">배송비</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" data-amount="deliveryFee">0</span>
+                                        <span class="val" id="delivery-price">0</span>
                                         <span class="unit">원</span>
                                     </span>
+                                    <input type="hidden" id="deliveryPolicy" name="deliveryPolicy">
                                 </div>
                             </li>
                             <li class="payments_info_item" data-amount-area="present">
@@ -329,6 +558,7 @@
                                         <span class="val" id="gift-price">0</span>
                                         <span class="unit">원</span>
                                     </span>
+                                    <input type="hidden" id="giftPolicy" name="giftPolicy">
                                 </div>
                             </li>
                             <li class="payments_info_item" data-amount-area="couponDiscount">
@@ -338,15 +568,17 @@
                                         <span class="val" id="couponDiscount">0</span>
                                         <span class="unit">원</span>
                                     </span>
+                                    <input type="hidden" id="couponAmount" name="couponAmount">
                                 </div>
                             </li>
-                            <li class="payments_info_item" data-amount-area="pointDiscount">
+                            <li class="payments_info_item">
                                 <p class="label2">포인트 사용</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span id="usePoint" class="val" data-amount="pointDiscount">0</span>
+                                        <span id="usePoint" class="val">0</span>
                                         <span class="unit">원</span>
                                     </span>
+                                    <input type="hidden" id="pointAmount" name="pointAmount">
                                 </div>
                             </li>
                         </ul>
@@ -358,9 +590,10 @@
                                 <p class="label2">최종결제금액</p>
                                 <div class="right_box">
                                     <span class="price2">
-                                        <span class="val" style="font-size:20px" id="totalAmount" th:text="${totalPrice}"></span>
+                                        <span class="val" style="font-size:20px" id="totalAmount">0</span>
                                         <span class="unit">원</span>
                                     </span>
+                                    <input type="hidden" id="totalPrice" name="totalAmount">
                                 </div>
                             </li>
                             <li class="payments_info_item point" style="justify-content: space-between;">
@@ -369,12 +602,13 @@
                                     <span class="point" id="savingPoint">0</span>
                                     <span class="point-unit">P</span>
                                 </span>
+                                <input type="hidden" id="savePoint" name="savePoint">
                             </li>
                         </ul>
                     </div>
                 </div>
                 <div class="btn_wrap full">
-                    <button type="button" class="btn btn-primary"
+                    <button type="submit" class="btn btn-primary"
                             id="btnOrderProcess"><span
                             class="text">결제하기</span>
                     </button>
@@ -387,16 +621,13 @@
                     <input style="width: 17px; height: 17px; margin: 0;" type="checkbox" onclick="gift()" id="gift">
                 </div>
             </div>
-        </div>
+        </form>
     </div>
 </div>
-
 
 <script>
     document.getElementById('datetime').value = new Date().toISOString().substring(0, 19);
 </script>
-
-
 <th:block th:include="main/fragments/rootFooter"></th:block>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.min.js"
         integrity="sha384-cuYeSxntonz0PPNlHhBs68uyIAVpIIOZZ5JqeqvYYIcEL727kskC66kF92t6Xl2V"
@@ -408,42 +639,4 @@
 <script src="/static/js/main/jquery.zoom.min.js"></script>
 <script src="/static/js/main/main.js"></script>
 </body>
-
-<div id="member_addresses" class="modal-overlay">
-    <div id="modal_box">
-        <h2>회원 주소 목록</h2>
-        <table class="member-address-tbl">
-            <tr class="address_header">
-                <th class="member-address">도로명 주소</th>
-                <th class="member-address">상세 주소</th>
-                <th class="member-address">기준 주소</th>
-            </tr>
-            <tr th:each="address, num : ${member.addresses}" th:id="'address' + ${num.index}"
-                class="address-info" onclick="saveAddress(this.id)">
-                <td class="member-address" th:id="'roadAddr' + ${num.index}"
-                    th:text="${address.roadAddress}"></td>
-                <td class="member-address" th:id="'detailAddr' + ${num.index}"
-                    th:text="${address.addressDetail}"></td>
-                <td class="member-address" th:text="${address.addressBased}"></td>
-            </tr>
-        </table>
-    </div>
-</div>
-<script>
-    var modal = document.getElementById("member_addresses");
-
-    modal.addEventListener("click", e => {
-        const evTarget = e.target
-        if (evTarget.classList.contains("modal-overlay")) {
-            modal.style.display = "none"
-        }
-    })
-
-    window.addEventListener("keyup", e => {
-        if (modal.style.display === "flex" && e.key === "Escape") {
-            modal.style.display = "none"
-        }
-    })
-</script>
-
 </html>
