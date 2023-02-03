@@ -4,12 +4,16 @@ import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,6 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,11 +35,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberOrderController {
     private static final String MEMBER = "member";
+    private static final Integer PACKING = 0;
+    private static final Integer SHIPPING = 1;
     private final OrderService orderService;
     private final MemberService memberService;
     private final ProductService productService;
+    private final PricePolicyService pricePolicyService;
 
 
     /**
@@ -109,11 +118,27 @@ public class MemberOrderController {
             model.addAttribute("products", orderProductDtoList);
         }
 
+        List<GetOrderPolicyResponseDto> orderRequestPolicy
+                = pricePolicyService.getOrderRequestPolicy();
+
+        model.addAttribute("packPolicy", orderRequestPolicy.get(PACKING));
+        model.addAttribute("shipPolicy", orderRequestPolicy.get(SHIPPING));
+
         return "order/main";
     }
 
+    /**
+     * order from에서 정보를 받아 shop서버에 등록한 후 결제페이지로 이동시켜주는 controller.
+     *
+     * @param productInfo 주문상품 정보.
+     * @param requestDto  주문 정보.
+     * @return 결제페이지.
+     */
     @PostMapping("/order")
-    public String orderComplete() {
-        return "redirect:/";
+    public String orderComplete(@RequestParam(value = "productCoupon") List<String> productInfo,
+                                @ModelAttribute OrderFormRequestDto requestDto) {
+        Long orderNo = orderService.createOrder(requestDto, productInfo);
+
+        return "redirect:/payment/" + orderNo;
     }
 }
