@@ -90,8 +90,11 @@
                                         <div class="prod_area">
                                             <div class="bookpub-item-thumb size_sm">
                                                 <a target="_blank" href="#">
-                                                    <span class="item-img-wrap">
+                                                    <span class="item-img-wrap" th:if="${#strings.isEmpty(product.getThumbnail)}">
                                                         <img src="/static/img/main/no-image.png">
+                                                    </span>
+                                                    <span class="item-img-wrap" th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                                        <img th:src="@{'data:image/*;base64,' + ${product.getThumbnail()}}" alt="No image">
                                                     </span>
                                                 </a>
                                             </div>

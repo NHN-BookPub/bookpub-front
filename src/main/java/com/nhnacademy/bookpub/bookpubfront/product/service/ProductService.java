@@ -9,8 +9,10 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetail
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 상품을 다루기 위한 서비스.
@@ -26,7 +28,7 @@ public interface ProductService {
      * @param dto     상품 등록 폼에서 입력을 받은 DTO
      * @param tagList 상품 등록 폼에서 입력을 받는 태그 리스트
      */
-    void createCategory(InputProductFormRequestDto dto, List<Integer> tagList);
+    void createCategory(InputProductFormRequestDto dto, List<Integer> tagList, Map<String, MultipartFile> fileMap);
 
     /**
      * 전체 상품을 받아오려는 메서드.

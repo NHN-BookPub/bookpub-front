@@ -10,18 +10,26 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequ
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletRequestWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
@@ -42,13 +50,34 @@ public class ProductAdaptorImpl implements ProductAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void requestCreateProduct(CreateProductRequestDto request) {
+    public void requestCreateProduct(CreateProductRequestDto requestDto, Map<String, MultipartFile> fileMap) {
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest servletRequest = servletRequestAttributes.getRequest();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        headers.setAccept(List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON));
+
+        String accessToken = (String) servletRequest.getAttribute(JwtUtil.AUTH_HEADER);
+        if (Objects.nonNull(accessToken)) {
+            headers.add(JwtUtil.AUTH_HEADER, accessToken);
+        }
+
         String url = GateWayConfig.getGatewayUrl() + PRODUCT_URI;
+
+        MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
+        mapRequest.add("requestDto", requestDto);
+        mapRequest.add("thumbnail", fileMap.get("thumbnail").getResource());
+        mapRequest.add("detail", fileMap.get("detail").getResource());
+        mapRequest.add("ebook", fileMap.get("ebook").getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(mapRequest, headers);
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
-                new HttpEntity<>(request, Utils.makeHeader()),
+                entity,
                 Void.class
         );
 

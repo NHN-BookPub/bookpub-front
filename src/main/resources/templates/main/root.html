@@ -85,8 +85,19 @@
 
                                 <div th:each="newBook :${newBooks}" style="padding: 15px !important;">
                                     <div class="product">
-                                        <div class="product-img">
-                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                        <div class="product-img" style="width: 150px; height: 240px; margin-left: 55px;">
+                                            <img style="width: 100%; height: 100%; object-fit: cover;"
+                                                 th:if="${#strings.isEmpty(newBook.getThumbnail)}"
+                                                 src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                                 alt=""
+                                                 th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
+
+                                            <img style="width: 100%; height: 100%; object-fit: cover;"
+                                                 th:if="${not #strings.isEmpty(newBook.getThumbnail)}"
+                                                 th:src="@{${newBook.getThumbnail()}}"
+                                                 alt="no image"
+                                                 th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
+
                                             <div class="product-label">
                                                 <span class="sale" th:if="${newBook.salesRate} != 0"
                                                       th:text="'-'+${newBook.salesRate} +'%'"></span>
@@ -98,7 +109,7 @@
                                                 <span class="product-category" th:text="${category}"></span>
                                             </div>
                                             <h3 class="product-name">
-                                                <a th:href="@{/products/view/{productNo}(productNo=${newBook.productNo})}"
+                                                <a th:href="@{/products/{productNo}(productNo=${newBook.productNo})}"
                                                    th:text="${newBook.title}"></a>
                                             </h3>
                                             <del class="product-old-price" th:text="${newBook.productPrice}+'원'"></del>
@@ -150,8 +161,19 @@
 
                                 <div th:each="bestSeller :${bestSellers}" style="padding: 15px !important;">
                                     <div class="product">
-                                        <div class="product-img">
-                                            <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                        <div class="product-img" style="width: 150px; height: 240px; margin-left: 55px;">
+                                            <img style="width: 100%; height: 100%; object-fit: cover;"
+                                                 th:if="${#strings.isEmpty(bestSeller.getThumbnail)}"
+                                                 src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                                 alt=""
+                                                 th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSeller.productNo})} + '\''">
+
+                                            <img style="width: 100%; height: 100%; object-fit: cover;"
+                                                 th:if="${not #strings.isEmpty(bestSeller.getThumbnail)}"
+                                                 th:src="@{${bestSeller.getThumbnail()}}"
+                                                 alt="no image"
+                                                 th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSeller.productNo})} + '\''">
+
                                             <div class="product-label">
                                                 <span class="sale" th:if="${bestSeller.salesRate} != 0"
                                                       th:text="'-'+${bestSeller.salesRate} +'%'"></span>
@@ -163,12 +185,13 @@
                                                 <span class="product-category" th:text="${category}"></span>
                                             </div>
                                             <h3 class="product-name">
-                                                <a th:href="@{/products/view/{productNo}(productNo=${bestSeller.productNo})}"
+                                                <a th:href="@{/products/{productNo}(productNo=${bestSeller.productNo})}"
                                                    th:text="${bestSeller.title}"></a>
                                             </h3>
                                             <del class="product-old-price"
                                                  th:text="${bestSeller.productPrice}+'원'"></del>
-                                            <h4 class="product-price" th:text="${bestSeller.salesPrice}+'원'"></h4>
+                                            <h4 id="money" class="product-price"
+                                                th:text="${bestSeller.salesPrice}+'원'"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>

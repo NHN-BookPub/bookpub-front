@@ -11,8 +11,7 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetail
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +19,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * 상품 서비스 구현체.
@@ -38,7 +38,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public void createCategory(InputProductFormRequestDto dto, List<Integer> tagList) {
+    public void createCategory(InputProductFormRequestDto dto, List<Integer> tagList, Map<String, MultipartFile> fileMap) {
         dto.setSalePrice(dto.getProductPrice(), dto.getSaleRate());
 
         boolean subscribed = dto.getSubscribed().equals("구독가능");
@@ -82,7 +82,7 @@ public class ProductServiceImpl implements ProductService {
                 new ArrayList<>()
         );
 
-        productAdaptor.requestCreateProduct(request);
+        productAdaptor.requestCreateProduct(request, fileMap);
     }
 
     /**

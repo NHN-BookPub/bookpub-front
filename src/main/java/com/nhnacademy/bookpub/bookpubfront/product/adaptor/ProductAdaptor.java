@@ -8,8 +8,10 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetail
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import java.util.Map;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * API 서버와 연동을 위한 상품 어댑터 인터페이스.
@@ -22,9 +24,9 @@ public interface ProductAdaptor {
     /**
      * 상품 등록 API 부르는 메서드.
      *
-     * @param request 상품등록을 위한 DTO
+     * @param requestDto 상품등록을 위한 DTO
      */
-    void requestCreateProduct(CreateProductRequestDto request);
+    void requestCreateProduct(CreateProductRequestDto requestDto, Map<String, MultipartFile> fileMap);
 
     /**
      * 상품 목록 API 부르는 메서드.
