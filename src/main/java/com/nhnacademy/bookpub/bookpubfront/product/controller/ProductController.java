@@ -7,6 +7,7 @@ import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
+import com.nhnacademy.bookpub.bookpubfront.review.service.ReviewService;
 import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -28,6 +29,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class ProductController {
 
     private final ProductService productService;
+    private final ReviewService reviewService;
     private final CartUtils cartUtils;
     private final CategoryUtils categoryUtils;
     private static final String CART = "CART";
@@ -51,6 +53,7 @@ public class ProductController {
         model.addAttribute("product", product);
         model.addAttribute("free", DELIVERY_FREE_FEE_STANDARD.getFee());
         model.addAttribute("deliveryFee", DELIVERY_FEE.getFee());
+        model.addAttribute("reviewInfo", reviewService.getProductReviewInfo(productNo));
 
         return "product/productDetail";
     }
