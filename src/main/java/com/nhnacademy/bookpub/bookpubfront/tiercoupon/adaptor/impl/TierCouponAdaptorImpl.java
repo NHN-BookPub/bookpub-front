@@ -8,8 +8,8 @@ import com.nhnacademy.bookpub.bookpubfront.tiercoupon.adaptor.TierCouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.request.CreateTierCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.response.GetTierCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -25,7 +25,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author : 김서현
  * @since : 1.0
  **/
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class TierCouponAdaptorImpl implements TierCouponAdaptor {
@@ -92,6 +91,25 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
         );
 
         checkError(response);
+
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Long> requestTierCouponsByTierNo(Integer tierNo) {
+        String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_URL + "/" + tierNo;
+
+        ResponseEntity<List<Long>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<>() {
+                }
+        );
+
+        return response.getBody();
 
     }
 }
