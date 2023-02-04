@@ -117,7 +117,6 @@ function paintCouponModalPage(product) {
         if (couponConfirmList.has(couponList[i].couponNo.toString())) {
             continue;
         }
-
         let price = product.salesPrice;
 
         if (price < couponList[i].policyMinimum) {
@@ -125,19 +124,23 @@ function paintCouponModalPage(product) {
         }
         let salePrice =
             couponList[i].policyFixed ?
-                product.salesPrice - couponList[i].policyPrice :
-                product.salesPrice * (1 - couponList[i].policyPrice)
-
-        if (salePrice < couponList[i].maxDiscount) {
-            salePrice = couponList[i].maxDiscount
-        }
+                couponList[i].policyPrice :
+                (product.salesPrice * (1 - (couponList[i].policyPrice / 100))).toFixed()
 
         let tr = document.createElement("tr")
 
         let discount =
             couponList[i].policyFixed ? couponList[i].policyPrice + "원" : couponList[i].policyPrice + "%"
 
-        let sale = product.salesPrice - salePrice;
+        let sale = couponList[i].policyFixed ? salePrice : product.salesPrice - salePrice;
+
+        if (sale > couponList[i].maxDiscount) {
+            sale = couponList[i].maxDiscount
+        }
+
+        if (sale > price) {
+            sale = price;
+        }
 
         let inputValue = product.productNo + "|" +
             product.title + "-" +
@@ -172,7 +175,7 @@ function paintCouponModalPage(product) {
         td4.className = "coupon-td"
         let span3 = document.createElement("span")
         span3.className = "coupon-span"
-        span3.innerText = salePrice.toString();
+        span3.innerText = sale.toString();
 
         td1.appendChild(radioInput)
         td1.appendChild(label)
@@ -279,7 +282,7 @@ function applyCouponOrder() {
 
             if (productNo === couponParsingProductNo) {
                 let couponInfo = couponList[i].split("-")[1]
-                resultList.push(productList[i] + "-" +couponInfo);
+                resultList.push(productList[i] + "-" + couponInfo);
 
                 totalSalePrice += parseInt(couponInfo.split("|")[2])
                 break;

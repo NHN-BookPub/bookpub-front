@@ -23,7 +23,7 @@ public class CreateOrderRequestDto {
     private Map<Long, Long> productSaleAmount;
     private Long memberNo;
     private Integer deliveryFeePolicyNo;
-    private Integer packingFeeFeePolicyNo;
+    private Integer packingFeePolicyNo;
     private String buyerName;
     private String buyerNumber;
     private String recipientName;
@@ -65,7 +65,7 @@ public class CreateOrderRequestDto {
         this.productSaleAmount = productSaleAmount;
         this.memberNo = memberNo;
         this.deliveryFeePolicyNo = orderInfo.getDeliveryFeePolicyNo();
-        this.packingFeeFeePolicyNo = orderInfo.getPackingFeeFeePolicyNo();
+        this.packingFeePolicyNo = orderInfo.getPackingFeeFeePolicyNo();
         this.buyerName = orderInfo.getBuyerName();
         this.buyerNumber = orderInfo.getBuyerNumber();
         this.recipientName = orderInfo.getRecipientName();
