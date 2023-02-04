@@ -115,6 +115,7 @@ public class MemberOrderController {
             List<OrderProductDto> orderProductDtoList =
                     productService.orderProductInCart(products, isLoginUser);
 
+            log.warn(orderProductDtoList.get(0).getThumbnail());
             model.addAttribute("products", orderProductDtoList);
         }
 
