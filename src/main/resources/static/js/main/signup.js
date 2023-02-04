@@ -187,7 +187,6 @@ function smsAuth() {
             success: function (result) {
                 alert("인증번호가 전송되었습니다");
                 authMessage = result;
-                console.log(authMessage)
                 $('#smsAuthSend').css("display", "none");
                 $('#smsAuthConfirm').css("display", "inline-block");
                 $('#authInput').css("display", "inline-block");
@@ -204,9 +203,20 @@ function smsConfirm() {
         alert("인증에 성공하였습니다.");
         authInput.disabled = true;
         confirmBtn.css("display", "none");
+        document.getElementById("auth-check").value = "1"
     } else {
         alert("인증에 실패하였습니다.")
         authInput.value = '';
+    }
+}
+
+function finalCheck() {
+    let authCheck = document.getElementById("auth-check")
+    if (authCheck.value === "0") {
+        alert("핸드폰 인증을 받아주세요. (bookpub 단톡방 초대 요청하세요)")
+    } else{
+        let form = document.getElementById("signupForm")
+        form.submit()
     }
 }
 
