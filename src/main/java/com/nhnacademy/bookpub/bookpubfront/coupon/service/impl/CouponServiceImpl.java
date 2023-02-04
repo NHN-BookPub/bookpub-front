@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponReques
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -51,5 +52,21 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public PageResponse<GetCouponResponseDto> getNegativeCoupons(Pageable pageable, Long memberNo) {
         return couponAdaptor.requestNegativeCoupons(pageable, memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean existCouponsByMemberNo(Long memberNo, List<Long> tierCoupons) {
+        return couponAdaptor.requestExistCouponsByMemberNo(memberNo, tierCoupons);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void issueTierCoupons(Long memberNo, List<Long> tierCoupons) {
+        couponAdaptor.requestIssueTierCoupons(memberNo, tierCoupons);
     }
 }
