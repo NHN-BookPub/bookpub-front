@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link href="/static/css/review/star.css" rel="stylesheet"/>
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="/static/js/review/reviewInfo.js"></script>
+
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+</head>
+<body>
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+<div class="body-pd">
+    <br>
+
+    <h1 class="mt-4">마이 리뷰</h1>
+    <h6> - 작성한 리뷰들 </h6>
+    <hr/>
+
+    <div align="right">
+        <form action="/members/my/writable-reviews">
+            <button class="btn btn-dark float-right" style="box-shadow: 3px 3px #888888;"> 작성 가능한 리뷰 ></button>
+        </form>
+
+        <form action="/members/my/written-reviews">
+            <button class="btn btn-dark float-right" style="margin-right: 8px; box-shadow: 3px 3px #888888;"> 작성한 리뷰 >
+            </button>
+        </form>
+    </div>
+
+    <br/>
+    <br/>
+
+    <div>
+        <table class="table">
+            <thead class="table-light">
+            <tr style="text-align: center">
+                <th style="width: 85%">리뷰</th>
+                <th style="width: 15%">수정/삭제</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="review: ${myWrittenReviewList}">
+                <td>
+                    <div>
+                        <div class="row">
+                            <div class="col-2" style="text-align: center;">
+                                <img th:src="${review.productImagePath}" alt="이미지 없음" style="width: 30%; height: auto;">
+                            </div>
+                            <div class="col-7"><span>제목 : </span><a th:href="@{/products/view/{productNo}(productNo=${review.productNo})}"
+                                                  th:text="${review.productTitle}"></a>
+                                <br/>
+                                <span>저자 : </span>
+                                <span th:each="author : ${review.productAuthorNames}">
+                                <span th:text="${author}"></span>
+                                </span>
+                                <br/>
+                                <span th:text="'출판사 : ' + ${review.productPublisher}"></span>
+                            </div>
+                            <span class="col-3"
+                                  th:text="|작성일시 : ${#temporals.format(review.createdAt, 'yyyy/MM/dd HH:mm:SS')}|"></span>
+                        </div>
+                        <hr/>
+                        <div class="row">
+                            <div class="col-2">
+                                <div class="star-ratings" style="align-content: center; margin: auto;">
+                                    <div class="star-ratings-fill space-x-2 text-lg" id="starFill"
+                                         th:with="percent=${review.reviewStar} * 20"
+                                         th:style="'width: ' + ${percent} +'%'">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                    <div class="star-ratings-base space-x-2 text-lg">
+                                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <span class="col-7" th:text="${review.reviewContent}"></span>
+                            <img class="col-3" th:src="${review.reviewImagePath}" style="width: 30%; height: auto"
+                                 onerror="this.onerror=null; this.src='/static/image.review/no-image.png'">
+
+                        </div>
+                    </div>
+                </td>
+
+                <td class="text-center" style="width:100%; justify-content: center; display: flex; gap: 8px;">
+                    <input type="button" class="btn btn-outline-dark" value="수정" data-toggle="modal"
+                           data-target="#modify" th:onclick="|javascript:clickInfo('${review.reviewNo}')|">
+                    <form th:action="@{/members/my/written-reviews/{reviewNo}(reviewNo=${review.reviewNo})}"
+                          method="post">
+                        <input type="submit" class="btn btn-outline-danger" value="삭제">
+                    </form>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/members/my/written-reviews?(page=(${currentPage}-1))}">Previous</a>
+                </li>
+                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link" th:href="@{/members/my/written-reviews?(page=(${page-1}))}"
+                           th:text="${page}"></a></li>
+                </th:block>
+                <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/members/my/written-reviews?(page=(${currentPage}+1))}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</div>
+
+<form>
+    <input type="hidden" value="0" id="reviewNumber" name="reviewNumber">
+</form>
+
+<div class="modal fade" id="modify" data-backdrop="static" tabindex="-1" role="dialog"
+     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="staticBackdropLabel">리뷰 수정</h5>
+            </div>
+            <div class="modal-body">
+                <form class="was-validated" method="post"
+                      enctype="multipart/form-data" id="submitForm" onsubmit="submitForm()">
+
+                    <span class="text-bold">받으신 상품은 어떠셨나요?</span>
+                    <br/>
+                    <fieldset id="reviewForm">
+                        <input type="radio" name="reviewStar" value="5" id="rate5"><label
+                            for="rate5">★</label>
+                        <input type="radio" name="reviewStar" value="4" id="rate4"><label
+                            for="rate4">★</label>
+                        <input type="radio" name="reviewStar" value="3" id="rate3"><label
+                            for="rate3">★</label>
+                        <input type="radio" name="reviewStar" value="2" id="rate2"><label
+                            for="rate2">★</label>
+                        <input type="radio" name="reviewStar" value="1" id="rate1"><label
+                            for="rate1">★</label>
+                    </fieldset>
+                    <br/>
+                    <span>상품 리뷰를 남겨주세요.</span>
+                    <br/>
+                    <div>
+		            <textarea class="col-auto" type="text" id="reviewContents"
+                              name="reviewContent" required
+                              placeholder="리뷰 작성 시 포인트가 지급됩니다. 교환 및 환불은 문의로 남겨주세요."></textarea>
+                    </div>
+
+                    <br/>
+                    <span>이미지 첨부</span>
+                    <span style="color: #888888; font-size: 13px;">(이미지는 10MB 이하의 jpeg, png파일만 등록 가능합니다.)</span>
+                    <img class="col-3" id="existingFile" style="width: 30%; height: auto"
+                         onerror="this.onerror=null;">
+                    <button type="button" id="deleteFileBtn" onclick="deleteFile()">이미지 삭제</button>
+                    <div class="form-group">
+                        <input type="file" id="fileUpload" name="reviewImage" accept="image/jpeg,image/png"/>
+                    </div>
+
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                    <button type="submit" class="btn btn-primary">리뷰 수정</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+</body>
+</html>

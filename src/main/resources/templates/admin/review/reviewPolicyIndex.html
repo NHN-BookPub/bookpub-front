@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>BookPub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">상품평 정책</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">상품평정책 등록, 수정</li>
+                </ol>
+
+                <div align="right">
+                    <button type="button" class="btn btn-primary mb-4 ms-auto" data-toggle="modal" data-target="#add">
+                        등록
+                    </button>
+                    <button type="button" class="btn btn-primary mb-4 ms-auto" data-toggle="modal"
+                            data-target="#modify">
+                        수정
+                    </button>
+                </div>
+
+                <hr/>
+
+                <!-- Modal -->
+                <div class="modal fade" id="add" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="staticBackdropLabel">상품평정책 등록</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/review/review-policies" class="was-validated" method="post">
+                                    <div class="form-group">
+                                        <label for="sendPoint">상품평 지급 포인트 금액</label>
+                                        <input type="text" class="form-control" id="sendPoint"
+                                               placeholder="0이상의 값을 입력해주세요." name="sendPoint" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               maxlength="8"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">0이상의 값을 입력해주세요.</div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" class="btn btn-primary">등록</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- Modal -->
+                <div class="modal fade" id="modify" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="modifyLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modifyLabel">쿠폰정책 수정</h5>
+                            </div>
+
+                            <form action="/admin/review/review-policies/modify" class="was-validated" method="post">
+                                <div class="modal-body">
+                                    <div class="form-group">
+                                        <label for="modifyPolicyNo">정책번호</label>
+                                        <input type="text" class="form-control" id="modifyPolicyNo"
+                                               placeholder="수정할 정책 번호"
+                                               name="policyNo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">수정할 정책 번호를 기입해주세요.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="modifyPolicyPrice">상품평 지급 포인트 금액</label>
+                                        <input type="text" class="form-control" id="modifyPolicyPrice"
+                                               placeholder="0이상의 값을 입력해주세요." name="sendPoint" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">0이상의 값을 입력해주세요.</div>
+                                    </div>
+
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" class="btn btn-primary">수정</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <br/>
+
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>상품평정책 번호</th>
+                        <th>상품평 지급 포인트</th>
+                        <th>현재 사용 여부</th>
+                        <th>사용 설정</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="reviewPolicy : ${reviewPolicyList}">
+                        <td th:text="${reviewPolicy.policyNo}"></td>
+                        <td th:text="${reviewPolicy.sendPoint} + 'P'"></td>
+                        <td th:text="${reviewPolicy.policyUsed}"></td>
+                        <td>
+                            <form th:action="@{/admin/review/review-policies/{policyNo}/used(policyNo=${reviewPolicy.policyNo})}" th:method="post">
+                                <button type="submit" class="btn btn-outline-info mb-1 ms-auto">사용하기</button>
+                            </form>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+        </main>
+    </div>
+</div>
+
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/chart-area-demo.js"></script>
+<script src="/static/js/admin/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+
+
+</html>

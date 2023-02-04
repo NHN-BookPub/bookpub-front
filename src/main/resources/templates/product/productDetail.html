@@ -11,6 +11,8 @@
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+    <link href="/static/css/review/star.css" rel="stylesheet"/>
+
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -109,12 +111,19 @@
             <div class="row" mb-3>
                 <label class="col-sm-3">리뷰</label>
                 <div class="col-sm-9">
-                    <i class="fa fa-star" style="color: #fd7e14"></i>
-                    <i class="fa fa-star" style="color: #fd7e14"></i>
-                    <i class="fa fa-star" style="color: #fd7e14"></i>
-                    <i class="fa fa-star" style="color: #fd7e14"></i>
-                    <i class="fa fa-star" style="color: #fd7e14"></i>
-                    <strong style="font-size: 22px">5점</strong> <i>회원리뷰(7건)</i>
+                    <div class="col-sm-9">
+                        <div class="star-ratings">
+                            <div class="star-ratings-fill space-x-2 text-lg"
+                                 th:with="percent=${reviewInfo.productStar} * 20"
+                                 th:style="'width: ' + ${percent} +'%'">
+                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                            </div>
+                            <div class="star-ratings-base space-x-2 text-lg">
+                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                            </div>
+                        </div>
+                        <i th:text="${reviewInfo.productStar}"></i>
+                    </div>
                 </div>
             </div>
 
@@ -217,9 +226,71 @@
 
     <hr/>
 
-    <div class="row" style="background-color: #d0e9c6">
-        리뷰
+
+    <!-- 리뷰 -->
+
+    <div>
+        <h3>리뷰</h3>
+        <br/>
+        <div style="background-color: whitesmoke; margin: 0 auto; display: flex; padding: 10px" class="row">
+            <div style="text-align: center; display: inline-block; width: 30%">
+                <span style="font-size: 18px"> 리뷰 평점</span>
+                <br/>
+                <div class="star-ratings" style="align-content: center; margin: auto;">
+                    <div class="star-ratings-fill space-x-2 text-lg productView" id="starFill"
+                         th:with="percent=${reviewInfo.productStar} * 20"
+                         th:style="'width: ' + ${percent} +'%'">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                    <div class="star-ratings-base space-x-2 text-lg productView">
+                        <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                    </div>
+                </div>
+                <b style="font-size: 25px" th:text="${reviewInfo.productStar}"></b>
+                <span style="font-size: 25px; color: #B8B8B8">/</span>
+                <b style="font-size: 25px; color: #B8B8B8">5</b>
+            </div>
+            <div class="col-8" style="display: inline-block; padding-top: 30px">
+                <span style="font-size: 18px"> 리뷰 개수</span>
+                <br/>
+                <b style="font-size: 18px;" th:text="${reviewInfo.reviewCount}"></b>
+            </div>
+        </div>
+        <table class="table table-bordered">
+            <tr>
+                <td>
+                    <div id="test1"></div>
+                    <div id="test2"></div>
+                    <div id="test3"></div>
+                    <div id="test4"></div>
+                    <div id="test5"></div>
+                    <div id="test6"></div>
+                    <div id="test7"></div>
+                    <div id="test8"></div>
+                    <div id="test9"></div>
+                    <div id="test10"></div>
+                </td>
+            </tr>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" id="reviewPreviousBtn">
+                    <a class="page-link" id="reviewPreviousLink" onclick="reviewPrevious()">Previous</a>
+                </li>
+<!--                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?-->
+<!--                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">-->
+<!--                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">-->
+<!--                        <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${page-1}))}"-->
+<!--                           th:text="${page}"></a></li>-->
+<!--                </th:block>-->
+                <li class="page-item" id="reviewNextBtn">
+                    <a class="page-link" id="reviewNextLink" onclick="reviewNext()">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
+
 
     <hr/>
 
@@ -243,6 +314,7 @@
 <script src="/static/js/main/nouislider.min.js"></script>
 <script src="/static/js/main/jquery.zoom.min.js"></script>
 <script src="/static/js/main/main.js"></script>
+<script src="/static/js/review/product-review.js"></script>
 
 <script>
     const productNo = $('#productNo').text();
