@@ -8,6 +8,7 @@ import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -77,9 +78,22 @@ public class MemberRestController {
      */
     @PostMapping("/members/{memberNo}/password-check")
     public boolean passwordCheck(@PathVariable("memberNo") Long memberNo,
-                                 @RequestParam("rawPassword") String rawPassword) {
+            @RequestParam("rawPassword") String rawPassword) {
         MemberPasswordResponseDto memberPassword = memberService.getMemberPassword(memberNo);
         log.error(rawPassword);
         return passwordEncoder.matches(rawPassword, memberPassword.getPassword());
     }
+
+    /**
+     * 멤버의 등급을 조회하는 메서드입니다.
+     *
+     * @param memberNo 회원 번호
+     * @return 등급 번호
+     */
+    @GetMapping("/members/member")
+    public Integer getTierNoByMemberNo(@RequestParam Long memberNo) {
+        Integer tierNo = memberService.getTierByMemberNo(memberNo);
+        return tierNo;
+    }
+
 }

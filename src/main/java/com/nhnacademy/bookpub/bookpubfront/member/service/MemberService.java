@@ -171,4 +171,12 @@ public interface MemberService {
      * @param addressNo 주소번호
      */
     void deleteMemberAddress(Long memberNo, Long addressNo);
+
+    /**
+     * 멤버의 등급을 조회하는 메서드입니다.
+     *
+     * @param memberNo 멤버 번호
+     * @return 등급 번호
+     */
+    Integer getTierByMemberNo(Long memberNo);
 }
