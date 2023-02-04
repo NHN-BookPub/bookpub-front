@@ -16,6 +16,7 @@
     <link rel="stylesheet" href="/static/css/main/signup.css">
     <script src="/static/js/main/signup.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="../../static/js/main/signup.js"></script>
 
 
 </head>
@@ -25,7 +26,7 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">회원가입</h4>
-            <form class="validation-form" novalidate action="/signup" method="post">
+            <form class="validation-form" id="signupForm" action="/signup" method="post">
                 <div class="mb-3">
                     <label for="name">이름</label>
                     <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
@@ -119,6 +120,7 @@
                         <div class="confirm-box">
                             <label id="inputLabel" for="authInput">인증번호 입력</label>
                             <input type="text" id="authInput" name="auth" required>
+                            <input type="hidden" id="auth-check" value="0">
                             <button id="smsAuthConfirm" type="button" onclick="smsConfirm()">확인</button>
                         </div>
                         <button id="smsAuthSend" type="button" onclick="smsAuth()">인증번호 전송</button>
@@ -150,9 +152,8 @@
                     <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
                 </div>
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" id="submitBtn" type="submit" disabled="disabled">가입
-                    완료
-                </button>
+                <button class="btn btn-primary btn-lg btn-block" id="submitBtn"
+                        onclick="finalCheck()" type="button" disabled="disabled">가입 완료</button>
             </form>
         </div>
     </div>
