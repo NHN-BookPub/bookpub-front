@@ -20,6 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 주문 어답터의 구현체입니다.
@@ -53,8 +54,13 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "?page=" + pageable.getOffset() + "&size=" + pageable.getPageSize();
+        String url =
+                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + ORDER_URL)
+                        .queryParam("page", pageable.getPageNumber())
+                        .queryParam("size", pageable.getPageSize())
+                        .encode()
+                        .toUriString();
+
         ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
@@ -68,9 +74,14 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
             Pageable pageable, Long memberNo) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "/member?page=" + pageable.getPageNumber()
-                + "&size=" + pageable.getPageSize() + "&no=" + memberNo;
+        String url =
+                UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + ORDER_URL + "/member")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .queryParam("no", memberNo)
+                .encode()
+                .toUriString();
 
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
