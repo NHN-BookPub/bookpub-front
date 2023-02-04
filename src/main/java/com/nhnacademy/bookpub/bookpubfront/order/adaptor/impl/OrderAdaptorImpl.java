@@ -5,9 +5,10 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.CreateOrderRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -19,6 +20,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 주문 어답터의 구현체입니다.
@@ -36,42 +38,57 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void createOrderRequest(CreateOrderRequestDto requestDto) {
+    public Long createOrderRequest(CreateOrderRequestDto requestDto) {
         String url = GateWayConfig.getGatewayUrl() + ORDER_URL;
         HttpEntity<CreateOrderRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url, HttpMethod.POST, httpEntity, Void.class);
+        ResponseEntity<Long> response =
+                restTemplate.exchange(url, HttpMethod.POST, httpEntity, Long.class);
 
         checkError(response);
+
+        return response.getBody();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetOrderListResponseDto> getAllOrdersRequest(Pageable pageable) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "?page=" + pageable.getOffset() + "&size=" + pageable.getPageSize()     ;
-        ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
+    public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
+        String url =
+                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + ORDER_URL)
+                        .queryParam("page", pageable.getPageNumber())
+                        .queryParam("size", pageable.getPageSize())
+                        .encode()
+                        .toUriString();
+
+        ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>(){});
+                        new ParameterizedTypeReference<>() {
+                        });
 
-        return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
+        return (PageResponse<GetOrderListForAdminResponseDto>) checkError(response).getBody();
     }
 
     @Override
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
             Pageable pageable, Long memberNo) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
-                + "/member?page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize() + "&no=" + memberNo;
+        String url =
+                UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + ORDER_URL + "/member")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .queryParam("no", memberNo)
+                .encode()
+                .toUriString();
 
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
     }
@@ -101,7 +118,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         checkError(response);
     }
@@ -119,7 +137,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
         checkError(response);
     }

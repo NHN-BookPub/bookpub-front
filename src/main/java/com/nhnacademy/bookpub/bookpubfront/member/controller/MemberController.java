@@ -1,13 +1,16 @@
 package com.nhnacademy.bookpub.bookpubfront.member.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -33,9 +36,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequiredArgsConstructor
 public class MemberController {
+
     private static final String REDIRECT_MY_PAGE = "redirect:/members/";
     private static final String MEMBER = "member";
+    private static final String AUTH_MEMBER = "oauthMember";
     private final MemberService memberService;
+
+    private final CouponService couponService;
 
     /**
      * 관리자가 멤버 정보들을 볼수있는 View 로 갑니다.
@@ -65,13 +72,27 @@ public class MemberController {
     /**
      * 회원가입 페이지를 연결해주는 메소드.
      *
-     * @param model the model
      * @return 회원가입 페이지 view를 보여줌
      */
     @GetMapping("/signup")
-    public String signupPageForm(Model model) {
-        model.addAttribute("url", GateWayConfig.getGatewayUrl() + "/api/signup");
+    public String signupPageForm() {
         return "member/signupPage";
+    }
+
+    /**
+     * oauth 회원가입 페이지를 연결해주는 메소드.
+     *
+     * @param model   model.
+     * @param request 요청.
+     * @return oauth 회원의 가입 페이지.
+     */
+    @GetMapping("/oauth/signup")
+    public String oauthSignupPageForm(Model model, HttpServletRequest request) {
+        OauthMemberRequestDto oauthMember
+                = (OauthMemberRequestDto) request.getAttribute(AUTH_MEMBER);
+
+        model.addAttribute(AUTH_MEMBER, oauthMember);
+        return "member/oauthSignupPage";
     }
 
     /**
@@ -84,6 +105,24 @@ public class MemberController {
     @PostMapping("/signup")
     public String signupComplete(@Valid SignupMemberRequestDto signupMemberRequestDto,
                                  Model model) {
+        SignupMemberResponseDto memberInfo
+                = memberService.signup(signupMemberRequestDto);
+
+        model.addAttribute(MEMBER, memberInfo);
+
+        return "member/signupComplete";
+    }
+
+    /**
+     * 회원가입 정보로 통신한 후 성공페이지를 띄워주는 메소드.
+     *
+     * @param signupMemberRequestDto 회원가입 정보를 담고있다.
+     * @param model                  html에 동적인 정보를 전달해주는 객체.
+     * @return 성공, 실패 페이지를 보여준다.
+     */
+    @PostMapping("/oauth/signup")
+    public String oauthSignupComplete(@Valid OauthMemberCreateRequestDto signupMemberRequestDto,
+            Model model) {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
 
@@ -140,6 +179,65 @@ public class MemberController {
     }
 
     /**
+     * 멤버의 사용가능한 쿠폰 리스트를 조회하기 위한 요청.
+     *
+     * @param memberNo 멤버 번호
+     * @param pageable 페이징 정보
+     * @param model    모델
+     * @return 멤버의 사용 가능 쿠폰함 페이지로 이동.
+     */
+    @Auth
+    @GetMapping("/members/{memberNo}/coupon/positive")
+    public String memberCouponList(@PathVariable("memberNo") Long memberNo,
+            @PageableDefault Pageable pageable, Model model,
+            @RequestParam(name = "type", required = false) String type) {
+        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        model.addAttribute(MEMBER, member);
+
+        PageResponse<GetCouponResponseDto> positiveCoupons = couponService.getPositiveCoupons(
+                pageable, memberNo);
+
+        model.addAttribute("positiveList", positiveCoupons.getContent());
+        model.addAttribute("positiveTotalPages", positiveCoupons.getTotalPages());
+        model.addAttribute("positiveCurrentPage", positiveCoupons.getNumber());
+        model.addAttribute("positiveIsNext", positiveCoupons.isNext());
+        model.addAttribute("positiveIsPrevious", positiveCoupons.isPrevious());
+        model.addAttribute("positivePageButtonNum", 5);
+
+        return "mypage/mycouponPositive";
+    }
+
+    /**
+     * 멤버의 사용 불가능 쿠폰 리스트를 조회하기 위한 요청.
+     *
+     * @param memberNo 멤버 번호
+     * @param pageable 페이징 정보
+     * @param model    모델
+     * @return 멤버의 사용 불가능 쿠폰함 페이지로 이동.
+     */
+    @Auth
+    @GetMapping("/members/{memberNo}/coupon/negative")
+    public String memberCouponListNegative(@PathVariable("memberNo") Long memberNo,
+            @PageableDefault Pageable pageable, Model model,
+            @RequestParam(name = "type", required = false) String type) {
+        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        model.addAttribute(MEMBER, member);
+
+        PageResponse<GetCouponResponseDto> negativeCoupons = couponService.getNegativeCoupons(
+                pageable, memberNo);
+
+        model.addAttribute("negativeList", negativeCoupons.getContent());
+        model.addAttribute("negativeTotalPages", negativeCoupons.getTotalPages());
+        model.addAttribute("negativeCurrentPage", negativeCoupons.getNumber());
+        model.addAttribute("negativeIsNext", negativeCoupons.isNext());
+        model.addAttribute("negativeIsPrevious", negativeCoupons.isPrevious());
+        model.addAttribute("negativePageButtonNum", 5);
+
+        return "mypage/mycouponNegative";
+    }
+
+
+    /**
      * 로그인 화면을 보여주는 메소드.
      *
      * @param model   html에 동적인 정보를 전달해주는 객체.
@@ -179,7 +277,6 @@ public class MemberController {
     public String memberExchangeName(@PathVariable("memberNo") Long memberNo,
                                      @RequestParam("exchangeName") String name) {
         memberService.modifyMemberName(memberNo, name);
-
 
         return REDIRECT_MY_PAGE + memberNo;
     }

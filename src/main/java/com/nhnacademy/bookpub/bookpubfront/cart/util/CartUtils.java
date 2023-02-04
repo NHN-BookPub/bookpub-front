@@ -1,6 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.cart.util;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
@@ -33,6 +36,10 @@ public class CartUtils {
         }
 
         model.addAttribute("cartCount", count);
+    }
+
+    public static List<String> parsingCart(String cart) {
+        return Arrays.stream(cart.split("/")).collect(Collectors.toList());
     }
 
 }

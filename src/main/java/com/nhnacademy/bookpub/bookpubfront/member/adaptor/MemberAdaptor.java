@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.member.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
@@ -27,6 +28,15 @@ public interface MemberAdaptor {
      * @return 성공 201 이 반환됩니다.
      */
     ResponseEntity<SignupMemberResponseDto> signupRequest(SignupMemberRequestDto signupRequest);
+
+    /**
+     * oauth 회원가입 여부의 값이 반환됩니다.
+     *
+     * @param signupRequest 회원가입 정보.
+     * @return 성공 201 이 반환됩니다.
+     */
+    ResponseEntity<SignupMemberResponseDto> signupRequest(
+            OauthMemberCreateRequestDto signupRequest);
 
     /**
      * 멤버 닉네임을 변경하기위한 메서드입니다.

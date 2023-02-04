@@ -1,10 +1,11 @@
-package com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto;
+package com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.request;
 
 import com.nhnacademy.bookpub.bookpubfront.state.PricePolicyState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 가격 정책 생성 dto.
@@ -13,7 +14,8 @@ import lombok.NoArgsConstructor;
  * @since : 1.0
  **/
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
+@ToString
 public class CreatePricePolicyRequestDto {
     @StateCode(enumClass = PricePolicyState.class)
     private String policyName;

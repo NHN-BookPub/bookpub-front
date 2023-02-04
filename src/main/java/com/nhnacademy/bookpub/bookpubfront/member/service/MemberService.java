@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.member.service;
 
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
@@ -30,6 +31,13 @@ public interface MemberService {
      */
     SignupMemberResponseDto signup(SignupMemberRequestDto signupMemberRequestDto);
 
+    /**
+     * oauth 회원정보를 저장 요청하는 메소드.
+     *
+     * @param signupMemberRequestDto 멤버 정보를 담아 요청보내는 DTO
+     * @return 저장된 멤버 정보의 일부를 반환받는 DTO
+     */
+    SignupMemberResponseDto signup(OauthMemberCreateRequestDto signupMemberRequestDto);
 
     /**
      * 회원 로그아웃 메소드.
@@ -43,7 +51,7 @@ public interface MemberService {
      * 멤버의 닉네임을 적어야하는 메서드입니다.
      *
      * @param memberNo 멤버 번호.
-     * @param nickname      수정할 닉네임 기입.
+     * @param nickname 수정할 닉네임 기입.
      */
     void modifyMemberNickName(Long memberNo, String nickname);
 
@@ -51,7 +59,7 @@ public interface MemberService {
      * 멤버의 이메일 정보를 수정해야하는 메서드입니다.
      *
      * @param memberNo 멤버 번호가 기입.
-     * @param email      멤버가 수정할 이메일 정보.
+     * @param email    멤버가 수정할 이메일 정보.
      */
     void modifyMemberEmail(Long memberNo, String email);
 
@@ -86,15 +94,27 @@ public interface MemberService {
     MemberStatisticsResponseDto memberStatistics();
 
     /**
-     * 회원의 등급별 통계를 반환
+     * 회원의 등급별 통계를 반환.
      *
      * @return the list
      */
     List<MemberTierStatisticsResponseDto> memberTierStatistics();
 
+    /**
+     * id 중복체크 메소드.
+     *
+     * @param id 회원가입 하고자 하는 id.
+     * @return true, false
+     */
     boolean idDuplicateCheck(String id);
 
-    boolean nickDuplicateCheck(String id);
+    /**
+     * nickname 중복체크 메소드.
+     *
+     * @param nickname 회원가입 하고자 하는 닉네임.
+     * @return true, false
+     */
+    boolean nickDuplicateCheck(String nickname);
 
     /**
      * 멤버에 이름을 수정할때 쓰이는 메서드입니다.

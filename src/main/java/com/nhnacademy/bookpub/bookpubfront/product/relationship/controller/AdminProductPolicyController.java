@@ -39,7 +39,7 @@ public class AdminProductPolicyController {
 
         model.addAttribute("productPolicies", productPolicies);
 
-        return "/admin/product/productPolicyPage";
+        return "admin/product/productPolicyPage";
     }
 
     /**

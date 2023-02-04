@@ -11,15 +11,6 @@ function order() {
     const productArr = [];
     const productCnt = [];
 
-    for (var i = 1; i < $('table tr').size(); i++) {
-        const chk = $('table tr').eq(i).children().find('input[type="checkbox"]').is(':checked');
-
-        if (chk === true) {
-            const cnt = $('table tr').eq(i).find('input[type="number"]').val();
-            productCnt.push(cnt);
-        }
-    }
-
     const checkBox = $("input[name=product]:checked");
 
     checkBox.each(function (i) {
@@ -27,6 +18,7 @@ function order() {
         const td = tr.children();
 
         productArr.push(td.eq(1).children().eq(0).text())
+        productCnt.push(td.eq(3).children().eq(0).val())
     });
 
 
@@ -58,7 +50,7 @@ function order() {
 
         success: function () {
             alert('결제하러가기')
-            window.location = '/orders';
+            window.location = '/orders/order';
         }
     })
 }

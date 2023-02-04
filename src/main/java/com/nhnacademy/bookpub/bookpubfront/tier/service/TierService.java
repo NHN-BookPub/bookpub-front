@@ -20,4 +20,6 @@ public interface TierService {
     List<TierResponseDto> getTiers();
 
     TierResponseDto getTier(Integer tierNo);
+
+    Boolean getTierName(String tierName);
 }

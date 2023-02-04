@@ -12,6 +12,7 @@ import org.springframework.data.domain.Pageable;
  * @since : 1.0
  **/
 public interface CouponService {
+
     /**
      * 쿠폰을 생성하기 위한 메서드입니다.
      *
@@ -27,5 +28,24 @@ public interface CouponService {
      * @param search    검색어
      * @return 쿠폰을 조회할 수 있는 Dto를 담은 페이지
      */
-    PageResponse<GetCouponResponseDto> getCoupons(Pageable pageable, String searchKey, String search);
+    PageResponse<GetCouponResponseDto> getCoupons(Pageable pageable, String searchKey,
+            String search);
+
+    /**
+     * 멤버의 사용가능한 쿠폰을 조회하기 위해 메서드입니다.
+     *
+     * @param pageable 페이지 정보
+     * @param memberNo 멤버 번호
+     * @return 사용 가능한 쿠폰 정보 DTO를 담은 페이지
+     */
+    PageResponse<GetCouponResponseDto> getPositiveCoupons(Pageable pageable, Long memberNo);
+
+    /**
+     * 멤버의 사용가능한 쿠폰을 조회하기 위해 메서드입니다.
+     *
+     * @param pageable 페이지 정보
+     * @param memberNo 멤버 번호
+     * @return 사용 불가능한 쿠폰 정보 DTO를 담은 페이지
+     */
+    PageResponse<GetCouponResponseDto> getNegativeCoupons(Pageable pageable, Long memberNo);
 }

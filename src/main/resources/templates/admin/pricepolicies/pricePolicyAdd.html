@@ -13,31 +13,25 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <form class="form was-validated" method="post" action="/admin/tiers">
+                <form class="form was-validated" method="post" action="/admin/pricepolicies" id="pricePolicyDto" name="pricePolicyDto">
                     <div class="form-group">
-                    <label>회원 등급</label>
-                    <input name="tierName"type="text" placeholder="등급명을 기입해주세요" id="tierName"
-                           min="2"
-                           max="10"
-                           required>
-                    <div class="valid-feedback">완료</div>
-                    <div class="invalid-feedback">2자 10자</div>
+                        <label>가격정책</label>
+                        </br>
+                        <input name="policyName" type="text" placeholder="정책명을 입력해주세요." id="policyName"
+                               min="2"
+                               max="3"
+                               required>
+                        <div class="valid-feedback">완료</div>
+                        <div class="invalid-feedback">배송비 | 포장비</div>
                     </div>
                     <div class="form-group">
-                        <input name="tierValue"type="text" placeholder="등급 값을 입력해주세요"
+                        <input name="policyFee" type="text" placeholder="금액을 입력해주세요" id="policyFee"
                                pattern="^[0-9]+$"
                                required>
                         <div class="valid-feedback">완료</div>
                         <div class="invalid-feedback">숫자만 입력해주세요</div>
                     </div>
-                    <div class="form-group">
-                        <input name="tierPrice"type="text" placeholder="등급 필요 금액을 입력해주세요"
-                               pattern="^[0-9]+$"
-                               required>
-                        <div class="valid-feedback">완료</div>
-                        <div class="invalid-feedback">숫자만 입력해주세요</div>
-                    </div>
-                    <input type="submit" class="btn-primary" value="REGISTER">
+                    <input type="submit" class="btn-primary" value="등록">
                 </form>
             </div>
         </main>

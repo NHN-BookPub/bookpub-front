@@ -1,14 +1,13 @@
 let emptyReg = /\s/g;
-let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
-let idReg = /^.*(?=.*[a-z])(?=.*\d)(?=^.{5,20}).*$/;
+let nameReg = /^[가-힣a-z]{2,200}$/;
+let idReg = /^[a-z0-9_-]{5,20}$/;
 let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
-let nickReg = /^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$/;
-let birthReg = /^.*(?=.*\d)(?=^.{6}).*$/;
+let nickReg = /^[a-zA-Z\d]{2,8}$/;
+let birthReg = /^\d{6}$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 const nicknameCheck = $("#nickname-check");
 const idCheck = $("#id-check");
-const emailCheck = $("#email-check");
 
 let authMessage;
 let confirmBtn = $('#smsAuthConfirm');
@@ -37,7 +36,7 @@ window.addEventListener('load', () => {
 function idPattern() {
     let idVal = document.getElementById('memberId').value;
     if (!idReg.test(idVal) || emptyReg.test(idVal)) {
-        alert('아이디는 영소문자,숫자로 구성된 5글자 이상, 20글자 이하로 생성해주세요.')
+        alert('아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.')
         return false;
     }
     return true;
@@ -46,7 +45,7 @@ function idPattern() {
 function nicknamePattern() {
     let nickVal = document.getElementById('nickname').value;
     if (!nickReg.test(nickVal) || emptyReg.test(nickVal)) {
-        alert('닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.')
+        alert('닉네임은 영어나 숫자로 2글자 이상 8글자 이하로 입력해주세요.')
         return false;
     }
     return true;
@@ -115,7 +114,7 @@ function idCheckFunc() {
         $.ajax({
             type: "post",
             async: true,
-            url: "./idCheck",
+            url: "/idCheck",
             data: {"id": id},
             success: function (result) {
                 if (result === false) {
@@ -148,7 +147,7 @@ function nickCheckFunc() {
         $.ajax({
             type: "post",
             async: true,
-            url: "./nickCheck",
+            url: "/nickCheck",
             data: {"nickname": nickname},
             success: function (result) {
                 if (result === false) {
@@ -184,11 +183,10 @@ function smsAuth() {
         $.ajax({
             type: "post",
             async: false,
-            url: "./smsSend",
+            url: "/smsSend",
             success: function (result) {
                 alert("인증번호가 전송되었습니다");
                 authMessage = result;
-                console.log(authMessage)
                 $('#smsAuthSend').css("display", "none");
                 $('#smsAuthConfirm').css("display", "inline-block");
                 $('#authInput').css("display", "inline-block");
@@ -205,9 +203,20 @@ function smsConfirm() {
         alert("인증에 성공하였습니다.");
         authInput.disabled = true;
         confirmBtn.css("display", "none");
+        document.getElementById("auth-check").value = "1"
     } else {
         alert("인증에 실패하였습니다.")
         authInput.value = '';
+    }
+}
+
+function finalCheck() {
+    let authCheck = document.getElementById("auth-check")
+    if (authCheck.value === "0") {
+        alert("핸드폰 인증을 받아주세요. (bookpub 단톡방 초대 요청하세요)")
+    } else{
+        let form = document.getElementById("signupForm")
+        form.submit()
     }
 }
 

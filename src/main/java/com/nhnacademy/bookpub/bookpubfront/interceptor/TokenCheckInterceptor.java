@@ -7,7 +7,7 @@ import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.MILL_SEC;
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
-import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
+import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
@@ -36,6 +36,15 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
     private static final Long RENEW_TIME = Duration.ofMinutes(15).toSeconds();
     private final MemberAdaptor memberAdaptor;
 
+    /**
+     * 컨트롤러 진입 전에 실행되는 메소드.
+     *
+     * @param request 요청
+     * @param response 응답
+     * @param handler 핸들러
+     * @return true, false
+     * @throws IOException  sendError에서 발생할 수 있는 에러.
+     */
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws IOException {
@@ -44,7 +53,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
             return true;
         }
 
-        Cookie jwtCookie = Utils.findCookie(JWT_COOKIE);
+        Cookie jwtCookie = CookieUtil.findCookie(JWT_COOKIE);
 
         if (unauthorizedAccess(response, jwtCookie)) {
             return false;

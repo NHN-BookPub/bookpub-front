@@ -5,8 +5,9 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.adaptor.PricePolicyAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.CreatePricePolicyRequestDto;
-import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.GetPricePolicyResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.request.CreatePricePolicyRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetPricePolicyResponseDto;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
@@ -19,7 +20,7 @@ import org.springframework.web.client.RestTemplate;
 /**
  * 가격정책 어답터의 구현체입니다.
  *
- * @author : 여운석
+ * @author : 여운석, 임태원
  * @since : 1.0
  **/
 @Component
@@ -65,7 +66,8 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     @Override
     public void createOrderStateCodeRequest(
             CreatePricePolicyRequestDto requestDto) {
-        HttpEntity<CreatePricePolicyRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
+        HttpEntity<CreatePricePolicyRequestDto> httpEntity =
+                new HttpEntity<>(requestDto, makeHeader());
         ResponseEntity<Void> response =
                 restTemplate.exchange(ORDER_PRODUCT_URL,
                         HttpMethod.POST,
@@ -89,4 +91,34 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
 
         checkError(response);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<GetPricePolicyResponseDto> getPoliciesByName(String name) {
+        String url = ORDER_PRODUCT_URL + "/" + name;
+
+        ResponseEntity<List<GetPricePolicyResponseDto>> response =
+                restTemplate.exchange(url,
+                        HttpMethod.GET,
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<>() {
+                        });
+
+        return (List<GetPricePolicyResponseDto>) checkError(response).getBody();
+    }
+
+    @Override
+    public List<GetOrderPolicyResponseDto> getShipAndPackagePolicy() {
+        return restTemplate.exchange(
+                ORDER_PRODUCT_URL + "/order",
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<List<GetOrderPolicyResponseDto>>() {
+                }
+        ).getBody();
+    }
+
+
 }

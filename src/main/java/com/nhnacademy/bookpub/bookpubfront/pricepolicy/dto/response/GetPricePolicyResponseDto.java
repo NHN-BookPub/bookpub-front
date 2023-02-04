@@ -1,7 +1,8 @@
-package com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto;
+package com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response;
 
-import lombok.AllArgsConstructor;
+import java.time.LocalDateTime;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 /**
  * 가격정책을 반환하기 위한 Dto.
@@ -10,9 +11,10 @@ import lombok.Getter;
  * @since : 1.0
  **/
 @Getter
-@AllArgsConstructor
+@NoArgsConstructor
 public class GetPricePolicyResponseDto {
-    private Integer pricePolicyNo;
+    private Integer policyNo;
     private String policyName;
     private Long policyFee;
+    private LocalDateTime createdAt;
 }

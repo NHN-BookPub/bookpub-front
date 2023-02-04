@@ -16,6 +16,9 @@ public class GetProductDetailResponseDto {
     private Long productNo;
     private String productIsbn;
     private String title;
+    private String thumbnail;
+    private String detail;
+    private String ebook;
     private String productPublisher;
     private Integer pageCount;
     private String productDescription;
@@ -37,6 +40,7 @@ public class GetProductDetailResponseDto {
     private Integer policySaveRate;
 
     private List<String> authors = new ArrayList<>();
+    private List<Integer> categoriesNo = new ArrayList<>();
     private List<String> categories = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
     private List<String> tagsColors = new ArrayList<>();
