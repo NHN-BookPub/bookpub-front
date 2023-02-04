@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BookPub</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+    .btn-custom {
+      color: #333;
+      background-color: #FFFFFF;
+      border-color: #ed0e53;
+    }
+
+    .btn-custom:hover {
+      opacity: 0.9;
+      background-color: #2c3034;
+      color: #fff;
+    }
+
+
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+<th:block th:include="main/fragments/rootHeader"></th:block>
+<!-- HEADER -->
+</br>
+
+<div class="container">
+  <section class="section_wrap">
+    <p style="display: none" id="memberNo" th:text="${member}"></p>
+
+    <img src="/static/coupon/tier-coupon.png" alt="등급 쿠폰">
+
+    <input type="hidden" id="clickBtnNo" value="">
+
+    <div class="row" style="margin: 10rem 0rem;">
+      <div class="col-sm-3" style="text-align: center">
+        <img src="/static/coupon/white.png" width="80%">
+        <div style="text-align: center; padding: 2rem;">
+          <button type="button" class="btn btn-lg btn-block btn-custom "
+                  onclick="clickCouponButton(1)">쿠폰 발급 받기
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-3" style="text-align: center;">
+        <img src="/static/coupon/silver.png" alt="실버 쿠폰" width="80%">
+        <div style="text-align: center; padding: 2rem;">
+          <button type="button" class="btn btn-lg btn-block btn-custom"
+                  onclick="clickCouponButton(2)">쿠폰 발급 받기
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-3" style="text-align: center;">
+        <img src="/static/coupon/gold.png" alt="골드 쿠폰" width="80%">
+        <div style="text-align: center; padding: 2rem;">
+          <button type="button" class="btn btn-lg btn-block btn-custom"
+                  onclick="clickCouponButton(3)">쿠폰 발급 받기
+          </button>
+        </div>
+      </div>
+      <div class="col-sm-3" style="text-align: center;">
+        <img src="/static/coupon/platinum.png" alt="플래티넘 쿠폰" width="80%">
+        <div style="text-align: center; padding: 2rem;">
+          <button type="button" class="btn btn-lg btn-block btn-custom"
+                  onclick="clickCouponButton(4)">쿠폰 발급 받기
+          </button>
+        </div>
+      </div>
+    </div>
+
+  </section>
+</div>
+
+
+<th:block th:include="main/fragments/rootFooter"></th:block>
+
+</body>
+
+<script src="/static/js/coupon/tierCoupon.js"></script>
+
+</html>
