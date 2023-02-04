@@ -4,8 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>BookPub - HTML Ecommerce Template</title>
-
+    <title>BookPub - Login</title>
 
     <link href="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
     <script src="//maxcdn.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js"></script>
@@ -13,20 +12,16 @@
     <!------ Include the above in your HEAD tag ---------->
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link href="/static/css/main/login.css" rel="stylesheet">
     <script src="../../static/js/main/signup.js"></script>
-
-
-    <!--    <link rel="stylesheet" href="/static/css/main/gnbFooter.css"/>-->
 
 </head>
 <body>
 <div id="body">
     <section class="login-block">
         <div class="login-container">
-            <div class="row">
-                <div class="col-md-4 login-sec">
+            <div class="custom-row">
+                <div class="login-sec">
                     <h2 class="text-center">로그인</h2>
                     <form class="login-form" action="/auth" method="post">
                         <div class="form-group">
@@ -39,9 +34,6 @@
                             <input id="bookpub-pwd" name="pwd" type="password" class="form-control"
                                    placeholder="Abc123!@#">
                         </div>
-                        <input type="hidden" name="sessionId" th:value="${sessionId}">
-
-
                         <div class="login-form-check" style="gap: 10px">
                             <button type="submit" class="btn btn-login float-right">로그인</button>
                             <button type="button" class="btn btn-outline-dark float-right"
@@ -68,27 +60,18 @@
                     </form>
                     <script src="/static/js/member/login.js"></script>
                     <div id="name"></div>
-                    <script>startApp();</script>
                     <div class="copy-text">Created with <i class="fa fa-heart"></i> by <a
                             href="http://book-pub.shop">북펍</a>
                     </div>
                 </div>
-                <div class="col-md-8 banner-sec">
-                    <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
-                        <ol class="carousel-indicators">
-                            <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
-                        </ol>
-                        <div class="carousel-inner" role="listbox">
-                            <div class="carousel-item active">
-                                <img class="d-block img-fluid"
-                                     src="https://static.pexels.com/photos/33972/pexels-photo.jpg"
-                                     alt="First slide">
-                                <div class="carousel-caption d-none d-md-block">
-                                    <div class="banner-text">
-                                        <h2>북펍에 오신걸 환영합니다</h2>
-                                        <p>수천권의 서적들과 ebook 자료들을 가장 먼저 만나볼 수 있는 공간</p>
-                                    </div>
-                                </div>
+                <div class="col-md-8 banner-sec" style="display: flex;justify-content: center;align-items: center;">
+                    <div class="carousel-item active" style="height: 85vh;">
+                        <img src="/static/img/main/loginImage.jpeg" style="width: 100%; height: 100%"
+                             alt="First slide">
+                        <div class="carousel-caption d-none d-md-block">
+                            <div class="banner-text">
+                                <h2>북펍에 오신걸 환영합니다</h2>
+                                <p>수천권의 서적들과 ebook 자료들을 가장 먼저 만나볼 수 있는 공간</p>
                             </div>
                         </div>
                     </div>
