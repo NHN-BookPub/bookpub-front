@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.request.CreateTierCoup
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.response.GetTierCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.service.TierCouponService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -45,5 +46,13 @@ public class TierCouponServiceImpl implements TierCouponService {
     public void deleteTierCoupon(Integer tierNo, Long templateNo) {
         tierCouponAdaptor.requestDeleteTierCoupon(tierNo, templateNo);
 
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Long> getTierCouponsByTierNo(Integer tierNo) {
+        return tierCouponAdaptor.requestTierCouponsByTierNo(tierNo);
     }
 }

@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -49,4 +50,20 @@ public interface CouponAdaptor {
      * @return 멤버의 사용 불가능한 쿠폰 DTO 정보를 담은 페이지
      */
     PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable, Long memberNo);
+
+    /**
+     * 멤버 번호로 등급 쿠폰 발급 유무를 확인하기 위한 메서드입니다.
+     *
+     * @param memberNo 멤버 번호
+     * @return 등급 쿠폰 발급 유무
+     */
+    boolean requestExistCouponsByMemberNo(Long memberNo, List<Long> tierCoupons);
+
+    /**
+     * 멤버에게 등급쿠폰을 발급하기 위한 메서드입니다.
+     *
+     * @param memberNo    멤버 번호
+     * @param tierCoupons 등급 쿠폰 리스트
+     */
+    void requestIssueTierCoupons(Long memberNo, List<Long> tierCoupons);
 }

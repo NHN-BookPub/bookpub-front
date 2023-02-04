@@ -1,7 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.member.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
-
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
@@ -22,7 +22,6 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
@@ -371,5 +370,21 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new HttpEntity<>(makeHeader()),
                 Void.class
         );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer requestMemberTier(Long memberNo) {
+        ResponseEntity<Integer> response = restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/tier",
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                Integer.class
+        );
+
+        checkError(response);
+        return response.getBody();
     }
 }

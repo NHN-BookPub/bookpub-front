@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.tiercoupon.service;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.request.CreateTierCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.response.GetTierCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.List;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -35,4 +36,12 @@ public interface TierCouponService {
      * @param templateNo 쿠폰 템플릿 번호.
      */
     void deleteTierCoupon(Integer tierNo, Long templateNo);
+
+    /**
+     * 등급 번호로 쿠폰 템플릿 번호 리스트를 조회하기 위한 메서드입니다.
+     *
+     * @param tierNo 등급 번호
+     * @return 쿠폰 템플릿 리스트
+     */
+    List<Long> getTierCouponsByTierNo(Integer tierNo);
 }

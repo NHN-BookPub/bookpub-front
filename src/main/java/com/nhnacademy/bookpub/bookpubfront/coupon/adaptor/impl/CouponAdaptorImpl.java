@@ -9,6 +9,7 @@ import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponReques
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -126,5 +127,50 @@ public class CouponAdaptorImpl implements CouponAdaptor {
         checkError(response);
 
         return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean requestExistCouponsByMemberNo(Long memberNo, List<Long> tierCoupons) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/"
+                                + memberNo + "/tier-coupons")
+                .queryParam("tierCoupons", tierCoupons)
+                .encode()
+                .toUriString();
+
+        ResponseEntity<Boolean> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<>() {
+                }
+        );
+
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestIssueTierCoupons(Long memberNo, List<Long> tierCoupons) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/"
+                                + memberNo + "/tier-coupons")
+                .queryParam("tierCoupons", tierCoupons)
+                .encode().toUriString();
+
+        ResponseEntity<Void> response = restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+
+        checkError(response);
+
     }
 }

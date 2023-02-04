@@ -187,4 +187,13 @@ public interface MemberAdaptor {
      * @return 인증받은 유저의 정보.
      */
     MemberLoginResponseDto requestAuthMemberInfo(String accessToken);
+
+    /**
+     * 회원의 멤버 등급을 조회하기 위한 메서드입니다.
+     *
+     * @param memberNo 멤버 번호
+     * @return 등급 번호
+     */
+    Integer requestMemberTier(Long memberNo);
+
 }

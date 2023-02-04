@@ -241,4 +241,12 @@ public class MemberServiceImpl implements MemberService {
     public void deleteMemberAddress(Long memberNo, Long addressNo) {
         memberAdaptor.requestMemberAddressDelete(memberNo, addressNo);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Integer getTierByMemberNo(Long memberNo) {
+        return memberAdaptor.requestMemberTier(memberNo);
+    }
 }
