@@ -28,6 +28,8 @@ import org.springframework.web.client.RestTemplate;
 public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     private final RestTemplate restTemplate;
     private static final String ORDER_PRODUCT_URL = getGatewayUrl() + "/api/state/pricepolicies";
+    private static final String AUTH_ORDER_PRODUCT_URL =
+            getGatewayUrl() + "/token/state/pricepolicies";
 
     /**
      * {@inheritDoc}
@@ -35,7 +37,7 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     @Override
     public List<GetPricePolicyResponseDto> getAllPricePolicyCodeRequest() {
         ResponseEntity<List<GetPricePolicyResponseDto>> response =
-                restTemplate.exchange(ORDER_PRODUCT_URL,
+                restTemplate.exchange(AUTH_ORDER_PRODUCT_URL,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>() {
@@ -64,8 +66,7 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void createOrderStateCodeRequest(
-            CreatePricePolicyRequestDto requestDto) {
+    public void createOrderStateCodeRequest(CreatePricePolicyRequestDto requestDto) {
         HttpEntity<CreatePricePolicyRequestDto> httpEntity =
                 new HttpEntity<>(requestDto, makeHeader());
         ResponseEntity<Void> response =
@@ -82,7 +83,7 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
      */
     @Override
     public void modifyPricePolicyFeeUsedRequest(Integer codeNo, Long fee) {
-        String url = ORDER_PRODUCT_URL + "/" + codeNo + "?fee=" + fee;
+        String url = AUTH_ORDER_PRODUCT_URL + "/" + codeNo + "?fee=" + fee;
         ResponseEntity<Void> response =
                 restTemplate.exchange(url,
                         HttpMethod.PUT,

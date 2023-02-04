@@ -45,12 +45,14 @@ public class ProductAdaptorImpl implements ProductAdaptor {
 
     private final RestTemplate restTemplate;
     private static final String PRODUCT_URI = "/api/products";
+    private static final String AUTH_PRODUCT_URI = "/token/products";
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void requestCreateProduct(CreateProductRequestDto requestDto, Map<String, MultipartFile> fileMap) {
+    public void requestCreateProduct(CreateProductRequestDto requestDto,
+                                     Map<String, MultipartFile> fileMap) {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest servletRequest = servletRequestAttributes.getRequest();
@@ -64,7 +66,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
             headers.add(JwtUtil.AUTH_HEADER, accessToken);
         }
 
-        String url = GateWayConfig.getGatewayUrl() + PRODUCT_URI;
+        String url = GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI;
 
         MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
         mapRequest.add("requestDto", requestDto);
@@ -110,12 +112,13 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestSetProductDeleted(Long productNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/deleted/" + productNo)
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI
+                                + productNo)
                 .encode().toUriString();
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
-                HttpMethod.PUT,
+                HttpMethod.DELETE,
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );
@@ -183,9 +186,12 @@ public class ProductAdaptorImpl implements ProductAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable) {
+    public PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(
+            Integer categoryNo, Pageable pageable) {
+
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/product/categories/" + categoryNo)
+                        GateWayConfig.getGatewayUrl() + PRODUCT_URI
+                                + "/product/categories/" + categoryNo)
                 .encode()
                 .toUriString();
 

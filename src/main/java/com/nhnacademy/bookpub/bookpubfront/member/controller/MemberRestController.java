@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.member.controller;
 
 import com.nhn.dooray.client.DoorayHook;
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.config.DoorayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
@@ -76,6 +77,7 @@ public class MemberRestController {
      * @return the boolean
      */
     @PostMapping("/members/{memberNo}/password-check")
+    @Auth
     public boolean passwordCheck(@PathVariable("memberNo") Long memberNo,
                                  @RequestParam("rawPassword") String rawPassword) {
         MemberPasswordResponseDto memberPassword = memberService.getMemberPassword(memberNo);

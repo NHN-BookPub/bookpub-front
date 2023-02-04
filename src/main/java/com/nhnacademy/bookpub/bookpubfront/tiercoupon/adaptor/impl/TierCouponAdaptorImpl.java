@@ -31,7 +31,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class TierCouponAdaptorImpl implements TierCouponAdaptor {
 
     private final RestTemplate restTemplate;
-    private static final String TIER_COUPON_URL = "/api/tier-coupons";
+    private static final String TIER_COUPON_URL = "/token/tier-coupons";
 
     /**
      * {@inheritDoc}
