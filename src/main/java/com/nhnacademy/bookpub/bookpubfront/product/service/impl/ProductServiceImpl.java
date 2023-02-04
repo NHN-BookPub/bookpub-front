@@ -11,7 +11,9 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetail
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -38,10 +40,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public void createCategory(InputProductFormRequestDto dto, List<Integer> tagList, Map<String, MultipartFile> fileMap) {
+    public void createCategory(InputProductFormRequestDto dto, List<Integer> tagList,
+                               Map<String, MultipartFile> fileMap) {
         dto.setSalePrice(dto.getProductPrice(), dto.getSaleRate());
 
-        boolean subscribed = dto.getSubscribed().equals("구독가능");
+        final boolean subscribed = dto.getSubscribed().equals("구독가능");
 
         String[] authorTmp = dto.getAuthors().split(",");
         List<Integer> authors = new ArrayList<>();
@@ -169,6 +172,7 @@ public class ProductServiceImpl implements ProductService {
                 .productNo(product.getProductNo())
                 .categoriesNo(product.getCategoriesNo())
                 .count(count)
+                .thumbnail(product.getThumbnail())
                 .build();
     }
 
@@ -176,7 +180,8 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetProductByCategoryResponseDto> findProductByCategory(Integer categoryNo, Pageable pageable) {
+    public PageResponse<GetProductByCategoryResponseDto> findProductByCategory(Integer categoryNo,
+                                                                               Pageable pageable) {
         return productAdaptor.requestProductsByCategory(categoryNo, pageable);
     }
 

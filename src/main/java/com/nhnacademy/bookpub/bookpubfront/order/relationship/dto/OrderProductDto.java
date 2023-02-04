@@ -21,6 +21,7 @@ public class OrderProductDto {
     private List<Integer> categoriesNo;
     private int count;
     private long totalPrice;
+    private String thumbnail;
     private List<GetOrderCouponResponseDto> couponList;
 
     /**
@@ -36,13 +37,15 @@ public class OrderProductDto {
                            String title,
                            Long salesPrice,
                            List<Integer> categoriesNo,
-                           int count) {
+                           int count,
+                           String thumbnail) {
         this.productNo = productNo;
         this.title = title;
         this.salesPrice = salesPrice;
         this.categoriesNo = categoriesNo;
         this.count = count;
         this.totalPrice = this.salesPrice * this.count;
+        this.thumbnail = thumbnail;
     }
 
     public void addCouponInfo(List<GetOrderCouponResponseDto> couponList) {
