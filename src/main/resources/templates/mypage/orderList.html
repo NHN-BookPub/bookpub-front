@@ -76,7 +76,7 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                    <a th:href="|../../../products/view/${product.getProductNo()}|">
+                                    <a th:href="|../../../products/${product.getProductNo()}|">
                                         <h3 th:text="${product.getTitle()}"></h3>
                                     </a>
                                     <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
