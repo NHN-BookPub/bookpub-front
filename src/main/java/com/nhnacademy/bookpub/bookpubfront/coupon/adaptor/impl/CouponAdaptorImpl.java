@@ -1,6 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -43,14 +42,12 @@ public class CouponAdaptorImpl implements CouponAdaptor {
 
         HttpEntity<CreateCouponRequestDto> entity =
                 new HttpEntity<>(createRequestDto, makeHeader());
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
-        checkError(response);
     }
 
     /**
@@ -58,7 +55,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
-            String search) {
+                                                             String search) {
         String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -75,8 +72,6 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 }
         );
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -85,7 +80,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
-            Long memberNo) {
+                                                                     Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/positive")
@@ -100,8 +95,6 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -110,7 +103,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable,
-            Long memberNo) {
+                                                                     Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/negative")
@@ -124,8 +117,6 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
-
-        checkError(response);
 
         return response.getBody();
     }
@@ -164,14 +155,11 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 .queryParam("tierCoupons", tierCoupons)
                 .encode().toUriString();
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-
     }
 }

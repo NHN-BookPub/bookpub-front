@@ -1,6 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.tiercoupon.adaptor.impl;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -28,7 +27,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @RequiredArgsConstructor
 public class TierCouponAdaptorImpl implements TierCouponAdaptor {
-
     private final RestTemplate restTemplate;
     private static final String TIER_COUPON_URL = "/token/tier-coupons";
 
@@ -51,10 +49,7 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
                 }
         );
 
-        checkError(response);
-
         return response.getBody();
-
     }
 
     /**
@@ -64,15 +59,12 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
     public void requestAddTierCoupon(CreateTierCouponRequestDto createRequestDto) {
         String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_URL;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(createRequestDto, makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-
     }
 
     /**
@@ -83,15 +75,12 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
         String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_URL + "?&tierNo=" + tierNo
                 + "&templateNo=" + templateNo;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
                 new HttpEntity<>(makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-
     }
 
     /**
@@ -110,6 +99,5 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
         );
 
         return response.getBody();
-
     }
 }

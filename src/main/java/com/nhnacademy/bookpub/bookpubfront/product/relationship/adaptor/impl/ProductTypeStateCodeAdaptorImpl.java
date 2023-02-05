@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -23,10 +22,8 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class ProductTypeStateCodeAdaptorImpl implements ProductTypeStateCodeAdaptor {
-
     private final GateWayConfig gateWayConfig;
     private final RestTemplate restTemplate;
-
     private static final String PRODUCT_TYPE_URI = "/api/state/productType";
 
     /**
@@ -44,22 +41,6 @@ public class ProductTypeStateCodeAdaptorImpl implements ProductTypeStateCodeAdap
                         new ParameterizedTypeReference<>() {
                         });
 
-
-        checkError(response);
         return response.getBody();
-    }
-
-    /**
-     * 4xx or 5xx 상태코드 응답을 처리하기 위한 메서드.
-     *
-     * @param response API 응답
-     * @param <T>      모든 객체
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus status = response.getStatusCode();
-
-        if (status.is4xxClientError() || status.is5xxServerError()) {
-            throw new RuntimeException();
-        }
     }
 }

@@ -27,7 +27,6 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class TierAdaptorImpl implements TierAdaptor {
     private final RestTemplate restTemplate;
-
     private static final String TIER_URI = getGatewayUrl() + "/api/tiers";
     private static final String AUTH_TIER_URI = getGatewayUrl() + "/api/tiers";
 
@@ -94,5 +93,4 @@ public class TierAdaptorImpl implements TierAdaptor {
                 new HttpEntity<>(makeHeader()),
                 Boolean.class).getBody();
     }
-
 }

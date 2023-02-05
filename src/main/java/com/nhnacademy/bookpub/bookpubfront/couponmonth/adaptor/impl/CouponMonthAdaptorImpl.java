@@ -43,7 +43,6 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
                 new ParameterizedTypeReference<>() {
                 }
         );
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -57,14 +56,12 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
 
         HttpEntity<CreateCouponMonthRequestDto> request = new HttpEntity<>(createRequestDto, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 request,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -76,14 +73,12 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
 
         HttpEntity<ModifyCouponMonthRequestDto> request = new HttpEntity<>(modifyRequestDto, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 request,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -93,13 +88,11 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
     public void requestDeleteCouponMonth(Long monthNo) {
         String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_AUTH_URL + "/" + monthNo;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 }

@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.order.relationship.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.adaptor.OrderStateCodeAdaptor;
@@ -40,7 +39,7 @@ public class OrderStateCodeAdaptorImpl implements OrderStateCodeAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (List<GetOrderStateCodeResponseDto>) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -56,7 +55,7 @@ public class OrderStateCodeAdaptorImpl implements OrderStateCodeAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (GetOrderStateCodeResponseDto) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -68,13 +67,10 @@ public class OrderStateCodeAdaptorImpl implements OrderStateCodeAdaptor {
         HttpEntity<CreateOrderStateCodeRequestDto> httpEntity =
                 new HttpEntity<>(requestDto, makeHeader());
 
-        ResponseEntity<Void> response =
-                restTemplate.exchange(ORDER_PRODUCT_URL,
-                        HttpMethod.POST,
-                        httpEntity,
-                        Void.class);
-
-        checkError(response);
+        restTemplate.exchange(ORDER_PRODUCT_URL,
+                HttpMethod.POST,
+                httpEntity,
+                Void.class);
     }
 
     /**
@@ -83,12 +79,9 @@ public class OrderStateCodeAdaptorImpl implements OrderStateCodeAdaptor {
     @Override
     public void modifyOrderStateCodeUsedRequest(Integer codeNo) {
         String url = ORDER_PRODUCT_URL + "/" + codeNo;
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url,
-                        HttpMethod.PUT,
-                        new HttpEntity<>(makeHeader()),
-                        Void.class);
-
-        checkError(response);
+        restTemplate.exchange(url,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class);
     }
 }
