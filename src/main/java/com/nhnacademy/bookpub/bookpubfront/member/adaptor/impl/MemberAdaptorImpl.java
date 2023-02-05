@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.member.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
@@ -325,7 +326,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new HttpEntity<>(headers);
 
         return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/api/auth",
+                GateWayConfig.getGatewayUrl() + "/token/auth",
                 HttpMethod.GET,
                 httpEntity,
                 MemberLoginResponseDto.class).getBody();
