@@ -4,11 +4,13 @@ import com.nhnacademy.bookpub.bookpubfront.config.TossConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 결제 컨트롤러.
@@ -19,16 +21,43 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @Controller
 @RequestMapping("/payment")
 @RequiredArgsConstructor
+@Slf4j
 public class PaymentController {
     private final OrderService orderService;
     private final TossConfig tossConfig;
 
+    /**
+     * 결제페이지를 로딩하는 컨트롤러입니다.
+     *
+     * @param orderNo 주문번호.
+     * @param model   model.
+     * @return 결제페이지.
+     */
     @GetMapping("/{orderNo}")
     public String paymentPage(@PathVariable Long orderNo, Model model) {
         GetOrderDetailResponseDto order = orderService.getOrderDetailByNo(orderNo);
         model.addAttribute("order", order);
-        model.addAttribute("toss", tossConfig);
+        model.addAttribute("toss", tossConfig.makeTossProvider());
         return "payment/main";
+    }
+
+    /**
+     * 결제 생성 성공 시 리다이렉트 되서 들어오는 컨트롤러 url.
+     *
+     * @param paymentKey 결제 생성 키.
+     * @param orderId 주문번호.
+     * @param amount 금액.
+     * @return successPage.
+     */
+    @GetMapping("/success")
+    public String successPage(@RequestParam String paymentKey,
+                              @RequestParam String orderId,
+                              @RequestParam Long amount) {
+        log.warn(paymentKey);
+        log.warn(orderId);
+        log.warn(amount.toString());
+
+        return "redirect:/";
     }
 
 }

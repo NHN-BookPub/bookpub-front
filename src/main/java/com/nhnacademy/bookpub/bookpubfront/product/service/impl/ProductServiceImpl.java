@@ -190,7 +190,6 @@ public class ProductServiceImpl implements ProductService {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
 
-
         ResponseEntity<List<GetOrderCouponResponseDto>> listResponseEntity =
                 productAdaptor.requestOrderCoupons(productNo, memberNo);
 

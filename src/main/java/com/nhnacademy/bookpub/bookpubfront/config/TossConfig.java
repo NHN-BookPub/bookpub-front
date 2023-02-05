@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.config;
 
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.TossProviderDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
@@ -15,11 +16,14 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 public class TossConfig {
     private final KeyConfig keyConfig;
-
     private String clientId;
     private String secret;
     private String successUrl;
-    private String failureUrl;
+    private String failUrl;
+
+    public TossProviderDto makeTossProvider() {
+        return new TossProviderDto(clientId, secret, successUrl, failUrl);
+    }
 
     public String getClientId() {
         return clientId;
@@ -45,11 +49,11 @@ public class TossConfig {
         this.successUrl = keyConfig.keyStore(successUrl);
     }
 
-    public String getFailureUrl() {
-        return failureUrl;
+    public String getFailUrl() {
+        return failUrl;
     }
 
-    public void setFailureUrl(String failureUrl) {
-        this.failureUrl = keyConfig.keyStore(failureUrl);
+    public void setFailUrl(String failUrl) {
+        this.failUrl = keyConfig.keyStore(failUrl);
     }
 }
