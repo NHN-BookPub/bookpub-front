@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.config;
 
+import com.nhnacademy.bookpub.bookpubfront.handler.CustomResponseErrorHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -39,6 +40,8 @@ public class RestTemplateConfig {
      */
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
-        return new RestTemplate(clientHttpRequestFactory);
+        RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
+        restTemplate.setErrorHandler(new CustomResponseErrorHandler());
+        return restTemplate;
     }
 }
