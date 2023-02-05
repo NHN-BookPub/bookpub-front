@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.tiercoupon.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
@@ -47,6 +48,7 @@ public class TierCouponController {
      * @param pageable 페이지 정보
      * @return 등급 쿠폰 관리자 페이지
      */
+    @Auth
     @GetMapping("/admin/coupon/tier-coupons")
     public String tierCouponList(Model model, @PageableDefault Pageable pageable) {
         PageResponse<GetTierCouponResponseDto> tierCoupons = tierCouponService.getTierCoupons(
@@ -69,6 +71,7 @@ public class TierCouponController {
      * @param createRequestDto 등급 쿠폰 등록을 위한 정보
      * @return 관리자 등급 쿠폰 페이지
      */
+    @Auth
     @PostMapping("/admin/coupon/tier-coupons")
     public String addTierCoupon(CreateTierCouponRequestDto createRequestDto) {
         tierCouponService.createTierCoupon(createRequestDto);
@@ -98,7 +101,7 @@ public class TierCouponController {
      */
     @GetMapping("/tier-coupons")
     public String tierCouponEvent(@CookieValue(name = CART, required = false) Cookie cookie,
-            Model model) {
+                                  Model model) {
         SecurityContextHolder.getContext().getAuthentication();
 
         String principal =

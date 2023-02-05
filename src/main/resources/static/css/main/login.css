@@ -1,10 +1,7 @@
-@import url("//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css");
 
 .login-block {
     background: #DE6262;
-    background: -webkit-linear-gradient(to bottom, #ffffff, #000000);
     background: linear-gradient(to bottom, #303062a6, #1E1F29);
-    display: flex;
     justify-content: center;
     align-items: center;
     float: left;
@@ -18,8 +15,7 @@
 }
 
 .banner-sec {
-    background: url(https://static.pexels.com/photos/33972/pexels-photo.jpg) no-repeat left bottom;
-    background-size: cover;
+    background-image: url("/static/img/main/loginImage.jpeg");
     min-height: 500px;
     border-radius: 0 10px 10px 0;
     padding: 0;
@@ -28,7 +24,7 @@
 .login-container {
     background: #fff;
     border-radius: 10px;
-    box-shadow: 15px 20px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 15px 20px 0 rgba(0, 0, 0, 0.1);
 }
 
 .carousel-inner {
@@ -41,7 +37,8 @@
 }
 
 .login-sec {
-    padding: 50px 30px;
+    width: 33%;
+    padding: 50px 56px;
     position: relative;
 }
 
@@ -134,8 +131,14 @@
     padding-left: 0;
 }
 
-.btn-login{
+.btn-login {
     background-color: black !important;
     color: white !important;
     font-weight: 600 !important;
+}
+
+.custom-row {
+    display: flex;
+    margin-right: -15px;
+    margin-left: -15px;
 }

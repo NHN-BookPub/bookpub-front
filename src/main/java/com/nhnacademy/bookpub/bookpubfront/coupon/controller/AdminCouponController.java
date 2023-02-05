@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
@@ -38,6 +39,7 @@ public class AdminCouponController {
      * @param model     the model
      * @return 쿠폰 리스트 조회 뷰
      */
+    @Auth
     @GetMapping("/coupons")
     public String couponList(@RequestParam(value = "searchKey", required = false) String searchKey,
                              @RequestParam(value = "search", required = false) String search,
@@ -61,6 +63,7 @@ public class AdminCouponController {
      * @param createRequestDto 쿠폰 등록시 필요한 정보를 담은 dto
      * @return 쿠폰 리스트 조회 뷰로 redirect
      */
+    @Auth
     @PostMapping("/coupons")
     public String addCoupon(CreateCouponRequestDto createRequestDto) {
         couponService.createCoupon(createRequestDto);

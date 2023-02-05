@@ -5,14 +5,12 @@ import com.nhnacademy.bookpub.bookpubfront.couponpolicy.adaptor.CouponPolicyAdap
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.dto.request.CreateCouponPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.dto.request.ModifyCouponPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.dto.response.GetCouponPolicyResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -29,6 +27,7 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
     private final GateWayConfig gateWayConfig;
     private final RestTemplate restTemplate;
     private static final String COUPON_POLICY_URL = "/api/coupon-policies";
+    private static final String COUPON_POLICY_AUTH_URL = "/token/coupon-policies";
 
     /**
      * {@inheritDoc}
@@ -36,17 +35,17 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
     @Override
     public void requestAddCouponPolicy(CreateCouponPolicyRequestDto createRequestDto) {
 
-        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_URL;
+        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_AUTH_URL;
 
         HttpEntity<CreateCouponPolicyRequestDto> httpEntity =
-                new HttpEntity<>(createRequestDto, makeHeaders());
+                new HttpEntity<>(createRequestDto, Utils.makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(url,
                 HttpMethod.POST,
                 httpEntity,
                 Void.class);
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -55,17 +54,17 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
     @Override
     public void requestModifyCouponPolicy(ModifyCouponPolicyRequestDto modifyRequestDto) {
 
-        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_URL;
+        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_AUTH_URL;
 
         HttpEntity<ModifyCouponPolicyRequestDto> httpEntity =
-                new HttpEntity<>(modifyRequestDto, makeHeaders());
+                new HttpEntity<>(modifyRequestDto, Utils.makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(url,
                 HttpMethod.PUT,
                 httpEntity,
                 Void.class);
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -73,14 +72,14 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
      */
     @Override
     public GetCouponPolicyResponseDto requestCouponPolicy(Integer policyNo) {
-        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_URL + "/" + policyNo;
+        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_AUTH_URL + "/" + policyNo;
 
         ResponseEntity<GetCouponPolicyResponseDto> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 GetCouponPolicyResponseDto.class);
 
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -90,31 +89,16 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
      */
     @Override
     public List<GetCouponPolicyResponseDto> requestCouponPolicies() {
-        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_URL;
+        String url = gateWayConfig.getGatewayUrl() + COUPON_POLICY_AUTH_URL;
 
         ResponseEntity<List<GetCouponPolicyResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
-    }
-
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
-    }
-
-    private static HttpHeaders makeHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
     }
 }

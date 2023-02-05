@@ -8,14 +8,12 @@ import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRe
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -35,6 +33,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
     private final RestTemplate restTemplate;
 
     private static final String CATEGORY_URI = "/api/categories";
+    private static final String CATEGORY_AUTH_URI = "/token/categories";
 
 
     /**
@@ -46,14 +45,14 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
 
         String request = objectMapper.writeValueAsString(createCategoryRequestDto);
 
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI;
+        String url = gateWayConfig.getGatewayUrl() + CATEGORY_AUTH_URI;
 
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<>(request, Utils.makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity,
                 Void.class);
 
-        checkError(response);
+        Utils.checkError(response);
 
     }
 
@@ -65,14 +64,14 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
             throws JsonProcessingException {
 
         String request = objectMapper.writeValueAsString(modifyCategoryRequestDto);
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI;
+        String url = gateWayConfig.getGatewayUrl() + CATEGORY_AUTH_URI;
 
-        HttpEntity<String> httpEntity = new HttpEntity<>(request, makeHttpHeaders());
+        HttpEntity<String> httpEntity = new HttpEntity<>(request, Utils.makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, httpEntity,
                 Void.class);
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -85,11 +84,11 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
 
         ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeHttpHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
+        Utils.checkError(response);
         return response.getBody();
     }
 
@@ -102,11 +101,11 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
 
         ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
-                new HttpEntity<>(makeHttpHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
+        Utils.checkError(response);
         return response.getBody();
     }
 
@@ -119,11 +118,11 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
         String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/" + categoryNo;
 
         ResponseEntity<GetCategoryResponseDto> response = restTemplate.exchange(url, HttpMethod.GET,
-                new HttpEntity<>(makeHttpHeaders()),
+                new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
+        Utils.checkError(response);
         return response.getBody();
     }
 
@@ -136,26 +135,11 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
 
         ResponseEntity<List<GetParentCategoryWithChildrenResponseDto>> response = restTemplate
                 .exchange(url, HttpMethod.GET,
-                    new HttpEntity<>(makeHttpHeaders()),
-                    new ParameterizedTypeReference<>() {
-                    });
+                        new HttpEntity<>(Utils.makeHeader()),
+                        new ParameterizedTypeReference<>() {
+                        });
 
-        checkError(response);
+        Utils.checkError(response);
         return response.getBody();
-    }
-
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus status = response.getStatusCode();
-
-        if (status.is4xxClientError() || status.is5xxServerError()) {
-            throw new RuntimeException();
-        }
-    }
-
-    private static HttpHeaders makeHttpHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
     }
 }

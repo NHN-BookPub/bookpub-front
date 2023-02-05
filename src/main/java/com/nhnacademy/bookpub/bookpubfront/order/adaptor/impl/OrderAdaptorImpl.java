@@ -33,6 +33,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class OrderAdaptorImpl implements OrderAdaptor {
     private final RestTemplate restTemplate;
     private static final String ORDER_URL = "/api/orders";
+    private static final String AUTH_ORDER_URL = "/token/orders";
 
     /**
      * {@inheritDoc}
@@ -55,7 +56,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
         String url =
-                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + ORDER_URL)
+                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL)
                         .queryParam("page", pageable.getPageNumber())
                         .queryParam("size", pageable.getPageSize())
                         .encode()
@@ -76,7 +77,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
             Pageable pageable, Long memberNo) {
         String url =
                 UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + ORDER_URL + "/member")
+                        GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL + "/member")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .queryParam("no", memberNo)
@@ -113,7 +114,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
+        String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/invoice?no=" + invoiceNo;
         ResponseEntity<Void> response =
                 restTemplate.exchange(url, HttpMethod.PUT,
@@ -131,7 +132,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public void modifyStateCodeRequest(Long orderNo,
                                        @StateCode(enumClass = OrderState.class)
                                        String codeName) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL
+        String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/state?no" + codeName;
 
         ResponseEntity<Void> response =

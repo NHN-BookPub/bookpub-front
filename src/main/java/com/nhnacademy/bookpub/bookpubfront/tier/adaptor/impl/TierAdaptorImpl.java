@@ -1,9 +1,10 @@
 package com.nhnacademy.bookpub.bookpubfront.tier.adaptor.impl;
 
 
+import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.tier.adaptor.TierAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.tier.dto.request.CreateTierRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.tier.dto.request.ModifyTierRequestDto;
@@ -13,7 +14,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -28,20 +28,17 @@ import org.springframework.web.client.RestTemplate;
 public class TierAdaptorImpl implements TierAdaptor {
     private final RestTemplate restTemplate;
 
-    private static final String TIER_URI = "/api/tiers";
+    private static final String TIER_URI = getGatewayUrl() + "/api/tiers";
+    private static final String AUTH_TIER_URI = getGatewayUrl() + "/api/tiers";
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void requestAddTier(CreateTierRequestDto createRequestDto) {
-
-        String url = GateWayConfig.getGatewayUrl() + TIER_URI;
-        HttpEntity<CreateTierRequestDto> httpEntity = new HttpEntity<>(createRequestDto, makeHeader());
-
-        restTemplate.exchange(url,
+        restTemplate.exchange(AUTH_TIER_URI,
                 HttpMethod.POST,
-                httpEntity,
+                new HttpEntity<>(createRequestDto, makeHeader()),
                 Void.class);
     }
 
@@ -50,12 +47,9 @@ public class TierAdaptorImpl implements TierAdaptor {
      */
     @Override
     public void requestModifyTier(ModifyTierRequestDto modifyTierRequestDto) {
-        String url = GateWayConfig.getGatewayUrl() + TIER_URI;
-        HttpEntity<ModifyTierRequestDto> httpEntity = new HttpEntity<>(modifyTierRequestDto, makeHeader());
-
-        restTemplate.exchange(url,
+        restTemplate.exchange(AUTH_TIER_URI,
                 HttpMethod.PUT,
-                httpEntity,
+                new HttpEntity<>(modifyTierRequestDto, makeHeader()),
                 Void.class);
     }
 
@@ -66,16 +60,12 @@ public class TierAdaptorImpl implements TierAdaptor {
      */
     @Override
     public List<TierResponseDto> requestTierList() {
-        String url = GateWayConfig.getGatewayUrl() + TIER_URI;
-
-
-        ResponseEntity<List<TierResponseDto>> response = restTemplate.exchange(url,
+        return restTemplate.exchange(
+                AUTH_TIER_URI,
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
-                new ParameterizedTypeReference<>() {
-                });
-
-        return response.getBody();
+                new ParameterizedTypeReference<List<TierResponseDto>>() {
+                }).getBody();
     }
 
     /**
@@ -83,16 +73,13 @@ public class TierAdaptorImpl implements TierAdaptor {
      */
     @Override
     public TierResponseDto requestTier(Integer tierNo) {
+        String url = TIER_URI + "/" + tierNo;
 
-        String url = GateWayConfig.getGatewayUrl() + TIER_URI + "/" + tierNo;
-
-        ResponseEntity<TierResponseDto> response = restTemplate.exchange(url,
+        return restTemplate.exchange(url,
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<TierResponseDto>() {
-                });
-
-        return response.getBody();
+                }).getBody();
     }
 
     /**
@@ -100,8 +87,7 @@ public class TierAdaptorImpl implements TierAdaptor {
      */
     @Override
     public Boolean requestTierName(String tierName) {
-
-        String url = GateWayConfig.getGatewayUrl() + TIER_URI + "/check-tierName?tierName=" + tierName;
+        String url = TIER_URI + "/check-tierName?tierName=" + tierName;
 
         return restTemplate.exchange(url,
                 HttpMethod.GET,

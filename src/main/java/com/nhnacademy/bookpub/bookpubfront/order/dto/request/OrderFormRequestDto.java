@@ -27,4 +27,5 @@ public class OrderFormRequestDto {
     private Long couponAmount;
     private Long totalAmount;
     private Long savePoint;
+    private String orderName;
 }

@@ -37,6 +37,7 @@ public class CreateOrderRequestDto {
     private Long couponAmount;
     private Long totalAmount;
     private Long savePoint;
+    private String orderName;
 
     /**
      * order form에서 받은 dto객체로 shop과 통신할 requestDto로 만듭니다.
@@ -82,5 +83,6 @@ public class CreateOrderRequestDto {
         this.couponAmount = orderInfo.getCouponAmount();
         this.totalAmount = orderInfo.getTotalAmount();
         this.savePoint = orderInfo.getSavePoint();
+        this.orderName = orderInfo.getOrderName();
     }
 }

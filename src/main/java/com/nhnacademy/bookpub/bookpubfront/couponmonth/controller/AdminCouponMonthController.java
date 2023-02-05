@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.couponmonth.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.couponmonth.dto.request.CreateCouponMonthRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.couponmonth.dto.request.ModifyCouponMonthRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.couponmonth.dto.response.GetCouponMonthResponseDto;
@@ -31,6 +32,7 @@ public class AdminCouponMonthController {
      * @param model the model
      * @return 이달의 쿠폰 리스트 조회 뷰
      */
+    @Auth
     @GetMapping("/coupon/coupon-months")
     public String couponMonthList(Model model) {
         List<GetCouponMonthResponseDto> couponMonthList =
@@ -47,6 +49,7 @@ public class AdminCouponMonthController {
      * @param createRequestDto 이달의 쿠폰 등록에 필요한 정보를 담은 Dto
      * @return 이달의 쿠폰 리스트 조회 뷰로 redirect
      */
+    @Auth
     @PostMapping("coupon/coupon-months")
     public String addCouponMonth(CreateCouponMonthRequestDto createRequestDto) {
         couponMonthService.createCouponMonth(createRequestDto);
@@ -60,6 +63,7 @@ public class AdminCouponMonthController {
      * @param modifyRequestDto 이달의 쿠폰을 수정하기 위한 정보를 담은 Dto
      * @return 이달의 쿠폰 리스트 조회 뷰로 redirect
      */
+    @Auth
     @PostMapping("/coupon/coupon-months/modify")
     public String modifyCouponMonth(ModifyCouponMonthRequestDto modifyRequestDto) {
         couponMonthService.modifyCouponMonth(modifyRequestDto);
@@ -73,6 +77,7 @@ public class AdminCouponMonthController {
      * @param monthNo 삭제할 이달의 쿠폰 번호
      * @return 이달의 쿠폰 리스트 조회 뷰로 redirect
      */
+    @Auth
     @PostMapping("/coupon/coupon-months/{monthNo}/delete")
     public String deleteCouponMonth(@PathVariable("monthNo") Long monthNo) {
         couponMonthService.deleteCouponMonth(monthNo);

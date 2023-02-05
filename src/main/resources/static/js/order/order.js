@@ -341,6 +341,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let cntList = document.querySelectorAll('.prd_num');
     let priceList = document.querySelectorAll('.product-price');
+    let titleList = document.querySelectorAll('.prod_name');
 
     let count = 0;
     let totalPrice = 0;
@@ -360,6 +361,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     totalPrice += parseInt(shipAmount.innerText)
     totalAmount.innerText = totalPrice.toString();
+
+    let mainTitle = titleList[0].innerText;
+    let orderName = mainTitle + ' 외 ' + totalCnt-1 + "권";
+
+    let orderNameInput = document.getElementById("order-name")
+    orderNameInput.value = orderName;
 })
 
 
