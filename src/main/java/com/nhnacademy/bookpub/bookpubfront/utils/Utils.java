@@ -78,14 +78,14 @@ public class Utils {
      *
      * @return http 헤더가 반환됩니다.
      */
-    public static HttpHeaders makeHeader(MediaType[] mediaType) {
+    public static HttpHeaders makeHeader(MediaType contentType, MediaType[] accept) {
         ServletRequestAttributes servletRequestAttributes =
                 (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
         HttpServletRequest request = servletRequestAttributes.getRequest();
 
         HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(mediaType));
+        headers.setContentType(contentType);
+        headers.setAccept(List.of(accept));
 
         String accessToken = (String) request.getAttribute(JwtUtil.AUTH_HEADER);
         if (Objects.nonNull(accessToken)) {
