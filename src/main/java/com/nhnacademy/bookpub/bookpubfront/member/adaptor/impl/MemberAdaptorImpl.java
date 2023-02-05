@@ -48,7 +48,8 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 public class MemberAdaptorImpl implements MemberAdaptor {
     private final RestTemplate restTemplate;
-    private static final String MEMBER_API = "/token/members/";
+    private static final String TOKEN_API = "/token/members/";
+    private static final String MEMBER_API = "/api/members/";
 
 
     /**
@@ -96,7 +97,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new HttpEntity<>(new ModifyMemberNickNameRequestDto(nickname), makeHeader());
 
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/nickName",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/nickName",
                 HttpMethod.PUT,
                 httpentity,
                 Void.class);
@@ -111,7 +112,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         HttpEntity<ModifyMemberEmailRequestDto> httpEntity =
                 new HttpEntity<>(new ModifyMemberEmailRequestDto(email), makeHeader());
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/email",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/email",
                 HttpMethod.PUT,
                 httpEntity,
                 Void.class);
@@ -262,7 +263,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new HttpEntity<>(new ModifyMemberNameRequestDto(name), makeHeader());
 
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/name",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/name",
                 HttpMethod.PUT,
                 entity,
                 Void.class
@@ -278,7 +279,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new HttpEntity<>(new ModifyMemberPhoneRequestDto(phone), makeHeader());
 
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/phone",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/phone",
                 HttpMethod.PUT,
                 httpEntity,
                 Void.class
@@ -291,7 +292,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public MemberPasswordResponseDto requestMemberPassword(Long memberNo) {
         return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/password-check",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/password-check",
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 MemberPasswordResponseDto.class).getBody();
@@ -306,7 +307,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 new HttpEntity<>(new ModifyMemberPasswordRequestDto(password), makeHeader());
 
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/password",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/password",
                 HttpMethod.PUT,
                 httpEntity,
                 Void.class
@@ -338,7 +339,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public void requestMemberBaseAddressChange(Long memberNo, Long addressNo) {
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses/" + addressNo,
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/addresses/" + addressNo,
                 HttpMethod.PUT,
                 new HttpEntity<>(makeHeader()),
                 Void.class
@@ -352,7 +353,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public void requestMemberAddressAdd(Long memberNo, MemberAddressRequestDto requestDto) {
         HttpEntity<MemberAddressRequestDto> http = new HttpEntity<>(requestDto, makeHeader());
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/addresses",
                 HttpMethod.POST,
                 http,
                 Void.class
@@ -365,7 +366,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public void requestMemberAddressDelete(Long memberNo, Long addressNo) {
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/addresses/" + addressNo,
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/addresses/" + addressNo,
                 HttpMethod.DELETE,
                 new HttpEntity<>(makeHeader()),
                 Void.class
@@ -378,7 +379,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public Integer requestMemberTier(Long memberNo) {
         ResponseEntity<Integer> response = restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + MEMBER_API + memberNo + "/tier",
+                GateWayConfig.getGatewayUrl() + TOKEN_API + memberNo + "/tier",
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 Integer.class

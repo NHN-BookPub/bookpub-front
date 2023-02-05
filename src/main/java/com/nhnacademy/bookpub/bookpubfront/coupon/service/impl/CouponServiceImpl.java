@@ -58,7 +58,7 @@ public class CouponServiceImpl implements CouponService {
      * {@inheritDoc}
      */
     @Override
-    public boolean existCouponsByMemberNo(Long memberNo, List<Long> tierCoupons) {
+    public Boolean existCouponsByMemberNo(Long memberNo, List<Long> tierCoupons) {
         return couponAdaptor.requestExistCouponsByMemberNo(memberNo, tierCoupons);
     }
 

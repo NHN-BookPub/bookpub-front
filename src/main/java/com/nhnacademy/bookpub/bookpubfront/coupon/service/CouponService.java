@@ -57,7 +57,7 @@ public interface CouponService {
      * @param tierCoupons 등급쿠폰번호 리스트
      * @return 등급 쿠폰 발급 유무
      */
-    boolean existCouponsByMemberNo(Long memberNo, List<Long> tierCoupons);
+    Boolean existCouponsByMemberNo(Long memberNo, List<Long> tierCoupons);
 
     /**
      * 멤버에게 등급 쿠폰 발급하기 위한 메서드입니다.

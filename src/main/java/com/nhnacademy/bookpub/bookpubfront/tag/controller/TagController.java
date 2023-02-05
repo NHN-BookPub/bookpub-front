@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.tag.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.tag.dto.AddTagRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.tag.dto.GetTagResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.tag.dto.ModifyTagRequestDto;
@@ -51,6 +52,7 @@ public class TagController {
      * @return 태그 목록으로 redirect
      */
     @PostMapping("/add/tag")
+    @Auth
     public String addTag(@ModelAttribute AddTagRequestDto request) {
         tagService.addTag(request);
 
@@ -64,6 +66,7 @@ public class TagController {
      * @return 태그 목록으로 redirect
      */
     @PostMapping("/modify/tag")
+    @Auth
     public String modifyTag(@ModelAttribute ModifyTagRequestDto request) {
         tagService.modifyTag(request);
 
@@ -77,6 +80,7 @@ public class TagController {
      * @return 태그 목록으로 redirect
      */
     @PostMapping("/delete/tags/{tagNo}")
+    @Auth
     public String deleteTag(@PathVariable Integer tagNo) {
         tagService.deleteTag(tagNo);
 

@@ -26,6 +26,7 @@ import org.springframework.web.client.RestTemplate;
 public class TagAdaptorImpl implements TagAdaptor {
     private final RestTemplate restTemplate;
     private static final String TOKEN_API_PATH = getGatewayUrl() + "/token/tags";
+    private static final String TAG_API_PATH = getGatewayUrl() + "/api/tags";
 
     /**
      * {@inheritDoc}
@@ -33,7 +34,7 @@ public class TagAdaptorImpl implements TagAdaptor {
     @Override
     public List<GetTagResponseDto> getTags() {
         return restTemplate.exchange(
-                        TOKEN_API_PATH,
+                        TAG_API_PATH,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<List<GetTagResponseDto>>() {
