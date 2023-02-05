@@ -5,7 +5,9 @@ import com.nhnacademy.bookpub.bookpubfront.category.dto.request.CreateCategoryRe
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /**
  * Category 가 api 서버와 연동하기 위한 인터페이스.
@@ -36,9 +38,9 @@ public interface CategoryAdaptor {
     /**
      * 카테고리 전체 api 서버에서 받아오는 메소드.
      *
-     * @return 전체 카테고리
+     * @return 카테고리 리스트 페이지
      */
-    List<GetCategoryResponseDto> requestCategoryList();
+    PageResponse<GetCategoryResponseDto> requestCategoryList(Pageable pageable);
 
     /**
      * 최상위 카테고리 api 서버에서 받아오는 메소드.

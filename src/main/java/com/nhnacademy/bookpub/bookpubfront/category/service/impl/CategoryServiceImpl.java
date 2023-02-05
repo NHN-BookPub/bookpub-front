@@ -7,8 +7,10 @@ import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRe
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.service.CategoryService;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 /**
@@ -46,8 +48,8 @@ public class CategoryServiceImpl implements CategoryService {
      * {@inheritDoc}
      */
     @Override
-    public List<GetCategoryResponseDto> getCategories() {
-        return categoryAdaptor.requestCategoryList();
+    public PageResponse<GetCategoryResponseDto> getCategories(Pageable pageable) {
+        return categoryAdaptor.requestCategoryList(pageable);
     }
 
     /**
