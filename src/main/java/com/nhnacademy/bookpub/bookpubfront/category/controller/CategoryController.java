@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.category.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.CreateCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
@@ -33,6 +34,7 @@ public class CategoryController {
      * @param model view 로 정보를 보내는 request
      * @return 카테고리 메인 페이지
      */
+    @Auth
     @GetMapping
     public String categoryList(Model model) {
         List<GetCategoryResponseDto> categories = categoryService.getCategories();
@@ -49,6 +51,7 @@ public class CategoryController {
      * @return 카테고리 메인(카테고리 리스트)로 redirect
      * @throws JsonProcessingException objectMapper 발생시키는에러.
      */
+    @Auth
     @PostMapping
     public String addCategory(@ModelAttribute CreateCategoryRequestDto requestDto)
             throws JsonProcessingException {
@@ -64,6 +67,7 @@ public class CategoryController {
      * @return 카테고리 메인(카테고리 리스트)로 redirect
      * @throws JsonProcessingException objectMapper 발생시키는에러.
      */
+    @Auth
     @PostMapping("/modify")
     public String modifyCategory(@ModelAttribute ModifyCategoryRequestDto requestDto)
             throws JsonProcessingException {

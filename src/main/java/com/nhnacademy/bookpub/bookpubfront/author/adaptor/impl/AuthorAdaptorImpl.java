@@ -31,13 +31,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class AuthorAdaptorImpl implements AuthorAdaptor {
     private final RestTemplate restTemplate;
     private static final String AUTHOR_URI = "/api/authors";
+    private static final String AUTHOR_AUTH_URI = "/token/authors";
 
     /**
      * {@inheritDoc}
      */
     @Override
     public PageResponse<GetAuthorResponseDto> getAuthors(Pageable pageable) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + AUTHOR_URI)
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + AUTHOR_AUTH_URI)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -57,7 +58,7 @@ public class AuthorAdaptorImpl implements AuthorAdaptor {
      */
     @Override
     public void addAuthor(AddAuthorRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + AUTHOR_URI;
+        String url = GateWayConfig.getGatewayUrl() + AUTHOR_AUTH_URI;
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -75,7 +76,7 @@ public class AuthorAdaptorImpl implements AuthorAdaptor {
      */
     @Override
     public void modifyAuthor(ModifyAuthorRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + AUTHOR_URI + "/" + request.getModifyAuthorNo();
+        String url = GateWayConfig.getGatewayUrl() + AUTHOR_AUTH_URI + "/" + request.getModifyAuthorNo();
 
         RestModifyAuthorRequestDto dto = new RestModifyAuthorRequestDto(
                 request.getModifyAuthorName(), request.getModifyMainBook());

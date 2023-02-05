@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -28,6 +27,7 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
 
     private final RestTemplate restTemplate;
     private static final String COUPON_MONTH_URL = "/api/coupon-months";
+    private static final String COUPON_MONTH_AUTH_URL = "/token/coupon-months";
 
     /**
      * {@inheritDoc}
@@ -40,9 +40,10 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
                 url,
                 HttpMethod.GET,
                 new HttpEntity<>(Utils.makeHeader()),
-                new ParameterizedTypeReference<>() {}
+                new ParameterizedTypeReference<>() {
+                }
         );
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -52,7 +53,7 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
      */
     @Override
     public void requestAddCouponMonth(CreateCouponMonthRequestDto createRequestDto) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_URL;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_AUTH_URL;
 
         HttpEntity<CreateCouponMonthRequestDto> request = new HttpEntity<>(createRequestDto, Utils.makeHeader());
 
@@ -63,7 +64,7 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -71,7 +72,7 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
      */
     @Override
     public void requestModifyCouponMonth(ModifyCouponMonthRequestDto modifyRequestDto) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_URL;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_AUTH_URL;
 
         HttpEntity<ModifyCouponMonthRequestDto> request = new HttpEntity<>(modifyRequestDto, Utils.makeHeader());
 
@@ -82,7 +83,7 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -90,7 +91,7 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
      */
     @Override
     public void requestDeleteCouponMonth(Long monthNo) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_URL + "/" + monthNo;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_MONTH_AUTH_URL + "/" + monthNo;
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -99,20 +100,6 @@ public class CouponMonthAdaptorImpl implements CouponMonthAdaptor {
                 Void.class
         );
 
-        checkError(response);
-    }
-
-    /**
-     * 에러 체크를 위한 메소드입니다.
-     *
-     * @param response
-     * @param <T>
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
+        Utils.checkError(response);
     }
 }

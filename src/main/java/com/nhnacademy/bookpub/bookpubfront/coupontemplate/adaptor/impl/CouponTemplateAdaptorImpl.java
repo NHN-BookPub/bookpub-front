@@ -14,7 +14,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -38,13 +37,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
     private final RestTemplate restTemplate;
     private static final String COUPON_TEMPLATE_URL = "/api/coupon-templates";
+    private static final String COUPON_TEMPLATE_AUTH_URL = "/token/coupon-templates";
 
 
     /**
      * {@inheritDoc}
      */
     public PageResponse<GetCouponTemplateResponseDto> requestCouponTemplates(Pageable pageable) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL)
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -56,7 +56,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -66,7 +66,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     @Override
     public GetDetailCouponTemplateResponseDto requestDetailCouponTemplate(Long templateNo) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL + "/" + templateNo;
 
         ResponseEntity<GetDetailCouponTemplateResponseDto> response = restTemplate.exchange(url,
                 HttpMethod.GET,
@@ -74,7 +74,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -84,16 +84,13 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     public void requestAddCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) {
 
-        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL;
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("createRequestDto", createRequestDto.transform());
         body.add("image", createRequestDto.getTemplateImage().getResource());
 
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, Utils.makeHeader(MediaType.MULTIPART_FORM_DATA));
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -102,7 +99,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -110,16 +107,13 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     @Override
     public void requestModifyCouponTemplate(Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL + "/" + templateNo;
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("modifyRequestDto", modifyRequestDto.transform());
         body.add("image", modifyRequestDto.getTemplateImage().getResource());
 
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, Utils.makeHeader(MediaType.MULTIPART_FORM_DATA));
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -129,7 +123,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         );
 
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
     /**
@@ -137,7 +131,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     @Override
     public boolean existTemplateCheck(Long templateNo) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL + "/" + templateNo;
 
         HttpStatus response;
         try {
@@ -161,7 +155,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
      */
     @Override
     public GetDownloadInfo requestDownloadFile(Long templateNo) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_URL + "/" + templateNo + "/download";
+        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL + "/" + templateNo + "/download";
 
         ResponseEntity<GetDownloadInfo> response = restTemplate.exchange(url,
                 HttpMethod.GET,
@@ -169,22 +163,8 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 GetDownloadInfo.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
-    }
-
-    /**
-     * 에러 체크를 위한 메소드입니다.
-     *
-     * @param response
-     * @param <T>
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
     }
 }

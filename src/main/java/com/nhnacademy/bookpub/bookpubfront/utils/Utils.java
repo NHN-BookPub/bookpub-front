@@ -52,6 +52,50 @@ public class Utils {
     }
 
     /**
+     * 헤더생성에 대한 중복을 방지한 메서드입니다.
+     *
+     * @return http 헤더가 반환됩니다.
+     */
+    public static HttpHeaders makeHeader(MediaType mediaType) {
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(mediaType);
+        headers.setAccept(List.of(mediaType));
+
+        String accessToken = (String) request.getAttribute(JwtUtil.AUTH_HEADER);
+        if (Objects.nonNull(accessToken)) {
+            headers.add(JwtUtil.AUTH_HEADER, accessToken);
+        }
+
+        return headers;
+    }
+
+    /**
+     * 헤더생성에 대한 중복을 방지한 메서드입니다.
+     *
+     * @return http 헤더가 반환됩니다.
+     */
+    public static HttpHeaders makeHeader(MediaType[] mediaType) {
+        ServletRequestAttributes servletRequestAttributes =
+                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(mediaType));
+
+        String accessToken = (String) request.getAttribute(JwtUtil.AUTH_HEADER);
+        if (Objects.nonNull(accessToken)) {
+            headers.add(JwtUtil.AUTH_HEADER, accessToken);
+        }
+
+        return headers;
+    }
+
+    /**
      * String 타입을 받는 List를 SimpleGranted로 변환시켜주는 메소드.
      *
      * @param roles 유저 권한 string list.

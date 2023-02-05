@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.coupontemplate.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.dto.response.GetCouponPolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.service.CouponPolicyService;
 import com.nhnacademy.bookpub.bookpubfront.couponstatecode.dto.response.GetCouponStateCodeResponseDto;
@@ -46,6 +47,7 @@ public class AdminCouponTemplateController {
      * @param model    the model
      * @return 관리자 쿠폰템플릿 페이지
      */
+    @Auth
     @GetMapping("/coupon/coupon-templates")
     public String couponTemplateList(@PageableDefault Pageable pageable, Model model) {
         PageResponse<GetCouponTemplateResponseDto> couponTemplates = couponTemplateService.getCouponTemplates(pageable);
@@ -73,6 +75,7 @@ public class AdminCouponTemplateController {
      * @param model      the model
      * @return 쿠폰템플릿 상세보기 페이지
      */
+    @Auth
     @GetMapping("/coupon/coupon-templates/{templateNo}")
     public String couponTemplateDetail(@PathVariable Long templateNo, Model model) {
         GetDetailCouponTemplateResponseDto couponTemplate =
@@ -96,6 +99,7 @@ public class AdminCouponTemplateController {
      * @return 쿠폰템플릿 페이지로 이동
      * @throws IOException 파일로 인한 IOExcpeption
      */
+    @Auth
     @PostMapping("/coupon/coupon-templates")
     public String addCouponTemplate(CreateCouponTemplateRequestDto createRequestDto) throws IOException {
         couponTemplateService.createCouponTemplate(createRequestDto);
@@ -110,6 +114,7 @@ public class AdminCouponTemplateController {
      * @param modifyRequestDto 수정할 쿠폰템플릿 정보를 담은 dto
      * @return 쿠폰템플릿 페이지로 이동
      */
+    @Auth
     @PostMapping("/coupon/coupon-templates/modify/{templateNo}")
     public String modifyCouponTemplate(@PathVariable("templateNo") Long templateNo, ModifyCouponTemplateRequestDto modifyRequestDto) {
         couponTemplateService.modifyCouponTemplate(templateNo, modifyRequestDto);

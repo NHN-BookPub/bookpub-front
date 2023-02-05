@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.couponpolicy.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.dto.request.CreateCouponPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.dto.request.ModifyCouponPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.couponpolicy.service.CouponPolicyService;
@@ -31,8 +32,9 @@ public class AdminCouponPolicyController {
      * @param model 뷰에서 띄워줄 정보를 담은 request
      * @return 쿠폰 정책 리스트 조회 뷰
      */
+    @Auth
     @GetMapping("/coupon/coupon-policies")
-    public String goCouponPolicy(Model model) throws JsonProcessingException {
+    public String goCouponPolicy(Model model) {
         model.addAttribute("couponPolicyList", couponPolicyService.getCouponPolicies());
 
         return "admin/coupon/couponPolicyPage";
@@ -44,6 +46,7 @@ public class AdminCouponPolicyController {
      * @param createRequestDto 쿠폰정책 등록에 필요한 정보를 담은 Dto
      * @return 쿠폰 정책 리스트 조회 뷰
      */
+    @Auth
     @PostMapping("/coupon/coupon-policies")
     public String addCouponPolicy(@ModelAttribute CreateCouponPolicyRequestDto createRequestDto)
             throws JsonProcessingException {
@@ -58,6 +61,7 @@ public class AdminCouponPolicyController {
      * @param modifyRequestDto 쿠폰정책 수정에 필요한 정보를 담은 Dto
      * @return 쿠폰 정책 리스트 조회 뷰
      */
+    @Auth
     @PostMapping("/coupon/coupon-policies/modify")
     public String modifyCouponPolicy(@ModelAttribute ModifyCouponPolicyRequestDto modifyRequestDto)
             throws JsonProcessingException {

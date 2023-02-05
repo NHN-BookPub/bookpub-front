@@ -1,64 +1,63 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
+    <meta charset="UTF-8">
 </head>
 <body>
 <div class="l-navbar" id="navbar">
 
-  <nav class="nav">
-    <div>
-      <div class="nav__brand">
-        <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
-        <a href="/" class="nav__logo">Book-Pub</a>
-      </div>
-      <div class="nav__list">
-        <a th:href="@{/members/{memberNo}(memberNo=${member.memberNo})}" class="nav__link active">
-          <ion-icon name="home-outline" class="nav__icon"></ion-icon>
-          <span class="nav_name">내 정보</span>
-        </a>
+    <nav class="nav">
+        <div>
+            <div class="nav__brand">
+                <ion-icon name="menu-outline" class="nav__toggle" id="nav-toggle"></ion-icon>
+                <a href="/" class="nav__logo">Book-Pub</a>
+            </div>
+            <div class="nav__list">
+                <a th:href="@{/members/{memberNo}(memberNo=${member.memberNo})}" class="nav__link active">
+                    <ion-icon name="home-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">내 정보</span>
+                </a>
 
-        <a href="#" class="nav__link">
-          <ion-icon name="chatbubbles-outline" class="nav__icon"></ion-icon>
-          <span class="nav_name">메신저</span>
-        </a>
+                <a href="#" class="nav__link">
+                    <ion-icon name="chatbubbles-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">메신저</span>
+                </a>
 
-        <div href="#" class="nav__link collapse show">
-          <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
-          <span class="nav_name">내 쿠폰함</span>
+                <div href="#" class="nav__link collapse show">
+                    <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">내 쿠폰함</span>
 
-        <a th:href="@{/members/my/written-reviews}" class="nav__link">
-          <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
-          <span class="nav_name">마이 리뷰</span>
-        </a>
+                    <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
-        <a href="#" class="nav__link">
-          <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+                    <ul class="collapse__menu">
+                        <a th:href="@{/members/{memberNo}/coupon/positive(memberNo=${member.memberNo})}"
+                           class="collapse__sublink">사용 가능 쿠폰</a>
+                        <a th:href="@{/members/{memberNo}/coupon/negative(memberNo=${member.memberNo})}"
+                           class="collapse__sublink">사용 만료 쿠폰</a>
+                    </ul>
+                </div>
 
-          <ul class="collapse__menu">
-            <a th:href="@{/members/{memberNo}/coupon/positive(memberNo=${member.memberNo})}"
-               class="collapse__sublink">사용 가능 쿠폰</a>
-            <a th:href="@{/members/{memberNo}/coupon/negative(memberNo=${member.memberNo})}"
-               class="collapse__sublink">사용 만료 쿠폰</a>
-          </ul>
+                <a th:href="@{/members/my/written-reviews}" class="nav__link">
+                    <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">마이 리뷰</span>
+                </a>
+
+                <a href="/orders/list" class="nav__link">
+                    <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">주문내역</span>
+                </a>
+
+                <!--        <a href="#" class="nav__link">-->
+                <!--          <ion-icon name="settings-outline" class="nav__icon"></ion-icon>-->
+                <!--          <span class="nav_name">Settings</span>-->
+                <!--        </a>-->
+                <a href="/logout" class="nav__link">
+                    <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">Log out</span>
+                </a>
+            </div>
         </div>
-
-        <a href="/orders/list" class="nav__link">
-          <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
-          <span class="nav_name">주문내역</span>
-        </a>
-
-        <!--        <a href="#" class="nav__link">-->
-        <!--          <ion-icon name="settings-outline" class="nav__icon"></ion-icon>-->
-        <!--          <span class="nav_name">Settings</span>-->
-        <!--        </a>-->
-      </div>
-      <a href="/logout" class="nav__link">
-        <ion-icon name="log-out-outline" class="nav__icon"></ion-icon>
-        <span class="nav_name">Log out</span>
-      </a>
-    </div>
-  </nav>
+    </nav>
 </div>
 </body>
 </html>
