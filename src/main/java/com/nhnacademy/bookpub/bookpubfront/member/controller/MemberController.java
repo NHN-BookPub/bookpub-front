@@ -52,6 +52,7 @@ public class MemberController {
      * @return 관리자 멤버 리스트 페이지.
      */
     @GetMapping("/admin/members")
+    @Auth
     public String memberList(@PageableDefault Pageable pageable,
                              Model model) {
         PageResponse<MemberResponseDto> members = memberService.getMembers(pageable);
@@ -139,6 +140,7 @@ public class MemberController {
      * @return 관리자 의 멤버 상세페이지.
      */
     @GetMapping("/admin/members/{memberNo}")
+    @Auth
     public String adminMemberInfo(@PathVariable("memberNo") Long memberNo,
                                   Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
@@ -156,6 +158,7 @@ public class MemberController {
      * @return 멤버리스트 페이지로 리다이렉트.
      */
     @PostMapping("/admin/members/{memberNo}")
+    @Auth
     public String adminMemberBlock(@PathVariable("memberNo") Long memberNo,
                                    Pageable pageable) {
         memberService.memberBlock(memberNo);
@@ -274,6 +277,7 @@ public class MemberController {
      * @return 마이페이지 내정보.
      */
     @PostMapping("/members/{memberNo}/name")
+    @Auth
     public String memberExchangeName(@PathVariable("memberNo") Long memberNo,
                                      @RequestParam("exchangeName") String name) {
         memberService.modifyMemberName(memberNo, name);
@@ -290,6 +294,7 @@ public class MemberController {
      * @return the string
      */
     @PostMapping("/members/{memberNo}/nickname")
+    @Auth
     public String memberExchangeNickname(@PathVariable("memberNo") Long memberNo,
                                          @RequestParam("exchangeNickname") String nickname) {
         memberService.modifyMemberNickName(memberNo, nickname);
@@ -306,6 +311,7 @@ public class MemberController {
      * @return 마이페이지 내정보.
      */
     @PostMapping("/members/{memberNo}/email")
+    @Auth
     public String memberExchangeEmail(@PathVariable("memberNo") Long memberNo,
                                       @RequestParam("exchangeEmail") String email) {
         memberService.modifyMemberEmail(memberNo, email);
@@ -322,6 +328,7 @@ public class MemberController {
      * @return 마이페이지 내정보
      */
     @PostMapping("/members/{memberNo}/phone")
+    @Auth
     public String memberExchangePhone(@PathVariable("memberNo") Long memberNo,
                                       @RequestParam("exchangePhone") String phone) {
         memberService.modifyMemberPhone(memberNo, phone);
@@ -338,6 +345,7 @@ public class MemberController {
      * @return the string
      */
     @PostMapping("/members/{memberNo}/password")
+    @Auth
     public String memberExchangePassword(@PathVariable("memberNo") Long memberNo,
                                          @RequestParam("exchangePwd") String password) {
 
@@ -354,6 +362,7 @@ public class MemberController {
      * @return the string
      */
     @PostMapping("/members/{memberNo}/addresses/{addressNo}")
+    @Auth
     public String memberExchangeBaseAddress(@PathVariable("memberNo") Long memberNo,
                                             @PathVariable("addressNo") Long addressNo) {
 
@@ -369,6 +378,7 @@ public class MemberController {
      * @return the string
      */
     @PostMapping("/members/{memberNo}/addresses")
+    @Auth
     public String memberAddAddress(@PathVariable("memberNo") Long memberNo,
                                    MemberAddressRequestDto requestDto) {
 
@@ -385,6 +395,7 @@ public class MemberController {
      * @return the string
      */
     @PostMapping("/members/{memberNo}/addresses-delete/{addressNo}")
+    @Auth
     public String memberDeleteAddress(@PathVariable("memberNo") Long memberNo,
                                       @PathVariable("addressNo") Long addressNo) {
         memberService.deleteMemberAddress(memberNo, addressNo);

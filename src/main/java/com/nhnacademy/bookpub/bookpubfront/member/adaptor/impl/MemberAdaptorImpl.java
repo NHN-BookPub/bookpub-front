@@ -48,7 +48,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 public class MemberAdaptorImpl implements MemberAdaptor {
     private final RestTemplate restTemplate;
-    private static final String MEMBER_API = "/api/members/";
+    private static final String MEMBER_API = "/token/members/";
 
 
     /**
@@ -139,7 +139,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public PageResponse<MemberResponseDto> requestMembers(Pageable pageable) {
         String url = UriComponentsBuilder
-                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/api/admin/members")
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/token/admin/members")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -160,7 +160,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public void requestMemberBlock(Long memberNo) {
         restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/api/admin/members/" + memberNo,
+                GateWayConfig.getGatewayUrl() + "/token/admin/members/" + memberNo,
                 HttpMethod.PUT,
                 new HttpEntity<>(makeHeader()),
                 Void.class
@@ -174,7 +174,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public MemberStatisticsResponseDto requestMemberStatics() {
 
         return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/api/admin/members/statistics",
+                GateWayConfig.getGatewayUrl() + "/token/admin/members/statistics",
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 MemberStatisticsResponseDto.class
@@ -188,7 +188,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public List<MemberTierStatisticsResponseDto> requestMemberTierStatics() {
 
         return restTemplate.exchange(
-                GateWayConfig.getGatewayUrl() + "/api/admin/tier/statistics",
+                GateWayConfig.getGatewayUrl() + "/token/admin/tier/statistics",
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<List<MemberTierStatisticsResponseDto>>() {

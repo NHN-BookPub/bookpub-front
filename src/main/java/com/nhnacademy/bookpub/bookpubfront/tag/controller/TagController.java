@@ -26,9 +26,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/admin")
 @RequiredArgsConstructor
 public class TagController {
-
+    private static final String REDIRECT_URL = "redirect:/admin/tags";
     private final TagService tagService;
-
 
     /**
      * 관레자 페이지에서 태그 목록을 조회해서 보여주는 메서드.
@@ -55,7 +54,7 @@ public class TagController {
     public String addTag(@ModelAttribute AddTagRequestDto request) {
         tagService.addTag(request);
 
-        return "redirect:/admin/tags";
+        return REDIRECT_URL;
     }
 
     /**
@@ -68,7 +67,7 @@ public class TagController {
     public String modifyTag(@ModelAttribute ModifyTagRequestDto request) {
         tagService.modifyTag(request);
 
-        return "redirect:/admin/tags";
+        return REDIRECT_URL;
     }
 
     /**
@@ -81,6 +80,6 @@ public class TagController {
     public String deleteTag(@PathVariable Integer tagNo) {
         tagService.deleteTag(tagNo);
 
-        return "redirect:/admin/tags";
+        return REDIRECT_URL;
     }
 }
