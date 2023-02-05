@@ -20,15 +20,15 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
 
         if (status.equals(HttpStatus.NOT_FOUND)) {
             throw new NotFoundException();
-        } else if (response.getStatusCode().equals(HttpStatus.UNAUTHORIZED)) {
+        } else if (status.equals(HttpStatus.UNAUTHORIZED)) {
             throw new UnAuthorizedException();
-        } else if (response.getStatusCode().equals(HttpStatus.BAD_REQUEST)) {
+        } else if (status.equals(HttpStatus.BAD_REQUEST)) {
             throw new BadRequestException();
-        } else if (response.getStatusCode().is4xxClientError()) {
+        } else if (status.is4xxClientError()) {
             throw new NotFoundException();
-        } else if (response.getStatusCode().equals(HttpStatus.BAD_GATEWAY)) {
+        } else if (status.equals(HttpStatus.BAD_GATEWAY)) {
             throw new BadGatewayException();
-        } else if (response.getStatusCode().is5xxServerError()) {
+        } else if (status.is5xxServerError()) {
             throw new ServerErrorException();
         }
     }
