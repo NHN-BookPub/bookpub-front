@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.admin.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
@@ -24,12 +25,20 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final MemberService memberService;
+
+    /**
+     * 어드민 페이지.
+     *
+     * @param model 모델.
+     * @return 어드민 페이지.
+     */
     @GetMapping
+    @Auth
     public String adminIndex(Model model) {
         MemberStatisticsResponseDto memberStatisticsResponseDto = memberService.memberStatistics();
         List<MemberTierStatisticsResponseDto> tierStatistics = memberService.memberTierStatistics();
-        log.warn("statistics : {}",tierStatistics.get(0).getTierCnt());
-        log.error("statistics : {}",tierStatistics.get(0).getTierName());
+        log.warn("statistics : {}", tierStatistics.get(0).getTierCnt());
+        log.error("statistics : {}", tierStatistics.get(0).getTierName());
         model.addAttribute("memberStatistics", memberStatisticsResponseDto);
         model.addAttribute("tierStatistics", tierStatistics);
 

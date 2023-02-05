@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.product.controller;
 
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.service.CategoryService;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
@@ -24,7 +25,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -101,11 +108,12 @@ public class AdminProductController {
      * @return 상품 목록 화면으로 Redirect
      */
     @PostMapping("/add")
+    @Auth
     public String addProduct(@ModelAttribute InputProductFormRequestDto inputProduct,
-                             @RequestParam(value = "tagList", required = false) List<Integer> tagList,
-                             @RequestPart(required = false) MultipartFile thumbnail,
-                             @RequestPart(required = false) MultipartFile detail,
-                             @RequestPart(required = false) MultipartFile ebook) {
+                         @RequestParam(value = "tagList", required = false) List<Integer> tagList,
+                         @RequestPart(required = false) MultipartFile thumbnail,
+                         @RequestPart(required = false) MultipartFile detail,
+                         @RequestPart(required = false) MultipartFile ebook) {
         Map<String, MultipartFile> fileMap = new HashMap<>();
         if (thumbnail != null) {
             fileMap.put("thumbnail", thumbnail);
@@ -129,6 +137,7 @@ public class AdminProductController {
      * @return 상품 목록 화면으로 Redirect
      */
     @PostMapping("/deleted/{productNo}")
+    @Auth
     public String setDeletedProduct(@PathVariable("productNo") Long productNo) {
         productService.setProductDeleted(productNo);
 

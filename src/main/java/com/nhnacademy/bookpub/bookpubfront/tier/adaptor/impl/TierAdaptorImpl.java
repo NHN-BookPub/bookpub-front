@@ -29,7 +29,7 @@ public class TierAdaptorImpl implements TierAdaptor {
     private final RestTemplate restTemplate;
 
     private static final String TIER_URI = getGatewayUrl() + "/api/tiers";
-    private static final String AUTH_TIER_URI = getGatewayUrl() + "/api/tiers";
+    private static final String AUTH_TIER_URI = getGatewayUrl() + "/token/tiers";
 
     /**
      * {@inheritDoc}
@@ -87,7 +87,7 @@ public class TierAdaptorImpl implements TierAdaptor {
      */
     @Override
     public Boolean requestTierName(String tierName) {
-        String url = TIER_URI + "/check-tierName?tierName=" + tierName;
+        String url = AUTH_TIER_URI + "/check-tierName?tierName=" + tierName;
 
         return restTemplate.exchange(url,
                 HttpMethod.GET,

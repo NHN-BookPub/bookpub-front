@@ -58,6 +58,7 @@ public class CreateOrderRequestDto {
                                  Map<Long, Long> productCoupon,
                                  Map<Long, Long> productSaleAmount) {
         final String[] receive = orderInfo.getReceivedAt().split("-");
+        packaged = orderInfo.getPackaged() != null;
 
         this.productNos = productNos;
         this.productCount = productCount;
@@ -77,7 +78,6 @@ public class CreateOrderRequestDto {
                 Integer.parseInt(receive[0]),
                 Integer.parseInt(receive[1]),
                 Integer.parseInt(receive[2]), 0, 0);
-        this.packaged = orderInfo.isPackaged();
         this.orderRequest = orderInfo.getOrderRequest();
         this.pointAmount = orderInfo.getPointAmount();
         this.couponAmount = orderInfo.getCouponAmount();
