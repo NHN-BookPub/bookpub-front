@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.product.relationship.adaptor.impl;
 
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
+
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.adaptor.ProductTypeStateCodeAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.response.GetProductTypeStateCodeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
@@ -23,8 +24,6 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class ProductTypeStateCodeAdaptorImpl implements ProductTypeStateCodeAdaptor {
-
-    private final GateWayConfig gateWayConfig;
     private final RestTemplate restTemplate;
 
     private static final String PRODUCT_TYPE_URI = "/api/state/productType";
@@ -34,7 +33,7 @@ public class ProductTypeStateCodeAdaptorImpl implements ProductTypeStateCodeAdap
      */
     @Override
     public List<GetProductTypeStateCodeResponseDto> requestProductTypeStateCodes() {
-        String url = gateWayConfig.getGatewayUrl() + PRODUCT_TYPE_URI + "/used";
+        String url = getGatewayUrl() + PRODUCT_TYPE_URI + "/used";
 
         ResponseEntity<List<GetProductTypeStateCodeResponseDto>> response =
                 restTemplate.exchange(

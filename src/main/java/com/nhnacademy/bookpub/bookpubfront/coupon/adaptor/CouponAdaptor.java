@@ -57,7 +57,7 @@ public interface CouponAdaptor {
      * @param memberNo 멤버 번호
      * @return 등급 쿠폰 발급 유무
      */
-    boolean requestExistCouponsByMemberNo(Long memberNo, List<Long> tierCoupons);
+    Boolean requestExistCouponsByMemberNo(Long memberNo, List<Long> tierCoupons);
 
     /**
      * 멤버에게 등급쿠폰을 발급하기 위한 메서드입니다.

@@ -123,7 +123,7 @@ public class MemberController {
      */
     @PostMapping("/oauth/signup")
     public String oauthSignupComplete(@Valid OauthMemberCreateRequestDto signupMemberRequestDto,
-            Model model) {
+                                      Model model) {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
 
@@ -140,7 +140,6 @@ public class MemberController {
      * @return 관리자 의 멤버 상세페이지.
      */
     @GetMapping("/admin/members/{memberNo}")
-    @Auth
     public String adminMemberInfo(@PathVariable("memberNo") Long memberNo,
                                   Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
@@ -173,7 +172,6 @@ public class MemberController {
      * @param model    모델.
      * @return 멤버의 개인정보 페이지로 이동.
      */
-    @Auth
     @GetMapping("/members/{memberNo}")
     public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
@@ -189,11 +187,9 @@ public class MemberController {
      * @param model    모델
      * @return 멤버의 사용 가능 쿠폰함 페이지로 이동.
      */
-    @Auth
     @GetMapping("/members/{memberNo}/coupon/positive")
     public String memberCouponList(@PathVariable("memberNo") Long memberNo,
-            @PageableDefault Pageable pageable, Model model,
-            @RequestParam(name = "type", required = false) String type) {
+                                   @PageableDefault Pageable pageable, Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
         model.addAttribute(MEMBER, member);
 
@@ -221,8 +217,7 @@ public class MemberController {
     @Auth
     @GetMapping("/members/{memberNo}/coupon/negative")
     public String memberCouponListNegative(@PathVariable("memberNo") Long memberNo,
-            @PageableDefault Pageable pageable, Model model,
-            @RequestParam(name = "type", required = false) String type) {
+                                           @PageableDefault Pageable pageable, Model model) {
         MemberDetailResponseDto member = memberService.getMember(memberNo);
         model.addAttribute(MEMBER, member);
 
