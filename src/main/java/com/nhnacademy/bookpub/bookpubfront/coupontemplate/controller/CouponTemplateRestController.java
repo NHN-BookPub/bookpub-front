@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.coupontemplate.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
 import com.nhnacademy.bookpub.bookpubfront.coupontemplate.service.CouponTemplateService;
 import lombok.RequiredArgsConstructor;
@@ -29,6 +30,7 @@ public class CouponTemplateRestController {
      * @param templateNo 확인할 쿠폰템플릿 번호
      * @return the boolean
      */
+    @Auth
     @GetMapping(value = "/templateCheck")
     public boolean existTemplateCheck(@RequestParam("templateNo") Long templateNo) {
         return couponTemplateService.existTemplateCheck(templateNo);
@@ -41,6 +43,7 @@ public class CouponTemplateRestController {
      * @param templateNo 템플릿 번호
      * @return 다운 받아질 Resource
      */
+    @Auth
     @GetMapping("/download/{templateNo}")
     public ResponseEntity<Resource> downloadFile(@PathVariable Long templateNo) {
         GetDownloadInfo info = couponTemplateService.downloadInfo(templateNo);

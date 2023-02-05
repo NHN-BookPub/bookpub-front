@@ -32,13 +32,14 @@ public class CouponAdaptorImpl implements CouponAdaptor {
 
     private final RestTemplate restTemplate;
     private static final String COUPON_URL = "/api/coupons";
+    private static final String COUPON_AUTH_URL = "/token/coupons";
 
     /**
      * {@inheritDoc}
      */
     @Override
     public void requestAddCoupon(CreateCouponRequestDto createRequestDto) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_URL;
+        String url = GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL;
 
         HttpEntity<CreateCouponRequestDto> entity =
                 new HttpEntity<>(createRequestDto, makeHeader());
@@ -58,7 +59,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     @Override
     public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
             String search) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_URL)
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .queryParam("searchKey", searchKey)
@@ -86,7 +87,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
             Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/positive")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -111,7 +112,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable,
             Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/negative")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -135,7 +136,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     @Override
     public boolean requestExistCouponsByMemberNo(Long memberNo, List<Long> tierCoupons) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/"
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
                                 + memberNo + "/tier-coupons")
                 .queryParam("tierCoupons", tierCoupons)
                 .encode()
@@ -158,7 +159,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     @Override
     public void requestIssueTierCoupons(Long memberNo, List<Long> tierCoupons) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/"
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
                                 + memberNo + "/tier-coupons")
                 .queryParam("tierCoupons", tierCoupons)
                 .encode().toUriString();
