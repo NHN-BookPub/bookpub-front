@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Bootstrap demo</title>
+    <title>bookpub-주문</title>
     <!-- Google font -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
     <!-- Bootstrap -->
@@ -51,9 +51,9 @@
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
-<div id="order-main">
+<div id="order-main" style="margin-bottom: 100px;">
     <div class="contents_inner">
-        <h1 id="header-h1-text">주문/결제</h1>
+        <h1 id="header-h1-text">주문</h1>
 
         <form method="post" action="/orders/order" class="cart_body_payment">
             <input type="hidden" name="productCoupon" id="product-coupon-result" value="">
@@ -66,6 +66,7 @@
                             <summary onclick="revert()">
                                 <span style="font-size: 19px;">주문 상품</span>
                                 <span class="prod_cnt" id="totalCnt"></span>
+                                <input type="hidden" id="order-name" name="orderName">
                                 <div class="img-wrapper">
                                     <img id="arrow" class="btn-img" src="/static/img/main/down-arrow.svg">
                                 </div>
@@ -90,11 +91,13 @@
                                         <div class="prod_area">
                                             <div class="bookpub-item-thumb size_sm">
                                                 <a target="_blank" href="#">
-                                                    <span class="item-img-wrap" th:if="${#strings.isEmpty(product.getThumbnail)}">
+                                                    <span class="item-img-wrap"
+                                                          th:if="${#strings.isEmpty(product.getThumbnail)}">
                                                         <img src="/static/img/main/no-image.png">
                                                     </span>
-                                                    <span class="item-img-wrap" th:if="${not #strings.isEmpty(product.getThumbnail)}">
-                                                        <img th:src="@{'data:image/*;base64,' + ${product.getThumbnail()}}" alt="No image">
+                                                    <span class="item-img-wrap"
+                                                          th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                                        <img th:src="${product.getThumbnail()}" alt="No image">
                                                     </span>
                                                 </a>
                                             </div>
@@ -116,7 +119,7 @@
                                         <span class="prd_num" th:text="${product.count}"></span>
                                     </td>
                                     <td>
-                                        <span class="price product-price" th:text="${product.totalPrice}"></span>
+                                        <span class="price product-price" th:text="${product.totalPrice}+'원'"></span>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -595,12 +598,12 @@
                     <div class="payments_info_box"
                          style="margin-top: 12px; padding-top: 20px; border-top: 1px solid #eaeaea">
                         <ul class="payments_info_list">
-                            <li class="payments_info_item total">
-                                <p class="label2">최종결제금액</p>
+                            <li class="payments_info_item total" style="margin-bottom: 7px;">
+                                <p class="label2" style="margin: 0 !important;line-height: 27px;">최종결제금액</p>
                                 <div class="right_box">
-                                    <span class="price2">
-                                        <span class="val" style="font-size:20px" id="totalAmount">0</span>
-                                        <span class="unit">원</span>
+                                    <span class="price2" style="display: flex;align-items: center;gap: 5px;">
+                                        <span class="val" style="font-size:19px" id="totalAmount">0</span>
+                                        <span class="unit" style="font-size: 19px !important;">원</span>
                                     </span>
                                     <input type="hidden" id="totalPrice" name="totalAmount">
                                 </div>
