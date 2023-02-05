@@ -320,7 +320,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     @Override
     public MemberLoginResponseDto requestAuthMemberInfo(String accessToken) {
         HttpHeaders headers = makeHeader();
-        headers.add(JwtUtil.AUTH_HEADER, accessToken);
+        headers.add(JwtUtil.AUTH_HEADER, JwtUtil.TOKEN_TYPE + accessToken);
 
         HttpEntity<MemberLoginResponseDto> httpEntity =
                 new HttpEntity<>(headers);
