@@ -8,6 +8,10 @@
     align-items: center;
 }
 
+tr {
+    border-bottom: dashed 1px #e2e2e2;
+}
+
 .order-index {
     padding: 15px 0 15px 20px;
     font-size: 20px;
@@ -16,4 +20,20 @@
 
 .order-content {
     font-size: 20px;
+}
+
+.pay-btn {
+    background: #5055b1;
+    border: 1px solid #5055b1;
+    transition: background-color 0.2s ease-out, border-color 0.2s ease-out;
+    width: 220px;
+    height: 45px;
+    margin-top: 12px;
+}
+
+#pay_success {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    align-items: center;
 }
