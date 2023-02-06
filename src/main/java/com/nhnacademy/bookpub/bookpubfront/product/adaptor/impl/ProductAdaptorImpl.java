@@ -188,6 +188,22 @@ public class ProductAdaptorImpl implements ProductAdaptor {
      * {@inheritDoc}
      */
     @Override
+    public PageResponse<GetProductByCategoryResponseDto> requestEbooks(Pageable pageable) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/ebooks").encode().toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {}
+        ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public ResponseEntity<List<GetOrderCouponResponseDto>> requestOrderCoupons(
             Long productNo, Long memberNo) {
 

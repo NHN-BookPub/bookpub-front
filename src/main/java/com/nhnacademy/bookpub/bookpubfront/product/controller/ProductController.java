@@ -98,4 +98,22 @@ public class ProductController {
         return "product/productListByCategory";
     }
 
+    @GetMapping("/products/ebooks")
+    public String viewEbooks(@PageableDefault Pageable pageable,
+                             @CookieValue(name = CART, required = false) Cookie cookie,
+                             Model model) {
+        PageResponse<GetProductByCategoryResponseDto> products = productService.getEbooks(pageable);
+
+        cartUtils.getCountInCart(cookie.getValue(), model);
+        categoryUtils.categoriesView(model);
+
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("isNext", products.isNext());
+        model.addAttribute("isPrevious", products.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
+
+        return "product/productEbookList";
+    }
 }

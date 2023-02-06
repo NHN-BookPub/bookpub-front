@@ -78,6 +78,8 @@ public interface ProductAdaptor {
     PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable);
 
 
+    PageResponse<GetProductByCategoryResponseDto> requestEbooks(Pageable pageable);
+
     /**
      * 상품별 쿠폰 리스트를 얻어오는 메소드.
      *
