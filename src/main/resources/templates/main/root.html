@@ -85,7 +85,7 @@
 
                                 <div th:each="newBook :${newBooks}" style="padding: 15px !important;">
                                     <div class="product">
-                                        <div class="product-img" style="width: 100%; height: 300px;">
+                                        <div class="product-img" style="width: 100%; height: 370px;">
                                             <img style="width: 100%; height: 100%; object-fit: cover;"
                                                  th:if="${#strings.isEmpty(newBook.getThumbnail)}"
                                                  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
@@ -161,7 +161,7 @@
 
                                 <div th:each="bestSeller :${bestSellers}" style="padding: 15px !important;">
                                     <div class="product">
-                                        <div class="product-img" style="width: 100%; height: 300px;">
+                                        <div class="product-img" style="width: 100%; height: 370px;">
                                             <img style="width: 100%; height: 100%; object-fit: cover;"
                                                  th:if="${#strings.isEmpty(bestSeller.getThumbnail)}"
                                                  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
