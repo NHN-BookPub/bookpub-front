@@ -178,6 +178,7 @@ public class MemberController {
     public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
         MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
+        log.warn("실행");
         return "mypage/memberInfo";
     }
 
