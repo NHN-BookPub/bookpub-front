@@ -363,7 +363,7 @@ document.addEventListener("DOMContentLoaded", function () {
     totalAmount.innerText = totalPrice.toString();
 
     let mainTitle = titleList[0].innerText;
-    let orderName = mainTitle + ' 외 ' + totalCnt-1 + "권";
+    let orderName = count !== 1 ? mainTitle + ' 외 ' + totalCnt - 1 + "권" : mainTitle;
 
     let orderNameInput = document.getElementById("order-name")
     orderNameInput.value = orderName;
