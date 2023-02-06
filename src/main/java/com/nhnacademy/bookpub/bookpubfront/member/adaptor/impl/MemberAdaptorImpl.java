@@ -134,6 +134,17 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         ).getBody();
     }
 
+    @Override
+    public MemberDetailResponseDto requestTokenMemberDetails(Long memberNo) {
+
+        return restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + TOKEN_API + "/" + memberNo,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                MemberDetailResponseDto.class
+        ).getBody();
+    }
+
 
     /**
      * {@inheritDoc}

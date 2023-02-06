@@ -54,7 +54,7 @@ public class AdminOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
-        model.addAttribute("member", memberService.getMember(memberNo));
+        model.addAttribute("member", memberService.getApiMember(memberNo));
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "admin/order/adminOrderDetail";

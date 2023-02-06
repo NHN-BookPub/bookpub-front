@@ -88,7 +88,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
                                                                      Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + COUPON_URL + "/members/" + memberNo
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/positive")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())

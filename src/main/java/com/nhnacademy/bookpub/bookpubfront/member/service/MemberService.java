@@ -64,12 +64,21 @@ public interface MemberService {
     void modifyMemberEmail(Long memberNo, String email);
 
     /**
-     * 멤버의 단일값 반환.
+     * 멤버의 단일값 반환. -> 인가된 사용자인지 검증
      *
      * @param memberNo 멤버 번호가 기입.
      * @return 멤버의 상세정보가 반환.
      */
-    MemberDetailResponseDto getMember(Long memberNo);
+    MemberDetailResponseDto getTokenMember(Long memberNo);
+
+
+    /**
+     * 멤버의 단일값 반환.
+     *
+     * @param memberNo 멤버넘버.
+     * @return 멤버의 상세정보가 반환.
+     */
+    MemberDetailResponseDto getApiMember(Long memberNo);
 
     /**
      * 멤버들의 정보를 list 로 받는 메서드입니다.

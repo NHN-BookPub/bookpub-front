@@ -111,7 +111,7 @@ public class TierCouponController {
 
         if (!principal.equals("anonymousUser")) {
             MemberDetailResponseDto member
-                    = memberService.getMember(Long.parseLong(principal));
+                    = memberService.getApiMember(Long.parseLong(principal));
             memberNo = member.getMemberNo();
         }
 
