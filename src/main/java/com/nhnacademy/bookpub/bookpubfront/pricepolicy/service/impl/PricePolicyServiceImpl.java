@@ -32,22 +32,6 @@ public class PricePolicyServiceImpl implements PricePolicyService {
      * {@inheritDoc}
      */
     @Override
-    public void modifyPricePolicyFee(Integer policyNo, Long fee) {
-        pricePolicyAdaptor.modifyPricePolicyFeeUsedRequest(policyNo, fee);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GetPricePolicyResponseDto getPricePolicyByNo(Integer policyNo) {
-        return pricePolicyAdaptor.getPricePolicyByCodeNoRequest(policyNo);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
     public List<GetPricePolicyResponseDto> getPricePolicies() {
         return pricePolicyAdaptor.getAllPricePolicyCodeRequest();
     }
@@ -60,6 +44,9 @@ public class PricePolicyServiceImpl implements PricePolicyService {
         return pricePolicyAdaptor.getPoliciesByName(name);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetOrderPolicyResponseDto> getOrderRequestPolicy() {
         return pricePolicyAdaptor.getShipAndPackagePolicy();

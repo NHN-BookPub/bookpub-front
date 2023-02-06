@@ -36,23 +36,7 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     @Override
     public List<GetPricePolicyResponseDto> getAllPricePolicyCodeRequest() {
         ResponseEntity<List<GetPricePolicyResponseDto>> response =
-                restTemplate.exchange(AUTH_ORDER_PRODUCT_URL,
-                        HttpMethod.GET,
-                        new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {
-                        });
-
-        return response.getBody();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GetPricePolicyResponseDto getPricePolicyByCodeNoRequest(Integer codeNo) {
-        String url = ORDER_PRODUCT_URL + "/" + codeNo;
-        ResponseEntity<GetPricePolicyResponseDto> response =
-                restTemplate.exchange(url,
+                restTemplate.exchange(ORDER_PRODUCT_URL,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>() {
@@ -68,21 +52,9 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     public void createOrderStateCodeRequest(CreatePricePolicyRequestDto requestDto) {
         HttpEntity<CreatePricePolicyRequestDto> httpEntity =
                 new HttpEntity<>(requestDto, makeHeader());
-        restTemplate.exchange(ORDER_PRODUCT_URL,
+        restTemplate.exchange(AUTH_ORDER_PRODUCT_URL,
                 HttpMethod.POST,
                 httpEntity,
-                Void.class);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void modifyPricePolicyFeeUsedRequest(Integer codeNo, Long fee) {
-        String url = AUTH_ORDER_PRODUCT_URL + "/" + codeNo + "?fee=" + fee;
-        restTemplate.exchange(url,
-                HttpMethod.PUT,
-                new HttpEntity<>(makeHeader()),
                 Void.class);
     }
 
