@@ -195,4 +195,12 @@ public class ProductServiceImpl implements ProductService {
 
         return listResponseEntity.getBody();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> getEbooks(Pageable pageable) {
+        return productAdaptor.requestEbooks(pageable);
+    }
 }
