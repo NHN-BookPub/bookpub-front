@@ -25,11 +25,14 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
     private final RestTemplate restTemplate;
-    private static final String REVIEW_POLICY_URL = "/api/review-policies";
+    private static final String REVIEW_POLICY_AUTH_URL = "/token/review-policies";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetReviewPolicyResponseDto> requestReviewPolicies() {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL;
 
         ResponseEntity<List<GetReviewPolicyResponseDto>> response = restTemplate.exchange(
                 url,
@@ -42,11 +45,15 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestCreateReviewPolicy(CreateReviewPolicyRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL;
 
-        HttpEntity<CreateReviewPolicyRequestDto> entity = new HttpEntity<>(request, Utils.makeHeader());
+        HttpEntity<CreateReviewPolicyRequestDto> entity =
+                new HttpEntity<>(request, Utils.makeHeader());
 
         restTemplate.exchange(
                 url,
@@ -56,11 +63,15 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestModifyReviewPolicy(ModifyReviewPolicyRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL;
 
-        HttpEntity<ModifyReviewPolicyRequestDto> entity = new HttpEntity<>(request, Utils.makeHeader());
+        HttpEntity<ModifyReviewPolicyRequestDto> entity =
+                new HttpEntity<>(request, Utils.makeHeader());
 
         restTemplate.exchange(
                 url,
@@ -68,11 +79,16 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 entity,
                 Void.class
         );
+
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestModifyUsed(Integer policyNo) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL + "/" + policyNo + "/used";
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL
+                + "/" + policyNo + "/used";
 
         restTemplate.exchange(
                 url,

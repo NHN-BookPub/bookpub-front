@@ -78,7 +78,7 @@
                             <td th:text="${coupon.memberId}"></td>
                             <td th:text="${coupon.templateName}"></td>
                             <td><img class="img-fluid"
-                                     th:src="@{'data:image/*;base64,'+${coupon.templateImage}}" alt="이미지 없음"/>
+                                     th:src="${coupon.templateImage}" alt="이미지 없음"/>
                             </td>
                             <td th:if="${coupon.policyFixed}" th:text="'정액/할인가:' + ${coupon.policyPrice} + '원/최소주문금액:' + ${coupon.policyMinimum} + '원/최대할인가격:' + ${coupon.maxDiscount} + '원'"></td>
                             <td th:unless="${coupon.policyFixed}" th:text="'정률/할인율:' + ${coupon.policyPrice} + '%/최소주문금액:' + ${coupon.policyMinimum} + '원/최대할인가격:' + ${coupon.maxDiscount} + '원'"></td>

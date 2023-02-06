@@ -8,7 +8,7 @@ import java.util.List;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 마이페이지에서 회원의 상품평들을 조회하기 위한 Dto.
  *
  * @author : 정유진
  * @since : 1.0
@@ -21,7 +21,7 @@ public class GetMemberReviewResponseDto {
     private String productPublisher;
     private List<String> productAuthorNames = new ArrayList<>();
     private String productImagePath;
-    private Long reviewStar;
+    private Integer reviewStar;
     private String reviewContent;
     private String reviewImagePath;
     @JsonDeserialize(using = LocalDateTimeDeserializer.class)
