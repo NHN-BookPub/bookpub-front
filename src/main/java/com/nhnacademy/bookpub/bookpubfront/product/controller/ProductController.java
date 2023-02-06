@@ -35,7 +35,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping
 public class ProductController {
-
     private final ProductService productService;
     private final ReviewService reviewService;
     private final CategoryService categoryService;
