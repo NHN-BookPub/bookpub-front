@@ -11,6 +11,8 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <!-- Toast UI Editor -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 
     <script>
         var tagList = []
@@ -85,15 +87,15 @@
                             </div>
                         </div>
                         <div class="row">
-                            <div class="form-group" name="fileMap">
+                            <div class="form-group btn btn-light" name="fileMap">
                                 <span>썸네일</span>
                                 <input type="file" name="thumbnail">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group btn btn-light">
                                 <span>상세이미지</span>
                                 <input type="file" name="detail">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group btn btn-light">
                                 <span>e-book</span>
                                 <input type="file" name="ebook">
                             </div>
@@ -177,9 +179,12 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="addDescription">설명</label>
-                            <textarea class="form-control" id="addDescription" placeholder="설명"
-                                      name="productDescription"></textarea>
+                            <label>설명</label>
+                            <div id="editor"></div>
+                            <button type="button" class="btn btn-primary"
+                                    id="descriptionAdd" onclick="getDescription()">설명 저장</button>
+                            <textarea style="display: none" id="hiddenDes" name="productDescription" required></textarea>
+                            <div class="invalid-feedback">설명을 저장해주세요.</div>
                         </div>
 
                         <div class="row">
@@ -311,8 +316,25 @@
 
 </div>
 
-</body>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
+<script>
+    const Editor = toastui.Editor;
+
+    const editor = new Editor({
+        el: document.querySelector('#editor'),
+        height: '300px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical'
+    });
+
+    function getDescription() {
+        let hiddenDes = document.getElementById("hiddenDes");
+        hiddenDes.textContent = editor.getMarkdown();
+    }
+
+</script>
+</body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 </html>

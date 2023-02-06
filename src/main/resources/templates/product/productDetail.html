@@ -13,6 +13,7 @@
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link href="/static/css/review/star.css" rel="stylesheet"/>
 
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css" />
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -226,7 +227,8 @@
                 <img style="width: 100%; height: 100%; object-fit: cover;" th:src="@{${product.getDetail()}}" alt="No image">
             </span>
 
-            <p th:text="${product.productDescription}" style="font-size: 18px; padding-top: 20px;"></p>
+<!--            <p th:text="${product.productDescription}" style="font-size: 18px; padding-top: 20px;"></p>-->
+            <div id="viewer"></div>
         </div>
 
     </div>
@@ -307,7 +309,7 @@
     </div>
 
 </div>
-
+<p id="editor-hidden" style="display: none" th:text="${product.productDescription}"></p>
 <!-- FOOTER -->
 <th:block th:include="main/fragments/rootFooter"></th:block>
 <!-- /FOOTER -->
@@ -323,6 +325,7 @@
 <script src="/static/js/main/main.js"></script>
 <script src="/static/js/review/product-review.js"></script>
 
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
 <script>
     const productNo = $('#productNo').text();
 
@@ -351,5 +354,15 @@
             })
         });
     });
+
+    const Editor = toastui.Editor;
+
+    const viewer = new Editor({
+        el: document.querySelector('#viewer'),
+        viewer: true
+    });
+
+    let elem = document.getElementById('editor-hidden');
+    viewer.setMarkdown(elem.textContent);
 </script>
 </html>
