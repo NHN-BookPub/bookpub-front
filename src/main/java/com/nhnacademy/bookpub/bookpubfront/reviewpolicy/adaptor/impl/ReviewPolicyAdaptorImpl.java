@@ -42,8 +42,6 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 }
         );
 
-        Utils.checkError(response);
-
         return response.getBody();
     }
 
@@ -63,7 +61,6 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 entity,
                 Void.class
         );
-        Utils.checkError(response);
     }
 
     /**
@@ -82,8 +79,6 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 entity,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -100,8 +95,5 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );
-
-        Utils.checkError(response);
-
     }
 }
