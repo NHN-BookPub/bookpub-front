@@ -40,12 +40,10 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
         HttpEntity<CreateCouponPolicyRequestDto> httpEntity =
                 new HttpEntity<>(createRequestDto, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(url,
+        restTemplate.exchange(url,
                 HttpMethod.POST,
                 httpEntity,
                 Void.class);
-
-        Utils.checkError(response);
     }
 
     /**
@@ -59,12 +57,10 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
         HttpEntity<ModifyCouponPolicyRequestDto> httpEntity =
                 new HttpEntity<>(modifyRequestDto, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(url,
+        restTemplate.exchange(url,
                 HttpMethod.PUT,
                 httpEntity,
                 Void.class);
-
-        Utils.checkError(response);
     }
 
     /**
@@ -78,8 +74,6 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
                 HttpMethod.GET,
                 new HttpEntity<>(Utils.makeHeader()),
                 GetCouponPolicyResponseDto.class);
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -96,8 +90,6 @@ public class CouponPolicyAdaptorImpl implements CouponPolicyAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
-
-        Utils.checkError(response);
 
         return response.getBody();
     }

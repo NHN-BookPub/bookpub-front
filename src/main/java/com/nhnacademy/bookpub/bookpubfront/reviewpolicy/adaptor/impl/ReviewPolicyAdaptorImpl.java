@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -40,8 +39,6 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 }
         );
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -51,14 +48,12 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
 
         HttpEntity<CreateReviewPolicyRequestDto> entity = new HttpEntity<>(request, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
-        checkError(response);
     }
 
     @Override
@@ -67,41 +62,23 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
 
         HttpEntity<ModifyReviewPolicyRequestDto> entity = new HttpEntity<>(request, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 entity,
                 Void.class
         );
-
-        checkError(response);
     }
 
     @Override
     public void requestModifyUsed(Integer policyNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL + "/" + policyNo + "/used";
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-    }
-
-    /**
-     * 에러 체크를 위한 메소드입니다.
-     *
-     * @param response
-     * @param <T>
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
     }
 }

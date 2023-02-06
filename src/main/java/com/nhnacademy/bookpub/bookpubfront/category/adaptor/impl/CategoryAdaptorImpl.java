@@ -27,7 +27,6 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class CategoryAdaptorImpl implements CategoryAdaptor {
-
     private final GateWayConfig gateWayConfig;
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
@@ -45,15 +44,11 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
 
         String request = objectMapper.writeValueAsString(createCategoryRequestDto);
 
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_AUTH_URI;
+        String url = GateWayConfig.getGatewayUrl() + CATEGORY_AUTH_URI;
 
         HttpEntity<String> httpEntity = new HttpEntity<>(request, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.POST, httpEntity,
-                Void.class);
-
-        Utils.checkError(response);
-
+        restTemplate.exchange(url, HttpMethod.POST, httpEntity, Void.class);
     }
 
     /**
@@ -68,10 +63,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
 
         HttpEntity<String> httpEntity = new HttpEntity<>(request, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(url, HttpMethod.PUT, httpEntity,
-                Void.class);
-
-        Utils.checkError(response);
+        restTemplate.exchange(url, HttpMethod.PUT, httpEntity, Void.class);
     }
 
     /**
@@ -88,7 +80,6 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        Utils.checkError(response);
         return response.getBody();
     }
 
@@ -105,7 +96,6 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        Utils.checkError(response);
         return response.getBody();
     }
 
@@ -122,7 +112,6 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        Utils.checkError(response);
         return response.getBody();
     }
 
@@ -139,7 +128,6 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        Utils.checkError(response);
         return response.getBody();
     }
 }

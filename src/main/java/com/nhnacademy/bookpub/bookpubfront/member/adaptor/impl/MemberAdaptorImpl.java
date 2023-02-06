@@ -1,6 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.member.adaptor.impl;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -386,7 +385,6 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 Integer.class
         );
 
-        checkError(response);
         return response.getBody();
     }
 }

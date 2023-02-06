@@ -10,14 +10,10 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequ
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletRequestWrapper;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -27,8 +23,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -53,19 +47,6 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestCreateProduct(CreateProductRequestDto requestDto,
                                      Map<String, MultipartFile> fileMap) {
-        ServletRequestAttributes servletRequestAttributes =
-                (ServletRequestAttributes) RequestContextHolder.currentRequestAttributes();
-        HttpServletRequest servletRequest = servletRequestAttributes.getRequest();
-
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-        headers.setAccept(List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON));
-
-        String accessToken = (String) servletRequest.getAttribute(JwtUtil.AUTH_HEADER);
-        if (Objects.nonNull(accessToken)) {
-            headers.add(JwtUtil.AUTH_HEADER, accessToken);
-        }
-
         String url = GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI;
 
         MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
@@ -74,16 +55,17 @@ public class ProductAdaptorImpl implements ProductAdaptor {
         mapRequest.add("detail", fileMap.get("detail").getResource());
         mapRequest.add("ebook", fileMap.get("ebook").getResource());
 
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(mapRequest, headers);
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(mapRequest,
+                        makeHeader(MediaType.MULTIPART_FORM_DATA,
+                                List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON)));
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -116,14 +98,12 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                                 + productNo)
                 .encode().toUriString();
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**

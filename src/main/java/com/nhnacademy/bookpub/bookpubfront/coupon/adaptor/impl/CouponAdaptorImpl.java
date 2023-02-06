@@ -1,6 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -43,14 +42,12 @@ public class CouponAdaptorImpl implements CouponAdaptor {
 
         HttpEntity<CreateCouponRequestDto> entity =
                 new HttpEntity<>(createRequestDto, makeHeader());
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
-        checkError(response);
     }
 
     /**
@@ -76,8 +73,6 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 }
         );
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -101,8 +96,6 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -125,8 +118,6 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
-
-        checkError(response);
 
         return response.getBody();
     }
@@ -162,14 +153,11 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 .queryParam("tierCoupons", tierCoupons)
                 .encode().toUriString();
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-
     }
 }
