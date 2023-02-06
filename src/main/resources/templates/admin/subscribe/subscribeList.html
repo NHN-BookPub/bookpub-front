@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>구독상품리스트</title>
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">구독 목록</h1>
+                <ol class="breadcrumb mb-4">
+                    회원 목록 관리
+                </ol>
+
+                <hr/>
+
+                <div>
+                    <table class="table table-striped">
+                    </table>
+                </div>
+            </div>
+        </main>
+        <th:block th:include="admin/fragments/adminFooter"/>
+    </div>
+</div>
+</body>
+</html>
