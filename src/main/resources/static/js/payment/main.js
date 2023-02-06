@@ -5,8 +5,8 @@ function paymentBtn(method, toss, order) {
 
     tossPayments.requestPayment(method, {
         amount: order.totalAmount,
-        orderId: "orderIdOrderId",
-        orderName: "orderName",
+        orderId: order.orderId,
+        orderName: order.orderName,
         successUrl: toss.successUrl,
         failUrl: toss.failUrl
     })

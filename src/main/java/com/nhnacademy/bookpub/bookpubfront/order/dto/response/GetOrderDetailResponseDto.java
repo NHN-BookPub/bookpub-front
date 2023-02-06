@@ -35,4 +35,6 @@ public class GetOrderDetailResponseDto {
     private Long pointAmount;
     private Long couponAmount;
     private Long totalAmount;
+    private String orderName;
+    private String orderId;
 }
