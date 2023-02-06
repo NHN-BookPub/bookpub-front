@@ -19,21 +19,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReviewPolicyServiceImpl implements ReviewPolicyService {
     private final ReviewPolicyAdaptor reviewPolicyAdaptor;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetReviewPolicyResponseDto> getReviewPolicies() {
         return reviewPolicyAdaptor.requestReviewPolicies();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createReviewPolicy(CreateReviewPolicyRequestDto request) {
         reviewPolicyAdaptor.requestCreateReviewPolicy(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyReviewPolicy(ModifyReviewPolicyRequestDto request) {
         reviewPolicyAdaptor.requestModifyReviewPolicy(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyReviewPolicyUsed(Integer policyNo) {
         reviewPolicyAdaptor.requestModifyUsed(policyNo);

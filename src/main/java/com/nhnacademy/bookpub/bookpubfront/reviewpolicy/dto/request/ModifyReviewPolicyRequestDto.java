@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 상품평 정책 수정을 위한 Dto.
  *
  * @author : 정유진
  * @since : 1.0

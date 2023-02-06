@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.admin.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final MemberService memberService;
+    @Auth
     @GetMapping
     public String adminIndex(Model model) {
         MemberStatisticsResponseDto memberStatisticsResponseDto = memberService.memberStatistics();

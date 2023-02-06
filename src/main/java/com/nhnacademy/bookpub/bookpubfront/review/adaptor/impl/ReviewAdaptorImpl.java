@@ -25,7 +25,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
 /**
- * Some description here.
+ * 상품평 어댑터 구현체입니다.
  *
  * @author : 정유진
  * @since : 1.0
@@ -35,9 +35,14 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class ReviewAdaptorImpl implements ReviewAdaptor {
     private final RestTemplate restTemplate;
     private static final String REVIEW_URL = "/api/reviews";
+    private static final String REVIEW_AUTH_URL = "/token/reviews";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public PageResponse<GetMemberReviewResponseDto> requestMemberReviews(Long memberNo, Pageable pageable) {
+    public PageResponse<GetMemberReviewResponseDto> requestMemberReviews(
+            Long memberNo, Pageable pageable) {
         String url = UriComponentsBuilder
                 .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_URL + "/member/" + memberNo)
                 .queryParam("page", pageable.getPageNumber())
@@ -58,8 +63,12 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public PageResponse<GetProductReviewResponseDto> requestProductReviews(Long productNo, Pageable pageable) {
+    public PageResponse<GetProductReviewResponseDto> requestProductReviews(
+            Long productNo, Pageable pageable) {
         String url = UriComponentsBuilder
                 .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_URL + "/product/" + productNo)
                 .queryParam("page", pageable.getPageNumber())
@@ -80,10 +89,15 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public PageResponse<GetProductSimpleResponseDto> requestMemberWritableReviews(Long memberNo, Pageable pageable) {
+    public PageResponse<GetProductSimpleResponseDto> requestMemberWritableReviews(
+            Long memberNo, Pageable pageable) {
         String url = UriComponentsBuilder
-                .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_URL + "/member/" + memberNo + "/writable")
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_URL
+                        + "/member/" + memberNo + "/writable")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -103,6 +117,9 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GetMemberReviewResponseDto requestReview(Long reviewNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo;
@@ -120,6 +137,9 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public GetProductReviewInfoResponseDto requestProductReviewInfo(Long productNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/info/product/" + productNo;
@@ -137,6 +157,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         return response.getBody();
     }
 
+    /**
+     *
+     * {@inheritDoc}
+     */
     @Override
     public void requestCreateReview(CreateReviewRequestDto request, Long memberNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL;
@@ -160,6 +184,9 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         Utils.checkError(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestDeleteReview(Long reviewNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo;
@@ -174,6 +201,9 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         Utils.checkError(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestDeleteReviewImage(Long reviewNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo + "/file";
@@ -188,6 +218,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         Utils.checkError(response);
     }
 
+    /**
+     * {@inheritDoc}
+     *
+     */
     @Override
     public void requestModifyReview(Long reviewNo, ModifyReviewRequestDto request) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo + "/content";

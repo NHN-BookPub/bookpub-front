@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -26,11 +25,14 @@ import org.springframework.web.client.RestTemplate;
 @RequiredArgsConstructor
 public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
     private final RestTemplate restTemplate;
-    private static final String REVIEW_POLICY_URL = "/api/review-policies";
+    private static final String REVIEW_POLICY_AUTH_URL = "/token/review-policies";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetReviewPolicyResponseDto> requestReviewPolicies() {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL;
 
         ResponseEntity<List<GetReviewPolicyResponseDto>> response = restTemplate.exchange(
                 url,
@@ -40,16 +42,20 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 }
         );
 
-        checkError(response);
+        Utils.checkError(response);
 
         return response.getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestCreateReviewPolicy(CreateReviewPolicyRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL;
 
-        HttpEntity<CreateReviewPolicyRequestDto> entity = new HttpEntity<>(request, Utils.makeHeader());
+        HttpEntity<CreateReviewPolicyRequestDto> entity =
+                new HttpEntity<>(request, Utils.makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -58,14 +64,18 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestModifyReviewPolicy(ModifyReviewPolicyRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL;
 
-        HttpEntity<ModifyReviewPolicyRequestDto> entity = new HttpEntity<>(request, Utils.makeHeader());
+        HttpEntity<ModifyReviewPolicyRequestDto> entity =
+                new HttpEntity<>(request, Utils.makeHeader());
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -74,12 +84,16 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 Void.class
         );
 
-        checkError(response);
+        Utils.checkError(response);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void requestModifyUsed(Integer policyNo) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_URL + "/" + policyNo + "/used";
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL
+                + "/" + policyNo + "/used";
 
         ResponseEntity<Void> response = restTemplate.exchange(
                 url,
@@ -88,20 +102,6 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 Void.class
         );
 
-        checkError(response);
-    }
-
-    /**
-     * 에러 체크를 위한 메소드입니다.
-     *
-     * @param response
-     * @param <T>
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
+        Utils.checkError(response);
     }
 }
