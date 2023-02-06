@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * Some description here.
+ * 상품평 정책 서비스 구현체입니다.
  *
  * @author : 정유진
  * @since : 1.0
