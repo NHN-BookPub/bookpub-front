@@ -79,6 +79,7 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
                 entity,
                 Void.class
         );
+
     }
 
     /**
