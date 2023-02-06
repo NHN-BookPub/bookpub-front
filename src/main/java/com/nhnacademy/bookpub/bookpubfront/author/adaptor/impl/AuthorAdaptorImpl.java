@@ -1,7 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.author.adaptor.impl;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
-
 import com.nhnacademy.bookpub.bookpubfront.author.adaptor.AuthorAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.author.dto.request.AddAuthorRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.author.dto.request.ModifyAuthorRequestDto;
@@ -15,7 +13,6 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -60,15 +57,12 @@ public class AuthorAdaptorImpl implements AuthorAdaptor {
     public void addAuthor(AddAuthorRequestDto request) {
         String url = GateWayConfig.getGatewayUrl() + AUTHOR_AUTH_URI;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(request, Utils.makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-
     }
 
     /**
@@ -81,15 +75,11 @@ public class AuthorAdaptorImpl implements AuthorAdaptor {
         RestModifyAuthorRequestDto dto = new RestModifyAuthorRequestDto(
                 request.getModifyAuthorName(), request.getModifyMainBook());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 new HttpEntity<>(dto, Utils.makeHeader()),
                 Void.class
         );
-
-        checkError(response);
-
     }
-
 }

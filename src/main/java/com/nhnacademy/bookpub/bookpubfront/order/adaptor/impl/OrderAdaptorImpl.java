@@ -1,6 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.order.adaptor.impl;
 
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -45,8 +44,6 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<Long> response =
                 restTemplate.exchange(url, HttpMethod.POST, httpEntity, Long.class);
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -56,7 +53,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
         String url =
-                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL)
+                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + ORDER_URL)
                         .queryParam("page", pageable.getPageNumber())
                         .queryParam("size", pageable.getPageSize())
                         .encode()
@@ -69,7 +66,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (PageResponse<GetOrderListForAdminResponseDto>) checkError(response).getBody();
+        return response.getBody();
     }
 
     @Override
@@ -77,7 +74,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
             Pageable pageable, Long memberNo) {
         String url =
                 UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL + "/member")
+                        GateWayConfig.getGatewayUrl() + ORDER_URL + "/member")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .queryParam("no", memberNo)
@@ -91,7 +88,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (PageResponse<GetOrderListResponseDto>) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -106,7 +103,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (GetOrderDetailResponseDto) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -116,13 +113,10 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
         String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/invoice?no=" + invoiceNo;
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url, HttpMethod.PUT,
-                        new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {
-                        });
-
-        checkError(response);
+        restTemplate.exchange(url, HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
     }
 
     /**
@@ -135,12 +129,10 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/state?no" + codeName;
 
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url, HttpMethod.PUT,
-                        new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {
-                        });
 
-        checkError(response);
+        restTemplate.exchange(url, HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
     }
 }

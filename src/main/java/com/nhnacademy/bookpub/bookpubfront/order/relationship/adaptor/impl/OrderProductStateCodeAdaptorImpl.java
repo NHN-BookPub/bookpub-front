@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.order.relationship.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.adaptor.OrderProductStateCodeAdaptor;
@@ -37,9 +36,10 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
                 restTemplate.exchange(ORDER_PRODUCT_URL,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
-        return (List<GetOrderProductStateCodeResponseDto>) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -52,9 +52,10 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
                 restTemplate.exchange(url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {});
+                        new ParameterizedTypeReference<>() {
+                        });
 
-        return (GetOrderProductStateCodeResponseDto) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -66,13 +67,10 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
         HttpEntity<CreateOrderProductStateCodeRequestDto> httpEntity =
                 new HttpEntity<>(requestDto, makeHeader());
 
-        ResponseEntity<Void> response =
-                restTemplate.exchange(ORDER_PRODUCT_URL,
-                        HttpMethod.POST,
-                        httpEntity,
-                        Void.class);
-
-        checkError(response);
+        restTemplate.exchange(ORDER_PRODUCT_URL,
+                HttpMethod.POST,
+                httpEntity,
+                Void.class);
     }
 
     /**
@@ -81,12 +79,9 @@ public class OrderProductStateCodeAdaptorImpl implements OrderProductStateCodeAd
     @Override
     public void modifyOrderProductStateCodeUsedRequest(Integer codeNo, boolean used) {
         String url = ORDER_PRODUCT_URL + "/" + codeNo + "?used=" + used;
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url,
-                        HttpMethod.PUT,
-                        new HttpEntity<>(makeHeader()),
-                        Void.class);
-
-        checkError(response);
+        restTemplate.exchange(url,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class);
     }
 }

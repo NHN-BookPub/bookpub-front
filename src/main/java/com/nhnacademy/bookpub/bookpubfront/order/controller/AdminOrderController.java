@@ -46,7 +46,7 @@ public class AdminOrderController {
      * @param orderNo 주문번호.
      * @return 주문상세 뷰를 반환합니다.
      */
-    @GetMapping()
+    @GetMapping
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder

@@ -41,8 +41,6 @@ public class CouponTypeAdaptorImpl implements CouponTypeAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        Utils.checkError(response);
-
         return response.getBody();
     }
 }

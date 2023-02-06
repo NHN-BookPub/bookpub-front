@@ -54,7 +54,6 @@ public class MemberOrderController {
      * @return 주문리스트 뷰를 반환합니다.
      */
     @GetMapping("/list")
-    @Auth
     public String orderListView(Model model, @PageableDefault Pageable pageable) {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder
@@ -76,7 +75,8 @@ public class MemberOrderController {
      * @param orderNo 주문번호.
      * @return 주문상세 뷰를 반환합니다.
      */
-    @GetMapping()
+    @GetMapping
+    @Auth
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder

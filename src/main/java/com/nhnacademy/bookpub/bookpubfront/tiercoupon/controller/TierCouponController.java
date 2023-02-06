@@ -88,6 +88,7 @@ public class TierCouponController {
      * @return 관리자 등급 쿠폰 페이지
      */
     @PostMapping("/admin/coupon/tier-coupons/delete")
+    @Auth
     public String deleteTierCoupon(@RequestParam Integer tierNo, @RequestParam Long templateNo) {
         tierCouponService.deleteTierCoupon(tierNo, templateNo);
 

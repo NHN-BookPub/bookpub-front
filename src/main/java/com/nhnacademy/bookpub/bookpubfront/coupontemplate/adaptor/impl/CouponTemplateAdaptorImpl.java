@@ -56,8 +56,6 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        Utils.checkError(response);
-
         return response.getBody();
     }
 
@@ -73,8 +71,6 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -92,14 +88,12 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
 
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, Utils.makeHeader(MediaType.MULTIPART_FORM_DATA));
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -115,15 +109,12 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
 
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, Utils.makeHeader(MediaType.MULTIPART_FORM_DATA));
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 entity,
                 Void.class
         );
-
-
-        Utils.checkError(response);
     }
 
     /**
@@ -145,9 +136,7 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
             response = HttpStatus.valueOf(e.getRawStatusCode());
         }
 
-        if (response.is2xxSuccessful())
-            return true;
-        else return false;
+        return response.is2xxSuccessful();
     }
 
     /**
@@ -162,8 +151,6 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 GetDownloadInfo.class
         );
-
-        Utils.checkError(response);
 
         return response.getBody();
     }

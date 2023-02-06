@@ -1,11 +1,13 @@
 package com.nhnacademy.bookpub.bookpubfront.product.relationship.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.request.CreateProductPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.request.ModifyProductPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.response.GetProductPolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.service.ProductPolicyService;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/admin/product/product-policies")
 @RequiredArgsConstructor
+@Slf4j
 public class AdminProductPolicyController {
     private final ProductPolicyService productPolicyService;
 
@@ -48,6 +51,7 @@ public class AdminProductPolicyController {
      * @param createRequestDto 등록할 상품 정책 정보를 담은 dto
      * @return 상품정책 페이지로 리다이렉트
      */
+    @Auth
     @PostMapping
     public String productPolicyAdd(@ModelAttribute CreateProductPolicyRequestDto createRequestDto) {
         productPolicyService.createProductPolicy(createRequestDto);
@@ -63,6 +67,7 @@ public class AdminProductPolicyController {
      * @return 상품정책 페이지로 리다이렉트
      */
     @PostMapping("/modify")
+    @Auth
     public String productPolicyModify(@RequestParam("policyNo") Integer policyNo,
                                       @ModelAttribute
                                       ModifyProductPolicyRequestDto modifyRequestDto) {

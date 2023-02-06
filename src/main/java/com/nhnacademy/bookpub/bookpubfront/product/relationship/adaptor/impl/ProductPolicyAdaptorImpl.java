@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.product.relationship.adaptor.impl;
 
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
+
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.adaptor.ProductPolicyAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.request.CreateProductPolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.request.ModifyProductPolicyRequestDto;
@@ -11,7 +12,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
@@ -25,10 +25,8 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class ProductPolicyAdaptorImpl implements ProductPolicyAdaptor {
-
-    private final GateWayConfig gateWayConfig;
-
     private final RestTemplate restTemplate;
+    private static final String AUTH_POLICY_URI = "/token/policy/product";
     private static final String PRODUCT_POLICY_URI = "/api/policy/product";
 
     /**
@@ -36,7 +34,7 @@ public class ProductPolicyAdaptorImpl implements ProductPolicyAdaptor {
      */
     @Override
     public List<GetProductPolicyResponseDto> getProductPolicies() {
-        String url = gateWayConfig.getGatewayUrl() + PRODUCT_POLICY_URI;
+        String url = getGatewayUrl() + PRODUCT_POLICY_URI;
 
         ResponseEntity<List<GetProductPolicyResponseDto>> response =
                 restTemplate.exchange(
@@ -47,8 +45,6 @@ public class ProductPolicyAdaptorImpl implements ProductPolicyAdaptor {
                         }
                 );
 
-        checkError(response);
-
         return response.getBody();
     }
 
@@ -57,16 +53,14 @@ public class ProductPolicyAdaptorImpl implements ProductPolicyAdaptor {
      */
     @Override
     public void createProductPolicy(CreateProductPolicyRequestDto createRequestDto) {
-        String url = gateWayConfig.getGatewayUrl() + PRODUCT_POLICY_URI;
+        String url = getGatewayUrl() + AUTH_POLICY_URI;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(createRequestDto, Utils.makeHeader()),
                 Void.class
         );
-
-        checkError(response);
     }
 
     /**
@@ -75,27 +69,13 @@ public class ProductPolicyAdaptorImpl implements ProductPolicyAdaptor {
     @Override
     public void modifyProductPolicy(Integer policyNo,
                                     ModifyProductPolicyRequestDto modifyRequestDto) {
-        String url = gateWayConfig.getGatewayUrl() + PRODUCT_POLICY_URI + "/" + policyNo;
+        String url = getGatewayUrl() + AUTH_POLICY_URI + "/" + policyNo;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 new HttpEntity<>(modifyRequestDto, Utils.makeHeader()),
                 Void.class
         );
-    }
-
-    /**
-     * 4xx or 5xx 상태코드 응답을 처리하기 위한 메서드.
-     *
-     * @param response API 응답
-     * @param <T>      모든 객체
-     */
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus status = response.getStatusCode();
-
-        if (status.is4xxClientError() || status.is5xxServerError()) {
-            throw new RuntimeException();
-        }
     }
 }
