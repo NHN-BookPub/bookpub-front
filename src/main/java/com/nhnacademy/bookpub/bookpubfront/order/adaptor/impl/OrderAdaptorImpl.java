@@ -72,13 +72,12 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
             Pageable pageable, Long memberNo) {
-        String url =
-                UriComponentsBuilder.fromHttpUrl(
-                                GateWayConfig.getGatewayUrl() + ORDER_URL + "/member/" + memberNo)
-                        .queryParam("page", pageable.getPageNumber())
-                        .queryParam("size", pageable.getPageSize())
-                        .encode()
-                        .toUriString();
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL + "/member/" + memberNo)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
 
         ResponseEntity<PageResponse<GetOrderListResponseDto>> response =
                 restTemplate.exchange(url,
