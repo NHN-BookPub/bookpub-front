@@ -17,7 +17,7 @@ public class CustomExceptionAdvice {
 
     @ExceptionHandler(NotFoundException.class)
     public String notFound() {
-        return "exception/404";
+        return "error/404";
     }
 
     @ExceptionHandler(UnAuthorizedException.class)
