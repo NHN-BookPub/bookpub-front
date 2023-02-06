@@ -35,7 +35,6 @@ public class PricePolicyController {
      * @return 가격정책 메인.
      */
     @GetMapping
-    @Auth
     public String pricePolicyView(Model model) {
         model.addAttribute("policies", pricePolicyService.getPricePolicies());
 
