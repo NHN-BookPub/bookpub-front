@@ -5,7 +5,9 @@ import com.nhnacademy.bookpub.bookpubfront.category.dto.request.CreateCategoryRe
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
+import org.springframework.data.domain.Pageable;
 
 /**
  * 카테고리를 다루기 위한 Service 인터페이스입니다.
@@ -36,9 +38,9 @@ public interface CategoryService {
     /**
      * 전체 카테고리 조회하는 메소드.
      *
-     * @return 전체 카테고리 반환.
+     * @return 카레고리 리스트 페이지.
      */
-    List<GetCategoryResponseDto> getCategories();
+    PageResponse<GetCategoryResponseDto> getCategories(Pageable pageable);
 
     /**
      * 최상위 카테고리 조회하는 메소드.

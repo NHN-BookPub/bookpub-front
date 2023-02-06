@@ -8,10 +8,12 @@ import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRe
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +29,7 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class CategoryAdaptorImpl implements CategoryAdaptor {
-    private final GateWayConfig gateWayConfig;
+
     private final ObjectMapper objectMapper;
     private final RestTemplate restTemplate;
 
@@ -59,7 +61,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
             throws JsonProcessingException {
 
         String request = objectMapper.writeValueAsString(modifyCategoryRequestDto);
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_AUTH_URI;
+        String url = GateWayConfig.getGatewayUrl() + CATEGORY_AUTH_URI;
 
         HttpEntity<String> httpEntity = new HttpEntity<>(request, Utils.makeHeader());
 
@@ -70,11 +72,11 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public List<GetCategoryResponseDto> requestCategoryList() {
+    public PageResponse<GetCategoryResponseDto> requestCategoryList(Pageable pageable) {
 
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI;
+        String url = GateWayConfig.getGatewayUrl() + CATEGORY_URI;
 
-        ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
+        ResponseEntity<PageResponse<GetCategoryResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<>() {
@@ -88,7 +90,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
      */
     @Override
     public List<GetCategoryResponseDto> requestParentCategoryList() {
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent";
+        String url = GateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent";
 
         ResponseEntity<List<GetCategoryResponseDto>> response = restTemplate.exchange(url,
                 HttpMethod.GET,
@@ -105,7 +107,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
     @Override
     public GetCategoryResponseDto requestCategory(Integer categoryNo) {
 
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/" + categoryNo;
+        String url = GateWayConfig.getGatewayUrl() + CATEGORY_URI + "/" + categoryNo;
 
         ResponseEntity<GetCategoryResponseDto> response = restTemplate.exchange(url, HttpMethod.GET,
                 new HttpEntity<>(Utils.makeHeader()),
@@ -120,7 +122,7 @@ public class CategoryAdaptorImpl implements CategoryAdaptor {
      */
     @Override
     public List<GetParentCategoryWithChildrenResponseDto> requestParentWithChildList() {
-        String url = gateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent-child";
+        String url = GateWayConfig.getGatewayUrl() + CATEGORY_URI + "/parent-child";
 
         ResponseEntity<List<GetParentCategoryWithChildrenResponseDto>> response = restTemplate
                 .exchange(url, HttpMethod.GET,

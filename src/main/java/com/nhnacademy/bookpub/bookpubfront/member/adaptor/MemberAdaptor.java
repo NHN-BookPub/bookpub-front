@@ -63,6 +63,14 @@ public interface MemberAdaptor {
     MemberDetailResponseDto requestMemberDetails(Long memberNo);
 
     /**
+     * 인가된 멤버의 상세정보를 받기위하여 쓰이는 메서드입니다.
+     *
+     * @param memberNo 멤버 번호가 기입
+     * @return 멤버의 상세 정보가 반환됩니다.
+     */
+    MemberDetailResponseDto requestTokenMemberDetails(Long memberNo);
+
+    /**
      * 페이징 정보가 담긴 멤버들이 반환.
      *
      * @param pageable 페이징 정보 기입.

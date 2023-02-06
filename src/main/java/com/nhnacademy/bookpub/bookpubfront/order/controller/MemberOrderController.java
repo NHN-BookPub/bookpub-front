@@ -54,6 +54,7 @@ public class MemberOrderController {
      * @return 주문리스트 뷰를 반환합니다.
      */
     @GetMapping("/list")
+    @Auth
     public String orderListView(Model model, @PageableDefault Pageable pageable) {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder
@@ -61,7 +62,7 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
-        model.addAttribute(MEMBER, memberService.getMember(memberNo));
+        model.addAttribute(MEMBER, memberService.getTokenMember(memberNo));
         model.addAttribute("orderList", orderService.getOrderListByMemberNo(memberNo, pageable));
         model.addAttribute("nowPage", pageable.getPageNumber());
 
@@ -76,7 +77,6 @@ public class MemberOrderController {
      * @return 주문상세 뷰를 반환합니다.
      */
     @GetMapping
-    @Auth
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder
@@ -84,7 +84,7 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
-        model.addAttribute(MEMBER, memberService.getMember(memberNo));
+        model.addAttribute(MEMBER, memberService.getApiMember(memberNo));
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "mypage/orderDetail";
@@ -105,7 +105,7 @@ public class MemberOrderController {
 
         if (!principal.equals("anonymousUser")) {
             MemberDetailResponseDto member
-                    = memberService.getMember(Long.parseLong(principal));
+                    = memberService.getApiMember(Long.parseLong(principal));
             isLoginUser = true;
             model.addAttribute(MEMBER, member);
         }
