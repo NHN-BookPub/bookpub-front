@@ -265,14 +265,15 @@ function applyCouponOrder() {
     var resultList = []
     let totalSalePrice = 0;
 
-    $('input[name="order-product"]').each(function (i) {
+    $('input[name="order-product"]').each(function () {
         productList.push($(this).val());
     });
-    $('input[name="coupon-apply"]').each(function (i) {
+    $('input[name="coupon-apply"]').each(function () {
         couponList.push($(this).val());
     });
 
     for (var i = 0; i < productList.length; i++) {
+        resultList.push(productList[i]+"- ");
         for (var j = 0; j < couponList.length; j++) {
             if (couponList[j] === "") {
                 continue;
@@ -282,7 +283,7 @@ function applyCouponOrder() {
 
             if (productNo === couponParsingProductNo) {
                 let couponInfo = couponList[i].split("-")[1]
-                resultList.push(productList[i] + "-" + couponInfo);
+                resultList[i] = (resultList[i] + couponInfo);
 
                 totalSalePrice += parseInt(couponInfo.split("|")[2])
                 break;
@@ -318,6 +319,8 @@ function amountLogicCheck_coupon(totalSalePrice) {
 }
 
 function finalLogic() {
+    applyCouponOrder();
+
     let pointResult = document.getElementById("pointAmount")
     let couponResult = document.getElementById("couponAmount")
     let totalResult = document.getElementById("totalPrice")

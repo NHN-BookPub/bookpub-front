@@ -135,7 +135,7 @@ public class MemberOrderController {
      * @return 결제페이지.
      */
     @PostMapping("/order")
-    public String orderComplete(@RequestParam(value = "productCoupon") List<String> productInfo,
+    public String orderComplete(@RequestParam(value = "productCoupon") String productInfo,
                                 @ModelAttribute OrderFormRequestDto requestDto) {
         Long orderNo = orderService.createOrder(requestDto, productInfo);
 
