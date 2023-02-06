@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.review.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductSimpleResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.review.adaptor.ReviewAdaptor;
@@ -9,7 +10,6 @@ import com.nhnacademy.bookpub.bookpubfront.review.dto.response.GetMemberReviewRe
 import com.nhnacademy.bookpub.bookpubfront.review.dto.response.GetProductReviewInfoResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.review.dto.response.GetProductReviewResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
-import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -53,12 +53,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         ResponseEntity<PageResponse<GetMemberReviewResponseDto>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 }
         );
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -79,12 +77,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         ResponseEntity<PageResponse<GetProductReviewResponseDto>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 }
         );
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -107,12 +103,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         ResponseEntity<PageResponse<GetProductSimpleResponseDto>> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 }
         );
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -127,12 +121,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         ResponseEntity<GetMemberReviewResponseDto> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 }
         );
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -147,12 +139,10 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
         ResponseEntity<GetProductReviewInfoResponseDto> response = restTemplate.exchange(
                 url,
                 HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 }
         );
-
-        Utils.checkError(response);
 
         return response.getBody();
     }
@@ -165,23 +155,19 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
     public void requestCreateReview(CreateReviewRequestDto request, Long memberNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL;
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
-
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("createRequestDto", request.transform(memberNo));
         body.add("image", request.getReviewImage().getResource());
 
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(body, makeHeader(MediaType.MULTIPART_FORM_DATA));
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -191,14 +177,12 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
     public void requestDeleteReview(Long reviewNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo;
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -208,14 +192,12 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
     public void requestDeleteReviewImage(Long reviewNo) {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo + "/file";
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 
     /**
@@ -235,13 +217,11 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
 
         HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 entity,
                 Void.class
         );
-
-        Utils.checkError(response);
     }
 }

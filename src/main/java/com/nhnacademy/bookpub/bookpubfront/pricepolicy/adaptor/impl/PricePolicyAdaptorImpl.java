@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.pricepolicy.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
-import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.checkError;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.adaptor.PricePolicyAdaptor;
@@ -37,29 +36,13 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     @Override
     public List<GetPricePolicyResponseDto> getAllPricePolicyCodeRequest() {
         ResponseEntity<List<GetPricePolicyResponseDto>> response =
-                restTemplate.exchange(AUTH_ORDER_PRODUCT_URL,
+                restTemplate.exchange(ORDER_PRODUCT_URL,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (List<GetPricePolicyResponseDto>) checkError(response).getBody();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GetPricePolicyResponseDto getPricePolicyByCodeNoRequest(Integer codeNo) {
-        String url = ORDER_PRODUCT_URL + "/" + codeNo;
-        ResponseEntity<GetPricePolicyResponseDto> response =
-                restTemplate.exchange(url,
-                        HttpMethod.GET,
-                        new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {
-                        });
-
-        return (GetPricePolicyResponseDto) checkError(response).getBody();
+        return response.getBody();
     }
 
     /**
@@ -69,28 +52,10 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
     public void createOrderStateCodeRequest(CreatePricePolicyRequestDto requestDto) {
         HttpEntity<CreatePricePolicyRequestDto> httpEntity =
                 new HttpEntity<>(requestDto, makeHeader());
-        ResponseEntity<Void> response =
-                restTemplate.exchange(ORDER_PRODUCT_URL,
-                        HttpMethod.POST,
-                        httpEntity,
-                        Void.class);
-
-        checkError(response);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void modifyPricePolicyFeeUsedRequest(Integer codeNo, Long fee) {
-        String url = AUTH_ORDER_PRODUCT_URL + "/" + codeNo + "?fee=" + fee;
-        ResponseEntity<Void> response =
-                restTemplate.exchange(url,
-                        HttpMethod.PUT,
-                        new HttpEntity<>(makeHeader()),
-                        Void.class);
-
-        checkError(response);
+        restTemplate.exchange(AUTH_ORDER_PRODUCT_URL,
+                HttpMethod.POST,
+                httpEntity,
+                Void.class);
     }
 
     /**
@@ -107,7 +72,7 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
                         new ParameterizedTypeReference<>() {
                         });
 
-        return (List<GetPricePolicyResponseDto>) checkError(response).getBody();
+        return response.getBody();
     }
 
     @Override
@@ -120,6 +85,4 @@ public class PricePolicyAdaptorImpl implements PricePolicyAdaptor {
                 }
         ).getBody();
     }
-
-
 }

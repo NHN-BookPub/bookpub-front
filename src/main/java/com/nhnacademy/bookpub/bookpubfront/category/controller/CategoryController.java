@@ -6,8 +6,11 @@ import com.nhnacademy.bookpub.bookpubfront.category.dto.request.CreateCategoryRe
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.service.CategoryService;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,16 +34,25 @@ public class CategoryController {
     /**
      * 관리자가 카테고리 메인 페이지(카테고리 리스트 조회)로 갈 수 있도록 한다.
      *
-     * @param model view 로 정보를 보내는 request
-     * @return 카테고리 메인 페이지
+     * @param model    view 로 정보를 보내는 request
+     * @param pageable 페이지
+     * @return 카테고리 관리자 페이지
      */
     @Auth
     @GetMapping
-    public String categoryList(Model model) {
-        List<GetCategoryResponseDto> categories = categoryService.getCategories();
+    public String categoryList(Model model, @PageableDefault Pageable pageable) {
+        PageResponse<GetCategoryResponseDto> categories = categoryService.getCategories(pageable);
+        List<GetCategoryResponseDto> categoryList = categories.getContent();
+
         List<GetCategoryResponseDto> parentCategories = categoryService.getParentCategories();
         model.addAttribute("parentCategories", parentCategories);
-        model.addAttribute("categories", categories);
+        model.addAttribute("categoryList", categoryList);
+        model.addAttribute("totalPages", categories.getTotalPages());
+        model.addAttribute("currentPage", categories.getNumber());
+        model.addAttribute("isNext", categories.isNext());
+        model.addAttribute("isPrevious", categories.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
+
         return "admin/category/categoryIndex";
     }
 

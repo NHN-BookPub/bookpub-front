@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class AdminOrderController {
      * @return 주문 리스트 뷰.
      */
     @GetMapping("/list")
+    @Auth
     public String adminOrderView(Model model, @PageableDefault Pageable pageable) {
         model.addAttribute("orderList", orderService.getOrderList(pageable));
 
@@ -46,7 +48,7 @@ public class AdminOrderController {
      * @param orderNo 주문번호.
      * @return 주문상세 뷰를 반환합니다.
      */
-    @GetMapping()
+    @GetMapping
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         Long memberNo = Long.parseLong(
                 (String) SecurityContextHolder
@@ -54,7 +56,7 @@ public class AdminOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
-        model.addAttribute("member", memberService.getMember(memberNo));
+        model.addAttribute("member", memberService.getApiMember(memberNo));
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "admin/order/adminOrderDetail";

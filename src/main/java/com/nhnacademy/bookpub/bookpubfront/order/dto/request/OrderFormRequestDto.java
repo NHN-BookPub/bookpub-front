@@ -21,7 +21,7 @@ public class OrderFormRequestDto {
     private String roadAddress;
     private String addressDetail;
     private String receivedAt;
-    private boolean packaged;
+    private Boolean packaged;
     private String orderRequest;
     private Long pointAmount;
     private Long couponAmount;

@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.pricepolicy.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.request.CreatePricePolicyRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
 import com.nhnacademy.bookpub.bookpubfront.state.PricePolicyState;
@@ -66,6 +67,7 @@ public class PricePolicyController {
      * @return 가격정책 메인페이지로 돌아갑니다.
      */
     @PostMapping
+    @Auth
     public String addPricePolicy(@ModelAttribute CreatePricePolicyRequestDto pricePolicyDto) {
         pricePolicyService.createPricePolicy(pricePolicyDto);
 

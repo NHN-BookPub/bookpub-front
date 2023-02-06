@@ -7,7 +7,7 @@ function tierCheck() {
         data: {"tierName": tierName},
         url: "/tier-check",
         success: function (result) {
-            if (result === true) {
+            if (result === false) {
                 alert("사용할 수 있는 등급입니다.")
                 document.getElementById("tier-add-submit")
                     .disabled = false;

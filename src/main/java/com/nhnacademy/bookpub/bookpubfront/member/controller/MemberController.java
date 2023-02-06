@@ -123,7 +123,7 @@ public class MemberController {
      */
     @PostMapping("/oauth/signup")
     public String oauthSignupComplete(@Valid OauthMemberCreateRequestDto signupMemberRequestDto,
-            Model model) {
+                                      Model model) {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
 
@@ -143,7 +143,7 @@ public class MemberController {
     @Auth
     public String adminMemberInfo(@PathVariable("memberNo") Long memberNo,
                                   Model model) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
 
         model.addAttribute(MEMBER, member);
 
@@ -173,10 +173,10 @@ public class MemberController {
      * @param model    모델.
      * @return 멤버의 개인정보 페이지로 이동.
      */
-    @Auth
     @GetMapping("/members/{memberNo}")
+    @Auth
     public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
         return "mypage/memberInfo";
     }
@@ -189,12 +189,11 @@ public class MemberController {
      * @param model    모델
      * @return 멤버의 사용 가능 쿠폰함 페이지로 이동.
      */
-    @Auth
     @GetMapping("/members/{memberNo}/coupon/positive")
+    @Auth
     public String memberCouponList(@PathVariable("memberNo") Long memberNo,
-            @PageableDefault Pageable pageable, Model model,
-            @RequestParam(name = "type", required = false) String type) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+                                   @PageableDefault Pageable pageable, Model model) {
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
 
         PageResponse<GetCouponResponseDto> positiveCoupons = couponService.getPositiveCoupons(
@@ -221,9 +220,8 @@ public class MemberController {
     @Auth
     @GetMapping("/members/{memberNo}/coupon/negative")
     public String memberCouponListNegative(@PathVariable("memberNo") Long memberNo,
-            @PageableDefault Pageable pageable, Model model,
-            @RequestParam(name = "type", required = false) String type) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+                                           @PageableDefault Pageable pageable, Model model) {
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
 
         PageResponse<GetCouponResponseDto> negativeCoupons = couponService.getNegativeCoupons(

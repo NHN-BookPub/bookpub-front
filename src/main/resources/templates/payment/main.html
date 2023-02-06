@@ -36,6 +36,7 @@
             }
         }
     </script>
+    <script src="../../static/js/order/order.js"></script>
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
@@ -63,7 +64,7 @@
                             <tbody>
                             <tr>
                                 <td class="order-index">주문상품</td>
-                                <td class="order-content">해리포터 외 4권</td>
+                                <td class="order-content" th:text="${order.orderName}"></td>
                             </tr>
                             <tr>
                                 <td class="order-index">주문인</td>
@@ -99,7 +100,7 @@
                                     <p class="label2">총 결제금액</p>
                                     <div class="right_box">
                                     <span class="price">
-                                        <span class="val spot" id="commodity" th:text="${order.totalAmount}"></span>
+                                        <span class="val spot" id="total-amount" th:text="${order.totalAmount}"></span>
                                         <span class="unit">원</span>
                                     </span>
                                     </div>

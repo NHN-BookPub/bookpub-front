@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.tag.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.tag.adaptor.TagAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.tag.dto.AddTagRequestDto;
@@ -10,11 +11,7 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
@@ -27,9 +24,9 @@ import org.springframework.web.client.RestTemplate;
 @Component
 @RequiredArgsConstructor
 public class TagAdaptorImpl implements TagAdaptor {
-
     private final RestTemplate restTemplate;
     private static final String TOKEN_API_PATH = getGatewayUrl() + "/token/tags";
+    private static final String TAG_API_PATH = getGatewayUrl() + "/api/tags";
 
     /**
      * {@inheritDoc}
@@ -37,10 +34,11 @@ public class TagAdaptorImpl implements TagAdaptor {
     @Override
     public List<GetTagResponseDto> getTags() {
         return restTemplate.exchange(
-                        TOKEN_API_PATH,
+                        TAG_API_PATH,
                         HttpMethod.GET,
-                        new HttpEntity<>(makeHeaders()),
-                        new ParameterizedTypeReference<List<GetTagResponseDto>>() {})
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<List<GetTagResponseDto>>() {
+                        })
                 .getBody();
     }
 
@@ -49,14 +47,12 @@ public class TagAdaptorImpl implements TagAdaptor {
      */
     @Override
     public void addTag(AddTagRequestDto request) {
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 TOKEN_API_PATH,
                 HttpMethod.POST,
-                new HttpEntity<>(request, makeHeaders()),
+                new HttpEntity<>(request, makeHeader()),
                 Void.class
         );
-
-        checkError(response);
     }
 
     /**
@@ -64,14 +60,12 @@ public class TagAdaptorImpl implements TagAdaptor {
      */
     @Override
     public void modifyTag(ModifyTagRequestDto request) {
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 TOKEN_API_PATH,
                 HttpMethod.PUT,
-                new HttpEntity<>(request, makeHeaders()),
+                new HttpEntity<>(request, makeHeader()),
                 Void.class
         );
-
-        checkError(response);
     }
 
     /**
@@ -83,23 +77,8 @@ public class TagAdaptorImpl implements TagAdaptor {
         restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
-                new HttpEntity<>(makeHeaders()),
+                new HttpEntity<>(makeHeader()),
                 Void.class
         );
-    }
-
-    private static <T> void checkError(ResponseEntity<T> response) {
-        HttpStatus statusCode = response.getStatusCode();
-
-        if (statusCode.is4xxClientError() || statusCode.is5xxServerError()) {
-            throw new RuntimeException();
-        }
-    }
-
-    private static HttpHeaders makeHeaders() {
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.APPLICATION_JSON);
-        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
-        return headers;
     }
 }

@@ -41,8 +41,6 @@ public class CouponStateCodeAdaptorImpl implements CouponStateCodeAdaptor {
                 new ParameterizedTypeReference<>() {
                 });
 
-        Utils.checkError(response);
-
         return response.getBody();
     }
 }

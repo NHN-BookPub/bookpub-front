@@ -19,29 +19,13 @@ public interface PricePolicyAdaptor {
      */
     List<GetPricePolicyResponseDto> getAllPricePolicyCodeRequest();
 
-    /**
-     * 번호로 가격정책을 조회합니다.
-     *
-     * @param codeNo 번호
-     * @return 가격정책을 반환합니다.
-     */
-    GetPricePolicyResponseDto getPricePolicyByCodeNoRequest(Integer codeNo);
 
     /**
      * 가격정책을 등록합니다.
      *
      * @param requestDto dto
      */
-    void createOrderStateCodeRequest(
-            CreatePricePolicyRequestDto requestDto);
-
-    /**
-     * 가격정책의 가격을 수정합니다.
-     *
-     * @param codeNo 번호
-     * @param fee 수정할 가격
-     */
-    void modifyPricePolicyFeeUsedRequest(Integer codeNo, Long fee);
+    void createOrderStateCodeRequest(CreatePricePolicyRequestDto requestDto);
 
     /**
      * 정책명으로 조회합니다.

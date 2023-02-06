@@ -132,7 +132,12 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public MemberDetailResponseDto getMember(Long memberNo) {
+    public MemberDetailResponseDto getTokenMember(Long memberNo) {
+        return memberAdaptor.requestTokenMemberDetails(memberNo);
+    }
+
+    @Override
+    public MemberDetailResponseDto getApiMember(Long memberNo) {
         return memberAdaptor.requestMemberDetails(memberNo);
     }
 

@@ -43,7 +43,7 @@ public class ReviewController {
         PageResponse<GetMemberReviewResponseDto> writtenReviewList =
                 reviewService.getMemberReviews(memberNo, pageable);
 
-        model.addAttribute("member", memberService.getMember(memberNo));
+        model.addAttribute("member", memberService.getTokenMember(memberNo));
         model.addAttribute("myWrittenReviewList", writtenReviewList.getContent());
         model.addAttribute("totalPages", writtenReviewList.getTotalPages());
         model.addAttribute("currentPage", writtenReviewList.getNumber());
@@ -69,7 +69,7 @@ public class ReviewController {
         PageResponse<GetProductSimpleResponseDto> writableReviewList =
                 reviewService.getMemberWritableReviews(memberNo, pageable);
 
-        model.addAttribute("member", memberService.getMember(memberNo));
+        model.addAttribute("member", memberService.getTokenMember(memberNo));
         model.addAttribute("myWritableReviewList", writableReviewList.getContent());
         model.addAttribute("totalPages", writableReviewList.getTotalPages());
         model.addAttribute("currentPage", writableReviewList.getNumber());

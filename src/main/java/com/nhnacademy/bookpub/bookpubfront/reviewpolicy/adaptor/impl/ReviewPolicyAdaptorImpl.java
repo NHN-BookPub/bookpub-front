@@ -57,13 +57,12 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
         HttpEntity<CreateReviewPolicyRequestDto> entity =
                 new HttpEntity<>(request, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 entity,
                 Void.class
         );
-
         Utils.checkError(response);
     }
 
@@ -77,7 +76,7 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
         HttpEntity<ModifyReviewPolicyRequestDto> entity =
                 new HttpEntity<>(request, Utils.makeHeader());
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 entity,
@@ -95,7 +94,7 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
         String url = GateWayConfig.getGatewayUrl() + REVIEW_POLICY_AUTH_URL
                 + "/" + policyNo + "/used";
 
-        ResponseEntity<Void> response = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
                 new HttpEntity<>(Utils.makeHeader()),
@@ -103,5 +102,6 @@ public class ReviewPolicyAdaptorImpl implements ReviewPolicyAdaptor {
         );
 
         Utils.checkError(response);
+
     }
 }
