@@ -7,5 +7,7 @@ package com.nhnacademy.bookpub.bookpubfront.payment.service;
  * @since : 1.0
  **/
 public interface PaymentService {
-    void successPayment(String orderId, String paymentKey, Long amount);
+    void verifyPayment(String orderId, Long amount);
+
+    void createPayment(String orderId, String paymentKey, Long amount);
 }

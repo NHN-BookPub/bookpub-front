@@ -8,9 +8,9 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.util.UriComponentsBuilder;
 
 /**
  * 결제 어댑터 구현체.
@@ -23,12 +23,33 @@ import org.springframework.web.client.RestTemplate;
 @Slf4j
 public class PaymentAdaptorImpl implements PaymentAdaptor {
     private final RestTemplate restTemplate;
+    private static final String API_URL = "/api/payment";
 
     @Override
-    public ResponseEntity<Void> successPayment(String orderId, String paymentKey, Long amount) {
-        return restTemplate.exchange(
-                getGatewayUrl() + "/api/payment",
+    public boolean verifyPayment(String orderId, Long amount) {
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + API_URL + "/verify")
+                .queryParam("orderId", orderId)
+                .queryParam("amount", amount)
+                .build().toUriString();
+
+        return Boolean.TRUE.equals(restTemplate.exchange(
+                url,
                 HttpMethod.POST,
+                new HttpEntity<>(makeHeader()),
+                Boolean.class
+        ).getBody());
+    }
+
+    @Override
+    public void createPayment(String orderId, String paymentKey, Long amount) {
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + API_URL)
+                .queryParam("paymentKey", paymentKey)
+                .queryParam("orderId", orderId)
+                .queryParam("amount", amount)
+                .build().toUriString();
+
+        restTemplate.postForEntity(
+                url,
                 new HttpEntity<>(makeHeader()),
                 Void.class
         );

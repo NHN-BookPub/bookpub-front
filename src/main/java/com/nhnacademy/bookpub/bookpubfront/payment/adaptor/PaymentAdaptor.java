@@ -1,7 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.adaptor;
 
-import org.springframework.http.ResponseEntity;
-
 /**
  * 결제 어댑터.
  *
@@ -9,5 +7,7 @@ import org.springframework.http.ResponseEntity;
  * @since : 1.0
  **/
 public interface PaymentAdaptor {
-    ResponseEntity<Void> successPayment(String orderId, String paymentKey, Long amount);
+    boolean verifyPayment(String orderId, Long amount);
+
+    void createPayment(String orderId, String paymentKey, Long amount);
 }
