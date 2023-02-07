@@ -5,6 +5,12 @@
     <title>구독상품리스트</title>
     <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    달
+    <link rel="stylesheet" href="/static/css/admin/subscribe/main.css">
 
 </head>
 <body class="sb-nav-fixed">
@@ -15,21 +21,180 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">구독 목록</h1>
-                <ol class="breadcrumb mb-4">
-                    회원 목록 관리
-                </ol>
+                <div class="card-header" style="justify-content: center">
+                    <h1 class="mb-3 sm">구독 목록</h1>
+                </div>
+                <div>
+                    <button type="button" class="nav-link btn btn-outline-primary mb-4 ms-auto btn-lg"
+                            data-target="#add"
+                            data-toggle="modal">구독생성
+                    </button>
+                </div>
+                <!-- 구독 생성 모달 -->
+                <div class="modal fade" id="add" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="addLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addLabel">구독 등록</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/admin/subscribes" class="was-validated" method="post"
+                                      enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="addName">구독 명칭</label>
+                                        <input type="text" id="addName" class="form-control"
+                                               placeholder="구독 명칭을 적어주세요" name="name"
+                                               pattern="^\S[a-zA-Zㄱ-힣0-9!@#$%^&*()_+-=₩~ ]*$"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">구독명칭을 지정해주세요</div>
+                                    </div>
 
-                <hr/>
+                                    <div class="form-group">
+                                        <label for="addPrice">정가</label>
+                                        <input type="number" id="addPrice" class="form-control"
+                                               placeholder="구독 가격을 정해주세요" name="price"
+                                               min="0"
+                                               onchange="cal()"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">숫자를 입력해주세요</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addSaleRate">할인률</label>
+                                        <input type="number" id="addSaleRate" class="form-control"
+                                               placeholder="0~100 의 할인률이적용됩니다" name="salesRate"
+                                               min="0"
+                                               max="100"
+                                               onchange="calModify()"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">숫자를 입력해주세요</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addSalePrice">할인가</label>
+                                        <input type="number" id="addSalePrice" class="form-control"
+                                               placeholder="할인 가격이 적용됩니다." name="salePrice"
+                                               min="0"
+                                               readonly
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">값이 맞지않습니다.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="fileUpload"> 구독 이미지</label>
+                                        <input type="file" id="fileUpload" name="image">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addRenewed">갱신여부</label>
+                                        <select type="checkbox" id="addRenewed" class="form-select"
+                                                name="renewed"
+                                                required>
+                                            <option value="true">가능</option>
+                                            <option value="false">불가능</option>
+                                        </select>
+                                        <div class="valid-feedback">완료</div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" id="submitSubscribe" class="btn btn-primary" disabled>등록</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                </div>
 
                 <div>
                     <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">구독번호</th>
+                            <th scope="col">구독 명</th>
+                            <th scope="col">이미지</th>
+                            <th scope="col">일반 가격</th>
+                            <th scope="col">할인 가격</th>
+                            <th scope="col">할인 률</th>
+                            <th scope="col">뷰 카운트</th>
+                            <th scope="col">삭제여부</th>
+                            <th scope="col">갱신여부</th>
+                            <th scope="col">수정</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="subscribe : ${content}">
+                            <td th:text="${subscribe.subscribeNo}"></td>
+                            <td th:text="${subscribe.subscribeName}"></td>
+                            <td>
+                                <th:block th:if="${#strings.isEmpty(subscribe.imagePath)}">
+                                    <img src="/static/img/main/no-image.png">
+                                </th:block>
+                                <th:block th:unless="${#strings.isEmpty(subscribe.imagePath)}">
+                                    <img th:src="${subscribe.imagePath}">
+                                </th:block>
+                            </td>
+                            <td th:text="${subscribe.price}"></td>
+                            <td th:text="${subscribe.salePrice}"></td>
+                            <td th:text="${subscribe.salesRate}"></td>
+                            <td th:text="${subscribe.viewCnt}"></td>
+                            <td>
+                                <th:block th:if="${subscribe.deleted} == false">
+                                    <button type="button" class="btn btn-lg btn-outline-danger">삭제 가능</button>
+                                </th:block>
+                                <th:block th:unless="${subscribe.deleted} == false">
+                                    <button type="button" class="btn btn-lg btn-outline-secondary">복구 가능</button>
+                                </th:block>
+                            </td>
+                            <td>
+                                <th:block th:if="${subscribe.renewed} == false">
+                                    <button type="button" class="btn btn-lg btn-outline-success">갱신 가능</button>
+                                </th:block>
+                                <th:block th:unless="${subscribe.renewed} == false">
+                                    <button type="button" class="btn btn-lg btn-outline-danger">갱신 불가</button>
+                                </th:block>
+                            </td>
+                            <td>
+                                <button type="button" th:onclick="|location.href='@'|" class="btn btn-outline-primary mb-4 ms-auto btn-lg">
+                                    상세보기
+                                </button>
+                            </td>
+                        </tr>
+                        </tbody>
                     </table>
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!previous} ? 'disabled'">
+                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum -1}+
+                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}" tabindex="-1">Previous</a>
+                            </li>
+                            <th:block th:with="
+                            start=${(pageNum/5)*5 + 1},
+                            end=(${(totalPage ==0) ? 1 : (start + (4) < totalPage ? start + 4 : totalPage)})">
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}">
+                                    <a class="page-link"
+                                       th:href="@{ ${uri} + '?page=' + ${page - 1}+
+                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}"
+                                       th:text="${page}">
+                                    </a>
+                                </li>
+                            </th:block>
+                            <li class="page-item" th:classappend="${!next} ? 'disabled'">
+                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum + 1}+
+                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
                 </div>
             </div>
         </main>
         <th:block th:include="admin/fragments/adminFooter"/>
     </div>
 </div>
+<script src="/static/js/subscribe/main.js"></script>
 </body>
 </html>
