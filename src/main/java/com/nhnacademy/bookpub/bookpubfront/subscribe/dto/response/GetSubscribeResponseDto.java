@@ -14,10 +14,11 @@ import lombok.NoArgsConstructor;
 public class GetSubscribeResponseDto {
     private Long subscribeNo;
     private String subscribeName;
+    private Long price;
     private Long salePrice;
     private Integer salesRate;
     private Long viewCnt;
-    private boolean isDeleted;
-    private boolean isRenewed;
-
+    private boolean deleted;
+    private boolean renewed;
+    private String imagePath;
 }
