@@ -4,7 +4,6 @@ import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.couponmonth.dto.response.GetCouponMonthResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.couponmonth.service.CouponMonthService;
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import java.util.List;
 import javax.servlet.http.Cookie;
@@ -27,7 +26,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MonthCouponController {
 
     private final CouponMonthService couponMonthService;
-    private final MemberService memberService;
 
     private final CartUtils cartUtils;
 
@@ -63,9 +61,7 @@ public class MonthCouponController {
         Long memberNo = -1L;
 
         if (!principal.equals("anonymousUser")) {
-            MemberDetailResponseDto member
-                    = memberService.getMember(Long.parseLong(principal));
-            memberNo = member.getMemberNo();
+            memberNo = Long.parseLong(principal);
         }
 
         cartUtils.getCountInCart(cookie.getValue(), model);
