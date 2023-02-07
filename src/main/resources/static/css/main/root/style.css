@@ -716,6 +716,7 @@ textarea.input {
   position: relative;
   overflow: hidden;
   margin: 15px 0px;
+  height: 202px;
 }
 
 .shop:before {
