@@ -92,6 +92,8 @@ public class MemberRestController {
      * @param memberNo 회원 번호
      * @return 등급 번호
      */
+
+    @Auth
     @GetMapping("/members/member")
     public Integer getTierNoByMemberNo(@RequestParam Long memberNo) {
         Integer tierNo = memberService.getTierByMemberNo(memberNo);

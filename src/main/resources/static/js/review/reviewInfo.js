@@ -1,3 +1,11 @@
+let memberNo = document.getElementById("memberNumber");
+
+window.onload = function() {
+    const pathname = window.location.pathname
+    let pathVariable = pathname.split('/');
+    memberNo.value = pathVariable[2];
+}
+
 function clickInfo(number) {
     const fiveStar = document.getElementById("rate5");
     const fourStar = document.getElementById("rate4");
@@ -82,11 +90,13 @@ function deleteFile() {
 }
 
 function submitForm() {
-    console.log("들어ㅏ왔음");
     const submit = document.getElementById("submitForm");
     const modifyNo = document.getElementById("reviewNumber");
 
-    submit.action = "/members/my/written-reviews/" + modifyNo.value +"/modify";
+    const tmp = submit.action = "/members/" + memberNo.value + "/written-reviews/" + modifyNo.value +"/modify";
+    console.log(modifyNo.value);
+    console.log(memberNo.value);
 
+    submit.method = "POST";
     submit.submit();
 }

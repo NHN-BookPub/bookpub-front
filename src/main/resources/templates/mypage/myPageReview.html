@@ -10,7 +10,6 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <script src="/static/js/review/reviewInfo.js"></script>
 
     <link rel='stylesheet'
           href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
@@ -25,11 +24,11 @@
     <hr/>
 
     <div align="right">
-        <form action="/members/my/writable-reviews">
+        <form th:action="@{/members/{memberNo}/writable-reviews(memberNo=${member.memberNo})}">
             <button class="btn btn-dark float-right" style="box-shadow: 3px 3px #888888;"> 작성 가능한 리뷰 ></button>
         </form>
 
-        <form action="/members/my/written-reviews">
+        <form th:action="@{/members/{memberNo}/written-reviews(memberNo=${member.memberNo})}">
             <button class="btn btn-dark float-right" style="margin-right: 8px; box-shadow: 3px 3px #888888;"> 작성한 리뷰 >
             </button>
         </form>
@@ -54,7 +53,7 @@
                             <div class="col-2" style="text-align: center;">
                                 <img th:src="${review.productImagePath}" alt="이미지 없음" style="width: 30%; height: auto;">
                             </div>
-                            <div class="col-7"><span>제목 : </span><a th:href="@{/products/view/{productNo}(productNo=${review.productNo})}"
+                            <div class="col-7"><span>제목 : </span><a th:href="@{/products/{productNo}(productNo=${review.productNo})}"
                                                   th:text="${review.productTitle}"></a>
                                 <br/>
                                 <span>저자 : </span>
@@ -92,7 +91,7 @@
                 <td class="text-center" style="width:100%; justify-content: center; display: flex; gap: 8px;">
                     <input type="button" class="btn btn-outline-dark" value="수정" data-toggle="modal"
                            data-target="#modify" th:onclick="|javascript:clickInfo('${review.reviewNo}')|">
-                    <form th:action="@{/members/my/written-reviews/{reviewNo}(reviewNo=${review.reviewNo})}"
+                    <form th:action="@{/members/{memberNo}/written-reviews/{reviewNo}(reviewNo=${review.reviewNo}, memberNo=${member.memberNo})}"
                           method="post">
                         <input type="submit" class="btn btn-outline-danger" value="삭제">
                     </form>
@@ -105,17 +104,17 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/my/written-reviews?(page=(${currentPage}-1))}">Previous</a>
+                       th:href="@{/members/{memberNo}/written-reviews?(page=(${currentPage}-1), memberNo=${member.memberNo})}">Previous</a>
                 </li>
                 <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                        <a class="page-link" th:href="@{/members/my/written-reviews?(page=(${page-1}))}"
+                        <a class="page-link" th:href="@{/members/{memberNo}/written-reviews?(page=(${page-1}), memberNo=${member.memberNo})}"
                            th:text="${page}"></a></li>
                 </th:block>
                 <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/my/written-reviews?(page=(${currentPage}+1))}">Next</a>
+                       th:href="@{/members/{memberNo}/written-reviews?(page=(${currentPage}+1), memberNo=${member.memberNo})}">Next</a>
                 </li>
             </ul>
         </nav>
@@ -125,6 +124,7 @@
 
 <form>
     <input type="hidden" value="0" id="reviewNumber" name="reviewNumber">
+    <input type="hidden" id="memberNumber" name="memberNumber" value="0">
 </form>
 
 <div class="modal fade" id="modify" data-backdrop="static" tabindex="-1" role="dialog"
@@ -163,12 +163,12 @@
 
                     <br/>
                     <span>이미지 첨부</span>
-                    <span style="color: #888888; font-size: 13px;">(이미지는 10MB 이하의 jpeg, png파일만 등록 가능합니다.)</span>
+                    <span style="color: #888888; font-size: 13px;">(이미지는 10MB 이하의 jpg, jpeg, png파일만 등록 가능합니다.)</span>
                     <img class="col-3" id="existingFile" style="width: 30%; height: auto"
                          onerror="this.onerror=null;">
                     <button type="button" id="deleteFileBtn" onclick="deleteFile()">이미지 삭제</button>
                     <div class="form-group">
-                        <input type="file" id="fileUpload" name="reviewImage" accept="image/jpeg,image/png"/>
+                        <input type="file" id="fileUpload" name="reviewImage" accept="image/jpeg,image/png,image/jpg"/>
                     </div>
 
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
@@ -186,5 +186,6 @@
         data-stencil-namespace="ionicons"></script>
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="/static/js/mypage/main.js"></script>
+<script src="/static/js/review/reviewInfo.js"></script>
 </body>
 </html>

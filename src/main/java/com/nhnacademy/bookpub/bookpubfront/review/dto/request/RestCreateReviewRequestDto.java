@@ -14,9 +14,15 @@ import lombok.Getter;
 public class RestCreateReviewRequestDto {
     private Long productNo;
     private Long memberNo;
-    private Long reviewStar;
+    private Integer reviewStar;
     private String reviewContent;
 
+    /**
+     * Dto 생성을 위한 빌더.
+     *
+     * @param request  CreateReviewRequestDto
+     * @param memberNo 리뷰를 작성한 멤버 번호
+     */
     @Builder
     public RestCreateReviewRequestDto(CreateReviewRequestDto request, Long memberNo) {
         this.productNo = request.getProductNo();
