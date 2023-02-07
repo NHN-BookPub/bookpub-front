@@ -4,6 +4,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.subscribe.adaptor.SubscribeAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.subscribe.dto.request.CreateSubscribeRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.subscribe.dto.request.ModifySubscribeRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.subscribe.dto.response.GetSubscribeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
@@ -11,8 +12,12 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * Shop 서버와 통신하기위한 Adaptor 구현 클래스입니다.
@@ -25,15 +30,20 @@ import org.springframework.web.client.RestTemplate;
 public class SubscribeAdaptorImpl implements SubscribeAdaptor {
 
     private final RestTemplate restTemplate;
-    private static final String SUBSCRIBE_TOKEN_URL =  GateWayConfig.getGatewayUrl()+"/token/subscribes";
+    private static final String SUBSCRIBE_TOKEN_URL = GateWayConfig.getGatewayUrl() + "/token/subscribes";
+
+    private static final String SUBSCRIBE_API = GateWayConfig.getGatewayUrl() + "/api/subscribes";
 
     /**
-     * 구독을 추가하기위한 shop 서버로 요청입니다.
-     *
-     * @param dto the dto
+     * {@inheritDoc}
      */
-    public void addSubscribeRequest(CreateSubscribeRequestDto dto) {
-        HttpEntity<CreateSubscribeRequestDto> http = new HttpEntity<>(dto,makeHeader());
+    @Override
+    public void addSubscribeRequest(CreateSubscribeRequestDto dto, MultipartFile image) {
+        MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
+
+        body.add("dto", dto);
+        body.add("image", image.getResource());
+        HttpEntity<MultiValueMap<String, Object>> http = new HttpEntity<>(body, makeHeader(MediaType.MULTIPART_FORM_DATA));
 
         restTemplate.exchange(SUBSCRIBE_TOKEN_URL,
                 HttpMethod.POST,
@@ -42,13 +52,24 @@ public class SubscribeAdaptorImpl implements SubscribeAdaptor {
     }
 
     /**
-     * 구독정보들을 받기위한 shop 서버로의 GET 요청입니다.
-     *
-     * @param pageable 페이징정보
-     * @return 구독\정보 반환
+     * {@inheritDoc}
      */
+    @Override
+    public void modifySubscribeRequest(Long subscribeNo, ModifySubscribeRequestDto dto) {
+        HttpEntity<ModifySubscribeRequestDto> http = new HttpEntity<>(dto, makeHeader());
+
+        restTemplate.exchange(SUBSCRIBE_TOKEN_URL + "/" + subscribeNo,
+                HttpMethod.PUT,
+                http,
+                Void.class);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public PageResponse<GetSubscribeResponseDto> getSubscribesRequest(Pageable pageable) {
-        String url = SUBSCRIBE_TOKEN_URL + "?page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize();
+        String url = SUBSCRIBE_API + "?page=" + pageable.getPageNumber() + "&size=" + pageable.getPageSize();
         return restTemplate.exchange(url,
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
