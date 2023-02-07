@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import java.util.ArrayList;
@@ -40,6 +41,7 @@ public class CartController {
     private final ObjectMapper objectMapper;
     private final CartUtils cartUtils;
     private final CategoryUtils categoryUtils;
+    private final MemberUtils memberUtils;
     private final RedisTemplate<String, Object> redisTemplate;
 
     /**
@@ -64,6 +66,7 @@ public class CartController {
 
             cartUtils.getCountInCart(cookie.getValue(), model);
             categoryUtils.categoriesView(model);
+            memberUtils.getMemberNo(model);
 
             List<GetProductDetailResponseDto> products =
                     productService.findProductInCart(productNos);

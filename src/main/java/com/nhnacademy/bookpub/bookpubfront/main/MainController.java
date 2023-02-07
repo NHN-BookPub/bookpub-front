@@ -6,6 +6,7 @@ import static com.nhnacademy.bookpub.bookpubfront.state.ProductType.NEW;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import java.util.List;
 import java.util.Objects;
@@ -34,6 +35,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 public class MainController {
 
     private final ProductService productService;
+    private final MemberUtils memberUtils;
     private final CartUtils cartUtils;
     private final CategoryUtils categoryUtils;
     private static final Integer LIMIT = 6;
@@ -71,6 +73,7 @@ public class MainController {
             cartUtils.getCountInCart(cookie.getValue(), model);
         }
 
+        memberUtils.getMemberNo(model);
         categoryUtils.categoriesView(model);
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);
