@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 /**
  * 쿠폰을 다루기 위한 서비스 구현체입니다.
  *
- * @author : 정유진
+ * @author : 정유진, 김서현
  * @since : 1.0
  **/
 @Service
@@ -68,5 +68,22 @@ public class CouponServiceImpl implements CouponService {
     @Override
     public void issueTierCoupons(Long memberNo, List<Long> tierCoupons) {
         couponAdaptor.requestIssueTierCoupons(memberNo, tierCoupons);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+
+    @Override
+    public boolean checkCouponIssuedByMemberNo(Long memberNo, Long templateNo) {
+        return couponAdaptor.requestExistMonthCoupon(memberNo, templateNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void issueMonthCoupon(Long memberNo, Long templateNo) {
+        couponAdaptor.requestIssueMonthCoupon(memberNo, templateNo);
     }
 }
