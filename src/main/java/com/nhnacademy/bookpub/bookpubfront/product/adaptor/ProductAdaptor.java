@@ -78,6 +78,12 @@ public interface ProductAdaptor {
     PageResponse<GetProductByCategoryResponseDto> requestProductsByCategory(Integer categoryNo, Pageable pageable);
 
 
+    /**
+     * 이북 리스트를 얻어오는 메소드입니다.
+     *
+     * @param pageable 페이징
+     * @return 이북 리스트
+     */
     PageResponse<GetProductByCategoryResponseDto> requestEbooks(Pageable pageable);
 
     /**
