@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.review.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductSimpleResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.review.dto.request.CreateReviewRequestDto;
@@ -9,7 +10,6 @@ import com.nhnacademy.bookpub.bookpubfront.review.service.ReviewService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,10 +35,10 @@ public class ReviewController {
      * @param pageable the pageable
      * @return 마이페이지의 작성한 상품평 조회 뷰
      */
-    @GetMapping("/members/my/written-reviews")
-    public String myWrittenReviewList(Model model, Pageable pageable) {
-        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal());
+    @Auth
+    @GetMapping("/members/{memberNo}/written-reviews")
+    public String myWrittenReviewList(@PathVariable Long memberNo,
+                                      Model model, Pageable pageable) {
 
         PageResponse<GetMemberReviewResponseDto> writtenReviewList =
                 reviewService.getMemberReviews(memberNo, pageable);
@@ -61,10 +61,10 @@ public class ReviewController {
      * @param pageable the pageable
      * @return 마이페이지의 작성 가능한 상품평 조회 뷰
      */
-    @GetMapping("/members/my/writable-reviews")
-    public String myWritableReviewList(Model model, Pageable pageable) {
-        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext()
-                .getAuthentication().getPrincipal());
+    @Auth
+    @GetMapping("/members/{memberNo}/writable-reviews")
+    public String myWritableReviewList(@PathVariable Long memberNo,
+                                       Model model, Pageable pageable) {
 
         PageResponse<GetProductSimpleResponseDto> writableReviewList =
                 reviewService.getMemberWritableReviews(memberNo, pageable);
@@ -87,11 +87,12 @@ public class ReviewController {
      * @param request 등록할 상품평 정보를 담은 Dto
      * @return the string
      */
-    @PostMapping("/members/my/writable-reviews")
-    public String reviewAdd(CreateReviewRequestDto request) {
+    @Auth
+    @PostMapping("/members/{memberNo}/writable-reviews")
+    public String reviewAdd(@PathVariable Long memberNo, CreateReviewRequestDto request) {
         reviewService.createReview(request);
 
-        return "redirect:/members/my/writable-reviews";
+        return "redirect:/members/" + memberNo + "/writable-reviews";
     }
 
     /**
@@ -101,11 +102,13 @@ public class ReviewController {
      * @param reviewNo 삭제할 상품평 번호
      * @return 마이페이지의 작성한 상품평 조회 뷰
      */
-    @PostMapping("/members/my/written-reviews/{reviewNo}")
-    public String reviewDelete(@PathVariable("reviewNo") Long reviewNo) {
+    @Auth
+    @PostMapping("/members/{memberNo}/written-reviews/{reviewNo}")
+    public String reviewDelete(@PathVariable("memberNo") Long memberNo,
+                               @PathVariable("reviewNo") Long reviewNo) {
         reviewService.deleteReview(reviewNo);
 
-        return "redirect:/members/my/written-reviews";
+        return "redirect:/members/" + memberNo + "/written-reviews";
     }
 
     /**
@@ -116,11 +119,13 @@ public class ReviewController {
      * @param request  수정할 상품평 정보를 담은 Dto
      * @return 마이페이지의 작성한 상품평 조회 뷰
      */
-    @PostMapping("/members/my/written-reviews/{reviewNo}/modify")
-    public String reviewModify(@PathVariable("reviewNo") Long reviewNo,
+    @Auth
+    @PostMapping("/members/{memberNo}/written-reviews/{reviewNo}/modify")
+    public String reviewModify(@PathVariable("memberNo") Long memberNo,
+                               @PathVariable("reviewNo") Long reviewNo,
                                ModifyReviewRequestDto request) {
         reviewService.modifyReview(reviewNo, request);
 
-        return "redirect:/members/my/written-reviews";
+        return "redirect:/members/" + memberNo + "/written-reviews";
     }
 }

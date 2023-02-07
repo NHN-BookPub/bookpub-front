@@ -37,7 +37,7 @@
                     </ul>
                 </div>
 
-                <a th:href="@{/members/my/written-reviews}" class="nav__link">
+                <a th:href="@{/members/{memberNo}/written-reviews(memberNo=${member.memberNo})}" class="nav__link">
                     <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">마이 리뷰</span>
                 </a>

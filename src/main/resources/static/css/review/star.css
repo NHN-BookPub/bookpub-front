@@ -59,6 +59,10 @@
     font-size: x-large;
 }
 
+.star-ratings > .reviewView {
+    font-size: medium;
+}
+
 .star-ratings-base {
     z-index: 0;
     padding: 0;

@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.review.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductSimpleResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.review.adaptor.ReviewAdaptor;
@@ -10,14 +11,15 @@ import com.nhnacademy.bookpub.bookpubfront.review.dto.response.GetMemberReviewRe
 import com.nhnacademy.bookpub.bookpubfront.review.dto.response.GetProductReviewInfoResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.review.dto.response.GetProductReviewResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -44,7 +46,8 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
     public PageResponse<GetMemberReviewResponseDto> requestMemberReviews(
             Long memberNo, Pageable pageable) {
         String url = UriComponentsBuilder
-                .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_URL + "/member/" + memberNo)
+                .fromHttpUrl(GateWayConfig.getGatewayUrl()
+                        + REVIEW_AUTH_URL + "/member/" + memberNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -92,7 +95,7 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
     public PageResponse<GetProductSimpleResponseDto> requestMemberWritableReviews(
             Long memberNo, Pageable pageable) {
         String url = UriComponentsBuilder
-                .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_URL
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + REVIEW_AUTH_URL
                         + "/member/" + memberNo + "/writable")
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -148,12 +151,11 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
     }
 
     /**
-     *
      * {@inheritDoc}
      */
     @Override
     public void requestCreateReview(CreateReviewRequestDto request, Long memberNo) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_URL;
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_AUTH_URL + "/members/" + memberNo;
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("createRequestDto", request.transform(memberNo));
@@ -175,7 +177,11 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
      */
     @Override
     public void requestDeleteReview(Long reviewNo) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo;
+        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal());
+
+        String url = GateWayConfig.getGatewayUrl() + REVIEW_AUTH_URL + "/" + reviewNo
+                + "/members/" + memberNo;
 
         restTemplate.exchange(
                 url,
@@ -190,7 +196,11 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
      */
     @Override
     public void requestDeleteReviewImage(Long reviewNo) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo + "/file";
+        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal());
+
+        String url = GateWayConfig.getGatewayUrl()
+                + REVIEW_AUTH_URL + "/" + reviewNo + "/file/members/" + memberNo;
 
         restTemplate.exchange(
                 url,
@@ -202,20 +212,21 @@ public class ReviewAdaptorImpl implements ReviewAdaptor {
 
     /**
      * {@inheritDoc}
-     *
      */
     @Override
     public void requestModifyReview(Long reviewNo, ModifyReviewRequestDto request) {
-        String url = GateWayConfig.getGatewayUrl() + REVIEW_URL + "/" + reviewNo + "/content";
+        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext()
+                .getAuthentication().getPrincipal());
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.setContentType(MediaType.MULTIPART_FORM_DATA);
+        String url = GateWayConfig.getGatewayUrl()
+                + REVIEW_AUTH_URL + "/" + reviewNo + "/content/members/" + memberNo;
 
         MultiValueMap<String, Object> body = new LinkedMultiValueMap<>();
         body.add("modifyRequestDto", request.transform());
         body.add("image", request.getReviewImage().getResource());
 
-        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(body, headers);
+        HttpEntity<MultiValueMap<String, Object>> entity = new HttpEntity<>(
+                body, Utils.makeHeader(MediaType.MULTIPART_FORM_DATA));
 
         restTemplate.exchange(
                 url,
