@@ -100,8 +100,6 @@ public class TierCouponController {
     @GetMapping("/tier-coupons")
     public String tierCouponEvent(@CookieValue(name = CART, required = false) Cookie cookie,
                                   Model model) {
-        SecurityContextHolder.getContext().getAuthentication();
-
         String principal =
                 (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberNo = -1L;

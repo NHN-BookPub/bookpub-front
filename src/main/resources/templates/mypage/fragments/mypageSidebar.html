@@ -23,6 +23,11 @@
                     <span class="nav_name">메신저</span>
                 </a>
 
+                <a th:href="@{/members/{memberNo}/wishlist(memberNo=${member.memberNo})}" class="nav__link">
+                    <ion-icon name="heart-circle-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">위시리스트</span>
+                </a>
+
                 <div href="#" class="nav__link collapse show">
                     <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">내 쿠폰함</span>
