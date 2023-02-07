@@ -79,6 +79,14 @@ public interface ProductAdaptor {
 
 
     /**
+     * 이북 리스트를 얻어오는 메소드입니다.
+     *
+     * @param pageable 페이징
+     * @return 이북 리스트
+     */
+    PageResponse<GetProductByCategoryResponseDto> requestEbooks(Pageable pageable);
+
+    /**
      * 상품별 쿠폰 리스트를 얻어오는 메소드.
      *
      * @param productNo 상품번호.

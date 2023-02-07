@@ -292,8 +292,8 @@ textarea.input {
 \*----------------------------*/
 
 .section {
-  padding-top: 30px;
-  padding-bottom: 30px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 
 .section-title {
@@ -724,8 +724,8 @@ textarea.input {
   top: 0;
   bottom: 0;
   left: 0px;
-  width: 60%;
-  background: #D10024;
+  width: 40%;
+  background: #000000;
   opacity: 0.9;
   -webkit-transform: skewX(-45deg);
   -ms-transform: skewX(-45deg);

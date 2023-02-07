@@ -11,7 +11,6 @@ import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import java.util.Map;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -103,4 +102,12 @@ public interface ProductService {
      * @return 사용가능한 쿠폰 dto 리스트.
      */
     List<GetOrderCouponResponseDto> availableCouponProduct(Long productsNo);
+
+    /**
+     * 이북 조회 합니다.
+     *
+     * @param pageable 페이징
+     * @return 이북 페이지
+     */
+    PageResponse<GetProductByCategoryResponseDto> getEbooks(Pageable pageable);
 }
