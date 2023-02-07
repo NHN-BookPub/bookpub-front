@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>BookPub</title>
+
+  <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+  <link rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+  <style>
+
+  </style>
+</head>
+<body>
+<!-- HEADER -->
+<th:block th:include="main/fragments/rootHeader"></th:block>
+<!-- HEADER -->
+</br>
+
+
+<div class="container">
+  <section class="section_wrap">
+    <p style="display: none" id="memberNo" th:text="${memberNo}"></p>
+    <div style="position: relative">
+      <div
+          style="background-image: url('/static/coupon/pink-001.png'); background-repeat: no-repeat; background-size: cover; background-position: center">
+        <h1 style="text-align: center; font-size: 95px; font-weight: bold; color: white;">BOOK
+          PUB</h1>
+        <h2 style="text-align: center; font-size: 70px; color: white; padding: 5rem">이달의 쿠폰</h2>
+        <h3 style="text-align: center; color: #c170c1; padding-bottom: 2rem; font-size: 30px"> 당신을
+          위한 특별한 BOOK, 북펍과 함께하세요. </h3>
+        <div style="width: 100%; margin: auto">
+          <div style="display: flex; width: 100%; justify-content: center; text-align: center">
+            <div class="col-sm-6 col-md-4">
+              <div class="thumbnail" th:each="coupon : ${couponMonthList}">
+                <img th:src="${coupon.templateImage}" alt="...">
+                <div class="caption">
+                  <h3 th:text="${coupon.templateName}"></h3>
+                  <a type="button" class="btn btn-warning"
+                     th:templateNo="${coupon.templateNo}"
+                     th:onclick="clickInfo(this.getAttribute('templateNo'))">발급받기</a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<th:block th:include="main/fragments/rootFooter"></th:block>
+</body>
+<script src="/static/js/coupon/couponMonth.js"></script>
+
+</html>
