@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <!-- CSS -->
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <!-- Latest compiled and minified CSS -->
+    <title>BookPub</title>
+
+    <style>
+        .wish-title:hover {
+            color: #D10024;
+        }
+    </style>
+
+</head>
+<body>
+
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+
+<div class="body-pd">
+    <p th:text="${member.memberNo}" id="memberNo" style="display: none"></p>
+    <h2 class="mb-3" style="padding-top: 3%;">위시리스트</h2>
+    <hr/>
+    <br/>
+
+    <div class="container" style="padding-bottom: 5%">
+        <div class="border">
+            <div class="row" style="padding: 4%">
+                <div class="col-3" th:each="wishlist: ${wishlists}" style="flex: auto">
+                    <div class="card" style="margin-bottom: 15%">
+                        <img th:src="${wishlist.thumbnail}" style="object-fit: cover; height: 300px"
+                             onerror="this.src=null; this.src='/static/image.review/no-image.png';"
+                             th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${wishlist.productNo})} + '\''">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-sm-10">
+                                    <strong th:text="'[' + ${wishlist.title} + ']'"
+                                            th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${wishlist.productNo})} + '\''"
+                                            style="font-size: 16px"
+                                            class="wish-title"></strong>
+                                    <p th:text="${wishlist.productPublisher}" style="font-size: 12px"></p>
+                                </div>
+                                <div class="col-sm-2">
+                                    <ion-icon name="heart"
+                                              color="danger"
+                                              th:productNo="${wishlist.productNo}"
+                                              th:onclick="cancelLike(this.getAttribute('productNo'))"
+                                              style="font-size: 20px">
+                                    </ion-icon>
+
+                                    <br/>
+                                    <div th:if="${wishlist.wishlistApplied == false}">
+                                        <ion-icon name="notifications-outline"
+                                                  th:productNo="${wishlist.productNo}"
+                                                  th:onclick="alarm(this.getAttribute('productNo'))">
+                                        </ion-icon>
+                                    </div>
+                                    <div th:unless="${wishlist.wishlistApplied == false}">
+                                        <ion-icon name="notifications"
+                                                  th:productNo="${wishlist.productNo}"
+                                                  th:onclick="alarm(this.getAttribute('productNo'))">
+                                        </ion-icon>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/members/{memberNo}/wishlist?(memberNo=${member.memberNo} ,page=(${currentPage}-1))}">Previous</a>
+                    </li>
+                    <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                            <a class="page-link"
+                               th:href="@{/members/{memberNo}/wishlist?(memberNo=${member.memberNo}, page=(${page-1}))}"
+                               th:text="${page}"></a></li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="@{/members/{memberNo}/wishlist?(memberNo=${member.memberNo}, page=(${currentPage}+1))}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+
+        </div>
+    </div>
+
+</div>
+
+</body>
+
+<!-- IONICONS -->
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+<script src="/static/js/mypage/mypage-wishlist.js"></script>
+<!-- IONICONS -->
+
+</html>

@@ -50,6 +50,7 @@
 <!-- /HEADER -->
 
 <div class="container" style="padding-top: 3%">
+    <p style="display: none" id="memberNo" th:text="${memberNo}"></p>
 
     <div class="row">
         <div class="col-sm-3">
@@ -115,19 +116,18 @@
             <div class="row" mb-3>
                 <label class="col-sm-3">리뷰</label>
                 <div class="col-sm-9">
-                    <div class="col-sm-9">
-                        <div class="star-ratings">
-                            <div class="star-ratings-fill space-x-2 text-lg"
-                                 th:with="percent=${reviewInfo.productStar} * 20"
-                                 th:style="'width: ' + ${percent} +'%'">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
-                            <div class="star-ratings-base space-x-2 text-lg">
-                                <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
-                            </div>
+                    <div class="star-ratings" style="display: inline-block">
+                        <div class="star-ratings-fill space-x-2 text-lg"
+                             th:with="percent=${reviewInfo.productStar} * 20"
+                             th:style="'width: ' + ${percent} +'%'">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
                         </div>
-                        <i th:text="${reviewInfo.productStar}"></i>
+                        <div class="star-ratings-base space-x-2 text-lg">
+                            <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                        </div>
                     </div>
+                    <i style="font-size: 18px"
+                       th:text="${reviewInfo.productStar} + '(' + ${reviewInfo.reviewCount} + '개)' "></i>
                 </div>
             </div>
 
@@ -135,13 +135,19 @@
 
             <div class="row mb-3">
                 <label class="col-sm-3">정가</label>
-                <del class="col-sm-9 product-old-price" th:text="${product.productPrice}+'원'"></del>
+                <del class="col-sm-9 product-old-price"
+                     th:text="|${#numbers.formatInteger(product.productPrice, 0, 'COMMA')}원|">
+                </del>
             </div>
 
-            <div class="row mb-3">
+            <div class="row mb-4">
                 <label class="col-sm-3">판매가</label>
-                <h3 class="col-sm-9 product-detail-price"
-                    th:text="${product.salesPrice}+'원 (' + ${product.salesRate} +'% 할인)'"></h3>
+                <div class="col-sm-7" style="display: inline-block">
+                    <span style="font-size: 20px; white-space: nowrap"
+                          th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></span>
+                    <span style="font-size: 14px; color: #ef0d0d" th:text="'(' + ${product.salesRate} + '% 할인)'"></span>
+                </div>
+
             </div>
 
             <div class="row mb-3">
@@ -170,7 +176,7 @@
 
         <div class="col-sm-2">
             <div class="row text-center">
-                <button class="btn btn-primary" id="confirmStart" style="width: 80%;">장바구니 담기</button>
+                <button class="btn btn-primary" onclick="cart()" style="width: 80%;">장바구니 담기</button>
             </div>
 
             <hr/>
@@ -179,6 +185,14 @@
                 <form action="" method="post">
                     <button type="submit" class="btn btn-info" style="width: 80%">바로 주문</button>
                 </form>
+            </div>
+
+            <hr/>
+
+            <div class="row text-center">
+                <button class="btn" onclick="putWishlist()" style="width: 80%; background-color: #ffa8a8; color: white">
+                    위시리스트 담기
+                </button>
             </div>
         </div>
 
@@ -326,11 +340,43 @@
 <script>
     const productNo = $('#productNo').text();
 
-    $().ready(function () {
-        $("#confirmStart").click(function () {
-            console.log(productNo)
+    function cart() {
+        Swal.fire({
+            title: '카트에 담으시겠습니까?',
+            icon: 'info',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: '확인',
+            cancelButtonText: '취소'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
+                $.ajax({
+                    type: "post",
+                    async: false,
+                    url: "/cart",
+                    data: {"productNo": productNo},
+                    dataType: "json"
+                })
+            }
+        })
+    }
+
+    function putWishlist() {
+        const memberNo = $('#memberNo').text();
+
+        console.log(memberNo);
+
+        if (memberNo === '-1') {
             Swal.fire({
-                title: '카트에 담으시겠습니까?',
+                icon: 'warning',
+                title: '위시리스트 등록은 회원만 가능!!',
+                text: '로그인을 먼저 해주세요'
+            })
+        } else {
+            Swal.fire({
+                title: '좋아요에 등록하시겠습니까?',
                 icon: 'info',
                 showCancelButton: true,
                 confirmButtonColor: '#3085d6',
@@ -339,17 +385,17 @@
                 cancelButtonText: '취소'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
+                    Swal.fire('위시리스트에 담겼습니다.', '즐거운 쇼핑 되세요~~~~', 'success')
                     $.ajax({
                         type: "post",
-                        async: false,
-                        url: "/cart",
-                        data: {"productNo": productNo},
-                        dataType: "json"
+                        url: "/wishlist",
+                        dataType: 'json',
+                        data: {"memberNo": memberNo, "productNo": productNo}
                     })
                 }
             })
-        });
-    });
+        }
+    }
+
 </script>
 </html>

@@ -151,10 +151,56 @@
 			}
 		});
 
-		priceSlider.noUiSlider.on('update', function( values, handle ) {
+		priceSlider.noUiSlider.on('update', function (values, handle) {
 			var value = values[handle];
 			handle ? priceInputMax.value = value : priceInputMin.value = value
 		});
 	}
 
 })(jQuery);
+
+function wishlist() {
+	const memberNo = $('#memberNo').text();
+
+	if (memberNo === '-1') {
+		Swal.fire({
+			icon: 'warning',
+			title: '회원만 접근 가능합니다.',
+			text: '로그인을 먼저 해주세요'
+		})
+	} else {
+		window.location = '/members/' + memberNo + '/wishlist';
+	}
+}
+
+function clickLike(productNo) {
+	const memberNo = $('#memberNo').text();
+
+	if (memberNo === '-1') {
+		Swal.fire({
+			icon: 'warning',
+			title: '위시리스트 등록은 회원만 가능!!',
+			text: '로그인을 먼저 해주세요'
+		})
+	} else {
+		Swal.fire({
+			title: '좋아요에 등록하시겠습니까?',
+			icon: 'info',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			confirmButtonText: '확인',
+			cancelButtonText: '취소'
+		}).then((result) => {
+			if (result.isConfirmed) {
+				Swal.fire('위시리스트에 담겼습니다.', '즐거운 쇼핑 되세요~~~~', 'success')
+				$.ajax({
+					type: "post",
+					url: "/wishlist",
+					dataType: 'json',
+					data: {"memberNo": memberNo, "productNo": productNo}
+				})
+			}
+		})
+	}
+}

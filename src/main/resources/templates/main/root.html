@@ -112,8 +112,10 @@
                                                 <a th:href="@{/products/{productNo}(productNo=${newBook.productNo})}"
                                                    th:text="${newBook.title}"></a>
                                             </h3>
-                                            <del class="product-old-price" th:text="${newBook.productPrice}+'원'"></del>
-                                            <h4 class="product-price" th:text="${newBook.salesPrice}+'원'"></h4>
+                                            <del class="product-old-price"
+                                                 th:text="|${#numbers.formatInteger(newBook.productPrice, 0, 'COMMA')}원|"></del>
+                                            <h4 class="product-price"
+                                                th:text="|${#numbers.formatInteger(newBook.salesPrice, 0, 'COMMA')}원|"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -122,8 +124,12 @@
                                                 <i class="fa fa-star"></i>
                                             </div>
                                             <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                        class="tooltipp">Like</span></button>
+                                                <button class="add-to-wishlist"
+                                                        th:productNo="${newBook.productNo}"
+                                                        th:onclick="clickLike(this.getAttribute('productNo'))">
+                                                    <i class="fa fa-heart-o"></i>
+                                                    <span class="tooltipp">Like</span>
+                                                </button>
                                                 <button class="quick-view"
                                                         th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
                                                     <i class="fa fa-eye"></i><span class="tooltipp">Information</span>
@@ -189,9 +195,9 @@
                                                    th:text="${bestSeller.title}"></a>
                                             </h3>
                                             <del class="product-old-price"
-                                                 th:text="${bestSeller.productPrice}+'원'"></del>
+                                                 th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></del>
                                             <h4 id="money" class="product-price"
-                                                th:text="${bestSeller.salesPrice}+'원'"></h4>
+                                                th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -200,8 +206,12 @@
                                                 <i class="fa fa-star"></i>
                                             </div>
                                             <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                        class="tooltipp">Like</span></button>
+                                                <button class="add-to-wishlist"
+                                                        th:productNo="${bestSeller.productNo}"
+                                                        th:onclick="clickLike(this.getAttribute('productNo'))">
+                                                    <i class="fa fa-heart-o"></i>
+                                                    <span class="tooltipp">Like</span>
+                                                </button>
 
                                                 <button class="quick-view"
                                                         th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSeller.productNo})} + '\''">
