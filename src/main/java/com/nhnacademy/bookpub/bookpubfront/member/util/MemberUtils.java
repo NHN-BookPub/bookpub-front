@@ -1,8 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.member.util;
 
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.ui.Model;
@@ -17,27 +17,26 @@ import org.springframework.ui.Model;
  **/
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class MemberUtils {
-
-    private final MemberService memberService;
-
     /**
      * 현재 로그인한 사용자의 멤버 번호를 model 쪽에 담는 메서드.
      * 로그인 한 사람     : 멤버 번호.
      * 로그인 안한 사람    : -1.
+     * principal : memberNo
+     * credential : memberDto
      *
      * @param model model
      */
     public void getMemberNo(Model model) {
         String principal =
-                (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+                (String) SecurityContextHolder.getContext()
+                        .getAuthentication().getPrincipal();
 
-        Long memberNo = -1L;
+        long memberNo = -1L;
 
         if (!principal.equals("anonymousUser")) {
-            MemberDetailResponseDto member
-                    = memberService.getApiMember(Long.parseLong(principal));
-            memberNo = member.getMemberNo();
+            memberNo = Long.parseLong(principal);
         }
 
         model.addAttribute("memberNo", memberNo);

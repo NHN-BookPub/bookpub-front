@@ -77,7 +77,7 @@ public class CreateOrderRequestDto {
         this.receivedAt = LocalDateTime.of(
                 Integer.parseInt(receive[0]),
                 Integer.parseInt(receive[1]),
-                Integer.parseInt(receive[2]), 0, 0);
+                Integer.parseInt(receive[2]), 12, 0);
         this.orderRequest = orderInfo.getOrderRequest();
         this.pointAmount = orderInfo.getPointAmount();
         this.couponAmount = orderInfo.getCouponAmount();

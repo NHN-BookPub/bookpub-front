@@ -5,7 +5,6 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressReque
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
@@ -100,7 +99,7 @@ public interface MemberAdaptor {
     List<MemberTierStatisticsResponseDto> requestMemberTierStatics();
 
     /**
-     * 로그인을 위해 auth 서버와 통신하는 메소드.
+     * 로그인을 위해 shop 서버와 통신하는 메소드.
      *
      * @param loginRequest 로그인을 위한 멤버정보가 들어있는 요청 dto.
      * @return auth 서버에서 생성된 토큰을 헤더에 담아 응답해준다.
@@ -194,7 +193,7 @@ public interface MemberAdaptor {
      * @param accessToken accessToken -> 추후 없어질 예정.
      * @return 인증받은 유저의 정보.
      */
-    MemberLoginResponseDto requestAuthMemberInfo(String accessToken);
+    MemberDetailResponseDto requestAuthMemberInfo(String accessToken);
 
     /**
      * 회원의 멤버 등급을 조회하기 위한 메서드입니다.

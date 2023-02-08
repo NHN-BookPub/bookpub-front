@@ -16,7 +16,6 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.request.NickCheckRequestDt
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.OauthMemberCreateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.SignupMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
@@ -329,18 +328,15 @@ public class MemberAdaptorImpl implements MemberAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public MemberLoginResponseDto requestAuthMemberInfo(String accessToken) {
+    public MemberDetailResponseDto requestAuthMemberInfo(String accessToken) {
         HttpHeaders headers = makeHeader();
         headers.add(JwtUtil.AUTH_HEADER, JwtUtil.TOKEN_TYPE + accessToken);
-
-        HttpEntity<MemberLoginResponseDto> httpEntity =
-                new HttpEntity<>(headers);
 
         return restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/token/auth",
                 HttpMethod.GET,
-                httpEntity,
-                MemberLoginResponseDto.class).getBody();
+                new HttpEntity<>(headers),
+                MemberDetailResponseDto.class).getBody();
     }
 
 
