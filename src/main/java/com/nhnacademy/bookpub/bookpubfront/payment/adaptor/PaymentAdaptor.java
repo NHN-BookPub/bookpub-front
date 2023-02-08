@@ -7,7 +7,21 @@ package com.nhnacademy.bookpub.bookpubfront.payment.adaptor;
  * @since : 1.0
  **/
 public interface PaymentAdaptor {
+    /**
+     * 유효한 주문인지 검증하는 메소드.
+     *
+     * @param orderId 주문 id
+     * @param amount 주문 금액
+     * @return 유효한 주문인지 아닌지
+     */
     boolean verifyPayment(String orderId, Long amount);
 
+    /**
+     * 결제를 생성하는 메소드.
+     *
+     * @param orderId 주문 id
+     * @param paymentKey 결제 고유 키
+     * @param amount 주문 금액
+     */
     void createPayment(String orderId, String paymentKey, Long amount);
 }

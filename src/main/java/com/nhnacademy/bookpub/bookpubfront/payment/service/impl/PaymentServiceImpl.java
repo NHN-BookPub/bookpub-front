@@ -18,6 +18,9 @@ public class PaymentServiceImpl implements PaymentService {
     private final PaymentAdaptor paymentAdaptor;
 
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void verifyPayment(String orderId, Long amount) {
         boolean verifyResult = paymentAdaptor.verifyPayment(orderId, amount);
@@ -27,6 +30,9 @@ public class PaymentServiceImpl implements PaymentService {
         }
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createPayment(String orderId, String paymentKey, Long amount) {
         paymentAdaptor.createPayment(orderId, paymentKey, amount);

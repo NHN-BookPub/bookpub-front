@@ -25,6 +25,9 @@ public class PaymentAdaptorImpl implements PaymentAdaptor {
     private final RestTemplate restTemplate;
     private static final String API_URL = "/api/payment";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public boolean verifyPayment(String orderId, Long amount) {
         String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + API_URL + "/verify")
@@ -40,6 +43,9 @@ public class PaymentAdaptorImpl implements PaymentAdaptor {
         ).getBody());
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createPayment(String orderId, String paymentKey, Long amount) {
         String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + API_URL)
