@@ -637,7 +637,7 @@
                                      th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\''">
                                 <img style="width: 100%; height: 100%; object-fit: cover;"
                                      th:if="${not #strings.isEmpty(newBooks[1].getThumbnail)}"
-                                     th:src="@{${newBooks[0].getThumbnail()}}"
+                                     th:src="@{${newBooks[1].getThumbnail()}}"
                                      alt="no image"
                                      th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\''">
                             </div>
@@ -664,7 +664,7 @@
                                      th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\''">
                                 <img style="width: 100%; height: 100%; object-fit: cover;"
                                      th:if="${not #strings.isEmpty(newBooks[2].getThumbnail)}"
-                                     th:src="@{${newBooks[0].getThumbnail()}}"
+                                     th:src="@{${newBooks[2].getThumbnail()}}"
                                      alt="no image"
                                      th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\''">
                             </div>
