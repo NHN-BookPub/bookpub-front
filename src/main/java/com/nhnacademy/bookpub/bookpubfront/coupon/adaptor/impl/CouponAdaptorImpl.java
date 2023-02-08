@@ -22,7 +22,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 /**
  * 쿠폰을 관리하기 위한 어댑터입니다.
  *
- * @author : 정유진
+ * @author : 정유진, 김서현
  * @since : 1.0
  **/
 @Component
@@ -153,6 +153,45 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 .queryParam("tierCoupons", tierCoupons)
                 .encode().toUriString();
 
+        restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean requestExistMonthCoupon(Long memberNo, Long templateNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
+                                + memberNo + "/month-coupon")
+                .queryParam("templateNo", templateNo)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<Boolean>() {
+                }).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestIssueMonthCoupon(Long memberNo, Long templateNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
+                                + memberNo + "/month-coupon")
+                .queryParam("templateNo", templateNo)
+                .encode().toUriString();
+        
         restTemplate.exchange(
                 url,
                 HttpMethod.POST,

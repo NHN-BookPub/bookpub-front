@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * api를 이용해 back 서버(shop)와 데이터를 주고받기 위해 만든 어댑터 인터페이스입니다.
  *
- * @author : 정유진
+ * @author : 정유진, 김서현
  * @since : 1.0
  **/
 
@@ -66,4 +66,21 @@ public interface CouponAdaptor {
      * @param tierCoupons 등급 쿠폰 리스트
      */
     void requestIssueTierCoupons(Long memberNo, List<Long> tierCoupons);
+
+    /**
+     * 멤버의 이달의 쿠폰 발급 유무 확인을 위한 메서드입니다.
+     *
+     * @param memberNo   멤버 번호
+     * @param templateNo 템플릿 번호
+     * @return 이달의 쿠폰 발급 여부
+     */
+    Boolean requestExistMonthCoupon(Long memberNo, Long templateNo);
+
+    /**
+     * 이달의 쿠폰 발급하기 위한 메서드입니다.
+     *
+     * @param memberNo   멤버 번호
+     * @param templateNo 쿠폰 템플릿 번호
+     */
+    void requestIssueMonthCoupon(Long memberNo, Long templateNo);
 }

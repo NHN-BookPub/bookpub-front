@@ -9,7 +9,7 @@ import org.springframework.data.domain.Pageable;
 /**
  * 쿠폰을 다루기 위한 서비스 인터페이스입니다.
  *
- * @author : 정유진
+ * @author : 정유진, 김서현
  * @since : 1.0
  **/
 public interface CouponService {
@@ -66,4 +66,21 @@ public interface CouponService {
      * @param tierCoupons 등급쿠폰 리스트
      */
     void issueTierCoupons(Long memberNo, List<Long> tierCoupons);
+
+    /**
+     * 멤버에게 이달의 쿠폰 발급하기 위해 발급 유무를 확인합니다.
+     *
+     * @param memberNo   멤버 번호
+     * @param templateNo 쿠폰 템플릿 번호
+     * @return 이달의 쿠폰 발급 유무
+     */
+    boolean checkCouponIssuedByMemberNo(Long memberNo, Long templateNo);
+
+    /**
+     * 이달의 쿠폰 발급 위한 메서드입니다.
+     *
+     * @param memberNo   멤버 번호
+     * @param templateNo 쿠폰 템플릿 번호
+     */
+    void issueMonthCoupon(Long memberNo, Long templateNo);
 }
