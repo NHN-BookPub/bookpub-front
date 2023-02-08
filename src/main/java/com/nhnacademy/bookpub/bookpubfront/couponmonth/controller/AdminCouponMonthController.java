@@ -50,7 +50,7 @@ public class AdminCouponMonthController {
      * @return 이달의 쿠폰 리스트 조회 뷰로 redirect
      */
     @Auth
-    @PostMapping("coupon/coupon-months")
+    @PostMapping("/coupon/coupon-months")
     public String addCouponMonth(CreateCouponMonthRequestDto createRequestDto) {
         couponMonthService.createCouponMonth(createRequestDto);
 
