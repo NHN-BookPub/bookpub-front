@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>BookPub-Purchase</title>
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div class="modal fade" id="productAddModal" role="dialog">
+        <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 등록</h3>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/purchases" class="was-validated" method="post" id="requestDto" name="requestDto">
+                        <div class="form-group">
+                            <div>
+                                <label>상품번호</label>
+                                <input type="text" class="form-control" id="productNo" placeholder="상품번호"
+                                       name="productNo"
+                                       minlength="1" required>
+                                <div class="invalid-feedback">번호를 입력하세요</div>
+                            </div>
+                        </div>
+
+                        <div class="row form-group">
+                            <div class="col">
+                                <label for="purchasePrice">권당 매입가격</label>
+                                <input type="text" class="form-control" id="purchasePrice" placeholder="가격을 입력하세요"
+                                       name="purchasePrice"
+                                       minlength="1" required>
+                                <div class="invalid-feedback">가격 입력</div>
+                            </div>
+                            <div class="col">
+                                <label for="purchaseAmount">매입 수량</label>
+                                <input type="text" class="form-control" id="purchaseAmount" placeholder="수량을 입력하세요"
+                                       name="purchaseAmount"
+                                       minlength="1" required>
+                                <div class="invalid-feedback">수량 입력</div>
+                            </div>
+                        </div>
+                        <br/>
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left: 80%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">등록</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">매입 이력</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active">
+                        매입 이력 관리
+                    </li>
+                </ol>
+
+                <hr/>
+
+                <div align="right">
+                    <input type="text" id="findProductNo" placeholder="번호를 입력하세요"
+                           name="findProductNo"
+                           minlength="1" required>
+                    <button class="btn btn-primary float-right" id="findPurchases" onclick="findPurchasesByNo()">
+                        번호 검색
+                    </button>
+
+                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#productAddModal">
+                        매입 등록
+                    </button>
+                </div>
+
+
+                <br/>
+
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>상품번호</th>
+                            <th>품명</th>
+                            <th>매입번호</th>
+                            <th>매입수량</th>
+                            <th>권당 매입가</th>
+                            <th>매입일시</th>
+                        </tr>
+                        </thead>
+                        <tbody th:if="${!purchases.isEmpty()}">
+                        <tr th:each="purchase: ${purchases}">
+                            <td th:text="${purchase.getProductNo()}"></td>
+                            <td th:text="${purchase.productTitle}"></td>
+                            <td th:text="${purchase.purchaseNo}"></td>
+                            <td th:text="${purchase.purchaseAmount}"></td>
+                            <td th:text="${purchase.purchasePrice}"></td>
+                            <td th:text="${#temporals.format(purchase.createdAt, 'yyyy.MM.dd HH:mm')}"></td>
+                            <td>
+                                <form th:action="@{/admin/products/{productNo}(productNo=${purchase.productNo})}"
+                                      method="post">
+                                    <button type="submit" class="btn btn-info">정보조회</button>
+                                </form>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="@{/admin/products(page=(${page}-1))}"
+                               th:text="${page}"></a></li>
+                    </th:block>
+                </ul>
+            </nav>
+        </main>
+
+        <th:block th:include="admin/fragments/adminFooter"/>
+    </div>
+</div>
+</body>
+<script>
+    const findProductNo = document.getElementById("findProductNo");
+
+    function findPurchasesByNo() {
+        window.location.href = "/admin/purchases/" + findProductNo.value;
+    }
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+</html>
