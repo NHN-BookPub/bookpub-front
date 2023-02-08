@@ -20,6 +20,8 @@ import org.springframework.ui.Model;
 public class CartUtils {
 
     private final RedisTemplate<String, Object> redisTemplate;
+    public static final String CART_COOKIE = "CART";
+    public static final String ORDER_INFO = "orderInfo";
 
     /**
      * 현재 장바구니에 담긴 상품 개수를 구하는 메서드.

@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.filter;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.AUTHENTICATION;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
@@ -35,6 +36,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private final RedisTemplate<String, AuthDto> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     /**
      * 인증된 사용자면 로그인 상태 유지.
@@ -75,7 +77,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             SecurityContext context = SecurityContextHolder.getContext();
             context.setAuthentication(new UsernamePasswordAuthenticationToken(
                     member.getMemberNo().toString(),
-                    member,
+                    objectMapper.writeValueAsString(member),
                     authorities)
             );
 

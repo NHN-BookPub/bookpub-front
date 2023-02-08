@@ -1,5 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.cart;
 
+import static com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils.CART_COOKIE;
+
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,6 +18,7 @@ import java.util.Set;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,9 +37,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/cart")
 @RequiredArgsConstructor
+@Slf4j
 public class CartController {
-
-    private static final String CART = "CART";
     private final ProductService productService;
     private final ObjectMapper objectMapper;
     private final CartUtils cartUtils;
@@ -51,7 +53,7 @@ public class CartController {
      * @return 장바구니 화면
      */
     @GetMapping
-    public String cartView(@CookieValue(name = CART, required = false) Cookie cookie,
+    public String cartView(@CookieValue(name = CART_COOKIE, required = false) Cookie cookie,
                            Model model) {
         if (Objects.nonNull(cookie)) {
             Set<Object> objects = redisTemplate.opsForSet().members(cookie.getValue());
@@ -83,7 +85,7 @@ public class CartController {
      * @return 상품 번호
      */
     @PostMapping
-    public @ResponseBody Object addProductToCart(@CookieValue(name = CART) Cookie cookie,
+    public @ResponseBody Object addProductToCart(@CookieValue(name = CART_COOKIE) Cookie cookie,
                                                  Long productNo) {
         redisTemplate.opsForSet().add(cookie.getValue(), productNo);
 
@@ -112,7 +114,7 @@ public class CartController {
             sb.append(productNo).append("-").append(count).append("/");
         }
 
-        Cookie cookie = new Cookie("orderInfo", sb.toString());
+        Cookie cookie = new Cookie(CartUtils.ORDER_INFO, sb.toString());
         cookie.setPath("/");
         cookie.setMaxAge(86400);
         response.addCookie(cookie);

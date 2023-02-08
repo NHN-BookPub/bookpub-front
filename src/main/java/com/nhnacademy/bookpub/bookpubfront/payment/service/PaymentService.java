@@ -1,5 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.service;
 
+import javax.servlet.http.HttpServletResponse;
+
 /**
  * 결제 서비스.
  *
@@ -21,6 +23,8 @@ public interface PaymentService {
      * @param orderId 주문 id
      * @param paymentKey 결제 키
      * @param amount 주문 금액
+     * @param response 응답
      */
-    void createPayment(String orderId, String paymentKey, Long amount);
+    void createPayment(String orderId, String paymentKey, Long amount,
+                       HttpServletResponse response);
 }
