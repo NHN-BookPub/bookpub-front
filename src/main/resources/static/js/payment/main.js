@@ -1,8 +1,5 @@
 function paymentBtn(method, toss, order) {
     var tossPayments = TossPayments(toss.clientId)
-
-    console.log(method)
-
     tossPayments.requestPayment(method, {
         amount: order.totalAmount,
         orderId: order.orderId,

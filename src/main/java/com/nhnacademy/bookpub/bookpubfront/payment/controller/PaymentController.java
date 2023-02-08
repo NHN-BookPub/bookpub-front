@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.payment.controller;
 import com.nhnacademy.bookpub.bookpubfront.config.TossConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
+import com.nhnacademy.bookpub.bookpubfront.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -23,6 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 @Slf4j
 public class PaymentController {
+    private final PaymentService paymentService;
     private final OrderService orderService;
     private final TossConfig tossConfig;
 
@@ -44,18 +46,17 @@ public class PaymentController {
     /**
      * 결제 생성 성공 시 리다이렉트 되서 들어오는 컨트롤러 url.
      *
+     * @param orderId    주문번호.
      * @param paymentKey 결제 생성 키.
-     * @param orderId 주문번호.
-     * @param amount 금액.
+     * @param amount     금액.
      * @return successPage.
      */
     @GetMapping("/success")
-    public String successPage(@RequestParam String paymentKey,
-                              @RequestParam String orderId,
+    public String successPage(@RequestParam String orderId,
+                              @RequestParam String paymentKey,
                               @RequestParam Long amount) {
-        log.warn(paymentKey);
-        log.warn(orderId);
-        log.warn(amount.toString());
+        paymentService.verifyPayment(orderId, amount);
+        paymentService.createPayment(orderId, paymentKey, amount);
 
         return "redirect:/";
     }
