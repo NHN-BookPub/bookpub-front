@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.tiercoupon.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.service.TierCouponService;
 import java.util.List;
@@ -28,6 +29,7 @@ public class TierCouponRestController {
      * @param tierNo   등급 번호
      * @return 발급 성공 여부
      */
+    @Auth
     @GetMapping("/coupon/tier-coupon")
     public boolean issueTierCoupon(@RequestParam Long memberNo, @RequestParam Integer tierNo) {
         // 등급 쿠폰 조회 // get
