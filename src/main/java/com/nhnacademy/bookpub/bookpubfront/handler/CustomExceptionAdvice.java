@@ -30,6 +30,11 @@ public class CustomExceptionAdvice {
         return "error/400";
     }
 
+    @ExceptionHandler(NotLoginException.class)
+    public String needLogin() {
+        return "member/login";
+    }
+
     @ExceptionHandler({ServerErrorException.class})
     public String other500() {
         return "error/500";
@@ -44,5 +49,6 @@ public class CustomExceptionAdvice {
     public String otherAll() {
         return "error/500";
     }
+
 
 }

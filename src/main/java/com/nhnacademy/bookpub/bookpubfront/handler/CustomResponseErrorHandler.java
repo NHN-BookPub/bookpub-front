@@ -24,6 +24,8 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
             throw new UnAuthorizedException();
         } else if (status.equals(HttpStatus.BAD_REQUEST)) {
             throw new BadRequestException();
+        } else if (status.equals(HttpStatus.FORBIDDEN)) {
+            throw new NotLoginException();
         } else if (status.is4xxClientError()) {
             throw new NotFoundException();
         } else if (status.equals(HttpStatus.BAD_GATEWAY)) {
