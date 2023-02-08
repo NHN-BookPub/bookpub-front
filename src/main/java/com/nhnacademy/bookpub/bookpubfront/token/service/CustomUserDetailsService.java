@@ -5,7 +5,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
 
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberLoginResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.exception.MemberNotFoundException;
 import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
@@ -54,7 +54,7 @@ public class CustomUserDetailsService implements UserDetailsService {
         String sessionId = request.getSession().getId();
         CookieUtil.makeCookie(response, SESSION_COOKIE, sessionId);
 
-        MemberLoginResponseDto member
+        MemberDetailResponseDto member
                 = memberAdaptor.requestAuthMemberInfo(accessToken);
 
         if (Objects.isNull(member)) {
@@ -64,15 +64,10 @@ public class CustomUserDetailsService implements UserDetailsService {
         List<SimpleGrantedAuthority> authorities =
                 Utils.makeAuthorities(member.getAuthorities());
 
-        AuthDto authDto = new AuthDto(
-                member.getMemberNo().toString(),
-                member.getMemberPwd(),
-                member.getAuthorities());
-
-        redisTemplate.opsForHash().put(AUTHENTICATION, sessionId, authDto);
+        redisTemplate.opsForHash().put(AUTHENTICATION, sessionId, member);
 
         return new User(member.getMemberNo().toString(),
-                member.getMemberPwd(),
+                "dummy",
                 authorities);
     }
 }

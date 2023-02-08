@@ -5,7 +5,6 @@ import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.makeJwtCook
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
-import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.http.Cookie;
@@ -31,6 +30,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final MemberAdaptor memberAdaptor;
+    private static final String LOGIN_STATUS = "X-LOGIN";
 
     @Override
     public Authentication attemptAuthentication(
@@ -87,15 +87,13 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
      * @param response   response.
      * @param chain      필터체인.
      * @param authResult 인증결과.
-     * @throws IOException sendRedirect하며 발생할 수 있는 exception.
      */
     @Override
     protected void successfulAuthentication(
             HttpServletRequest request, HttpServletResponse response,
-            FilterChain chain, Authentication authResult) throws IOException {
+            FilterChain chain, Authentication authResult) {
         SecurityContextHolder.clearContext();
-
-        response.sendRedirect("/");
+        response.addHeader(LOGIN_STATUS, "success");
     }
 
 

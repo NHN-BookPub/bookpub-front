@@ -4,6 +4,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.AUTHENTICATION;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.SESSION_COOKIE;
 
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
@@ -62,19 +63,19 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
             }
 
             String sessionId = Objects.requireNonNull(sessionCookie).getValue();
-            AuthDto auth =
-                    (AuthDto) redisTemplate.opsForHash().get(AUTHENTICATION, sessionId);
-            if (notExistLoginData(request, response, filterChain, auth)) {
+            MemberDetailResponseDto member = (MemberDetailResponseDto)
+                    redisTemplate.opsForHash().get(AUTHENTICATION, sessionId);
+            if (notExistLoginData(request, response, filterChain, member)) {
                 return;
             }
 
             List<SimpleGrantedAuthority> authorities =
-                    Utils.makeAuthorities(Objects.requireNonNull(auth).getAuthorities());
+                    Utils.makeAuthorities(Objects.requireNonNull(member).getAuthorities());
 
             SecurityContext context = SecurityContextHolder.getContext();
             context.setAuthentication(new UsernamePasswordAuthenticationToken(
-                    auth.getMemberNo(),
-                    auth.getMemberPwd(),
+                    member.getMemberNo().toString(),
+                    member,
                     authorities)
             );
 
@@ -92,7 +93,7 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
      * @param request     request.
      * @param response    response.
      * @param filterChain filterchain.
-     * @param auth        로그인 한 유저의 정보.
+     * @param member      로그인 한 유저의 정보.
      * @return 정보가 있는지 없는지.
      * @throws IOException      doFilter 발생가능 에러.
      * @throws ServletException doFilter 발생가능 에러.
@@ -100,8 +101,10 @@ public class CustomAuthenticationFilter extends OncePerRequestFilter {
     private static boolean notExistLoginData(HttpServletRequest request,
                                              HttpServletResponse response,
                                              FilterChain filterChain,
-                                             AuthDto auth) throws IOException, ServletException {
-        if (Objects.isNull(auth)) {
+                                             MemberDetailResponseDto member)
+            throws IOException, ServletException {
+
+        if (Objects.isNull(member)) {
             filterChain.doFilter(request, response);
             return true;
         }

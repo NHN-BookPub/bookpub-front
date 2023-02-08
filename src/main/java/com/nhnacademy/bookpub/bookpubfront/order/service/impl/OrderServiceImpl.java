@@ -83,7 +83,6 @@ public class OrderServiceImpl implements OrderService {
                                         String productCouponInfo) {
         String productSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[0];
         String couponSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[1];
-
         String[] productInfo = productSection.split(DIVIDER);
 
         Long productNo = Long.parseLong(productInfo[0]);
@@ -97,8 +96,8 @@ public class OrderServiceImpl implements OrderService {
         if (!couponSection.equals(" ")) {
             couponSection = couponSection.trim();
             String[] couponInfo = couponSection.split(DIVIDER);
-            final Long couponNo = Long.parseLong(couponInfo[0]);
-            final Long couponDiscount = Long.parseLong(couponInfo[2]);
+            Long couponNo = Long.parseLong(couponInfo[0]);
+            Long couponDiscount = Long.parseLong(couponInfo[2]);
             productCoupon.put(productNo, couponNo);
             productSaleAmount.put(productNo, couponDiscount);
         }
