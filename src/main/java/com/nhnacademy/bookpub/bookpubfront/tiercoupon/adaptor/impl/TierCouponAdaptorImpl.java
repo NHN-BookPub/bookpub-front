@@ -33,6 +33,7 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
     private static final String TIER_COUPON_URL = "/api/tier-coupons";
     private static final String TIER_COUPON_AUTH_URL = "/token/tier-coupons";
 
+
     /**
      * {@inheritDoc}
      */

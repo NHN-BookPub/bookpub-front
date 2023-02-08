@@ -140,9 +140,10 @@ public class MemberController {
      * @return 관리자 의 멤버 상세페이지.
      */
     @GetMapping("/admin/members/{memberNo}")
+    @Auth
     public String adminMemberInfo(@PathVariable("memberNo") Long memberNo,
                                   Model model) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
 
         model.addAttribute(MEMBER, member);
 
@@ -173,8 +174,9 @@ public class MemberController {
      * @return 멤버의 개인정보 페이지로 이동.
      */
     @GetMapping("/members/{memberNo}")
+    @Auth
     public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
         return "mypage/memberInfo";
     }
@@ -188,9 +190,10 @@ public class MemberController {
      * @return 멤버의 사용 가능 쿠폰함 페이지로 이동.
      */
     @GetMapping("/members/{memberNo}/coupon/positive")
+    @Auth
     public String memberCouponList(@PathVariable("memberNo") Long memberNo,
                                    @PageableDefault Pageable pageable, Model model) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
 
         PageResponse<GetCouponResponseDto> positiveCoupons = couponService.getPositiveCoupons(
@@ -218,7 +221,7 @@ public class MemberController {
     @GetMapping("/members/{memberNo}/coupon/negative")
     public String memberCouponListNegative(@PathVariable("memberNo") Long memberNo,
                                            @PageableDefault Pageable pageable, Model model) {
-        MemberDetailResponseDto member = memberService.getMember(memberNo);
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
         model.addAttribute(MEMBER, member);
 
         PageResponse<GetCouponResponseDto> negativeCoupons = couponService.getNegativeCoupons(

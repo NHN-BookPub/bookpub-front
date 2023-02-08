@@ -9,9 +9,11 @@ import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListRespon
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -37,7 +39,7 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public Long createOrder(OrderFormRequestDto requestDto, List<String> productInfoList) {
+    public Long createOrder(OrderFormRequestDto requestDto, String productInfo) {
         String principal =
                 (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberNo = null;
@@ -51,6 +53,9 @@ public class OrderServiceImpl implements OrderService {
         Map<Long, Long> productAmountMap = new HashMap<>();
         Map<Long, Long> productCoupon = new HashMap<>();
         Map<Long, Long> productSaleAmount = new HashMap<>();
+
+        List<String> productInfoList
+                = Arrays.stream(productInfo.split(",")).collect(Collectors.toList());
 
         for (String productCouponInfo : productInfoList) {
             parsingAndInput(productNos, productCount, productAmountMap,
@@ -78,21 +83,24 @@ public class OrderServiceImpl implements OrderService {
                                         String productCouponInfo) {
         String productSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[0];
         String couponSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[1];
-
         String[] productInfo = productSection.split(DIVIDER);
-        String[] couponInfo = couponSection.split(DIVIDER);
 
         Long productNo = Long.parseLong(productInfo[0]);
         Integer productCnt = Integer.parseInt(productInfo[1]);
         Long productAmount = Long.parseLong(productInfo[2]);
-        final Long couponNo = Long.parseLong(couponInfo[0]);
-        final Long couponDiscount = Long.parseLong(couponInfo[2]);
 
         productNos.add(productNo);
         productCount.put(productNo, productCnt);
         productAmountMap.put(productNo, productAmount);
-        productCoupon.put(productNo, couponNo);
-        productSaleAmount.put(productNo, couponDiscount);
+
+        if (!couponSection.equals(" ")) {
+            couponSection = couponSection.trim();
+            String[] couponInfo = couponSection.split(DIVIDER);
+            Long couponNo = Long.parseLong(couponInfo[0]);
+            Long couponDiscount = Long.parseLong(couponInfo[2]);
+            productCoupon.put(productNo, couponNo);
+            productSaleAmount.put(productNo, couponDiscount);
+        }
     }
 
     /**

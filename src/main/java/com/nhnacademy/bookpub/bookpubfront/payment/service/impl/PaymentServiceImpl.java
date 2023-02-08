@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.payment.adaptor.PaymentAdaptor;
+import com.nhnacademy.bookpub.bookpubfront.payment.exception.NotNormalPaymentException;
 import com.nhnacademy.bookpub.bookpubfront.payment.service.PaymentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -16,8 +17,24 @@ import org.springframework.stereotype.Service;
 public class PaymentServiceImpl implements PaymentService {
     private final PaymentAdaptor paymentAdaptor;
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public void successPayment(String orderId, String paymentKey, Long amount) {
-        paymentAdaptor.successPayment(orderId, paymentKey, amount);
+    public void verifyPayment(String orderId, Long amount) {
+        boolean verifyResult = paymentAdaptor.verifyPayment(orderId, amount);
+
+        if (!verifyResult) {
+            throw new NotNormalPaymentException();
+        }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void createPayment(String orderId, String paymentKey, Long amount) {
+        paymentAdaptor.createPayment(orderId, paymentKey, amount);
     }
 }

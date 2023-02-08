@@ -154,7 +154,7 @@
                     </tr>
                     <tr>
                         <td>
-                            <div><img th:src="@{'data:image/*;base64,'+${couponTemplate.templateImage}}" alt="이미지 없음"/>
+                            <div><img th:src="${couponTemplate.templateImage}" alt="이미지 없음"/>
                             </div>
                         </td>
                         <td>
@@ -169,10 +169,10 @@
                         <td>최대할인가격</td>
                     </tr>
                     <tr>
-                        <td th:if="${couponTemplate.policyFixed == 1}" th:text="정액"></td>
-                        <td th:unless="${couponTemplate.policyFixed == 1}" th:text="정률"></td>
-                        <td th:text="${couponTemplate.policyFixed == 1} ? ${couponTemplate.policyPrice} + '원'
-                                 : ${couponTemplate.policyPrice} + '%'"></td>
+                        <td th:if="${couponTemplate.policyFixed} == true" th:text="정액"></td>
+                        <td th:unless="${couponTemplate.policyFixed} == true" th:text="정률"></td>
+                        <td th:text="(${couponTemplate.policyFixed} == true) ? (${couponTemplate.policyPrice} + '원')
+                                 : (${couponTemplate.policyPrice} + '%')"></td>
                         <td th:text="${couponTemplate.policyMinimum} + '원'"></td>
                         <td th:text="${couponTemplate.maxDiscount} + '원'"></td>
                     </tr>

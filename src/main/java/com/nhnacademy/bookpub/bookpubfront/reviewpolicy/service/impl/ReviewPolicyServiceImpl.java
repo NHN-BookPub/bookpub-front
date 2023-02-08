@@ -10,7 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 /**
- * Some description here.
+ * 상품평 정책 서비스 구현체입니다.
  *
  * @author : 정유진
  * @since : 1.0
@@ -19,21 +19,34 @@ import org.springframework.stereotype.Service;
 @RequiredArgsConstructor
 public class ReviewPolicyServiceImpl implements ReviewPolicyService {
     private final ReviewPolicyAdaptor reviewPolicyAdaptor;
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetReviewPolicyResponseDto> getReviewPolicies() {
         return reviewPolicyAdaptor.requestReviewPolicies();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void createReviewPolicy(CreateReviewPolicyRequestDto request) {
         reviewPolicyAdaptor.requestCreateReviewPolicy(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyReviewPolicy(ModifyReviewPolicyRequestDto request) {
         reviewPolicyAdaptor.requestModifyReviewPolicy(request);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void modifyReviewPolicyUsed(Integer policyNo) {
         reviewPolicyAdaptor.requestModifyUsed(policyNo);

@@ -7,6 +7,7 @@ import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.service.CategoryService;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
@@ -35,12 +36,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequiredArgsConstructor
 @RequestMapping
 public class ProductController {
-
     private final ProductService productService;
     private final ReviewService reviewService;
     private final CategoryService categoryService;
     private final CartUtils cartUtils;
     private final CategoryUtils categoryUtils;
+    private final MemberUtils memberUtils;
     private static final String CART = "CART";
 
     /**
@@ -59,6 +60,8 @@ public class ProductController {
 
         cartUtils.getCountInCart(cookie.getValue(), model);
         categoryUtils.categoriesView(model);
+        memberUtils.getMemberNo(model);
+
         model.addAttribute("product", product);
         model.addAttribute("free", DELIVERY_FREE_FEE_STANDARD.getFee());
         model.addAttribute("deliveryFee", DELIVERY_FEE.getFee());
@@ -86,6 +89,7 @@ public class ProductController {
 
         cartUtils.getCountInCart(cookie.getValue(), model);
         categoryUtils.categoriesView(model);
+        memberUtils.getMemberNo(model);
 
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", products.getTotalPages());
@@ -99,4 +103,30 @@ public class ProductController {
         return "product/productListByCategory";
     }
 
+    /**
+     * 이북 리스트를 보여줍니다.
+     *
+     * @param pageable 페이징
+     * @param cookie 쿠키
+     * @param model 모델
+     * @return 이북 리스트 뷰
+     */
+    @GetMapping("/products/ebooks")
+    public String viewEbooks(@PageableDefault Pageable pageable,
+                             @CookieValue(name = CART, required = false) Cookie cookie,
+                             Model model) {
+        PageResponse<GetProductByCategoryResponseDto> products = productService.getEbooks(pageable);
+
+        cartUtils.getCountInCart(cookie.getValue(), model);
+        categoryUtils.categoriesView(model);
+
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("isNext", products.isNext());
+        model.addAttribute("isPrevious", products.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
+
+        return "product/productEbookList";
+    }
 }

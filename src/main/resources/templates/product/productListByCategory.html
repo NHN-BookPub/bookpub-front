@@ -55,7 +55,7 @@
                 </div>
 
                 <div class="col-sm-3">
-                    <h4 th:text="'-' + ${product.title} + '-'"></h4>
+                    <h4 th:text="'[' + ${product.title} + ']'"></h4>
                     <div class="row" style="padding-left: 10px">
                         <label>카테고리 : </label>
                         <span th:each="category: ${product.categories}">
@@ -73,8 +73,11 @@
                 <div class="col-sm-5">
                     <div class="row" style="text-align: right">
                         <label>판매 가격</label>
-                        <p class="product-detail-price"
-                           th:text="${product.salesPrice} + '원 [' + ${product.salesRate + '% 할인]'}"></p>
+                        <br/>
+                        <div style="display: inline-block; text-align: right">
+                            <span th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></span>
+                            <span style="color: #ef0d0d" th:text="'(' + ${product.salesRate} + '% 할인)'"></span>
+                        </div>
 
                         <br/>
 
@@ -118,4 +121,6 @@
 
 <th:block th:include="main/fragments/rootFooter"></th:block>
 </body>
+<script src="/static/js/main/main.js"></script>
+
 </html>

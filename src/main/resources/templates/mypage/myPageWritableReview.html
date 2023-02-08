@@ -24,11 +24,11 @@
     <hr/>
 
     <div align="right">
-        <form action="/members/my/writable-reviews">
+        <form th:action="@{/members/{memberNo}/writable-reviews(memberNo=${member.memberNo})}">
             <button class="btn btn-dark float-right" style="box-shadow: 3px 3px #888888;"> 작성 가능한 리뷰 ></button>
         </form>
 
-        <form action="/members/my/written-reviews">
+        <form th:action="@{/members/{memberNo}/written-reviews(memberNo=${member.memberNo})}">
             <button class="btn btn-dark float-right" style="margin-right: 8px; box-shadow: 3px 3px #888888;"> 작성한 리뷰 ></button>
         </form>
     </div>
@@ -53,7 +53,7 @@
                     </div>
                 <div class="col-10">
                     <b>제목 : </b>
-                    <a th:href="@{/products/view/{productNo}(productNo=${review.productNo})}"
+                    <a th:href="@{/products/{productNo}(productNo=${review.productNo})}"
                        th:text="${review.title}"></a>
                     <br/>
                     <b>저자 : </b>
@@ -81,17 +81,17 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/my/writable-reviews?(page=(${currentPage}-1))}">Previous</a>
+                       th:href="@{/members/{memberNo}/writable-reviews?(page=(${currentPage}-1), memberNo=${member.memberNo})}">Previous</a>
                 </li>
                 <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                        <a class="page-link" th:href="@{/members/my/writable-reviews?(page=(${page-1}))}"
+                        <a class="page-link" th:href="@{/members/{memberNo}/writable-reviews?(page=(${page-1}), memberNo=${member.memberNo})}"
                            th:text="${page}"></a></li>
                 </th:block>
                 <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/my/writable-reviews?(page=(${currentPage}+1))}">Next</a>
+                       th:href="@{/members/{memberNo}/writable-reviews?(page=(${currentPage}+1), memberNo=${member.memberNo})}">Next</a>
                 </li>
             </ul>
         </nav>
@@ -107,7 +107,7 @@
                 <h5 class="modal-title" id="staticBackdropLabel">리뷰 작성</h5>
             </div>
             <div class="modal-body">
-                <form action="/members/my/writable-reviews" class="was-validated" method="post"
+                <form th:action="@{/members/{memberNo}/writable-reviews(memberNo=${member.memberNo})}" class="was-validated" method="post"
                       enctype="multipart/form-data">
 
                     <input type="hidden" value="0" id="productNo" name="productNo">
@@ -149,75 +149,6 @@
         </div>
     </div>
 </div>
-
-<!--        <div class="row">-->
-<!--            <div class="col-md-6">-->
-<!--                <div class="card  text-black-50 mb-4 ">-->
-<!--                    <div class="card-body">-->
-<!--                        <span class="float-lg-start">내등급</span>-->
-<!--                        <span class="float-end check-member-info justify-content-end"-->
-<!--                              th:text="${member.tierName}"></span>-->
-<!--                    </div>-->
-<!--                    <div class="card-footer d-flex align-items-center">-->
-<!--                        <a class="text-white stretched-link justify-content-end" href="#">등급</a>-->
-<!--                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="col-md-6">-->
-<!--                <div class="card member-info-point text-black-50 mb-4">-->
-<!--                    <div class="card-body">-->
-<!--                        <span class="float-lg-start">잔여 포인트</span>-->
-<!--                        <span class="check-member float-end justify-content-end"-->
-<!--                              th:text="${member.point}"></span>-->
-<!--                    </div>-->
-<!--                    <div class="card-footer d-flex align-items-center">-->
-<!--                        <a class="text-white stretched-link justify-content-end" href="#">포인트 사용 내역</a>-->
-<!--                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--        <div class="list-group">-->
-<!--            <h5 class="mb-2 control-label">내 이름</h5>-->
-
-
-<!--            <a href="#change_name"-->
-<!--               class="nav__link list-group-item list-group-item-action flex-column align-items-start"-->
-<!--               data-toggle="modal">-->
-<!--                <div class="d-flex w-100 justify-content-end">-->
-<!--                    <small class="badge bg-opacity-20">수정하기</small>-->
-<!--                </div>-->
-<!--                <span class="mb-2" th:text="${member.memberName}"></span>-->
-<!--            </a>-->
-<!--            &lt;!&ndash;        이름 변경 모달        &ndash;&gt;-->
-<!--            <div class="modal fade" id="change_name" data-backdrop="static" tabindex="-1" role="dialog"-->
-<!--                 aria-labelledby="staticBackdropLabel" aria-hidden="true">-->
-<!--                <div class="modal-dialog modal-dialog-centered" role="document">-->
-<!--                    <div class="modal-content">-->
-<!--                        <div class="modal-header">-->
-<!--                            <h5 class="modal-title">이름 변경</h5>-->
-<!--                        </div>-->
-<!--                        <div class="modal-body">-->
-<!--                            <form th:action="'/members/' + ${member.memberNo} + '/name'" class="was-validated"-->
-<!--                                  method="POST">-->
-<!--                                <input type="hidden" id="member-no" th:value="${#authentication.principal}">-->
-<!--                                <br/>-->
-<!--                                <div class="form-group">-->
-<!--                                    <label for="exchangeName">변경할 이름</label>-->
-<!--                                    <input type="text" class="form-control" id="exchangeName" placeholder="변경할 이름 기입"-->
-<!--                                           name="exchangeName"-->
-<!--                                           pattern="^.*(?=.*[가-힣a-z])(?=.{2,200}).*$" required>-->
-<!--                                    <div class="valid-feedback">완료</div>-->
-<!--                                    <div class="invalid-feedback">2자 10자</div>-->
-<!--                                </div>-->
-<!--                                <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>-->
-<!--                                <button type="submit" class="btn btn-primary">등록</button>-->
-<!--                            </form>-->
-<!--                        </div>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
 
 </div>
 

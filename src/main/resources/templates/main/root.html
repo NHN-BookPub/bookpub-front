@@ -29,37 +29,37 @@
     <div class="container">
         <div class="row">
             <div class="col-md-4 col-xs-6">
-                <div class="shop">
+                <div class="shop" style="height: 202px">
                     <div class="shop-img">
-                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                        <img src="https://api-storage.cloud.toast.com/v1/AUTH_fcb81f74e379456b8ca0e091d351a7af/bookpub/front/bestSeller.jpg" alt="">
                     </div>
                     <div class="shop-body">
-                        <h3>베스트셀러<br>보러가기</h3>
+                        <h3>Best-Seller<br>Collection</h3>
                         <a href="#" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4 col-xs-6">
-                <div class="shop">
+                <div class="shop" style="height: 202px">
                     <div class="shop-img">
-                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                        <img src="https://api-storage.cloud.toast.com/v1/AUTH_fcb81f74e379456b8ca0e091d351a7af/bookpub/front/middle.jpg" alt="">
                     </div>
                     <div class="shop-body">
-                        <h3>Goods<br>Collection</h3>
+                        <h3>Subscription<br>Collection</h3>
                         <a href="#" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
 
             <div class="col-md-4 col-xs-6">
-                <div class="shop">
+                <div class="shop" style="height: 202px"  onclick="location.href='/products/ebooks'">
                     <div class="shop-img">
-                        <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                        <img src="https://api-storage.cloud.toast.com/v1/AUTH_fcb81f74e379456b8ca0e091d351a7af/bookpub/front/ebook.jpg" alt="">
                     </div>
                     <div class="shop-body">
-                        <h3>Coming<br>Soon...</h3>
-                        <a href="#" class="cta-btn">coming soon... <i class="fa fa-arrow-circle-right"></i></a>
+                        <h3>E-Book<br>Collection</h3>
+                        <a href="/products/ebooks" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -85,7 +85,7 @@
 
                                 <div th:each="newBook :${newBooks}" style="padding: 15px !important;">
                                     <div class="product">
-                                        <div class="product-img" style="width: 100%; height: 300px;">
+                                        <div class="product-img" style="width: 100%; height: 370px;">
                                             <img style="width: 100%; height: 100%; object-fit: cover;"
                                                  th:if="${#strings.isEmpty(newBook.getThumbnail)}"
                                                  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
@@ -112,8 +112,10 @@
                                                 <a th:href="@{/products/{productNo}(productNo=${newBook.productNo})}"
                                                    th:text="${newBook.title}"></a>
                                             </h3>
-                                            <del class="product-old-price" th:text="${newBook.productPrice}+'원'"></del>
-                                            <h4 class="product-price" th:text="${newBook.salesPrice}+'원'"></h4>
+                                            <del class="product-old-price"
+                                                 th:text="|${#numbers.formatInteger(newBook.productPrice, 0, 'COMMA')}원|"></del>
+                                            <h4 class="product-price"
+                                                th:text="|${#numbers.formatInteger(newBook.salesPrice, 0, 'COMMA')}원|"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -122,8 +124,12 @@
                                                 <i class="fa fa-star"></i>
                                             </div>
                                             <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                        class="tooltipp">Like</span></button>
+                                                <button class="add-to-wishlist"
+                                                        th:productNo="${newBook.productNo}"
+                                                        th:onclick="clickLike(this.getAttribute('productNo'))">
+                                                    <i class="fa fa-heart-o"></i>
+                                                    <span class="tooltipp">Like</span>
+                                                </button>
                                                 <button class="quick-view"
                                                         th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
                                                     <i class="fa fa-eye"></i><span class="tooltipp">Information</span>
@@ -161,7 +167,7 @@
 
                                 <div th:each="bestSeller :${bestSellers}" style="padding: 15px !important;">
                                     <div class="product">
-                                        <div class="product-img" style="width: 100%; height: 300px;">
+                                        <div class="product-img" style="width: 100%; height: 370px;">
                                             <img style="width: 100%; height: 100%; object-fit: cover;"
                                                  th:if="${#strings.isEmpty(bestSeller.getThumbnail)}"
                                                  src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
@@ -189,9 +195,9 @@
                                                    th:text="${bestSeller.title}"></a>
                                             </h3>
                                             <del class="product-old-price"
-                                                 th:text="${bestSeller.productPrice}+'원'"></del>
+                                                 th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></del>
                                             <h4 id="money" class="product-price"
-                                                th:text="${bestSeller.salesPrice}+'원'"></h4>
+                                                th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -200,8 +206,12 @@
                                                 <i class="fa fa-star"></i>
                                             </div>
                                             <div class="product-btns">
-                                                <button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span
-                                                        class="tooltipp">Like</span></button>
+                                                <button class="add-to-wishlist"
+                                                        th:productNo="${bestSeller.productNo}"
+                                                        th:onclick="clickLike(this.getAttribute('productNo'))">
+                                                    <i class="fa fa-heart-o"></i>
+                                                    <span class="tooltipp">Like</span>
+                                                </button>
 
                                                 <button class="quick-view"
                                                         th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSeller.productNo})} + '\''">
@@ -227,7 +237,7 @@
         <div class="row">
             <div class="col-md-4 col-xs-6">
                 <div class="section-title">
-                    <h4 class="title">Top selling</h4>
+                    <h4 class="title">인기 상품</h4>
                     <div class="section-nav">
                         <div id="slick-nav-3" class="products-slick-nav"></div>
                     </div>
@@ -237,34 +247,82 @@
                     <div>
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(bestSellers[0].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[0].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(bestSellers[0].getThumbnail)}"
+                                     th:src="@{${bestSellers[0].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[0].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${bestSellers[0].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${bestSellers[0].productNo})} + '\'"
+                                       th:text="${bestSellers[0].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(bestSellers[0].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(bestSellers[0].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(bestSellers[1].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[1].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(bestSellers[1].getThumbnail)}"
+                                     th:src="@{${bestSellers[1].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[1].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${bestSellers[1].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${bestSellers[1].productNo})} + '\'"
+                                       th:text="${bestSellers[1].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(bestSellers[1].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(bestSellers[1].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(bestSellers[2].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[2].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(bestSellers[2].getThumbnail)}"
+                                     th:src="@{${bestSellers[2].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[2].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${bestSellers[2].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${bestSellers[2].productNo})} + '\'"
+                                       th:text="${bestSellers[2].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(bestSellers[2].productPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(bestSellers[2].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
                     </div>
@@ -272,34 +330,82 @@
                     <div>
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(bestSellers[3].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[3].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(bestSellers[3].getThumbnail)}"
+                                     th:src="@{${bestSellers[3].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[3].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${bestSellers[3].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${bestSellers[3].productNo})} + '\'"
+                                       th:text="${bestSellers[3].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(bestSellers[3].productPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(bestSellers[3].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(bestSellers[4].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[4].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(bestSellers[4].getThumbnail)}"
+                                     th:src="@{${bestSellers[4].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[4].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${bestSellers[4].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${bestSellers[4].productNo})} + '\'"
+                                       th:text="${bestSellers[4].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(bestSellers[4].productPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(bestSellers[4].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(bestSellers[5].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[5].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(bestSellers[5].getThumbnail)}"
+                                     th:src="@{${bestSellers[5].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${bestSellers[5].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${bestSellers[5].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${bestSellers[5].productNo})} + '\'"
+                                       th:text="${bestSellers[5].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(bestSellers[5].productPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(bestSellers[5].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
                     </div>
@@ -308,7 +414,7 @@
 
             <div class="col-md-4 col-xs-6">
                 <div class="section-title">
-                    <h4 class="title">Top selling</h4>
+                    <h4 class="title">신간 상품</h4>
                     <div class="section-nav">
                         <div id="slick-nav-4" class="products-slick-nav"></div>
                     </div>
@@ -318,34 +424,82 @@
                     <div>
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[0].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[0].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[0].getThumbnail)}"
+                                     th:src="@{${newBooks[0].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[0].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[0].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[0].productNo})} + '\'"
+                                       th:text="${newBooks[0].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[0].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[0].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[1].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[1].getThumbnail)}"
+                                     th:src="@{${newBooks[0].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[1].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\'"
+                                       th:text="${newBooks[1].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[1].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[1].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[2].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[2].getThumbnail)}"
+                                     th:src="@{${newBooks[0].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[2].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\'"
+                                       th:text="${newBooks[2].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[2].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[2].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
                     </div>
@@ -353,34 +507,82 @@
                     <div>
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[3].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[3].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[3].getThumbnail)}"
+                                     th:src="@{${newBooks[3].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[3].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[3].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[3].productNo})} + '\'"
+                                       th:text="${newBooks[3].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[3].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[3].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[4].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[4].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[4].getThumbnail)}"
+                                     th:src="@{${newBooks[4].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[4].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[4].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[4].productNo})} + '\'"
+                                       th:text="${newBooks[4].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[4].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[4].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[5].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[5].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[5].getThumbnail)}"
+                                     th:src="@{${newBooks[5].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[5].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[5].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[5].productNo})} + '\'"
+                                       th:text="${newBooks[5].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[5].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[5].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
                     </div>
@@ -391,7 +593,7 @@
 
             <div class="col-md-4 col-xs-6">
                 <div class="section-title">
-                    <h4 class="title">Top selling</h4>
+                    <h4 class="title">북펍 추천</h4>
                     <div class="section-nav">
                         <div id="slick-nav-5" class="products-slick-nav"></div>
                     </div>
@@ -401,34 +603,82 @@
                     <div>
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[0].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[0].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[0].getThumbnail)}"
+                                     th:src="@{${newBooks[0].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[0].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[0].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[0].productNo})} + '\'"
+                                       th:text="${newBooks[0].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[0].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[0].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[1].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[1].getThumbnail)}"
+                                     th:src="@{${newBooks[1].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[1].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[1].productNo})} + '\'"
+                                       th:text="${newBooks[1].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[1].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[1].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[2].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[2].getThumbnail)}"
+                                     th:src="@{${newBooks[2].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[2].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[2].productNo})} + '\'"
+                                       th:text="${newBooks[2].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[2].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[2].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
                     </div>
@@ -436,40 +686,87 @@
                     <div>
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[3].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[3].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[3].getThumbnail)}"
+                                     th:src="@{${newBooks[3].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[3].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[3].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[3].productNo})} + '\'"
+                                       th:text="${newBooks[3].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[3].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[3].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[4].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[4].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[4].getThumbnail)}"
+                                     th:src="@{${newBooks[4].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[4].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[4].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[4].productNo})} + '\'"
+                                       th:text="${newBooks[4].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[4].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[4].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
 
                         <div class="product-widget">
                             <div class="product-img">
-                                <img src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${#strings.isEmpty(newBooks[5].getThumbnail)}"
+                                     src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg"
+                                     alt=""
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[5].productNo})} + '\''">
+                                <img style="width: 100%; height: 100%; object-fit: cover;"
+                                     th:if="${not #strings.isEmpty(newBooks[5].getThumbnail)}"
+                                     th:src="@{${newBooks[5].getThumbnail()}}"
+                                     alt="no image"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBooks[5].productNo})} + '\''">
                             </div>
                             <div class="product-body">
-                                <p class="product-category">Category</p>
-                                <h3 class="product-name"><a href="#">product name goes here</a></h3>
-                                <h4 class="product-price">$980.00 <del class="product-old-price">$990.00</del></h4>
+                                <div th:each="category : ${newBooks[5].getProductCategories()}">
+                                    <p class="product-category" th:text="${category}"></p>
+                                </div>
+                                <h3 class="product-name">
+                                    <a href="@{/products/{productNo}(productNo=${newBooks[5].productNo})} + '\'"
+                                       th:text="${newBooks[5].getTitle()}"></a>
+                                </h3>
+                                <h4 class="product-price" th:text="|${#numbers.formatInteger(newBooks[5].salesPrice, 0, 'COMMA')}원|">
+                                    <del class="product-old-price" th:text="|${#numbers.formatInteger(newBooks[5].productPrice, 0, 'COMMA')}원|"></del>
+                                </h4>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
         </div>
     </div>
 </div>

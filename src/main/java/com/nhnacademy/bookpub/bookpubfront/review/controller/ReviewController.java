@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.review.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductSimpleResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.review.dto.request.CreateReviewRequestDto;
@@ -9,7 +10,6 @@ import com.nhnacademy.bookpub.bookpubfront.review.service.ReviewService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 /**
- * Some description here.
+ * 상품평 뷰를 다루기 위한 컨트롤러입니다.
  *
  * @author : 정유진
  * @since : 1.0
@@ -28,14 +28,22 @@ public class ReviewController {
     private final ReviewService reviewService;
     private final MemberService memberService;
 
-    @GetMapping("/members/my/written-reviews")
-    public String myWrittenReviewList(Model model, Pageable pageable) {
-        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    /**
+     * 마이페이지에서 회원 본인이 작성한 상품평들을 보여주기 위한 메서드입니다.
+     *
+     * @param model    the model
+     * @param pageable the pageable
+     * @return 마이페이지의 작성한 상품평 조회 뷰
+     */
+    @Auth
+    @GetMapping("/members/{memberNo}/written-reviews")
+    public String myWrittenReviewList(@PathVariable Long memberNo,
+                                      Model model, Pageable pageable) {
 
         PageResponse<GetMemberReviewResponseDto> writtenReviewList =
                 reviewService.getMemberReviews(memberNo, pageable);
 
-        model.addAttribute("member", memberService.getMember(memberNo));
+        model.addAttribute("member", memberService.getTokenMember(memberNo));
         model.addAttribute("myWrittenReviewList", writtenReviewList.getContent());
         model.addAttribute("totalPages", writtenReviewList.getTotalPages());
         model.addAttribute("currentPage", writtenReviewList.getNumber());
@@ -46,14 +54,22 @@ public class ReviewController {
         return "mypage/myPageReview";
     }
 
-    @GetMapping("/members/my/writable-reviews")
-    public String myWritableReviewList(Model model, Pageable pageable) {
-        Long memberNo = Long.parseLong((String) SecurityContextHolder.getContext().getAuthentication().getPrincipal());
+    /**
+     * 마이페이지에서 회원 본인이 상품평 작성 가능한 상품들의 정보를 보여주기 위한 메서드입니다.
+     *
+     * @param model    the model
+     * @param pageable the pageable
+     * @return 마이페이지의 작성 가능한 상품평 조회 뷰
+     */
+    @Auth
+    @GetMapping("/members/{memberNo}/writable-reviews")
+    public String myWritableReviewList(@PathVariable Long memberNo,
+                                       Model model, Pageable pageable) {
 
         PageResponse<GetProductSimpleResponseDto> writableReviewList =
                 reviewService.getMemberWritableReviews(memberNo, pageable);
 
-        model.addAttribute("member", memberService.getMember(memberNo));
+        model.addAttribute("member", memberService.getTokenMember(memberNo));
         model.addAttribute("myWritableReviewList", writableReviewList.getContent());
         model.addAttribute("totalPages", writableReviewList.getTotalPages());
         model.addAttribute("currentPage", writableReviewList.getNumber());
@@ -64,25 +80,52 @@ public class ReviewController {
         return "mypage/myPageWritableReview";
     }
 
-    @PostMapping("/members/my/writable-reviews")
-    public String reviewAdd(CreateReviewRequestDto request) {
+    /**
+     * 상품평 등록을 위한 메서드입니다.
+     * 등록 후, 마이페이지의 작성 가능한 상품평 조회 뷰로 이동합니다.
+     *
+     * @param request 등록할 상품평 정보를 담은 Dto
+     * @return the string
+     */
+    @Auth
+    @PostMapping("/members/{memberNo}/writable-reviews")
+    public String reviewAdd(@PathVariable Long memberNo, CreateReviewRequestDto request) {
         reviewService.createReview(request);
 
-        return "redirect:/members/my/writable-reviews";
+        return "redirect:/members/" + memberNo + "/writable-reviews";
     }
 
-    @PostMapping("/members/my/written-reviews/{reviewNo}")
-    public String reviewDelete(@PathVariable("reviewNo") Long reviewNo) {
+    /**
+     * 상품평 삭제를 위한 메서드입니다.
+     * 삭제 후, 마이페이지의 작성한 상품평 조회 뷰로 이동합니다.
+     *
+     * @param reviewNo 삭제할 상품평 번호
+     * @return 마이페이지의 작성한 상품평 조회 뷰
+     */
+    @Auth
+    @PostMapping("/members/{memberNo}/written-reviews/{reviewNo}")
+    public String reviewDelete(@PathVariable("memberNo") Long memberNo,
+                               @PathVariable("reviewNo") Long reviewNo) {
         reviewService.deleteReview(reviewNo);
 
-        return "redirect:/members/my/written-reviews";
+        return "redirect:/members/" + memberNo + "/written-reviews";
     }
 
-    @PostMapping("/members/my/written-reviews/{reviewNo}/modify")
-    public String reviewModify(@PathVariable("reviewNo") Long reviewNo,
+    /**
+     * 상품평 수정을 위한 메서드입니다.
+     * 수정 후, 마이페이지의 작성한 상품평 조회 뷰로 이동합니다.
+     *
+     * @param reviewNo 수정할 상품평 번호
+     * @param request  수정할 상품평 정보를 담은 Dto
+     * @return 마이페이지의 작성한 상품평 조회 뷰
+     */
+    @Auth
+    @PostMapping("/members/{memberNo}/written-reviews/{reviewNo}/modify")
+    public String reviewModify(@PathVariable("memberNo") Long memberNo,
+                               @PathVariable("reviewNo") Long reviewNo,
                                ModifyReviewRequestDto request) {
         reviewService.modifyReview(reviewNo, request);
 
-        return "redirect:/members/my/written-reviews";
+        return "redirect:/members/" + memberNo + "/written-reviews";
     }
 }

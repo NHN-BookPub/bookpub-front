@@ -48,7 +48,6 @@ public class TierCouponController {
      * @param pageable 페이지 정보
      * @return 등급 쿠폰 관리자 페이지
      */
-    @Auth
     @GetMapping("/admin/coupon/tier-coupons")
     public String tierCouponList(Model model, @PageableDefault Pageable pageable) {
         PageResponse<GetTierCouponResponseDto> tierCoupons = tierCouponService.getTierCoupons(
@@ -71,7 +70,6 @@ public class TierCouponController {
      * @param createRequestDto 등급 쿠폰 등록을 위한 정보
      * @return 관리자 등급 쿠폰 페이지
      */
-    @Auth
     @PostMapping("/admin/coupon/tier-coupons")
     public String addTierCoupon(CreateTierCouponRequestDto createRequestDto) {
         tierCouponService.createTierCoupon(createRequestDto);
@@ -88,7 +86,6 @@ public class TierCouponController {
      * @return 관리자 등급 쿠폰 페이지
      */
     @PostMapping("/admin/coupon/tier-coupons/delete")
-    @Auth
     public String deleteTierCoupon(@RequestParam Integer tierNo, @RequestParam Long templateNo) {
         tierCouponService.deleteTierCoupon(tierNo, templateNo);
 
@@ -103,15 +100,13 @@ public class TierCouponController {
     @GetMapping("/tier-coupons")
     public String tierCouponEvent(@CookieValue(name = CART, required = false) Cookie cookie,
                                   Model model) {
-        SecurityContextHolder.getContext().getAuthentication();
-
         String principal =
                 (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         Long memberNo = -1L;
 
         if (!principal.equals("anonymousUser")) {
             MemberDetailResponseDto member
-                    = memberService.getMember(Long.parseLong(principal));
+                    = memberService.getApiMember(Long.parseLong(principal));
             memberNo = member.getMemberNo();
         }
 
