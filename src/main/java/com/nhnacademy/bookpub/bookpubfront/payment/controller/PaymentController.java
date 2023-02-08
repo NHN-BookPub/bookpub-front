@@ -4,6 +4,7 @@ import com.nhnacademy.bookpub.bookpubfront.config.TossConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.payment.service.PaymentService;
+import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
@@ -52,13 +53,13 @@ public class PaymentController {
      * @return successPage.
      */
     @GetMapping("/success")
-    public String successPage(@RequestParam String orderId,
+    public String successPage(HttpServletResponse response,
+                              @RequestParam String orderId,
                               @RequestParam String paymentKey,
                               @RequestParam Long amount) {
         paymentService.verifyPayment(orderId, amount);
-        paymentService.createPayment(orderId, paymentKey, amount);
+        paymentService.createPayment(orderId, paymentKey, amount, response);
 
-        return "redirect:/";
+        return "redirect:/?order=" + orderId;
     }
-
 }

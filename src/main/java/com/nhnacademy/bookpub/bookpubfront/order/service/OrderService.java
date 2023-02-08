@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.order.service;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -61,4 +62,6 @@ public interface OrderService {
      * @return 페이지 객체.
      */
     PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Pageable pageable);
+
+    GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
 }

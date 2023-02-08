@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.service.impl;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -142,5 +143,13 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo,
                                                                         Pageable pageable) {
         return orderAdaptor.getAllOrdersByMemberNoRequest(pageable, memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId) {
+        return orderAdaptor.getOrderAndPaymentInfo(orderId);
     }
 }
