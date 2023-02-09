@@ -8,6 +8,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResp
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -132,6 +133,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
+    public GetOrderDetailResponseDto getOrderDetailResponseDto(String orderId, String phoneNo) {
+        return orderAdaptor.getOrderDetailByOrderIdRequest(orderId, phoneNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public PageResponse<GetOrderListForAdminResponseDto> getOrderList(Pageable pageable) {
         return orderAdaptor.getAllOrdersRequest(pageable);
     }
@@ -151,5 +160,13 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId) {
         return orderAdaptor.getOrderAndPaymentInfo(orderId);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo) {
+        return orderAdaptor.getEbooksByMember(pageable, memberNo);
     }
 }

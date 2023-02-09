@@ -20,12 +20,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원의 주문에 관련된 뷰를 위한 컨트롤러입니다.
@@ -68,7 +63,9 @@ public class MemberOrderController {
         model.addAttribute("orderList", orders.getContent());
         model.addAttribute("totalPages", orders.getTotalPages());
         model.addAttribute("currentPage", orders.getNumber());
-        model.addAttribute("pageButtonNum", 100);
+        model.addAttribute("isNext", orders.isNext());
+        model.addAttribute("isPrevious", orders.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
 
         return "mypage/orderList";
     }
@@ -92,6 +89,15 @@ public class MemberOrderController {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "mypage/orderDetail";
+    }
+
+    @GetMapping("/non/{orderId}")
+    public String orderDetailViewNonMember(Model model,
+                                           @PathVariable String orderId,
+                                           @RequestParam String phoneNo) {
+        model.addAttribute("orderDetail", orderService.getOrderDetailResponseDto(orderId, phoneNo));
+
+        return "order/NonMemberOrderDetail";
     }
 
     /**
@@ -144,5 +150,18 @@ public class MemberOrderController {
         Long orderNo = orderService.createOrder(requestDto, productInfo);
 
         return "redirect:/payment/" + orderNo;
+    }
+
+    @GetMapping("/ebooks")
+    public String viewEbooksByMember(Model model, @PageableDefault Pageable pageable) {
+        Long memberNo = Long.parseLong(
+                (String) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal());
+
+        model.addAttribute("products", orderService.getEbooksByMember(pageable, memberNo));
+
+        return "/mypage/myPageEbooks";
     }
 }

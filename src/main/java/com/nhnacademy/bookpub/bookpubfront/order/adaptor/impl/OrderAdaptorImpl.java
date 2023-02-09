@@ -9,6 +9,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPayment
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -109,6 +110,21 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
+    public GetOrderDetailResponseDto getOrderDetailByOrderIdRequest(String orderId, String phoneNo) {
+        String url = GateWayConfig.getGatewayUrl() + ORDER_URL + "/non/" + orderId + "?phoneNo=" + phoneNo;
+        ResponseEntity<GetOrderDetailResponseDto> response =
+                restTemplate.exchange(url, HttpMethod.GET,
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<GetOrderDetailResponseDto>() {
+                        });
+
+        return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
         String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/invoice?no=" + invoiceNo;
@@ -149,5 +165,24 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 new HttpEntity<>(makeHeader()),
                 GetOrderAndPaymentResponseDto.class
         ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl()
+                        + "/api/product/"+ memberNo + "/ebooks/")
+                .build()
+                .toUriString();
+
+        return restTemplate.exchange(
+                        url,
+                        HttpMethod.GET,
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {
+                        })
+                .getBody();
     }
 }
