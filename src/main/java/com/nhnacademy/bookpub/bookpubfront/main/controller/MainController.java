@@ -1,4 +1,4 @@
-package com.nhnacademy.bookpub.bookpubfront.main;
+package com.nhnacademy.bookpub.bookpubfront.main.controller;
 
 import static com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils.CART_COOKIE;
 import static com.nhnacademy.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
