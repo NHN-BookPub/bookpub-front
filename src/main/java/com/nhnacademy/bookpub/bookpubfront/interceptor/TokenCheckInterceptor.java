@@ -131,7 +131,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
     private static boolean isRefreshTokenExpired(HttpServletResponse response,
                                                  List<String> messages) throws IOException {
         if (Objects.nonNull(messages)) {
-            response.sendError(403, messages.get(0));
+            response.sendError(401, messages.get(0));
             return true;
         }
         return false;
