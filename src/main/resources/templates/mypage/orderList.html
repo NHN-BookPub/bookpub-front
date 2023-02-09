@@ -7,120 +7,151 @@
 
     <title>BookPub - 주문 목록</title>
     <link rel="stylesheet" href="/static/css/mypage/styles.css">
-    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
+
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
 </head>
 <body>
 <th:block th:include="mypage/fragments/mypageSidebar"></th:block>
 </br>
 
+
 <div class="body-pd">
     <section class="section_wrap">
         <h3>주문 목록</h3>
-        <div style="display: flex; flex-direction: column; gap: 8px">
-            <div class="order_summary_box" th:each="order : ${orderList}">
-                <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
-                <div class="box_header"
-                     th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
-                    <div class="label">
+        </br>
+        <div class="container" style="padding-bottom: 5%">
+
+            <div style="display: flex; flex-direction: column; gap: 8px">
+                <div class="order_summary_box" th:each="order : ${orderList}">
+                    <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
+                    <div class="box_header"
+                         th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
+                        <div class="label">
                         <span class="order_date"
                               th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd')}"></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">주문번호 <span class="num" th:text="${order.getOrderNo()}"></span></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">송장번호 <span class="num" th:text="${order.getInvoiceNo()}"></span></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">상태 <span class="num" th:text="${order.getOrderState()}"></span></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">결제금액 <span class="num"
-                                                           th:text="${order.getTotalAmount()}"></span></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">배송일 <span class="num"
-                                                          th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
+                            <span class="gap">|</span>
+                            <span class="order_num">주문번호 <span class="num"
+                                                               th:text="${order.getOrderNo()}"></span></span>
+                            <span class="gap">|</span>
+                            <span class="order_num">송장번호 <span class="num"
+                                                               th:text="${order.getInvoiceNo()}"></span></span>
+                            <span class="gap">|</span>
+                            <span class="order_num">상태 <span class="num"
+                                                             th:text="${order.getOrderState()}"></span></span>
+                            <span class="gap">|</span>
+                            <span class="order_num">결제금액 <span class="num"
+                                                               th:text="${order.getTotalAmount()}"></span></span>
+                            <span class="gap">|</span>
+                            <span class="order_num">배송일 <span class="num"
+                                                              th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
+                        </div>
                     </div>
-                </div>
-                <table class="tbl_prod">
-                    <colgroup>
-                        <col style="width: 4rem"/>
-                        <col style="width: 18rem;" />
-                        <col style="width: 4rem;" />
-                        <col style="width: 4rem;" />
-                    </colgroup>
-                    <thead class="hidden">
-                    <tr>
-                        <th scope="col">상품정보</th>
-                        <th scope="col">금액</th>
-                        <th scope="col">배송정보</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr th:each="product : ${order.getOrderProducts()}">
-                        <td class="prod_img">
-                            <div>
+                    <table class="tbl_prod">
+                        <colgroup>
+                            <col style="width: 4rem"/>
+                            <col style="width: 18rem;"/>
+                            <col style="width: 4rem;"/>
+                            <col style="width: 4rem;"/>
+                        </colgroup>
+                        <thead class="hidden">
+                        <tr>
+                            <th scope="col">상품정보</th>
+                            <th scope="col">금액</th>
+                            <th scope="col">배송정보</th>
+                            <th scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="product : ${order.getOrderProducts()}">
+                            <td class="prod_img">
                                 <div>
+                                    <div>
                                     <span class="img_box" th:if="${#strings.isEmpty(product.getThumbnail)}">
-                                        <img class="img_thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg">
+                                        <img class="img_thumbnail"
+                                             src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg">
                                     </span>
-                                    <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                        <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
                                         <img class="img_thumbnail" th:src="@{${product.getThumbnail()}}" alt="No image">
                                     </span>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
 
-                        <td class="prod">
-                            <div class="prod_area horizontal">
-                                <div class="prod_thumb_box size_sm">
+                            <td class="prod">
+                                <div class="prod_area horizontal">
+                                    <div class="prod_thumb_box size_sm">
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                    <a th:href="|../../../products/${product.getProductNo()}|">
-                                        <h3 th:text="${product.getTitle()}"></h3>
-                                    </a>
-                                    <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
+                                        <a th:href="|../../../products/${product.getProductNo()}|">
+                                            <h3 th:text="${product.getTitle()}"></h3>
+                                        </a>
+                                        <span class="text">수량 : </span><span class="val"
+                                                                             th:text="${product.getProductAmount()}"></span>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
+                            </td>
 
-                        <td class="prod">
+                            <td class="prod">
                                 <span class="price">
                                     <span class="val" th:text="${product.getSalesPrice()}"></span>
                                     <span class="unit">원</span>
                                 </span>
-                        </td>
+                            </td>
 
-                        <td class="prod">
-                            <div class="btn_wrap full">
-                                <div class="right_box">
-                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
+                            <td class="prod">
+                                <div class="btn_wrap full">
+                                    <div class="right_box">
+                                        <button type="button" class="btn_xs btn_light_gray"><span
+                                                class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
+                                    </div>
                                 </div>
-                            </div>
-                        </td>
-                    </tr>
-                    </tbody>
-                </table>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
 
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/orders/list(page=(${currentPage}-1))}">Previous</a>
+                        </li>
+                        <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                <a class="page-link"
+                                   th:href="@{/orders/list(page=(${page - 1}))}"
+                                   th:text="${page}"></a></li>
+                        </th:block>
+                        <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                            <a class="page-link"
+                               th:href="@{/orders/list(page=(${currentPage}+1))}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </section>
-
-    <div style="display: flex; flex-direction: column; gap: 15px">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
-                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
-                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                        <a class="page-link" th:href="@{/orders/list(page=(${page}-1))}"
-                           th:text="${page}"></a></li>
-                </th:block>
-            </ul>
-        </nav>
-    </div>
 </div>
+
 
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="/static/js/mypage/main.js"></script>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 </body>
 </html>
