@@ -2,7 +2,9 @@ package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -27,21 +29,6 @@ public class AdminOrderController {
     private final MemberService memberService;
 
     /**
-     * 관리자용 주문 뷰.
-     *
-     * @param model 모델.
-     * @param pageable 페이징.
-     * @return 주문 리스트 뷰.
-     */
-    @GetMapping("/list")
-    @Auth
-    public String adminOrderView(Model model, @PageableDefault Pageable pageable) {
-        model.addAttribute("orderList", orderService.getOrderList(pageable));
-
-        return "/admin/order/orderMain";
-    }
-
-    /**
      * 주문 상세 뷰를 위한 메소드입니다.
      *
      * @param model   모델.
@@ -60,5 +47,26 @@ public class AdminOrderController {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "admin/order/adminOrderDetail";
+    }
+
+    /**
+     * 관리자용 주문 뷰.
+     *
+     * @param model 모델.
+     * @param pageable 페이징.
+     * @return 주문 리스트 뷰.
+     */
+    @Auth
+    @GetMapping("/list")
+    public String adminOrderView(Model model, @PageableDefault Pageable pageable) {
+        PageResponse<GetOrderListForAdminResponseDto> orders =
+                orderService.getOrderList(pageable);
+
+        model.addAttribute("orderList", orders.getContent());
+        model.addAttribute("totalPages", orders.getTotalPages());
+        model.addAttribute("currentPage", orders.getNumber());
+        model.addAttribute("pageButtonNum", 100);
+
+        return "/admin/order/orderMain";
     }
 }
