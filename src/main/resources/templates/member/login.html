@@ -24,7 +24,7 @@
 <div id="body">
     <section class="login-block">
         <div class="login-container">
-            <div class="custom-row">
+            <div class="custom-row" style="height: 85vh;">
                 <div class="login-sec">
                     <h2 class="text-center">로그인</h2>
                     <form class="login-form" action="/auth" method="post">
@@ -62,14 +62,14 @@
 
                     </form>
                     <script src="/static/js/member/login.js"></script>
-                    <div id="name"></div>
+                    <span style="cursor: pointer" class="order-find" onclick="modal()">비회원 주문조회</span>
                     <div class="copy-text">Created with <i class="fa fa-heart"></i> by <a
                             href="http://book-pub.shop">북펍</a>
                     </div>
                 </div>
                 <div class="col-md-8 banner-sec" style="display: block;justify-content: center;align-items: center;">
                     <div class="carousel-item active" style="height: 85vh;">
-                        <img src="/static/img/main/loginImage.jpeg" style="width: 100%; height: 100%"
+                        <img src="/static/img/main/test.png" style="width: 100%; height: 100%"
                              alt="First slide">
                         <div class="carousel-caption d-none d-md-block">
                             <div class="banner-text">
@@ -82,11 +82,77 @@
             </div>
         </div>
         <div id="loading" style="display: none">
-            <div id="loading-img" class="spinner-border" style="color: white;width: 15rem;height: 15rem;display: none;" role="status">
+            <div id="loading-img" class="spinner-border" style="color: white;width: 15rem;height: 15rem;display: none;"
+                 role="status">
                 <span class="visually-hidden">Loading...</span>
             </div>
         </div>
     </section>
+
+    <!--비회원 주문 모달창-->
+    <div id="notMember-order" class="modal-overlay2">
+        <div class="modal_box">
+            <h2>비회원 주문 조회</h2>
+            <form action="#" method="get"></form>
+            <table style="width: 100%">
+                <tbody>
+                <tr>
+                    <th scope="row" style="padding: 10px">주문인 전화번호</th>
+                </tr>
+                <tr>
+                    <td style="padding: 0 60px 10px 10px;">
+                        <input style="width: 100%;padding: 7px;border-radius: 18px;border: 1px solid #848383;"
+                               placeholder="전화번호를 입력해주세요(-제외)">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" style="padding: 10px" class="has_ip">주문인 전화번호</th>
+                </tr>
+                <tr>
+                    <td style="padding: 0 60px 10px 10px;">
+                        <input style="width: 100%; padding: 7px;border-radius: 18px;border: 1px solid #848383;"
+                               placeholder="주문 번호를 입력해주세요">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div style="padding-bottom: 20px">
+                <button type="submit" id="click">조회</button>
+            </div>
+
+        </div>
+    </div>
+    <!--주소 모달 js-->
+    <script>
+        var modal1 = document.getElementById("notMember-order");
+
+        function modal() {
+            modal1.style.display = "flex";
+        }
+
+        modal1.addEventListener("click", e => {
+            const evTarget = e.target
+            if (evTarget.classList.contains("modal-overlay2")) {
+                modal1.style.display = "none"
+            }
+        })
+
+        window.addEventListener("keyup", e => {
+            if (modal1.style.display === "flex" && e.key === "Escape") {
+                modal1.style.display = "none"
+            }
+        })
+
+        window.addEventListener("keydown", function (event) {
+            if (event.key === 'Enter') {
+                console.log("실행")
+                loginSubmit();
+                event.preventDefault();
+            }
+        })
+
+
+    </script>
 </div>
 </body>
 
