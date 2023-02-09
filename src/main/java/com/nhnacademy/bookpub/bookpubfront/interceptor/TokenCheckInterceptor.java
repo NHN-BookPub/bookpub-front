@@ -4,7 +4,6 @@ package com.nhnacademy.bookpub.bookpubfront.interceptor;
 import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.JWT_COOKIE;
 import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.MILL_SEC;
 
-import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
@@ -20,7 +19,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
-import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 /**
@@ -33,31 +31,29 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 @Slf4j
 public class TokenCheckInterceptor implements HandlerInterceptor {
-    private static final Long RENEW_TIME = Duration.ofMinutes(15).toSeconds();
+    private static final Long RENEW_TIME = Duration.ofMinutes(20).toSeconds();
+    private static final String ERROR_MESSAGE = "X-MESSAGE";
     private final MemberAdaptor memberAdaptor;
 
     /**
      * 컨트롤러 진입 전에 실행되는 메소드.
      *
-     * @param request 요청
+     * @param request  요청
      * @param response 응답
-     * @param handler 핸들러
+     * @param handler  핸들러
      * @return true, false
-     * @throws IOException  sendError에서 발생할 수 있는 에러.
+     * @throws IOException sendError에서 발생할 수 있는 에러.
      */
     @Override
     public boolean preHandle(HttpServletRequest request,
                              HttpServletResponse response, Object handler) throws IOException {
-        if (!(handler instanceof HandlerMethod)
-                || notHaveAuthAnnotation((HandlerMethod) handler)) {
-            return true;
-        }
 
         Cookie jwtCookie = CookieUtil.findCookie(JWT_COOKIE);
 
-        if (unauthorizedAccess(response, jwtCookie)) {
-            return false;
+        if (unauthorizedAccess(jwtCookie)) {
+            return true;
         }
+
         String cookieValue = Objects.requireNonNull(jwtCookie).getValue();
         String exp = cookieValue.split("\\.")[3];
         String accessToken =
@@ -66,16 +62,17 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
         long validTime = getValidTime(exp);
 
         if (validTime <= RENEW_TIME) {
-            ResponseEntity<Void> result
-                    = memberAdaptor.tokenReIssueRequest(accessToken);
-
-            List<String> messages = result.getHeaders().get("X-MESSAGE");
+            ResponseEntity<Void> result = memberAdaptor.tokenReIssueRequest(accessToken);
+            List<String> messages = result.getHeaders().get(ERROR_MESSAGE);
 
             if (isRefreshTokenExpired(response, messages)) {
+                log.warn("refreshToken expired");
                 return false;
             }
+
             return renewAccessToken(request, response, jwtCookie, result);
         }
+
         requestContainAccessToken(request, accessToken);
         return true;
     }
@@ -108,36 +105,19 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
 
         updateAccessToken(response, jwtCookie, renewAccessToken, expireTime);
         requestContainAccessToken(request, renewAccessToken);
+
         return true;
-    }
-
-    /**
-     * 인터셉터에 걸려야하는 메소드 인지 확인하는 메소드.
-     *
-     * @param handler @RequestMapping, @GetMapping, @PostMapping등이 붙은 메소드의 정보를 추상화한 객체.
-     * @return 해당 메소드가 이 인터셉터에 걸리는지 안걸리는지.
-     */
-    private static boolean notHaveAuthAnnotation(HandlerMethod handler) {
-        Auth loginRequired = handler.getMethodAnnotation(Auth.class);
-
-        return Objects.isNull(loginRequired);
     }
 
     /**
      * 로그인이 필요한 페이지에 로그인을 하지 않고 들어온 경우 허가되지 않은 접근임을 알려주는 메소드.
      *
-     * @param response  response.
      * @param jwtCookie 로그인을 확인할 수 있는 cookie.
      * @return 인가된 사용자인가 아닌가.
      * @throws IOException sendError 하며 발생하는 exception.
      */
-    private static boolean unauthorizedAccess(HttpServletResponse response,
-                                              Cookie jwtCookie) throws IOException {
-        if (Objects.isNull(jwtCookie)) {
-            response.sendError(403, "로그인이 필요한 페이지입니다.");
-            return true;
-        }
-        return false;
+    private static boolean unauthorizedAccess(Cookie jwtCookie) {
+        return Objects.isNull(jwtCookie);
     }
 
     /**
@@ -151,7 +131,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
     private static boolean isRefreshTokenExpired(HttpServletResponse response,
                                                  List<String> messages) throws IOException {
         if (Objects.nonNull(messages)) {
-            response.sendError(500, messages.get(0));
+            response.sendError(403, messages.get(0));
             return true;
         }
         return false;
