@@ -5,15 +5,16 @@ import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -35,7 +36,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/orders")
 @RequiredArgsConstructor
-@Slf4j
 public class MemberOrderController {
     private static final String MEMBER = "member";
     private static final Integer PACKING = 0;
@@ -62,9 +62,13 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
+        PageResponse<GetOrderListResponseDto> orders = orderService.getOrderListByMemberNo(memberNo, pageable);
+
         model.addAttribute(MEMBER, memberService.getTokenMember(memberNo));
-        model.addAttribute("orderList", orderService.getOrderListByMemberNo(memberNo, pageable));
-        model.addAttribute("nowPage", pageable.getPageNumber());
+        model.addAttribute("orderList", orders.getContent());
+        model.addAttribute("totalPages", orders.getTotalPages());
+        model.addAttribute("currentPage", orders.getNumber());
+        model.addAttribute("pageButtonNum", 100);
 
         return "mypage/orderList";
     }
