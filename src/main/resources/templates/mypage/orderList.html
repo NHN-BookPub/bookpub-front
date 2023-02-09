@@ -19,7 +19,7 @@
     <section class="section_wrap">
         <h3>주문 목록</h3>
         <div style="display: flex; flex-direction: column; gap: 8px">
-            <div class="order_summary_box" th:each="order : ${orderList.getContent()}">
+            <div class="order_summary_box" th:each="order : ${orderList}">
                 <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
                 <div class="box_header"
                      th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
@@ -107,18 +107,16 @@
     </section>
 
     <div style="display: flex; flex-direction: column; gap: 15px">
-        <div class="pagination">
-            <div th:if="${orderList.isPrevious()}">
-                <button class="btn_page_prev" th:onclick="|location.href='../orders/list?page='+ ${nowPage -1} + '&size=10'|">
-                    <span class="hidden">이전</span>
-                </button>
-            </div>
-            <div th:if="${orderList.isNext()}">
-                <button class="btn_page_next" th:onclick="|location.href='../orders/list?page='+ ${nowPage + 1} + '&size=10'|">
-                    <span class="hidden">다음</span>
-                </button>
-            </div>
-        </div>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link" th:href="@{/orders/list(page=(${page}-1))}"
+                           th:text="${page}"></a></li>
+                </th:block>
+            </ul>
+        </nav>
     </div>
 </div>
 

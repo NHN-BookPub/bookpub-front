@@ -28,12 +28,15 @@
 
                 <div class="card-body" style="display: flex;flex-direction: column;">
                     <div style="display: flex;gap: 7px;padding-bottom: 13px;">
-                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">가격정책조회</a>
-                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문상태조회</a>
-                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2" th:href="'/admin/tiers/add'">주문조회</a>
+                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2"
+                           th:href="'/admin/tiers/add'">가격정책조회</a>
+                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2"
+                           th:href="'/admin/tiers/add'">주문상태조회</a>
+                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2"
+                           th:href="'/admin/tiers/add'">주문조회</a>
                     </div>
                     <div style="display: flex; flex-direction: column; gap: 8px">
-                        <div class="order_summary_box" th:each="order : ${orderList.getContent()}">
+                        <div class="order_summary_box" th:each="order : ${orderList}">
                             <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
                             <div class="box_header"
                                  th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
@@ -41,13 +44,17 @@
                         <span class="order_date"
                               th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd HH:mm')}"></span>
                                     <span class="gap">|</span>
-                                    <span class="order_num">회원ID <span class="num" th:text="${order.getMemberId()}"></span></span>
+                                    <span class="order_num">회원ID <span class="num"
+                                                                       th:text="${order.getMemberId()}"></span></span>
                                     <span class="gap">|</span>
-                                    <span class="order_num">주문번호 <span class="num" th:text="${order.getOrderNo()}"></span></span>
+                                    <span class="order_num">주문번호 <span class="num"
+                                                                       th:text="${order.getOrderNo()}"></span></span>
                                     <span class="gap">|</span>
-                                    <span class="order_num">송장번호 <span class="num" th:text="${order.getInvoiceNo()}"></span></span>
+                                    <span class="order_num">송장번호 <span class="num"
+                                                                       th:text="${order.getInvoiceNo()}"></span></span>
                                     <span class="gap">|</span>
-                                    <span class="order_num">상태 <span class="num" th:text="${order.getOrderState()}"></span></span>
+                                    <span class="order_num">상태 <span class="num"
+                                                                     th:text="${order.getOrderState()}"></span></span>
                                     <span class="gap">|</span>
                                     <span class="order_num">결제금액 <span class="num"
                                                                        th:text="${order.getTotalAmount()}"></span></span>
@@ -57,6 +64,16 @@
                     </div>
                 </div>
             </div>
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="@{/admin/orders/list(page=(${page}-1))}"
+                               th:text="${page}"></a></li>
+                    </th:block>
+                </ul>
+            </nav>
         </main>
         <th:block th:include="admin/fragments/adminFooter"/>
     </div>
