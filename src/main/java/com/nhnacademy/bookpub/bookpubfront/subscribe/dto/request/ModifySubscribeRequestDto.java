@@ -17,5 +17,4 @@ public class ModifySubscribeRequestDto {
     private Long salePrice;
     private Integer saleRate;
     private boolean renewed;
-    private boolean deleted;
 }

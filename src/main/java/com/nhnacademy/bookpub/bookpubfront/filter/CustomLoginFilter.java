@@ -5,6 +5,7 @@ import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.makeJwtCook
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.LoginMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
+import java.io.IOException;
 import java.util.Objects;
 import javax.servlet.FilterChain;
 import javax.servlet.http.Cookie;
@@ -31,6 +32,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     private final MemberAdaptor memberAdaptor;
     private static final String LOGIN_STATUS = "X-LOGIN";
+    private String social;
 
     @Override
     public Authentication attemptAuthentication(
@@ -38,6 +40,7 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
             throws AuthenticationException {
         String id = obtainUsername(request);
         String password = obtainPassword(request);
+        social = obtainIsSocial(request);
 
         LoginMemberRequestDto loginMemberRequestDto = new LoginMemberRequestDto(id, password);
 
@@ -55,6 +58,16 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
         response.addCookie(cookie);
 
         return getAuthenticationManager().authenticate(token);
+    }
+
+    /**
+     * social 로그인인지 아닌지 확인하는 메소드.
+     *
+     * @param request request.
+     * @return social 정보.
+     */
+    private static String obtainIsSocial(HttpServletRequest request) {
+        return request.getParameter("social");
     }
 
     /**
@@ -91,10 +104,21 @@ public class CustomLoginFilter extends UsernamePasswordAuthenticationFilter {
     @Override
     protected void successfulAuthentication(
             HttpServletRequest request, HttpServletResponse response,
-            FilterChain chain, Authentication authResult) {
+            FilterChain chain, Authentication authResult) throws IOException {
         SecurityContextHolder.clearContext();
-        response.addHeader(LOGIN_STATUS, "success");
+        if (isSocialLogin()) {
+            response.addHeader(LOGIN_STATUS, "success");
+        } else {
+            response.sendRedirect("/");
+        }
     }
 
-
+    /**
+     * social 계정으로 로그인 하는지.
+     *
+     * @return true, false.
+     */
+    private boolean isSocialLogin() {
+        return Objects.nonNull(social);
+    }
 }
