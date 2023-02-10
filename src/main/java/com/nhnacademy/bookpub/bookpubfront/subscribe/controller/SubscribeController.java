@@ -26,7 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
  *
  * @author : 유호철
  * @since : 1.0
- **/
+ */
 @Slf4j
 @Controller
 @RequiredArgsConstructor
@@ -35,6 +35,13 @@ public class SubscribeController {
 
     private static final String RE_SUBSCRIBE = "redirect:/admin/subscribes";
 
+    /**
+     * 구독의 관리자 메인페이지로 갑니다.
+     *
+     * @param pageable 페이지
+     * @param model    모델
+     * @return 관리자페이지 string
+     */
     @GetMapping("/admin/subscribes")
     public String subscribeMain(@PageableDefault Pageable pageable,
                                 Model model) {
@@ -54,6 +61,13 @@ public class SubscribeController {
         return "admin/subscribe/subscribeList";
     }
 
+    /**
+     * 구독등록이후 리다이렉트.
+     *
+     * @param dto   생성정보
+     * @param image 이미지 값.
+     * @return 관리자 구독 메인페이지로 리다이렉트
+     */
     @Auth
     @PostMapping("/admin/subscribes")
     public String subscribeAdd(@ModelAttribute CreateSubscribeRequestDto dto,
@@ -63,6 +77,14 @@ public class SubscribeController {
         return RE_SUBSCRIBE;
     }
 
+    /**
+     * 구독수정
+     *
+     * @param dto         구독수정정보.
+     * @param image       이미지파일
+     * @param subscribeNo 구독번호
+     * @return the string
+     */
     @Auth
     @PostMapping("/admin/subscribes/{subscribeNo}")
     public String subscribeModify(@ModelAttribute ModifySubscribeRequestDto dto,
@@ -73,6 +95,13 @@ public class SubscribeController {
     }
 
 
+    /**
+     * 구독상세조회
+     *
+     * @param subscribeNo  구독번호
+     * @param model       모델
+     * @return the string
+     */
     @GetMapping("/admin/subscribes/{subscribeNo}")
     public String subscribeDetails(@PathVariable("subscribeNo") Long subscribeNo,
                                    Model model) {
@@ -83,6 +112,14 @@ public class SubscribeController {
         return "/admin/subscribe/subscribesDetail";
     }
 
+    /**
+     * 구독삭제
+     *
+     * @param subscribeNo 구독번호
+     * @param deleted     삭제여부
+     * @param model       모델
+     * @return the string
+     */
     @Auth
     @PostMapping("/admin/subscribes-removed/{subscribeNo}")
     public String subscribeDelete(@PathVariable("subscribeNo") Long subscribeNo,
@@ -92,6 +129,13 @@ public class SubscribeController {
         return RE_SUBSCRIBE;
     }
 
+    /**
+     * 갱신여부를 변경합니다.
+     *
+     * @param subscribeNo 구독번호.
+     * @param renewed     갱신여부 변경
+     * @return the string
+     */
     @Auth
     @PostMapping("/admin/subscribes-renewed/{subscribeNo}")
     public String subscribeRenewed(@PathVariable("subscribeNo") Long subscribeNo,
@@ -100,6 +144,13 @@ public class SubscribeController {
         return RE_SUBSCRIBE;
     }
 
+    /**
+     * 구독내부상품리스트.
+     *
+     * @param subscribeNo 구독번호.
+     * @param products    구독상품번호들.
+     * @return the string
+     */
     @Auth
     @PostMapping("/admin/subscribes-product-list/{subscribeNo}")
     public String subscribeProductList(@PathVariable("subscribeNo") Long subscribeNo,
@@ -109,6 +160,13 @@ public class SubscribeController {
         return "redirect:/admin/subscribes/" + subscribeNo;
     }
 
+    /**
+     * 메인구독페이지
+     *
+     * @param pageable 페이징.
+     * @param model    모델
+     * @return the string
+     */
     @GetMapping("/subscribes")
     public String mainSubscribes(@PageableDefault Pageable pageable,
                                  Model model){
