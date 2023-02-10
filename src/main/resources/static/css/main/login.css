@@ -89,9 +89,9 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    padding: 10px;
+    /*padding: 10px;*/
     font-weight: 600;
-    font-size: 18px;
+    /*font-size: 18px;*/
 }
 
 .banner-text {
