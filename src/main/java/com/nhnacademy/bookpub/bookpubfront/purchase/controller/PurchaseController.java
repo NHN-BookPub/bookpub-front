@@ -1,6 +1,5 @@
 package com.nhnacademy.bookpub.bookpubfront.purchase.controller;
 
-
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.purchase.dto.request.CreatePurchaseRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.purchase.dto.response.GetPurchaseListResponseDto;
@@ -44,7 +43,9 @@ public class PurchaseController {
         model.addAttribute("purchases", purchases.getContent());
         model.addAttribute("totalPages", purchases.getTotalPages());
         model.addAttribute("currentPage", purchases.getNumber());
-        model.addAttribute("pageButtonNum", 100);
+        model.addAttribute("isNext", purchases.isNext());
+        model.addAttribute("isPrevious", purchases.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
 
         return "/admin/product/purchaseIndex";
     }
@@ -83,7 +84,9 @@ public class PurchaseController {
         model.addAttribute("purchases", purchases.getContent());
         model.addAttribute("totalPages", purchases.getTotalPages());
         model.addAttribute("currentPage", purchases.getNumber());
-        model.addAttribute("pageButtonNum", 100);
+        model.addAttribute("isNext", purchases.isNext());
+        model.addAttribute("isPrevious", purchases.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
 
         return "/admin/product/purchaseIndex";
     }

@@ -4,6 +4,7 @@ import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.GetOrderDetailNonMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
@@ -94,11 +95,18 @@ public class MemberOrderController {
         return "mypage/orderDetail";
     }
 
-    @GetMapping("/non/{orderId}")
+    /**
+     * 비회원 주문 상세페이지입니다.
+     *
+     * @param model 모델
+     * @param request dto
+     * @return 주문 상세 뷰
+     */
+    @PostMapping("/non")
     public String orderDetailViewNonMember(Model model,
-                                           @PathVariable String orderId,
-                                           @RequestParam String phoneNo) {
-        model.addAttribute("orderDetail", orderService.getOrderDetailResponseDto(orderId, phoneNo));
+                                           GetOrderDetailNonMemberRequestDto request) {
+        model.addAttribute("orderDetail",
+                orderService.getOrderDetailResponseDto(request.getOrderId(), request.getPhoneNo()));
 
         return "order/NonMemberOrderDetail";
     }
