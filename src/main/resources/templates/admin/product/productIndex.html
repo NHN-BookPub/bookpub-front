@@ -116,13 +116,12 @@
 
                         <div class="row">
                             <div class="form-group col">
-                                <label>카테고리1</label>
+                                <label>상위 카테고리</label>
                                 <select class="form-control" name="categoryOne" required>
-                                    <option value="" selected disabled hidden>==카테고리 선택==</option>
-                                    <div th:each="category, index : ${categories}">
-                                        <option th:each="childCategory : ${category.childList}"
-                                                th:value="${childCategory.categoryNo}"
-                                                th:text="${category.categoryName} + '/' + ${childCategory.categoryName}"></option>
+                                    <option value="" selected disabled hidden>==상위 카테고리 선택==</option>
+                                    <div th:each="category : ${parentCategories}">
+                                        <option th:value="${category.categoryNo}"
+                                                th:text="${category.categoryName}"></option>
                                     </div>
                                 </select>
                             </div>
@@ -251,15 +250,15 @@
                 <hr/>
 
                 <div align="right">
-                    <button class="btn btn-primary float-right" data-toggle="modal" data-target="#productAddModal">상품
-                        등록
+                    <button class="btn btn-outline-dark float-right" data-toggle="modal" data-target="#productAddModal">
+                        상품 등록
                     </button>
                 </div>
 
                 <br/>
 
                 <div>
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th>상품번호</th>
@@ -267,8 +266,9 @@
                             <th>판매가격</th>
                             <th>정가</th>
                             <th>재고수량</th>
-                            <th>정보</th>
-                            <th>비고</th>
+                            <th style="text-align: center">구독</th>
+                            <th style="text-align: center">정보</th>
+                            <th style="text-align: center">비고</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -278,17 +278,27 @@
                             <td th:text="${product.salesPrice}"></td>
                             <td th:text="${product.productPrice}"></td>
                             <td th:text="${product.productStock}"></td>
-                            <td>
+                            <td style="text-align: center">
+                                <div th:if="${product.productSubscribed} == true">
+                                    <span class="badge rounded-pill bg-light text-primary">구독 상품</span>
+                                </div>
+                                <div th:if="${product.productSubscribed} == false">
+                                    <span class="badge rounded-pill bg-light text-dark">구독 불가 상품</span>
+                                </div>
+                            </td>
+                            <td style="text-align: center">
                                 <form th:action="@{/admin/products/{productNo}(productNo=${product.productNo})}"
-                                      method="post">
-                                    <button type="submit" class="btn btn-info">정보조회</button>
+                                      method="get">
+                                    <button type="submit" class="btn btn-outline-dark">정보조회</button>
                                 </form>
                             </td>
-                            <td>
+                            <td style="text-align: center">
                                 <form th:action="@{/admin/products/deleted/{productNo}(productNo=${product.productNo})}"
                                       method="post">
-                                    <button th:if="${product.deleted} == true" class="btn btn-warning">복구</button>
-                                    <button th:unless="${product.deleted} == true" class="btn btn-danger">삭제</button>
+                                    <button th:if="${product.deleted} == true" class="btn btn-outline-warning">복구
+                                    </button>
+                                    <button th:unless="${product.deleted} == true" class="btn btn-outline-danger">삭제
+                                    </button>
                                 </form>
                             </td>
 
@@ -298,12 +308,20 @@
 
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/products?(page=(${currentPage}-1))}">Previous</a>
+                            </li>
                             <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
                                     <a class="page-link" th:href="@{/admin/products(page=(${page}-1))}"
                                        th:text="${page}"></a></li>
                             </th:block>
+                            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/products?(page=(${currentPage}+1))}">Next</a>
+                            </li>
                         </ul>
                     </nav>
                 </div>

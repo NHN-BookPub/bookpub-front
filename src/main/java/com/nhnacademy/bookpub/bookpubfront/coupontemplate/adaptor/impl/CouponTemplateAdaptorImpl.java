@@ -6,7 +6,6 @@ import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.CreateCoup
 import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.request.ModifyCouponTemplateRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetCouponTemplateResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDetailCouponTemplateResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response.GetDownloadInfo;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
@@ -137,21 +136,5 @@ public class CouponTemplateAdaptorImpl implements CouponTemplateAdaptor {
         }
 
         return response.is2xxSuccessful();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public GetDownloadInfo requestDownloadFile(Long templateNo) {
-        String url = GateWayConfig.getGatewayUrl() + COUPON_TEMPLATE_AUTH_URL + "/" + templateNo + "/download";
-
-        ResponseEntity<GetDownloadInfo> response = restTemplate.exchange(url,
-                HttpMethod.GET,
-                new HttpEntity<>(Utils.makeHeader()),
-                GetDownloadInfo.class
-        );
-
-        return response.getBody();
     }
 }

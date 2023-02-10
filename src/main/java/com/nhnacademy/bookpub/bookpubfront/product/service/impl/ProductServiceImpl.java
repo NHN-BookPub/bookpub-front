@@ -6,17 +6,23 @@ import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDt
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductAuthorRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductCategoryRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductDescriptionRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductInfoRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductTagRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.RestModifyProductCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -31,7 +37,6 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 @Service
 @RequiredArgsConstructor
-@Slf4j
 public class ProductServiceImpl implements ProductService {
 
     private final ProductAdaptor productAdaptor;
@@ -202,5 +207,150 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> getEbooks(Pageable pageable) {
         return productAdaptor.requestEbooks(pageable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductInfo(Long productNo, ModifyProductInfoRequestDto request) {
+        request.setSalePrice(request.getProductPrice(), request.getSalesRate());
+
+        productAdaptor.requestModifyProductInfo(productNo, request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductCategory(Long productNo, ModifyProductCategoryRequestDto request) {
+        RestModifyProductCategoryRequestDto dto = new RestModifyProductCategoryRequestDto();
+        dto.getCategoriesNo().add(Integer.parseInt(request.getCategoryOne()));
+
+        if (!request.getCategoryTwo().equals("")) {
+            dto.getCategoriesNo().add(Integer.parseInt(request.getCategoryTwo()));
+        }
+        if (!request.getCategoryThree().equals("")) {
+            dto.getCategoriesNo().add(Integer.parseInt(request.getCategoryThree()));
+        }
+
+        productAdaptor.requestModifyProductCategory(productNo, dto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductAuthor(Long productNo, String authors) {
+        String[] split = authors.split(",");
+        List<Integer> tmp = new ArrayList<>();
+
+        for (String s : split) {
+            tmp.add(Integer.parseInt(s));
+        }
+
+        ModifyProductAuthorRequestDto dto = new ModifyProductAuthorRequestDto(tmp);
+
+        productAdaptor.requestModifyProductAuthor(productNo, dto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductTag(Long productNo, List<Integer> tagList) {
+        ModifyProductTagRequestDto dto = new ModifyProductTagRequestDto(tagList);
+
+        productAdaptor.requestModifyProductTag(productNo, dto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductType(Long productNo, Integer typeStateNo) {
+        productAdaptor.requestModifyProductType(productNo, typeStateNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductSale(Long productNo, Integer saleStateNo) {
+        productAdaptor.requestModifyProductSale(productNo, saleStateNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductPolicy(Long productNo, Integer policyNo) {
+        productAdaptor.requestModifyProductPolicy(productNo, policyNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyDescription(Long productNo, String productDescription) {
+        ModifyProductDescriptionRequestDto dto =
+                new ModifyProductDescriptionRequestDto(productDescription);
+
+        productAdaptor.requestModifyProductDescription(productNo, dto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductEBook(Long productNo, MultipartFile eBook) {
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        fileMap.put("eBook", eBook);
+
+        productAdaptor.requestModifyProductEBook(productNo, fileMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductImage(Long productNo, MultipartFile image) {
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        fileMap.put("image", image);
+
+        productAdaptor.requestModifyProductImage(productNo, fileMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void modifyProductDetailImage(Long productNo, MultipartFile detailImage) {
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        fileMap.put("detailImage", detailImage);
+
+        productAdaptor.requestModifyProductDetailImage(productNo, fileMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addNewImage(Long productNo, MultipartFile image) {
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        fileMap.put("image", image);
+
+        productAdaptor.requestAddProductImage(productNo, fileMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addNewDetailImage(Long productNo, MultipartFile detailImage) {
+        Map<String, MultipartFile> fileMap = new HashMap<>();
+        fileMap.put("detailImage", detailImage);
+
+        productAdaptor.requestAddProductDetailImage(productNo, fileMap);
     }
 }
