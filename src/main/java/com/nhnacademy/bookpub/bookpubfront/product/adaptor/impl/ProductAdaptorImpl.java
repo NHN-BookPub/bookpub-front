@@ -7,6 +7,11 @@ import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponRes
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductAuthorRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductDescriptionRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductInfoRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductTagRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.RestModifyProductCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
@@ -18,7 +23,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.*;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
@@ -94,14 +102,13 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestSetProductDeleted(Long productNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI
-                                + productNo)
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo)
                 .encode().toUriString();
 
         restTemplate.exchange(
                 url,
                 HttpMethod.DELETE,
-                new HttpEntity<>(Utils.makeHeader()),
+                new HttpEntity<>(makeHeader()),
                 Void.class
         );
     }
@@ -220,5 +227,282 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductInfo(Long productNo, ModifyProductInfoRequestDto request) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/info")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(request, makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductCategory(Long productNo, RestModifyProductCategoryRequestDto request) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/category")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(request, makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductAuthor(Long productNo, ModifyProductAuthorRequestDto request) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/author")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(request, makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductTag(Long productNo, ModifyProductTagRequestDto request) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/tag")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(request, makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductType(Long productNo, Integer typeStateNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/type")
+                .queryParam("no", typeStateNo)
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductSale(Long productNo, Integer saleStateNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/sale")
+                .queryParam("no", saleStateNo)
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductPolicy(Long productNo, Integer policyNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/policy")
+                .queryParam("no", policyNo)
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductDescription(Long productNo, ModifyProductDescriptionRequestDto request) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/description")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(request, makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductEBook(Long productNo, Map<String, MultipartFile> fileMap) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/e-book")
+                .encode()
+                .toUriString();
+
+        MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
+        mapRequest.add("eBook", fileMap.get("eBook").getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(mapRequest,
+                        makeHeader(MediaType.MULTIPART_FORM_DATA,
+                                List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON)));
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductImage(Long productNo, Map<String, MultipartFile> fileMap) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/thumbnail")
+                .encode()
+                .toUriString();
+
+        MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
+        mapRequest.add("image", fileMap.get("image").getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(mapRequest,
+                        makeHeader(MediaType.MULTIPART_FORM_DATA,
+                                List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON)));
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyProductDetailImage(Long productNo, Map<String, MultipartFile> fileMap) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/detail-image")
+                .encode()
+                .toUriString();
+
+        MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
+        mapRequest.add("detailImage", fileMap.get("detailImage").getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(mapRequest,
+                        makeHeader(MediaType.MULTIPART_FORM_DATA,
+                                List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON)));
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestAddProductImage(Long productNo, Map<String, MultipartFile> fileMap) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/new-thumbnail")
+                .encode()
+                .toUriString();
+
+        MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
+        mapRequest.add("image", fileMap.get("image").getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(mapRequest,
+                        makeHeader(MediaType.MULTIPART_FORM_DATA,
+                                List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON)));
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestAddProductDetailImage(Long productNo, Map<String, MultipartFile> fileMap) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/new-detail-image")
+                .encode()
+                .toUriString();
+
+        MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
+        mapRequest.add("detailImage", fileMap.get("detailImage").getResource());
+
+        HttpEntity<MultiValueMap<String, Object>> entity =
+                new HttpEntity<>(mapRequest,
+                        makeHeader(MediaType.MULTIPART_FORM_DATA,
+                                List.of(MediaType.MULTIPART_FORM_DATA, MediaType.APPLICATION_JSON)));
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                entity,
+                Void.class
+        );
     }
 }
