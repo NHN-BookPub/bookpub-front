@@ -10,6 +10,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDt
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
@@ -160,7 +161,18 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
-        model.addAttribute("products", orderService.getEbooksByMember(pageable, memberNo));
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
+        model.addAttribute(MEMBER, member);
+
+        PageResponse<GetProductByCategoryResponseDto> products =
+                orderService.getEbooksByMember(pageable, memberNo);
+        
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("isNext", products.isNext());
+        model.addAttribute("isPrevious", products.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
 
         return "/mypage/myPageEbooks";
     }

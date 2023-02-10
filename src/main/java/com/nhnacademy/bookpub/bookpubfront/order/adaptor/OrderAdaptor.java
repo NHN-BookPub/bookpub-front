@@ -87,5 +87,12 @@ public interface OrderAdaptor {
      */
     GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
 
+    /**
+     * 구매한 이북을 조회합니다.
+     *
+     * @param pageable 페이징
+     * @param memberNo 회원번호
+     * @return 이북 리스트
+     */
     PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo);
 }

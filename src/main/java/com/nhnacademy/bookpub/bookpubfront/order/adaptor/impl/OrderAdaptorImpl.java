@@ -96,7 +96,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL + "/" + orderNo;
+        String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL + "/" + orderNo;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
@@ -115,7 +115,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<GetOrderDetailResponseDto>() {
+                        new ParameterizedTypeReference<>() {
                         });
 
         return response.getBody();
@@ -173,7 +173,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl()
-                        + "/api/product/"+ memberNo + "/ebooks/")
+                        + "/token/product/"+ memberNo + "/ebooks/")
                 .build()
                 .toUriString();
 
