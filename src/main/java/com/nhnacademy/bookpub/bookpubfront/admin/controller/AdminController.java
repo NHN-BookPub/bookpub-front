@@ -37,8 +37,6 @@ public class AdminController {
     public String adminIndex(Model model) {
         MemberStatisticsResponseDto memberStatisticsResponseDto = memberService.memberStatistics();
         List<MemberTierStatisticsResponseDto> tierStatistics = memberService.memberTierStatistics();
-        log.warn("statistics : {}", tierStatistics.get(0).getTierCnt());
-        log.error("statistics : {}", tierStatistics.get(0).getTierName());
         model.addAttribute("memberStatistics", memberStatisticsResponseDto);
         model.addAttribute("tierStatistics", tierStatistics);
 
