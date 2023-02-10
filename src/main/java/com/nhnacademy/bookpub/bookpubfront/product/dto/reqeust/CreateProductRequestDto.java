@@ -4,7 +4,6 @@ import java.time.LocalDateTime;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 
 /**
  * API 에게 보낼 상품 등록을 위한 DTO.
@@ -14,7 +13,6 @@ import lombok.ToString;
  **/
 @Getter
 @AllArgsConstructor
-@ToString
 public class CreateProductRequestDto {
     private String productIsbn;
     private String title;
