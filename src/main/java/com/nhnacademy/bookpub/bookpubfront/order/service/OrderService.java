@@ -47,6 +47,13 @@ public interface OrderService {
      */
     GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo);
 
+    /**
+     * 주문번호로 상세정보를 조회합니다.(비회원)
+     *
+     * @param orderId 주문 Id
+     * @param phoneNo 전화번호
+     * @return 주문상세
+     */
     GetOrderDetailResponseDto getOrderDetailResponseDto(String orderId, String phoneNo);
 
     /**
