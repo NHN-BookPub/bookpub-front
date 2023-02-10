@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPayment
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -52,6 +53,15 @@ public interface OrderAdaptor {
     GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo);
 
     /**
+     * 주문을 상세조회하기 위한 메서드입니다.(비회원)
+     *
+     * @param orderId 주문번호
+     * @param phoneNo 전화번호
+     * @return 주문상세정보
+     */
+    GetOrderDetailResponseDto getOrderDetailByOrderIdRequest(String orderId, String phoneNo);
+
+    /**
      * 송장번호를 수정하기 위한 메서드입니다.
      *
      * @param orderNo 주문번호입니다.
@@ -76,4 +86,13 @@ public interface OrderAdaptor {
      * @return 주문, 결제 정보
      */
     GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
+
+    /**
+     * 구매한 이북을 조회합니다.
+     *
+     * @param pageable 페이징
+     * @param memberNo 회원번호
+     * @return 이북 리스트
+     */
+    PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo);
 }
