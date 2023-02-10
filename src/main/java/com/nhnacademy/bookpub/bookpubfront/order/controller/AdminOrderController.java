@@ -65,8 +65,9 @@ public class AdminOrderController {
         model.addAttribute("orderList", orders.getContent());
         model.addAttribute("totalPages", orders.getTotalPages());
         model.addAttribute("currentPage", orders.getNumber());
-        model.addAttribute("pageButtonNum", 100);
-
+        model.addAttribute("isNext", orders.isNext());
+        model.addAttribute("isPrevious", orders.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
         return "/admin/order/orderMain";
     }
 }

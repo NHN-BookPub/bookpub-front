@@ -10,6 +10,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDt
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
@@ -21,12 +22,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원의 주문에 관련된 뷰를 위한 컨트롤러입니다.
@@ -70,7 +66,9 @@ public class MemberOrderController {
         model.addAttribute("orderList", orders.getContent());
         model.addAttribute("totalPages", orders.getTotalPages());
         model.addAttribute("currentPage", orders.getNumber());
-        model.addAttribute("pageButtonNum", 100);
+        model.addAttribute("isNext", orders.isNext());
+        model.addAttribute("isPrevious", orders.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
 
         return "mypage/orderList";
     }
@@ -94,6 +92,15 @@ public class MemberOrderController {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "mypage/orderDetail";
+    }
+
+    @GetMapping("/non/{orderId}")
+    public String orderDetailViewNonMember(Model model,
+                                           @PathVariable String orderId,
+                                           @RequestParam String phoneNo) {
+        model.addAttribute("orderDetail", orderService.getOrderDetailResponseDto(orderId, phoneNo));
+
+        return "order/NonMemberOrderDetail";
     }
 
     /**
@@ -146,5 +153,29 @@ public class MemberOrderController {
         Long orderNo = orderService.createOrder(requestDto, productInfo);
 
         return "redirect:/payment/" + orderNo;
+    }
+
+    @GetMapping("/ebooks")
+    public String viewEbooksByMember(Model model, @PageableDefault Pageable pageable) {
+        Long memberNo = Long.parseLong(
+                (String) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal());
+
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
+        model.addAttribute(MEMBER, member);
+
+        PageResponse<GetProductByCategoryResponseDto> products =
+                orderService.getEbooksByMember(pageable, memberNo);
+        
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("isNext", products.isNext());
+        model.addAttribute("isPrevious", products.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
+
+        return "/mypage/myPageEbooks";
     }
 }
