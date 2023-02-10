@@ -48,8 +48,10 @@
                         <span class="order_date"
                               th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd HH:mm')}"></span>
                                     <span class="gap">|</span>
-                                    <span class="order_num">회원ID <span class="num"
-                                                                       th:text="${order.getMemberId()}"></span></span>
+                                    <span class="order_num" th:if="not ${#strings.isEmpty(order.getMemberId())}">회원ID
+                                        <span class="num"
+                                              th:text="${order.getMemberId()}"></span>
+                                    </span>
                                     <span class="gap">|</span>
                                     <span class="order_num">주문번호 <span class="num"
                                                                        th:text="${order.getOrderNo()}"></span></span>
