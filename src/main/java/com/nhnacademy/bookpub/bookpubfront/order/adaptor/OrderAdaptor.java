@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.order.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -67,4 +68,12 @@ public interface OrderAdaptor {
     void modifyStateCodeRequest(Long orderNo,
                                 @StateCode(enumClass = OrderState.class)
                                 String codeName);
+
+    /**
+     * 주문, 결제 정보를 얻어오기 위한 메서드입니다.
+     *
+     * @param orderId 주문번호.
+     * @return 주문, 결제 정보
+     */
+    GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
 }

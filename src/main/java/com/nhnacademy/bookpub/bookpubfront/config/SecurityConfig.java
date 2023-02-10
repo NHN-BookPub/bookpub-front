@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.config;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.dto.AuthDto;
 import com.nhnacademy.bookpub.bookpubfront.filter.CustomAuthenticationFilter;
 import com.nhnacademy.bookpub.bookpubfront.filter.CustomLoginFilter;
@@ -35,6 +36,7 @@ public class SecurityConfig {
     private final MemberAdaptor memberAdaptor;
     private final CustomUserDetailsService userDetailsService;
     private final RedisTemplate<String, AuthDto> redisTemplate;
+    private final ObjectMapper objectMapper;
 
     /**
      * security filterChain 설정.
@@ -86,7 +88,7 @@ public class SecurityConfig {
      */
     @Bean
     public CustomAuthenticationFilter customAuthenticationFilter() {
-        return new CustomAuthenticationFilter(redisTemplate);
+        return new CustomAuthenticationFilter(redisTemplate, objectMapper);
     }
 
     /**

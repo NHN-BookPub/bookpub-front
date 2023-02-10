@@ -1,0 +1,8 @@
+tr {
+    line-height: 10rem;
+}
+
+.img-fluid{
+    width: 15rem !important;
+    height: 10rem !important;
+}

@@ -5,6 +5,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -132,5 +133,21 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<>() {
                 });
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId) {
+        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + ORDER_URL)
+                .path("/payment")
+                .path("/" + orderId).build().toUriString();
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                GetOrderAndPaymentResponseDto.class
+        ).getBody();
     }
 }

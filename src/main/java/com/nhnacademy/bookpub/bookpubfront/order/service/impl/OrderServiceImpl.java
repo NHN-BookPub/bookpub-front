@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.service.impl;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -83,7 +84,6 @@ public class OrderServiceImpl implements OrderService {
                                         String productCouponInfo) {
         String productSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[0];
         String couponSection = productCouponInfo.split(PRODUCT_COUPON_DIVIDER)[1];
-
         String[] productInfo = productSection.split(DIVIDER);
 
         Long productNo = Long.parseLong(productInfo[0]);
@@ -97,8 +97,8 @@ public class OrderServiceImpl implements OrderService {
         if (!couponSection.equals(" ")) {
             couponSection = couponSection.trim();
             String[] couponInfo = couponSection.split(DIVIDER);
-            final Long couponNo = Long.parseLong(couponInfo[0]);
-            final Long couponDiscount = Long.parseLong(couponInfo[2]);
+            Long couponNo = Long.parseLong(couponInfo[0]);
+            Long couponDiscount = Long.parseLong(couponInfo[2]);
             productCoupon.put(productNo, couponNo);
             productSaleAmount.put(productNo, couponDiscount);
         }
@@ -143,5 +143,13 @@ public class OrderServiceImpl implements OrderService {
     public PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo,
                                                                         Pageable pageable) {
         return orderAdaptor.getAllOrdersByMemberNoRequest(pageable, memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId) {
+        return orderAdaptor.getOrderAndPaymentInfo(orderId);
     }
 }

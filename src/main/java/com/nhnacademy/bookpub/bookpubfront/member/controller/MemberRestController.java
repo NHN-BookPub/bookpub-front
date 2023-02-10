@@ -80,7 +80,7 @@ public class MemberRestController {
     @PostMapping("/members/{memberNo}/password-check")
     @Auth
     public boolean passwordCheck(@PathVariable("memberNo") Long memberNo,
-            @RequestParam("rawPassword") String rawPassword) {
+                                 @RequestParam("rawPassword") String rawPassword) {
         MemberPasswordResponseDto memberPassword = memberService.getMemberPassword(memberNo);
         log.error(rawPassword);
         return passwordEncoder.matches(rawPassword, memberPassword.getPassword());
@@ -96,8 +96,6 @@ public class MemberRestController {
     @Auth
     @GetMapping("/members/member")
     public Integer getTierNoByMemberNo(@RequestParam Long memberNo) {
-        Integer tierNo = memberService.getTierByMemberNo(memberNo);
-        return tierNo;
+        return memberService.getTierByMemberNo(memberNo);
     }
-
 }

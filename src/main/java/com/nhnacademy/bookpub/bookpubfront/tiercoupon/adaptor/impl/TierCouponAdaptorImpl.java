@@ -27,8 +27,12 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Component
 @RequiredArgsConstructor
 public class TierCouponAdaptorImpl implements TierCouponAdaptor {
+
     private final RestTemplate restTemplate;
+
     private static final String TIER_COUPON_URL = "/api/tier-coupons";
+    private static final String TIER_COUPON_AUTH_URL = "/token/tier-coupons";
+
 
     /**
      * {@inheritDoc}
@@ -36,7 +40,7 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
     @Override
     public PageResponse<GetTierCouponResponseDto> requestTierCoupons(Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + TIER_COUPON_URL)
+                        GateWayConfig.getGatewayUrl() + TIER_COUPON_AUTH_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode().toUriString();
@@ -57,7 +61,7 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
      */
     @Override
     public void requestAddTierCoupon(CreateTierCouponRequestDto createRequestDto) {
-        String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_URL;
+        String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_AUTH_URL;
 
         restTemplate.exchange(
                 url,
@@ -72,7 +76,7 @@ public class TierCouponAdaptorImpl implements TierCouponAdaptor {
      */
     @Override
     public void requestDeleteTierCoupon(Integer tierNo, Long templateNo) {
-        String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_URL + "?&tierNo=" + tierNo
+        String url = GateWayConfig.getGatewayUrl() + TIER_COUPON_AUTH_URL + "?&tierNo=" + tierNo
                 + "&templateNo=" + templateNo;
 
         restTemplate.exchange(

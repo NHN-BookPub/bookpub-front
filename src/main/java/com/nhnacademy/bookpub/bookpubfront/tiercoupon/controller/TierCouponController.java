@@ -3,8 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.tiercoupon.controller;
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
-import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.request.CreateTierCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.dto.response.GetTierCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.tiercoupon.service.TierCouponService;
@@ -14,7 +13,6 @@ import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
@@ -33,7 +31,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public class TierCouponController {
 
     private final TierCouponService tierCouponService;
-    private final MemberService memberService;
+
+    private final MemberUtils memberUtils;
 
     private final CartUtils cartUtils;
 
@@ -48,6 +47,7 @@ public class TierCouponController {
      * @param pageable 페이지 정보
      * @return 등급 쿠폰 관리자 페이지
      */
+    @Auth
     @GetMapping("/admin/coupon/tier-coupons")
     public String tierCouponList(Model model, @PageableDefault Pageable pageable) {
         PageResponse<GetTierCouponResponseDto> tierCoupons = tierCouponService.getTierCoupons(
@@ -70,6 +70,7 @@ public class TierCouponController {
      * @param createRequestDto 등급 쿠폰 등록을 위한 정보
      * @return 관리자 등급 쿠폰 페이지
      */
+    @Auth
     @PostMapping("/admin/coupon/tier-coupons")
     public String addTierCoupon(CreateTierCouponRequestDto createRequestDto) {
         tierCouponService.createTierCoupon(createRequestDto);
@@ -85,6 +86,7 @@ public class TierCouponController {
      * @param templateNo 쿠폰 템플릿 번호
      * @return 관리자 등급 쿠폰 페이지
      */
+    @Auth
     @PostMapping("/admin/coupon/tier-coupons/delete")
     public String deleteTierCoupon(@RequestParam Integer tierNo, @RequestParam Long templateNo) {
         tierCouponService.deleteTierCoupon(tierNo, templateNo);
@@ -99,21 +101,12 @@ public class TierCouponController {
      */
     @GetMapping("/tier-coupons")
     public String tierCouponEvent(@CookieValue(name = CART, required = false) Cookie cookie,
-                                  Model model) {
-        String principal =
-                (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        Long memberNo = -1L;
+            Model model) {
 
-        if (!principal.equals("anonymousUser")) {
-            MemberDetailResponseDto member
-                    = memberService.getApiMember(Long.parseLong(principal));
-            memberNo = member.getMemberNo();
-        }
+        memberUtils.getMemberNo(model);
 
         cartUtils.getCountInCart(cookie.getValue(), model);
         categoryUtils.categoriesView(model);
-
-        model.addAttribute("member", memberNo);
 
         return "coupon/tierCoupon";
     }
