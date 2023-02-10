@@ -70,25 +70,27 @@
                     </div>
                 </div>
             </div>
-            <nav aria-label="Page navigation example">
+
+            <nav style="text-align: center">
                 <ul class="pagination justify-content-center">
                     <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/admin/orders/list(page=(${currentPage}-1))}">Previous</a>
+                           th:href="@{/admin/orders/list?page=(${currentPage}-1)}">Previous</a>
                     </li>
                     <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                         <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
                             <a class="page-link"
-                               th:href="@{/admin/orders/list(page=(${page - 1}))}"
+                               th:href="@{/admin/orders/list?page=(${page - 1})}"
                                th:text="${page}"></a></li>
                     </th:block>
                     <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                         <a class="page-link"
-                           th:href="@{/admin/orders/list(page=(${currentPage}+1))}">Next</a>
+                           th:href="@{/admin/orders/list?page=(${currentPage + 1})}">Next</a>
                     </li>
                 </ul>
             </nav>
+
         </main>
         <th:block th:include="admin/fragments/adminFooter"/>
     </div>

@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
@@ -55,6 +56,7 @@ public class AdminOrderController {
      * @param pageable 페이징.
      * @return 주문 리스트 뷰.
      */
+    @Auth
     @GetMapping("/list")
     public String adminOrderView(Model model, @PageableDefault Pageable pageable) {
         PageResponse<GetOrderListForAdminResponseDto> orders =
