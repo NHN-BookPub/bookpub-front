@@ -15,6 +15,7 @@ import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -36,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/orders")
 @RequiredArgsConstructor
+@Slf4j
 public class MemberOrderController {
     private static final String MEMBER = "member";
     private static final Integer PACKING = 0;
