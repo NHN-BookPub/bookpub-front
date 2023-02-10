@@ -93,32 +93,37 @@
     <div id="notMember-order" class="modal-overlay2">
         <div class="modal_box">
             <h2>비회원 주문 조회</h2>
-            <form action="#" method="get"></form>
-            <table style="width: 100%">
-                <tbody>
-                <tr>
-                    <th scope="row" style="padding: 10px">주문인 전화번호</th>
-                </tr>
-                <tr>
-                    <td style="padding: 0 60px 10px 10px;">
-                        <input style="width: 100%;padding: 7px;border-radius: 18px;border: 1px solid #848383;"
-                               placeholder="전화번호를 입력해주세요(-제외)">
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" style="padding: 10px" class="has_ip">주문인 전화번호</th>
-                </tr>
-                <tr>
-                    <td style="padding: 0 60px 10px 10px;">
-                        <input style="width: 100%; padding: 7px;border-radius: 18px;border: 1px solid #848383;"
-                               placeholder="주문 번호를 입력해주세요">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="padding-bottom: 20px">
-                <button type="submit" id="click">조회</button>
-            </div>
+            <form action="/orders/non" method="post">
+                <table style="width: 100%">
+                    <tbody>
+                    <tr>
+                        <th scope="row" style="padding: 10px" class="has_ip">주문번호</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 60px 10px 10px;">
+                            <input style="width: 100%; padding: 7px;border-radius: 18px;border: 1px solid #848383;"
+                                   id="orderId"
+                                   name="orderId"
+                                   placeholder="주문 번호를 입력해주세요">
+                        </td>
+                    </tr>
+                    <tr>
+                        <th scope="row" style="padding: 10px">주문인 전화번호</th>
+                    </tr>
+                    <tr>
+                        <td style="padding: 0 60px 10px 10px;">
+                            <input style="width: 100%;padding: 7px;border-radius: 18px;border: 1px solid #848383;"
+                                   id="phoneNo"
+                                   name="phoneNo"
+                                   placeholder="전화번호를 입력해주세요(-제외)">
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <div style="padding-bottom: 20px">
+                    <button type="submit" id="click">조회</button>
+                </div>
+            </form>
 
         </div>
     </div>
