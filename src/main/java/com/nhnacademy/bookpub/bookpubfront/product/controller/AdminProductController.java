@@ -375,4 +375,36 @@ public class AdminProductController {
 
         return REDIRECT + "/" + productNo;
     }
+
+    /**
+     * 연관관계 상품 추가 매핑.
+     *
+     * @param productNo        상품 번호
+     * @param relationProducts 연관관계 상품 번호들
+     * @return 상품 상세 페이지 Redirect
+     */
+    @Auth
+    @PostMapping("/{productNo}/product-relation")
+    public String addRelationProduct(@PathVariable("productNo") Long productNo,
+                                     @RequestParam String relationProducts) {
+        productService.addRelationProduct(productNo, relationProducts);
+
+        return REDIRECT + "/" + productNo;
+    }
+
+    /**
+     * 연관 상품을 삭제 매핑.
+     *
+     * @param parentNo 부모 상품 번호
+     * @param childNo  자식 상품 번호
+     * @return 상품 상세 페이지 Redirect
+     */
+    @Auth
+    @PostMapping("/{parentNo}/cut/{childNo}")
+    public String disconnectRelation(@PathVariable("parentNo") Long parentNo,
+                                     @PathVariable("childNo") Long childNo) {
+        productService.disconnectRelationProduct(childNo);
+
+        return REDIRECT + "/" + parentNo;
+    }
 }
