@@ -153,7 +153,6 @@ public class ProductServiceImpl implements ProductService {
         List<GetProductDetailResponseDto> productsDtos =
                 productAdaptor.requestProductInCart(productNos);
 
-
         for (int i = 0; i < productCounts.size(); i++) {
             orderProductList.add(convertDto(productsDtos.get(i), productCounts.get(i)));
         }
@@ -178,6 +177,9 @@ public class ProductServiceImpl implements ProductService {
                 .categoriesNo(product.getCategoriesNo())
                 .count(count)
                 .thumbnail(product.getThumbnail())
+                .policyMethod(product.getPolicyMethod())
+                .policySaved(product.isPolicySaved())
+                .policySaveRate(product.getPolicySaveRate())
                 .build();
     }
 

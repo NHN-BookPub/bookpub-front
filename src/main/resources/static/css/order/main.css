@@ -268,7 +268,7 @@ summary {
 }
 
 .payments_info_area {
-    padding: 24px;
+    padding: 24px 24px 10px 24px;
     border-radius: 10px;
     background: #fff;
 }
@@ -664,13 +664,13 @@ label, input[type=radio] {
     color: #8500ff;
 }
 
-.product-per-coupon{
+.product-per-coupon {
     font-size: 17px;
     font-weight: 600;
     color: #8500ff;
 }
 
-#coupon-use{
+#coupon-use {
     background-color: white;
     color: black;
     border: 1px solid #656363;
@@ -683,4 +683,46 @@ label, input[type=radio] {
 
 #coupon-use:hover {
     background-color: #eaeaea;
+}
+
+.product-th {
+    text-align: center;
+    padding: 20px 10px 0 10px;
+}
+
+.product-td {
+    text-align: center;
+    padding: 15px 0 15px 0;
+    font-size: 15px;
+}
+
+.th-size {
+    font-size: 16px;
+}
+
+.point_box {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding-top: 2rem;
+}
+
+.policy-method {
+    font-size: 9px;
+}
+
+.prd_savePoint {
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.price-box {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.product-per-discount {
+    color: #D52929FF;
+    font-weight: 500;
 }
