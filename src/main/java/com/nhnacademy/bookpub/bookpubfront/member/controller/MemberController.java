@@ -365,6 +365,21 @@ public class MemberController {
     }
 
     /**
+     * 회원을 탈퇴하기위한 메서드입니다.
+     *
+     * @param memberNo 회원번호.
+     * @param request  HTTP Request.
+     * @param response the response
+     * @return 메인페이지
+     */
+    @Auth
+    @PostMapping("/members/{memberNo}")
+    public String memberDelete(@PathVariable("memberNo") Long memberNo) {
+        memberService.memberDelete(memberNo);
+        return "redirect:/logout";
+    }
+
+    /**
      * 회원의 주소를 추가하기위한 메서드입니다.
      *
      * @param memberNo   회원번호

@@ -162,6 +162,14 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
+    public void memberDelete(Long memberNo){
+        memberAdaptor.requestMemberDelete(memberNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public MemberStatisticsResponseDto memberStatistics() {
         return memberAdaptor.requestMemberStatics();
     }
