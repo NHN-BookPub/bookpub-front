@@ -95,6 +95,11 @@ public interface MemberService {
      */
     void memberBlock(Long memberNo);
 
+    /**
+     * 회원의 삭제를 위한 메서드입니다.
+     *
+     * @param memberNo 회원번호.
+     */
     void memberDelete(Long memberNo);
 
     /**
