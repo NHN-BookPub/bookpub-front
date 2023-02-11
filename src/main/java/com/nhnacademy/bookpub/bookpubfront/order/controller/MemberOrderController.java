@@ -4,12 +4,16 @@ import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.request.GetOrderDetailNonMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.dto.response.GetOrderPolicyResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyService;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
+import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -19,12 +23,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.CookieValue;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * 회원의 주문에 관련된 뷰를 위한 컨트롤러입니다.
@@ -62,9 +61,16 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
+        PageResponse<GetOrderListResponseDto> orders =
+                orderService.getOrderListByMemberNo(memberNo, pageable);
+
         model.addAttribute(MEMBER, memberService.getTokenMember(memberNo));
-        model.addAttribute("orderList", orderService.getOrderListByMemberNo(memberNo, pageable));
-        model.addAttribute("nowPage", pageable.getPageNumber());
+        model.addAttribute("orderList", orders.getContent());
+        model.addAttribute("totalPages", orders.getTotalPages());
+        model.addAttribute("currentPage", orders.getNumber());
+        model.addAttribute("isNext", orders.isNext());
+        model.addAttribute("isPrevious", orders.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
 
         return "mypage/orderList";
     }
@@ -88,6 +94,22 @@ public class MemberOrderController {
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "mypage/orderDetail";
+    }
+
+    /**
+     * 비회원 주문 상세페이지입니다.
+     *
+     * @param model   모델
+     * @param request dto
+     * @return 주문 상세 뷰
+     */
+    @PostMapping("/non")
+    public String orderDetailViewNonMember(Model model,
+                                           GetOrderDetailNonMemberRequestDto request) {
+        model.addAttribute("orderDetail",
+                orderService.getOrderDetailResponseDto(request.getOrderId(), request.getPhoneNo()));
+
+        return "order/NonMemberOrderDetail";
     }
 
     /**
@@ -140,5 +162,36 @@ public class MemberOrderController {
         Long orderNo = orderService.createOrder(requestDto, productInfo);
 
         return "redirect:/payment/" + orderNo;
+    }
+
+    @GetMapping("/ebooks")
+    public String viewEbooksByMember(Model model, @PageableDefault Pageable pageable) {
+        Long memberNo = Long.parseLong(
+                (String) SecurityContextHolder
+                        .getContext()
+                        .getAuthentication()
+                        .getPrincipal());
+
+        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
+        model.addAttribute(MEMBER, member);
+
+        PageResponse<GetProductByCategoryResponseDto> products =
+                orderService.getEbooksByMember(pageable, memberNo);
+
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("isNext", products.isNext());
+        model.addAttribute("isPrevious", products.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
+
+        return "/mypage/myPageEbooks";
+    }
+
+    @PostMapping("/refund/{orderNo}")
+    public String orderRefundRequest(@PathVariable Long orderNo) {
+        orderService.refundOrder(orderNo);
+
+        return "/mypage/orderList";
     }
 }

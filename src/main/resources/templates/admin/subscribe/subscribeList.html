@@ -9,7 +9,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    달
     <link rel="stylesheet" href="/static/css/admin/subscribe/main.css">
 
 </head>
@@ -100,7 +99,8 @@
                                         <div class="valid-feedback">완료</div>
                                     </div>
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                                    <button type="submit" id="submitSubscribe" class="btn btn-primary" disabled>등록</button>
+                                    <button type="submit" id="submitSubscribe" class="btn btn-primary" disabled>등록
+                                    </button>
                                 </form>
                             </div>
                         </div>
@@ -108,92 +108,94 @@
 
                 </div>
 
-                </div>
+            </div>
 
-                <div>
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th scope="col">구독번호</th>
-                            <th scope="col">구독 명</th>
-                            <th scope="col">이미지</th>
-                            <th scope="col">일반 가격</th>
-                            <th scope="col">할인 가격</th>
-                            <th scope="col">할인 률</th>
-                            <th scope="col">뷰 카운트</th>
-                            <th scope="col">삭제여부</th>
-                            <th scope="col">갱신여부</th>
-                            <th scope="col">수정</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="subscribe : ${content}">
-                            <td th:text="${subscribe.subscribeNo}"></td>
-                            <td th:text="${subscribe.subscribeName}"></td>
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">구독번호</th>
+                        <th scope="col">구독 명</th>
+                        <th scope="col">이미지</th>
+                        <th scope="col">일반 가격</th>
+                        <th scope="col">할인 가격</th>
+                        <th scope="col">할인 률</th>
+                        <th scope="col">뷰 카운트</th>
+                        <th scope="col">삭제여부</th>
+                        <th scope="col">갱신여부</th>
+                        <th scope="col">상세정보</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr th:each="subscribe : ${content}">
+                        <td th:text="${subscribe.subscribeNo}"></td>
+                        <td th:text="${subscribe.subscribeName}"></td>
+                        <td>
+                            <th:block th:if="${#strings.isEmpty(subscribe.imagePath)}">
+                                <img src="/static/img/main/no-image.png">
+                            </th:block>
+                            <th:block th:unless="${#strings.isEmpty(subscribe.imagePath)}">
+                                <img th:src="${subscribe.imagePath}">
+                            </th:block>
+                        </td>
+                        <td th:text="${subscribe.price}"></td>
+                        <td th:text="${subscribe.salePrice}"></td>
+                        <td th:text="${subscribe.salesRate}"></td>
+                        <td th:text="${subscribe.viewCnt}"></td>
                             <td>
-                                <th:block th:if="${#strings.isEmpty(subscribe.imagePath)}">
-                                    <img src="/static/img/main/no-image.png">
-                                </th:block>
-                                <th:block th:unless="${#strings.isEmpty(subscribe.imagePath)}">
-                                    <img th:src="${subscribe.imagePath}">
-                                </th:block>
+                                <form th:action="@{/admin/subscribes-removed/{subscribeNo}(subscribeNo=${subscribe.subscribeNo},deleted=(${subscribe.deleted}))}"
+                                      method="post">
+                                    <button th:if="${subscribe.deleted} == false" class="btn btn-outline-danger">삭제 가능
+                                    </button>
+                                    <button th:unless="${subscribe.deleted} == false" class="btn btn-outline-secondary">복구
+                                    </button>
+                                </form>
+                                <!-- 차단 버튼 클릭시 JS 로 처리 -->
                             </td>
-                            <td th:text="${subscribe.price}"></td>
-                            <td th:text="${subscribe.salePrice}"></td>
-                            <td th:text="${subscribe.salesRate}"></td>
-                            <td th:text="${subscribe.viewCnt}"></td>
-                            <td>
-                                <th:block th:if="${subscribe.deleted} == false">
-                                    <button type="button" class="btn btn-lg btn-outline-danger">삭제 가능</button>
-                                </th:block>
-                                <th:block th:unless="${subscribe.deleted} == false">
-                                    <button type="button" class="btn btn-lg btn-outline-secondary">복구 가능</button>
-                                </th:block>
-                            </td>
-                            <td>
-                                <th:block th:if="${subscribe.renewed} == false">
-                                    <button type="button" class="btn btn-lg btn-outline-success">갱신 가능</button>
-                                </th:block>
-                                <th:block th:unless="${subscribe.renewed} == false">
-                                    <button type="button" class="btn btn-lg btn-outline-danger">갱신 불가</button>
-                                </th:block>
-                            </td>
-                            <td>
-                                <button type="button" th:onclick="|location.href='@'|" class="btn btn-outline-primary mb-4 ms-auto btn-lg">
-                                    상세보기
+                        <td>
+                            <form th:action="@{/admin/subscribes-renewed/{subscribeNo}(subscribeNo=${subscribe.subscribeNo},renewed=(${subscribe.renewed}))}"
+                                  method="post">
+                                <button th:if="${subscribe.renewed} == false" class="btn btn-outline-danger">갱신 불가
                                 </button>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                    <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center">
-                            <li class="page-item" th:classappend="${!previous} ? 'disabled'">
-                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum -1}+
+                                <button th:unless="${subscribe.renewed} == false" class="btn btn-outline-success"> 갱신 가능
+                                </button>
+                            </form>
+                        <td>
+                            <button type="button"
+                                    th:onclick="|location.href='@{/admin/subscribes/{subscribeNo}(subscribeNo=${subscribe.subscribeNo})}'|"
+                                    class="btn btn-outline-primary mb-4 ms-auto">
+                                상세보기
+                            </button>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <li class="page-item" th:classappend="${!previous} ? 'disabled'">
+                            <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum -1}+
                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}" tabindex="-1">Previous</a>
-                            </li>
-                            <th:block th:with="
+                        </li>
+                        <th:block th:with="
                             start=${(pageNum/5)*5 + 1},
                             end=(${(totalPage ==0) ? 1 : (start + (4) < totalPage ? start + 4 : totalPage)})">
-                                <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}">
-                                    <a class="page-link"
-                                       th:href="@{ ${uri} + '?page=' + ${page - 1}+
+                            <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}">
+                                <a class="page-link"
+                                   th:href="@{ ${uri} + '?page=' + ${page - 1}+
                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}"
-                                       th:text="${page}">
-                                    </a>
-                                </li>
-                            </th:block>
-                            <li class="page-item" th:classappend="${!next} ? 'disabled'">
-                                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum + 1}+
-                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}">Next</a>
+                                   th:text="${page}">
+                                </a>
                             </li>
-                        </ul>
-                    </nav>
-                </div>
+                        </th:block>
+                        <li class="page-item" th:classappend="${!next} ? 'disabled'">
+                            <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum + 1}+
+                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}">Next</a>
+                        </li>
+                    </ul>
+                </nav>
             </div>
-        </main>
-        <th:block th:include="admin/fragments/adminFooter"/>
-    </div>
+    </main>
+</div>
 </div>
 <script src="/static/js/subscribe/main.js"></script>
 </body>

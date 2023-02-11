@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPayment
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import org.springframework.data.domain.Pageable;
 
@@ -47,6 +48,15 @@ public interface OrderService {
     GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo);
 
     /**
+     * 주문번호로 상세정보를 조회합니다.(비회원)
+     *
+     * @param orderId 주문 Id
+     * @param phoneNo 전화번호
+     * @return 주문상세
+     */
+    GetOrderDetailResponseDto getOrderDetailResponseDto(String orderId, String phoneNo);
+
+    /**
      * 모든 주문의 리스트를 반환합니다.
      *
      * @param pageable 페이지.
@@ -64,4 +74,8 @@ public interface OrderService {
     PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Pageable pageable);
 
     GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
+
+    PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo);
+
+    void refundOrder(Long orderNo);
 }

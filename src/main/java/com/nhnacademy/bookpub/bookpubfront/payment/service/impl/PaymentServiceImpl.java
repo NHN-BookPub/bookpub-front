@@ -70,6 +70,7 @@ public class PaymentServiceImpl implements PaymentService {
                         redisTemplate.opsForSet().remove(cartRedisKey, info.split("-")[0]));
 
         orderCookie.setMaxAge(0);
+        orderCookie.setPath("/");
         response.addCookie(orderCookie);
     }
 }

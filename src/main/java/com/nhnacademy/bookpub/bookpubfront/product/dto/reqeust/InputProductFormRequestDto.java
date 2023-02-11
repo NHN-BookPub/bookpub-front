@@ -3,7 +3,6 @@ package com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust;
 import java.time.LocalDateTime;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.ToString;
 import org.springframework.format.annotation.DateTimeFormat;
 
 /**
@@ -14,7 +13,6 @@ import org.springframework.format.annotation.DateTimeFormat;
  **/
 @Getter
 @AllArgsConstructor
-@ToString
 public class InputProductFormRequestDto {
     private Integer typeStateNo;
     private Integer saleStateNo;

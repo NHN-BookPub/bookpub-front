@@ -67,7 +67,8 @@ function loginSubmit() {
             url: "/auth",
             data: {
                 "id": id,
-                "pwd": pwd
+                "pwd": pwd,
+                "social": "no"
             },
             success: function (data, textStatus, request) {
                 if (request.getResponseHeader("X-LOGIN") === null) {

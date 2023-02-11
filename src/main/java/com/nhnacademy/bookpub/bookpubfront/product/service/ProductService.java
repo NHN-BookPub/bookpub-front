@@ -4,6 +4,8 @@ import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponRes
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductCategoryRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductInfoRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
@@ -110,4 +112,123 @@ public interface ProductService {
      * @return 이북 페이지
      */
     PageResponse<GetProductByCategoryResponseDto> getEbooks(Pageable pageable);
+
+    /**
+     * 상품 정보를 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param request   상품 정보를 수정할 dto
+     */
+    void modifyProductInfo(Long productNo, ModifyProductInfoRequestDto request);
+
+    /**
+     * 상품 카테고리를 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param request   수정할 카테고리 정보
+     */
+    void modifyProductCategory(Long productNo, ModifyProductCategoryRequestDto request);
+
+    /**
+     * 상품 저자를 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param authors   수정할 저자 정
+     */
+    void modifyProductAuthor(Long productNo, String authors);
+
+    /**
+     * 상품 태그를 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param tagList   수정할 태그 정보
+     */
+    void modifyProductTag(Long productNo, List<Integer> tagList);
+
+    /**
+     * 상품 유형을 수정하는 메서드.
+     *
+     * @param productNo   상품 번호
+     * @param typeStateNo 수정할 유형 번호
+     */
+    void modifyProductType(Long productNo, Integer typeStateNo);
+
+    /**
+     * 상품 판매 유형 수정하는 메서드.
+     *
+     * @param productNo   상품 번호
+     * @param saleStateNo 수정할 판매 유형 번호
+     */
+    void modifyProductSale(Long productNo, Integer saleStateNo);
+
+    /**
+     * 상품 포인트 정책 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param policyNo  수정할 포인트 정책 번호
+     */
+    void modifyProductPolicy(Long productNo, Integer policyNo);
+
+    /**
+     * 상품 설명을 수정하는 메서드.
+     *
+     * @param productNo          상품 번호
+     * @param productDescription 수정할 상품 설명
+     */
+    void modifyDescription(Long productNo, String productDescription);
+
+    /**
+     * E-Book 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param eBook     수정할 E-Book
+     */
+    void modifyProductEBook(Long productNo, MultipartFile eBook);
+
+    /**
+     * Image 수정하는 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param image     수정할 Image
+     */
+    void modifyProductImage(Long productNo, MultipartFile image);
+
+    /**
+     * Detail Image 수정하는 메서드.
+     *
+     * @param productNo   상품 번호
+     * @param detailImage 수정할 상세 이미지
+     */
+    void modifyProductDetailImage(Long productNo, MultipartFile detailImage);
+
+    /**
+     * Image 추가 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param image     추가할 Image
+     */
+    void addNewImage(Long productNo, MultipartFile image);
+
+    /**
+     * Detail Image 추가 메서드.
+     *
+     * @param productNo   상품 번호
+     * @param detailImage 추가할 Detail Image
+     */
+    void addNewDetailImage(Long productNo, MultipartFile detailImage);
+
+    /**
+     * 연관관계 상품 추가 메서드.
+     *
+     * @param productNo        상품 번호
+     * @param relationProducts 연관 관계 상품 번호
+     */
+    void addRelationProduct(Long productNo, String relationProducts);
+
+    /**
+     * 연관관계 상품을 삭제하는 메서드.
+     *
+     * @param childNo 자식 상품 번호
+     */
+    void disconnectRelationProduct(Long childNo);
 }

@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>구독상품리스트</title>
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <link rel="stylesheet" href="/static/css/subscribe/detail.css">
+
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="card-header" style="justify-content: center">
+                    <h1 class="mb-3 sm">구독 상세 정보</h1>
+                </div>
+                <div align="right">
+                    <button type="button" class=" btn btn-outline-primary float-right"
+                            data-target="#add"
+                            data-toggle="modal">구독수정
+                    </button>
+                    <button type="button"
+                            data-target="#addProduct"
+                            data-toggle="modal" onclick="addInfo()"
+                            class=" btn btn-outline-info flex-column-reverse float-right">구독상품등록
+                    </button>
+                </div>
+
+                <!-- 구독 상품 등록 모달 -->
+                <div class="modal fade" id="addProduct" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="addProductLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addProductLabel">구독 수정</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/admin/subscribes-product-list/{subscribeNo}(subscribeNo=${subscribe.subscribeNo})}"
+                                      class="was-validated" method="post">
+                                    <h4><a href="/admin/products" rel="noopener noreferrer"
+                                           style="text-decoration-line: none"
+                                           target="_blank">구독 상품보러가기</a></h4>
+                                    <div class="form-group">
+                                        <label for="addProductList">구독상품 수정</label>
+                                        <input type="text" id="addProductList" class="form-select"
+                                               name="products"
+                                               required>
+                                        <div class="invalid-feedback">상품번호들이 들어가야합니다.</div>
+                                        <div class="valid-feedback">완료</div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" class="btn btn-primary">등록
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- 구독 생성 모달 -->
+                <div class="modal fade" id="add" data-backdrop="static" tabindex="-1" role="dialog"
+                     aria-labelledby="addLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="addLabel">구독 수정</h5>
+                            </div>
+                            <div class="modal-body">
+                                <form th:action="@{/admin/subscribes/{subscribeNo}(subscribeNo=${subscribe.subscribeNo})}"
+                                      class="was-validated" method="post"
+                                      enctype="multipart/form-data">
+                                    <div class="form-group">
+                                        <label for="addName">구독 명칭</label>
+                                        <input type="text" id="addName" class="form-control"
+                                               placeholder="구독 명칭을 적어주세요" name="name"
+                                               th:value="${subscribe.subscribeName}"
+                                               pattern="^\S[a-zA-Zㄱ-힣0-9!@#$%^&*()_+-=₩~ ]*$"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">구독명칭을 지정해주세요</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addPrice">정가</label>
+                                        <input type="number" id="addPrice" class="form-control"
+                                               placeholder="구독 가격을 정해주세요" name="price"
+                                               th:value="${subscribe.price}"
+                                               min="0"
+                                               onchange="cal()"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">숫자를 입력해주세요</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addSaleRate">할인률</label>
+                                        <input type="number" id="addSaleRate" class="form-control"
+                                               placeholder="0~100 의 할인률이적용됩니다" name="saleRate"
+                                               min="0"
+                                               max="100"
+                                               th:value="${subscribe.salesRate}"
+                                               onchange="cal()"
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">숫자를 입력해주세요</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="addSalePrice">할인가</label>
+                                        <input type="number" id="addSalePrice" class="form-control"
+                                               placeholder="할인 가격이 적용됩니다." name="salePrice"
+                                               th:value="${subscribe.salePrice}"
+                                               min="0"
+                                               readonly
+                                               required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">값이 맞지않습니다.</div>
+                                    </div>
+
+                                    <div class="form-group">
+                                        <label for="fileUpload"> 구독 이미지</label>
+                                        <input type="file" id="fileUpload" name="image" required>
+                                        <div class="valid-feedback">완료</div>
+                                        <div class="invalid-feedback">이미지를 넣어주세요</div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="addRenewed">갱신여부</label>
+                                        <select type="checkbox" id="addRenewed" class="form-select"
+                                                th:value="${subscribe.renewed}"
+                                                name="renewed"
+                                                required>
+                                            <option value="true">가능</option>
+                                            <option value="false">불가능</option>
+                                        </select>
+                                        <div class="valid-feedback">완료</div>
+                                    </div>
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                                    <button type="submit" id="submitSubscribe" class="btn btn-primary">등록
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div>
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th scope="col">구독번호</th>
+                        <th scope="col">구독 명</th>
+                        <th scope="col">이미지</th>
+                        <th scope="col">일반 가격</th>
+                        <th scope="col">할인 가격</th>
+                        <th scope="col">할인 률</th>
+                        <th scope="col">뷰 카운트</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td th:text="${subscribe.subscribeNo}"></td>
+                        <td th:text="${subscribe.subscribeName}"></td>
+                        <td>
+                            <th:block th:if="${#strings.isEmpty(subscribe.imagePath)}">
+                                <img class="cover-thumbnail" src="/static/img/main/no-image.png">
+                            </th:block>
+                            <th:block th:unless="${#strings.isEmpty(subscribe.imagePath)}">
+                                <img class="cover-thumbnail" th:src="${subscribe.imagePath}">
+                            </th:block>
+                        </td>
+                        <td th:text="${subscribe.price}"></td>
+                        <td th:text="${subscribe.salePrice}"></td>
+                        <td th:text="${subscribe.salesRate}"></td>
+                        <td th:text="${subscribe.viewCnt}"></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+            <h2>구독 연관 상품</h2>
+
+
+            <!--Slider-->
+            <div id="slider" style="border-radius: 20px" >
+                <th:block th:each="product :${content}">
+                    <div class="slide">
+                        <div style="display: flex; justify-content: center">
+                            <div class="h4" th:text="${product.title}"></div>
+                        </div>
+                        <th:block th:if="${#strings.isEmpty(product.filePath)}">
+                            <img class="cover-thumbnail" src="/static/img/main/no-image.png">
+                        </th:block>
+                        <th:block th:unless="${#strings.isEmpty(product.filePath)}">
+                            <img th:src="${product.filePath}">
+                        </th:block>
+                    </div>
+                </th:block>
+                <!--Controlling arrows-->
+                <span class="controls" onclick="prevSlide(-1)" id="left-arrow"><i class="fa fa-arrow-left"
+                                                                                  aria-hidden="true"></i></span>
+                <span class="controls" id="right-arrow" onclick="nextSlide(1)"><i class="fa fa-arrow-right"
+                                                                                  aria-hidden="true"></i></span>
+            </div>
+            <div id="dots-con" th:each="product :${content}">
+                <span class="dot" hidden="true"></span>
+            </div>
+        </main>
+    </div>
+</div>
+<script src="/static/js/subscribe/main.js"></script>
+<script src="/static/js/subscribe/detail.js"></script>
+<script th:inline="javascript">
+
+    /*<![CDATA[*/
+    function addInfo() {
+        let productList = [[${content}]];
+        var input = '';
+        productList.forEach(function (item) {
+            input = item.productNo + a + ',';
+
+        })
+        console.log(input);
+        document.getElementById('productList').value = input;
+    }
+
+    /*]]>*/
+
+</script>
+</body>
+</html>

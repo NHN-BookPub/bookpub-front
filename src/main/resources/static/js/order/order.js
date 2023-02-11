@@ -1,4 +1,6 @@
 let couponConfirmList = new Set();
+const policy_actualPrice = '실구매가';
+const policy_salePrice = '판매가';
 
 function findAddress() {
     new daum.Postcode({
@@ -27,12 +29,21 @@ function usePoint() {
     let relievedPoint = document.getElementById("usePoint")
     let useUserPoint = document.getElementById("tbl-point")
     let totalAmount = document.getElementById("totalAmount")
-    let userPoint = document.getElementById("userPoint").innerText;
+    let userPoint = parsingNumber(document.getElementById("userPoint").innerText);
 
     let usePoint = 0;
     if (useUserPoint.value !== "") {
         usePoint = useUserPoint.value;
     }
+
+    let couponDiscount = document.getElementById("couponDiscount");
+    let value = parsingNumber(couponDiscount.innerText);
+
+    // if (value === '0') {
+    //     alert("쿠폰을 먼저 적용해주세요!")
+    //     relievedPoint.innerText = "0";
+    //     useUserPoint.value = 0;
+    // } else
 
     if (parseInt(userPoint) < usePoint) {
         alert("포인트가 부족합니다.")
@@ -41,12 +52,14 @@ function usePoint() {
         calTotalAmount()
     } else {
         alert("포인트를 사용합니다.")
-        let originPrice = parseInt(totalAmount.innerText) + parseInt(relievedPoint.innerText)
+        let originPrice = parseInt(parsingNumber(totalAmount.innerText)) +
+            parseInt(parsingNumber(relievedPoint.innerText))
+
         if (originPrice < usePoint) {
-            relievedPoint.innerText = originPrice.toString()
+            relievedPoint.innerText = parseKRW(originPrice.toString());
             useUserPoint.value = originPrice;
         } else {
-            relievedPoint.innerText = usePoint.toString()
+            relievedPoint.innerText = parseKRW(usePoint.toString());
         }
         calTotalAmount();
     }
@@ -55,14 +68,18 @@ function usePoint() {
 
 function amountLogicCheck_gift(packPolicy) {
     let totalAmount = document.getElementById("totalAmount");
-    if (parseInt(totalAmount.innerText) === 0) {
+    if (parseInt(totalAmount.innerText) === 100) {
         let relievedPoint = document.getElementById("usePoint")
         let useUserPoint = document.getElementById("tbl-point")
 
         let result = relievedPoint.innerText;
-        result = (parseInt(result) - packPolicy.policyFee)
+        result = (parseInt(parsingNumber(result)) - packPolicy.policyFee)
 
-        relievedPoint.innerText = result.toString();
+        if (result < 0) {
+            result = 0;
+        }
+
+        relievedPoint.innerText = parseKRW(result.toString());
         useUserPoint.value = result
     }
 }
@@ -73,7 +90,7 @@ function giftOp(packPolicy) {
 
     let giftOption = document.getElementById('gift');
     if (giftOption.checked === true) {
-        giftPrice.innerText = policyFee.toString();
+        giftPrice.innerText = parseKRW(policyFee.toString());
         calTotalAmount();
     } else {
         giftPrice.innerText = "0";
@@ -88,17 +105,29 @@ function calTotalAmount() {
     let relievedPoint = document.getElementById("usePoint")
     let couponDiscount = document.getElementById("couponDiscount")
     let giftPrice = document.getElementById("gift-price");
-    let savingPoint = document.getElementById("savingPoint");
     let deliveryAmount = document.getElementById("shipAmount");
 
-    let result = parseInt(commodity.innerText) +
-        parseInt(giftPrice.innerText) +
-        parseInt(deliveryAmount.innerText) -
-        (parseInt(relievedPoint.innerText) +
-            parseInt(couponDiscount.innerText));
+    let result = parseInt(parsingNumber(commodity.innerText)) +
+        parseInt(parsingNumber(giftPrice.innerText)) +
+        parseInt(parsingNumber(deliveryAmount.innerText)) -
+        (parseInt(parsingNumber(relievedPoint.innerText)) +
+            parseInt(parsingNumber(couponDiscount.innerText)));
 
-    totalAmount.innerText = result.toString();
-    savingPoint.innerText = ((result * 0.07).toFixed()).toString();
+
+    if (result === 0) {
+        if (parseInt(parsingNumber(relievedPoint.innerText)) >= 100) {
+            let point = parseInt(parsingNumber(relievedPoint.innerText)) - 100;
+            relievedPoint.innerText = parseKRW(point.toString());
+            let input = document.getElementById("tbl-point")
+            input.value = point;
+        } else {
+            let coupon = parseInt(parsingNumber(couponDiscount.innerText)) - 100;
+            couponDiscount.innerText = parseKRW(coupon.toString());
+        }
+        result = result + 100;
+    }
+
+    totalAmount.innerText = parseKRW(result.toString());
 }
 
 function selectCoupon(product) {
@@ -143,7 +172,7 @@ function paintCouponModalPage(product) {
         }
 
         let inputValue = product.productNo + "|" +
-            product.title + "-" +
+            "-" +
             couponList[i].couponNo + "|" +
             couponList[i].templateName + "|" +
             sale;
@@ -175,7 +204,7 @@ function paintCouponModalPage(product) {
         td4.className = "coupon-td"
         let span3 = document.createElement("span")
         span3.className = "coupon-span"
-        span3.innerText = sale.toString();
+        span3.innerText = parseKRW(sale.toString());
 
         td1.appendChild(radioInput)
         td1.appendChild(label)
@@ -216,7 +245,7 @@ function applyCoupon() {
 
     let saleId = "price" + productNo;
     let saleInfo = document.getElementById(saleId)
-    saleInfo.innerText = salesPrice + "원";
+    saleInfo.innerText = parseKRW(salesPrice.toString()) + "원";
 
     let availBtnId = "coupon_avail_button" + productNo
     let cancelBtnId = "dc_cancel_button" + productNo
@@ -259,10 +288,11 @@ function cancelCoupon(product) {
     saleInfo.innerText = "";
 }
 
-function applyCouponOrder() {
+function couponCalculateAndParsingLogic() {
     var productList = []
     var couponList = []
     var resultList = []
+    var productSalePriceList = []
     let totalSalePrice = 0;
 
     $('input[name="order-product"]').each(function () {
@@ -272,30 +302,56 @@ function applyCouponOrder() {
         couponList.push($(this).val());
     });
 
+    let changePriceList = document.querySelectorAll(".changePrice");
+    let productPriceList = document.querySelectorAll('.product-total-price');
+    let productDiscountList = document.querySelectorAll('.product-per-discount');
+
     for (var i = 0; i < productList.length; i++) {
-        resultList.push(productList[i]+"- ");
+        resultList.push(productList[i] + "- ");
         for (var j = 0; j < couponList.length; j++) {
+            let productInfo = productList[i].split("|");
+            let productNo = productInfo[0]
+            let productCount = productInfo[1]
+            let productPrice = productInfo[2]
+
+            productSalePriceList.push(productPrice);
             if (couponList[j] === "") {
                 continue;
             }
-            let productNo = productList[i].split("|")[0]
+
             let couponParsingProductNo = couponList[i].split("|")[0]
 
             if (productNo === couponParsingProductNo) {
                 let couponInfo = couponList[i].split("-")[1]
+                let discountAmount = couponInfo.split("|")[2]
                 resultList[i] = (resultList[i] + couponInfo);
-
-                totalSalePrice += parseInt(couponInfo.split("|")[2])
+                productSalePriceList[i] -= parseInt(discountAmount)
+                totalSalePrice += parseInt(discountAmount)
+                productPriceList[i].innerText = parseKRW(productSalePriceList[i].toString()) + '원';
+                productDiscountList[i].innerText = '-' + parseKRW(discountAmount.toString()) + '원'
                 break;
             }
         }
     }
 
+    for (var i = 0; i < changePriceList.length; i++) {
+        changePriceList[i].value = productSalePriceList[i];
+    }
+
+    calculateSavePoint()
+    return {resultList, totalSalePrice};
+}
+
+function applyCouponOrder() {
+    const __ret = couponCalculateAndParsingLogic();
+    var resultList = __ret.resultList;
+    let totalSalePrice = __ret.totalSalePrice;
+
     let result = document.getElementById("product-coupon-result")
     let couponDiscount = document.getElementById("couponDiscount")
 
     result.value = resultList;
-    couponDiscount.innerText = totalSalePrice.toString()
+    couponDiscount.innerText = parseKRW(totalSalePrice.toString())
 
     amountLogicCheck_coupon(totalSalePrice);
     calTotalAmount()
@@ -306,20 +362,32 @@ function applyCouponOrder() {
 
 function amountLogicCheck_coupon(totalSalePrice) {
     let totalAmount = document.getElementById("totalAmount");
-    if (parseInt(totalAmount.innerText) === 0) {
-        let relievedPoint = document.getElementById("usePoint")
-        let useUserPoint = document.getElementById("tbl-point")
+    let commodity = document.getElementById('commodity');
+    let relievedPoint = document.getElementById("usePoint")
+    let useUserPoint = document.getElementById("tbl-point")
+    let result = relievedPoint.innerText;
 
-        let result = relievedPoint.innerText;
-        result = (parseInt(result) - totalSalePrice)
+    if (parseInt(parsingNumber(totalAmount.innerText)) === 100) {
+        result = (parseInt(parsingNumber(result)) - totalSalePrice)
 
-        relievedPoint.innerText = result.toString();
+        if (result < 0) {
+            result = 0;
+        }
+        relievedPoint.innerText = parseKRW(result.toString());
         useUserPoint.value = result
     }
+
+    if (parseInt(parsingNumber(totalAmount.innerText)) - totalSalePrice < 100) {
+        alert("최대 할인 금액을 넘어 포인트 사용을 취소합니다")
+        relievedPoint.innerText = '0';
+        useUserPoint.value = 0;
+    }
+
+
 }
 
 function finalLogic() {
-    applyCouponOrder();
+    couponCalculateAndParsingLogic()
 
     let pointResult = document.getElementById("pointAmount")
     let couponResult = document.getElementById("couponAmount")
@@ -331,10 +399,57 @@ function finalLogic() {
     let totalPrice = document.getElementById("totalAmount")
     let save = document.getElementById("savingPoint")
 
-    pointResult.value = point.innerText;
-    couponResult.value = coupon.innerText;
-    totalResult.value = totalPrice.innerText;
-    savePoint.value = save.innerText;
+    pointResult.value = parsingNumber(point.innerText);
+    couponResult.value = parsingNumber(coupon.innerText);
+    totalResult.value = parsingNumber(totalPrice.innerText);
+    savePoint.value = parsingNumber(save.innerText);
+}
+
+function parseKRW(data) {
+    return data.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function parsingNumber(data) {
+    return data.replaceAll(",", "")
+}
+
+function calculateSavePoint() {
+    let save = document.getElementById("savingPoint")
+
+    let saveList = document.querySelectorAll(".prd_savePoint")
+    let policyList = document.querySelectorAll(".point_policy")
+    let priceList = document.querySelectorAll(".changePrice");
+    let methodList = document.querySelectorAll(".policy-method")
+
+    let totalSave = 0;
+
+    for (var i = 0; i < policyList.length; i++) {
+        let policy = policyList[i].value.split('|');
+        let rate;
+        let method = policy[0];
+        let isSaved = policy[1];
+
+        if (method === policy_salePrice && saveList[i].innerText !== '') {
+            totalSave += parseInt(parsingNumber(saveList[i].innerText));
+            continue;
+        }
+        if (isSaved === true) {
+            if (methodList[i].innerText === '') {
+                methodList[i].innerText = '적립방식 : ' + method;
+            }
+
+            rate = policy[2];
+            let savePoint = parseInt(parsingNumber(priceList[i].value)) * (rate / 100);
+            saveList[i].innerText = parseKRW((savePoint.toFixed()).toString())
+            totalSave += savePoint;
+        } else {
+            if (methodList[i].innerText === '') {
+                methodList[i].innerText = '포인트 적립이 안되는 상품입니다';
+            }
+        }
+    }
+
+    save.innerText = parseKRW((totalSave.toFixed()).toString());
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -350,27 +465,30 @@ document.addEventListener("DOMContentLoaded", function () {
     let totalPrice = 0;
 
     for (var i = 0; i < cntList.length; i++) {
-        count += parseInt(cntList[i].innerText)
+        count += parseInt(parsingNumber(cntList[i].innerText))
     }
 
     for (var i = 0; i < priceList.length; i++) {
-        totalPrice += parseInt(priceList[i].innerText)
+        totalPrice += parseInt(parsingNumber(priceList[i].innerText))
     }
 
-    commodity.innerText = totalPrice.toString();
+    commodity.innerText = parseKRW(totalPrice.toString());
     totalCnt.innerText = count.toString() + "개";
 
     let shipAmount = document.getElementById("shipAmount")
 
-    totalPrice += parseInt(shipAmount.innerText)
-    totalAmount.innerText = totalPrice.toString();
+    totalPrice += parseInt(parsingNumber(shipAmount.innerText))
+    totalAmount.innerText = parseKRW(totalPrice.toString());
 
     let mainTitle = titleList[0].innerText;
     let orderName = count !== 1 ? mainTitle + ' 외 ' + (count - 1) + "권" : mainTitle;
 
     let orderNameInput = document.getElementById("order-name")
     orderNameInput.value = orderName;
+
+    calculateSavePoint()
 })
+
 
 
 

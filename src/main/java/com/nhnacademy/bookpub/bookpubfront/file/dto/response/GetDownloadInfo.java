@@ -1,12 +1,12 @@
-package com.nhnacademy.bookpub.bookpubfront.coupontemplate.dto.response;
+package com.nhnacademy.bookpub.bookpubfront.file.dto.response;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * 오브젝트 스토리지 접근을 위해 정보를 받아오는 Dto.
+ * 파일 다운로드 정보.
  *
- * @author : 정유진
+ * @author : 박경서
  * @since : 1.0
  **/
 @Getter

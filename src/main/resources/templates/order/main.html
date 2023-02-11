@@ -69,15 +69,16 @@
                                 <input type="hidden" id="order-name" name="orderName">
                                 <div class="img-wrapper">
                                     <img id="arrow" class="btn-img" src="/static/img/main/down-arrow.svg">
+                                    <input type="hidden" id="img-option" value="1">
                                 </div>
                             </summary>
                             <table class="tbl_prod">
-                                <thead class="hidden">
+                                <thead>
                                 <tr>
-                                    <th scope="col">상품정보</th>
-                                    <th scope="col">#</th>
-                                    <th scope="col">수량</th>
-                                    <th scope="col">금액</th>
+                                    <th scope="col" class="th-size" style="padding: 20px 0 0 40px;">상품정보</th>
+                                    <th scope="col" class="product-th th-size">포인트 적립금</th>
+                                    <th scope="col" class="product-th th-size">수량</th>
+                                    <th scope="col" class="product-th th-size">금액</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -87,19 +88,17 @@
                                            th:value="${product.productNo}+'|'+
                                            ${product.count}+'|'+
                                            ${product.totalPrice}" name="order-product">
-                                    <td class="prod">
+                                    <td class="prod product-td">
                                         <div class="prod_area">
                                             <div class="bookpub-item-thumb size_sm">
-                                                <a target="_blank" href="#">
-                                                    <span class="item-img-wrap"
-                                                          th:if="${#strings.isEmpty(product.getThumbnail)}">
-                                                        <img src="/static/img/main/no-image.png">
-                                                    </span>
-                                                    <span class="item-img-wrap"
-                                                          th:if="${not #strings.isEmpty(product.getThumbnail)}">
-                                                        <img th:src="${product.getThumbnail()}" alt="No image">
-                                                    </span>
-                                                </a>
+                                                <span class="item-img-wrap"
+                                                      th:if="${#strings.isEmpty(product.getThumbnail)}">
+                                                    <img src="/static/img/main/no-image.png">
+                                                </span>
+                                                <span class="item-img-wrap"
+                                                      th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                                    <img th:src="${product.getThumbnail()}" alt="No image">
+                                                </span>
                                             </div>
                                             <div class="prod_info size_sm">
                                                 <span class="prod_info">
@@ -110,16 +109,23 @@
                                             </div>
                                         </div>
                                     </td>
-                                    <td>
-                                        <div class="badge_box">
-                                            <div id="badge">bookpub 배송</div>
+                                    <td class="product-td">
+                                        <div class="point_box">
+                                            <input class="changePrice" type="hidden" th:value="${product.totalPrice}">
+                                            <input class="point_policy" type="hidden" th:value="${product.pointPolicy}">
+                                            <span class="prd_savePoint"></span>
+                                            <span class="policy-method"></span>
                                         </div>
                                     </td>
-                                    <td>
-                                        <span class="prd_num" th:text="${product.count}"></span>
+                                    <td class="product-td prd_num">
+                                        <span th:text="${product.count}"></span>
                                     </td>
-                                    <td>
-                                        <span class="price product-price" th:text="${product.totalPrice}+'원'"></span>
+                                    <td class="product-td product-price">
+                                        <div class="price-box">
+                                            <span class="product-total-price" style="font-weight: 600"
+                                                  th:text="${#numbers.formatInteger(product.totalPrice,0,'COMMA')}+'원'"></span>
+                                            <span class="product-per-discount"></span>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
@@ -143,6 +149,7 @@
                                                        title="이름 입력"
                                                        maxlength="200"
                                                        name="buyerName"
+                                                       required
                                                        th:value="${#authentication.getPrincipal()!='anonymousUser' ? member.memberName : ''}">
                                             </div>
                                             <div class="col_box"
@@ -151,6 +158,7 @@
                                                        title="휴대폰 번호 입력"
                                                        maxlength="11"
                                                        name="buyerNumber"
+                                                       required
                                                        th:value="${#authentication.getPrincipal()!='anonymousUser' ? member.phone : ''}">
                                                 <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>
                                             </div>
@@ -226,7 +234,7 @@
                                 </tr>
                                 <td class="col-box-wrapper">
                                     <div class="col-box" style="gap: 13px;display: flex;align-items: center;">
-                                        <span style=" padding-left: 7rem;font-size: 18px; color: #0000004d;" th:text="${#authentication.getPrincipal()!='anonymousUser'
+                                        <span style="padding-left: 7rem;font-size: 18px; color: #0000004d;" th:text="${#authentication.getPrincipal()!='anonymousUser'
                                         ? '사용할 수 있는 쿠폰이 있는지 확인하세요' : '비회원은 쿠폰을 사용할 수 없습니다'}"></span>
                                         <button th:if="${#authentication.getPrincipal()!='anonymousUser'}"
                                                 id="coupon-use" type="button" onclick="showCoupon()">쿠폰사용
@@ -240,14 +248,24 @@
                     <div class="payment_body_wrap">
                         <div class="tbl_row_wrap">
                             <table>
-                                <colgroup>
+                                <colgroup th:if="${#authentication.getPrincipal()=='anonymousUser'}">
+                                    <col style="width: 100%">
+                                </colgroup>
+                                <colgroup th:if="${#authentication.getPrincipal()!='anonymousUser'}">
                                     <col style="width: 210px">
                                     <col style="width: auto">
                                 </colgroup>
                                 <tr>
                                     <th scope="row" class="has_ip">포인트</th>
                                 </tr>
-                                <tr>
+                                <tr th:if="${#authentication.getPrincipal()=='anonymousUser'}">
+                                    <td class="col-box-wrapper">
+                                        <div class="col-box" style="gap: 13px;display: flex;align-items: center;">
+                                            <span style="padding-left: 7rem;font-size: 18px; color: #0000004d;">비회원은 포인트를 사용할 수 없습니다</span>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <tr th:if="${#authentication.getPrincipal()!='anonymousUser'}">
                                     <th scope="row" class="has_ip" style="font-size: 17px;padding-left: 80px;">
                                         <label for="tbl-point">포인트 잔액</label>
                                     </th>
@@ -256,7 +274,7 @@
                                         <span class="point">
                                             <span id="userPoint"
                                                   class="val fc_spot"
-                                                  th:text="${#authentication.getPrincipal() != 'anonymousUser' ?member.point :'0'}"></span>
+                                                  th:text="${#numbers.formatInteger(member.point,0,'COMMA')}"></span>
                                             <span class="unit">원</span>
                                         </span>
                                         </div>
@@ -405,7 +423,7 @@
                                             <div class="coupon-sale-price">
                                                 <span>판매가</span>
                                                 <strong class="font-w-noraml"
-                                                        th:text="${product.salesPrice}"></strong>
+                                                        th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></strong>
                                             </div>
                                             <div>
                                                 <span class="operation">X</span>
@@ -419,7 +437,7 @@
                                             </div>
                                             <div class="coupon-sale-price">
                                                 <span class="coupon-total-price">총 판매가</span>
-                                                <strong th:text="${product.totalPrice}"></strong>
+                                                <strong th:text="${#numbers.formatInteger(product.totalPrice, 0, 'COMMA')}"></strong>
                                             </div>
                                         </td>
                                         <td class="td-css">
@@ -468,13 +486,13 @@
                 modal.addEventListener("click", e => {
                     const evTarget = e.target
                     if (evTarget.classList.contains("modal-overlay")) {
-                        modal.style.display = "none"
+                        applyCouponOrder()
                     }
                 })
 
                 window.addEventListener("keyup", e => {
                     if (modal.style.display === "flex" && e.key === "Escape") {
-                        modal.style.display = "none"
+                        applyCouponOrder()
                     }
                 })
             </script>
@@ -554,7 +572,8 @@
                                 <p class="label2">배송비</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" id="shipAmount" th:text="${shipPolicy.policyFee}"></span>
+                                        <span class="val" style="color: #d52929 !important;" id="shipAmount"
+                                              th:text="${#numbers.formatInteger(shipPolicy.policyFee,0,'COMMA')}"></span>
                                         <span class="unit">원</span>
                                     </span>
                                     <input type="hidden" id="deliveryPolicy" name="deliveryFeePolicyNo"
@@ -566,7 +585,7 @@
                                 <p class="label2">선물포장</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" id="gift-price">0</span>
+                                        <span class="val" style="color: #d52929 !important;" id="gift-price">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                     <input type="hidden" id="giftPolicy" name="packingFeeFeePolicyNo"
@@ -577,7 +596,7 @@
                                 <p class="label2">쿠폰할인</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span class="val" id="couponDiscount">0</span>
+                                        <span class="val" style="color:blue !important;" id="couponDiscount">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                     <input type="hidden" id="couponAmount" name="couponAmount">
@@ -587,7 +606,7 @@
                                 <p class="label2">포인트 사용</p>
                                 <div class="right_box">
                                     <span class="price">
-                                        <span id="usePoint" class="val">0</span>
+                                        <span id="usePoint" style="color:blue !important;" class="val">0</span>
                                         <span class="unit">원</span>
                                     </span>
                                     <input type="hidden" id="pointAmount" name="pointAmount">
@@ -615,6 +634,11 @@
                                     <span class="point-unit">P</span>
                                 </span>
                                 <input type="hidden" id="savePoint" name="savePoint">
+                            </li>
+                            <li>
+                                <span style="vertical-align: middle;font-size: 8px;">
+                                    최대 100원까지만 할인됩니다
+                                </span>
                             </li>
                         </ul>
                     </div>

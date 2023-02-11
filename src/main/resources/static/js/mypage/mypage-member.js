@@ -1,26 +1,16 @@
 var exPwd = document.getElementById("exchangePwd");
 var checkPwd = document.getElementById("exchangeCheckPwd");
 
-console.log(exPwd.value);
-console.log(checkPwd.value);
-
 function validatePassword() {
-    console.log(exPwd.value)
-    console.log(checkPwd.value)
     if (exPwd.value === checkPwd.value) {
-        console.log("if 안에 exPwd : {}",exPwd.value)
-        console.log("if 안에 checkPwd : {}",checkPwd.value)
         document.getElementById("pwd-register")
             .disabled = false;
         checkPwd.checkValidity(true);
         checkPwd.setCustomValidity('');
 
     } else {
-        console.log("else 안에 exPwd : {}",exPwd.value)
-        console.log("else 안에 checkPwd : {}",checkPwd.value)
-
         checkPwd.setCustomValidity("패스워드가 일치하지 않습니다.");
-        checkPwd.disabled =false;
+        checkPwd.disabled = false;
     }
 }
 
@@ -57,16 +47,16 @@ function smsConfirm() {
     }
 }
 
-const rawPwd = document.getElementById("currentPwd").value;
 let elementById = document.getElementById("member-no").value;
 
 function pwdCheck() {
+    const rawPwd = document.getElementById("currentPwd").value;
     $.ajax({
         type: "post",
         async: false,
         dataType: 'json',
         data: {rawPassword: rawPwd},
-        url: "/members/" + 388 + "/password-check"
+        url: "/members/" + elementById + "/password-check"
         , success: function (result) {
             console.log(result);
             if (result === true) {
@@ -82,8 +72,6 @@ function pwdCheck() {
                     .disabled = true;
             } else {
                 alert("비밀번호가 맞지않습니다.")
-                document.getElementById(checkPwd)
-                    .value = '';
             }
         }
     })
@@ -91,26 +79,26 @@ function pwdCheck() {
 
 function nickCheckFunc() {
     let value = document.getElementById("nickname").value;
-        $.ajax({
-            type: "post",
-            async: true,
-            url: "/nickCheck",
-            data: {"nickname": value},
-            success: function (result) {
-                if (result === false) {
-                    document.getElementById("nick-submit")
-                        .disabled = false;
-                    document.document.getElementById("nickname")
-                        .disabled = true;
+    $.ajax({
+        type: "post",
+        async: true,
+        url: "/nickCheck",
+        data: {"nickname": value},
+        success: function (result) {
+            if (result === false) {
+                document.getElementById("nick-submit")
+                    .disabled = false;
+                document.document.getElementById("nickname")
+                    .disabled = true;
 
-                    alert("이용가능한 닉네임 입니다.");
-                } else {
-                    alert("이미 사용하는 닉네임 입니다.");
-                    document.getElementById("nickname")
-                        .value = '';
-                }
+                alert("이용가능한 닉네임 입니다.");
+            } else {
+                alert("이미 사용하는 닉네임 입니다.");
+                document.getElementById("nickname")
+                    .value = '';
             }
-        })
+        }
+    })
 }
 
 function findAddress() {

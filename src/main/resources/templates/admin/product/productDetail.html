@@ -12,109 +12,945 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+
+    <!-- Toast UI Editor -->
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css">
+
+    <style>
+        .cursor {
+            cursor: pointer;
+        }
+    </style>
 </head>
 <body class="sb-nav-fixed">
 <div id="layoutSidenav">
     <th:block th:include="admin/fragments/adminHeader"/>
     <th:block th:include="admin/fragments/adminNavigationBar"/>
 
+    <!-- 상품 정보 수정 모달   -->
+    <div class="modal fade" id="infoModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 정보 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/info(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+                        <div class="row">
+                            <div class="col">
+                                <label for="modifyIsbn">
+                                    <a href="https://www.nl.go.kr/seoji/" target="_blank" rel="noopener noreferrer"
+                                       style="text-decoration-line: none">
+                                        ISBN
+                                    </a>
+                                </label>
+                                <input type="text"
+                                       id="modifyIsbn"
+                                       class="form-control"
+                                       th:value="${product.productIsbn}"
+                                       placeholder="ISBN"
+                                       name="productIsbn" minlength="10" maxlength="13" required>
+                                <div class="invalid-feedback">유효하지 않는 ISBN</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="modifyPrice">정가</label>
+                                <input type="text" class="form-control" id="modifyPrice" placeholder="00"
+                                       name="productPrice" min="100"
+                                       th:value="${product.productPrice}"
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                       required>
+                                <div class="invalid-feedback">최소 100원</div>
+                            </div>
+                            <div class="col">
+                                <label for="modifyRate">할인율</label>
+                                <input type="text" class="form-control" id="modifyRate" name="salesRate" min="0"
+                                       max="99" th:value="${product.salesRate}" required
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                <div class="invalid-feedback">최소 0%</div>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="modifyPublisher">출판사</label>
+                                <input type="text" class="form-control" id="modifyPublisher" placeholder="출판사"
+                                       th:value="${product.productPublisher}"
+                                       name="productPublisher" minlength="1" maxlength="50" required>
+                                <div class="invalid-feedback">최소 1글자, 최대 50글자</div>
+                            </div>
+                            <div class="col">
+                                <label for="modifyDate">출판일</label>
+                                <input type="datetime-local" th:value="${product.publishDate}" id="modifyDate"
+                                       name="publishedAt" required>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="col">
+                                <label for="modifyPage">페이지</label>
+                                <input type="text" class="form-control" id="modifyPage" placeholder="00"
+                                       name="pageCount" min="1"
+                                       th:value="${product.pageCount}"
+                                       oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                       required>
+                                <div class="invalid-feedback">최소 1 Page</div>
+                            </div>
+                            <div class="col">
+                                <label for="modifyPriority">우선순위</label>
+                                <input type="text" class="form-control" id="modifyPriority" name="priority" min="0"
+                                       required
+                                       max="100" th:value="${product.productPriority}"
+                                       oninput="this.value = this.value.replace(/-[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
+                                <div class="invalid-feedback">0 ~ 100 입력 필수</div>
+                            </div>
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 저자 수정 모달   -->
+    <div class="modal fade" id="authorModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 저자 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/author(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <div class="row">
+                            <label for="modifyAuthor">저자
+                                <a href="/admin/authors" target="_blank" rel="noopener noreferrer"
+                                   style="text-decoration-line: none">
+                                    (저자 목록)
+                                </a>
+                            </label>
+                            <input type="text" class="form-control" id="modifyAuthor" placeholder="저자 번호를 입력 ex) 1,3,4"
+                                   name="authors" required>
+                            <div class="invalid-feedback">최소 1명의 저자</div>
+
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 카테고리 수정 모달   -->
+    <div class="modal fade" id="categoryModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 카테고리 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/category(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <div class="row">
+                            <div class="form-group col">
+                                <label>카테고리1</label>
+                                <select class="form-control" name="categoryOne" required>
+                                    <option value="" selected disabled hidden>==상위 카테고리 선택==</option>
+                                    <div th:each="category : ${parentCategories}">
+                                        <option th:value="${category.categoryNo}"
+                                                th:text="${category.categoryName}"></option>
+                                    </div>
+                                </select>
+                            </div>
+
+                            <div class="form-group col">
+                                <label>카테고리2</label>
+                                <select class="form-control" name="categoryTwo">
+                                    <option value="">==카테고리 선택==</option>
+                                    <div th:each="category : ${categories}">
+                                        <option th:each="childCategory : ${category.childList}"
+                                                th:value="${childCategory.categoryNo}"
+                                                th:text="${category.categoryName} + '/' + ${childCategory.categoryName}"></option>
+                                    </div>
+                                </select>
+                            </div>
+
+                            <div class="form-group col">
+                                <label>카테고리3</label>
+                                <select class="form-control" name="categoryThree">
+                                    <option value="">==카테고리 선택==</option>
+                                    <div th:each="category : ${categories}">
+                                        <option th:each="childCategory : ${category.childList}"
+                                                th:value="${childCategory.categoryNo}"
+                                                th:text="${category.categoryName} + '/' + ${childCategory.categoryName}"></option>
+                                    </div>
+                                </select>
+                            </div>
+
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 태그 수정 모달   -->
+    <div class="modal fade" id="tagModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 태그 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/tag(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <h3>태그</h3>
+                        <br/>
+                        <label th:each="tag : ${tags}" th:for="${tag.tagName}+'id'">&nbsp;&nbsp;
+                            <input type="checkbox" class="form-check-label" th:id="${tag.tagName}+'id'"
+                                   name="tagList" th:value="${tag.tagNo}" th:text="${tag.tagName}">
+                        </label>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 유형 수정 모달   -->
+    <div class="modal fade" id="typeModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 유형 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/type(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <label>상품 유형</label>
+                        <select class="form-control" name="typeStateNo" required>
+                            <option value="" selected disabled hidden>==상품 유형 선택==</option>
+                            <option th:each="typeStateCode : ${typeStateCodes}"
+                                    th:value="${typeStateCode.codeNo}"
+                                    th:text="${typeStateCode.codeName}"></option>
+                        </select>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 판매 유형 수정 모달   -->
+    <div class="modal fade" id="saleModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 유형 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/sale(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <div class="col">
+                            <label>상품 판매 유형</label>
+                            <select class="form-control" name="saleStateNo" required>
+                                <option value="" selected disabled hidden>==상품 유형 선택==</option>
+                                <option th:each="saleStateCode : ${saleStateCodes}"
+                                        th:value="${saleStateCode.codeNo}"
+                                        th:text="${saleStateCode.codeCategory}"></option>
+                            </select>
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 포인트 정책 수정 모달   -->
+    <div class="modal fade" id="policyModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 유형 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/policy(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <label>포인트 정책</label>
+                        <select class="form-control" name="policyNo" required>
+                            <option value="" selected disabled hidden>==포인트 정책 유형 선택==</option>
+                            <option th:each="policy: ${policies}" th:value="${policy.policyNo}"
+                                    th:text="${policy.policyMethod} + '/ 적립률 : ' + ${policy.saveRate} + '%'"></option>
+                        </select>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 설명 수정 모달   -->
+    <div class="modal fade" id="descriptionModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 설명 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/description(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <div class="form-group">
+                            <label>상품 설명</label>
+                            <div id="modify_editor"></div>
+                            <button type="button" class="btn btn-primary"
+                                    id="descriptionAdd" onclick="getDescription()">설명 저장
+                            </button>
+                            <textarea style="display: none" id="hiddenDes" name="productDescription"
+                                      required></textarea>
+                            <div class="invalid-feedback">설명을 저장해주세요.</div>
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- E-Book 수정 모달   -->
+    <div class="modal fade" id="eBookModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 유형 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/eBook(productNo=${product.productNo})}"
+                          enctype="multipart/form-data" class="was-validated" method="post">
+
+                        <label>E-Book 수정</label>
+                        <div class="form-group btn btn-light">
+                            <span>e-book</span>
+                            <input type="file" name="eBook" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 이미지 수정 모달   -->
+    <div class="modal fade" id="imageModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 이미지 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/image(productNo=${product.productNo})}"
+                          enctype="multipart/form-data" class="was-validated" method="post">
+
+                        <label>이미지 수정</label>
+                        <div class="form-group btn btn-light">
+                            <span>상품 Image</span>
+                            <input type="file" name="image" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 상세 이미지 수정 모달   -->
+    <div class="modal fade" id="deepImageModify" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 상세 이미지 수정</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/detail-image(productNo=${product.productNo})}"
+                          enctype="multipart/form-data" class="was-validated" method="post">
+
+                        <label>상세 이미지 수정</label>
+                        <div class="form-group btn btn-light">
+                            <span>상품 상세 Image</span>
+                            <input type="file" name="detailImage" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 이미지 추가 모달   -->
+    <div class="modal fade" id="imageAdd" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 이미지 추가</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/new-image(productNo=${product.productNo})}"
+                          enctype="multipart/form-data" class="was-validated" method="post">
+
+                        <label>이미지 추가</label>
+                        <div class="form-group btn btn-light">
+                            <span>상품 Image</span>
+                            <input type="file" name="image" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 상품 상세 이미지 추가 모달   -->
+    <div class="modal fade" id="deepImageAdd" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">상품 상세 이미지 추가</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/new-detail-image(productNo=${product.productNo})}"
+                          enctype="multipart/form-data" class="was-validated" method="post">
+
+                        <label>상세 이미지 추가</label>
+                        <div class="form-group btn btn-light">
+                            <span>상품 상세 Image</span>
+                            <input type="file" name="detailImage" accept="image/jpeg,image/png,image/jpg">
+                        </div>
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- 연관 관계 상품 등록 모달   -->
+    <div class="modal fade" id="relationProductAdd" role="dialog">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title">연관 상품 등록</h3>
+                </div>
+                <div class="modal-body">
+                    <form th:action="@{/admin/products/{productNo}/product-relation(productNo=${product.productNo})}"
+                          class="was-validated" method="post">
+
+                        <div class="row">
+                            <label for="addRelation">상품
+                                <a href="/admin/products" target="_blank" rel="noopener noreferrer"
+                                   style="text-decoration-line: none">
+                                    (상품 목록)
+                                </a>
+                            </label>
+                            <input type="text" class="form-control" id="addRelation" placeholder="상품 번호를 입력 ex) 1,3,4"
+                                   name="relationProducts" required>
+                            <div class="invalid-feedback">최소 1개의 상품</div>
+
+                        </div>
+
+                        <br/>
+
+                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left:70%;">취소
+                        </button>
+                        <button type="submit" class="btn btn-primary">수정</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h3 class="mt-4">
-                    상품 상세 정보
-                </h3>
+                <h3 class="mt-4" th:text="'[' +  ${product.title} + ']'"></h3>
 
                 <hr/>
 
                 <div align="right">
-                    <button class="btn btn-info float-right" data-toggle="modal" data-target="#productModifyModal">상품 정보
-                        수정
+                    <button class="btn btn-outline-dark float-right" data-toggle="modal" data-target="#infoModify">
+                        상품 정보 수정
                     </button>
                 </div>
 
                 <br/>
 
-                <h4>책 제목</h4>
-                <p th:text="${product.title}"></p>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <span class="img-thumbnail" style="width: 250px; height: 350px"
+                              th:if="${#strings.isEmpty(product.getThumbnail)}">
+                            <img class="img_thumbnail" style="width: 100%; height: 450px; object-fit: cover;"
+                                 src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg">
+                        </span>
+                        <span class="img-thumbnail" style="width: 250px; height: 350px"
+                              th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                            <img class="img_thumbnail" style="width: 100%; height: 400px; object-fit: cover;"
+                                 th:src="@{${product.getThumbnail()}}" alt="No image">
+                        </span>
+                    </div>
 
-                <h4>ISBN</h4>
-                <p th:text="${product.productIsbn}"></p>
+                    <div class="col-sm-9" style="padding-left: 3%">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <span style="font-size: 1.25rem; font-weight: bold">상품 번호</span>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.productNo}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <span style="font-size: 1.25rem; font-weight: bold">ISBN</span>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.productIsbn}"></div>
+                                </div>
+                            </div>
 
-                <h4>페이지수</h4>
-                <p th:text="${product.pageCount}"></p>
+                            <div class="col-sm-4">
+                                <span style="font-size: 1.25rem; font-weight: bold">재고수량</span>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.productStock}"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                <h4>페이지수</h4>
-                <p th:text="${product.pageCount}"></p>
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <span style="font-size: 1.25rem; font-weight: bold">정가</span>
+                                <div class="card">
+                                    <div class="card-body"
+                                         th:text="|${#numbers.formatInteger(product.productPrice, 0, 'COMMA')}원|"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <span style="font-size: 1.25rem; font-weight: bold">판매가</span>
+                                <div class="card">
+                                    <div class="card-body"
+                                         th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <span style="font-size: 1.25rem; font-weight: bold">할인율</span>
+                                <div class="card">
+                                    <div class="card-body" style="color: #ef0d0d"
+                                         th:text="${product.salesRate} + '%'"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                <h4>설명</h4>
-                <p th:text="${product.productDescription}"></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span style="font-size: 1.25rem; font-weight: bold">페이지수</span>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.pageCount}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <span style="font-size: 1.25rem; font-weight: bold">우선순위</span>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.productPriority}"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                <h4>판매가</h4>
-                <p th:text="${product.salesPrice}"></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span style="font-size: 1.25rem; font-weight: bold">출판사</span>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.productPublisher}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <span style="font-size: 1.25rem; font-weight: bold">출판일</span>
+                                <div class="card">
+                                    <div class="card-body"
+                                         th:text="${#temporals.format(product.publishDate, 'yyyy년 MM월 dd일')}"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                <h4>정가</h4>
-                <p th:text="${product.salesPrice}"></p>
+                        <hr/>
 
-                <h4>할인율</h4>
-                <p th:text="${product.salesRate}+'%'"></p>
+                        <div class="row">
+                            <div class="col-sm-4">
 
-                <h4>우선순위</h4>
-                <p th:text="${product.productPriority}"></p>
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-size: 1.25rem; font-weight: bold">저자</span>
 
-                <h4>재고수량</h4>
-                <p th:text="${product.productStock}"></p>
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#authorModify">
+                                        저자 수정
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div th:each="author: ${product.authors}">
+                                            <span th:text="${author}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-size: 1.25rem; font-weight: bold">카테고리</span>
 
-                <h4>출판일</h4>
-                <p th:text="${product.publishDate}"></p>
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#categoryModify">
+                                        카테고리 수정
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div th:each="category: ${product.categories}">
+                                            <span th:text="${category}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-size: 1.25rem; font-weight: bold">태그</span>
 
-                <h4>삭제여부</h4>
-                <p th:text="${product.deleted}"></p>
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#tagModify">
+                                        태그 수정
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <div th:each="tag: ${product.tags}">
+                                            <span th:text="${tag}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
 
-                <h4>구독여부</h4>
-                <p th:text="${product.productSubscribed}"></p>
+                        <hr/>
 
-                <h4>판매유형</h4>
-                <p th:text="${product.saleStateCodeCategory}"></p>
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-size: 1.25rem; font-weight: bold">상품 유형</span>
 
-                <h4>상품유형</h4>
-                <p th:text="${product.typeStateCodeName}"></p>
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#typeModify">
+                                        상품 유형 수정
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.typeStateCodeName}"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-size: 1.25rem; font-weight: bold">판매 유형</span>
 
-                <h4>포인트 정책</h4>
-                <p th:text="${product.policyMethod} + '/' + ${product.policySaved} + '/' + ${product.policySaveRate} + '%'"></p>
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#saleModify">
+                                        판매 유형 수정
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body" th:text="${product.saleStateCodeCategory}"></div>
+                                </div>
+                            </div>
+                        </div>
 
-                <h4>작가</h4>
-                <div th:each="author : ${product.authors}">
-                    <p th:text="${author}"></p>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div style="display: flex; justify-content: space-between">
+                                    <span style="font-size: 1.25rem; font-weight: bold">포인트 정책</span>
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#policyModify">
+                                        포인트 정책 수정
+                                    </button>
+                                </div>
+                                <div class="card">
+                                    <div class="card-body"
+                                         th:text="${product.policyMethod} + '/' + ${product.policySaved} + '/' + ${product.policySaveRate}"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr/>
+
+                        <div class="row">
+                            <div class="col-sm-6">
+                                <span style="font-size: 1.25rem; font-weight: bold">삭제여부</span>
+                                <div class="card">
+                                    <div th:if="${product.deleted} == true">
+                                        <div class="card-body">삭제 O</div>
+                                    </div>
+                                    <div th:unless="${product.deleted} == true">
+                                        <div class="card-body">삭제 X</div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-6">
+                                <span style="font-size: 1.25rem; font-weight: bold">구독가능여부</span>
+                                <div class="card">
+                                    <div th:if="${product.productSubscribed} == true">
+                                        <div class="card-body">구독가능</div>
+                                    </div>
+                                    <div th:unless="${product.productSubscribed} == true">
+                                        <div class="card-body">구독불가능</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <hr/>
+                        <div class="row">
+                            <div th:if="${product.ebook} != null">
+                                <h5>E-Book</h5>
+                                <div class="card">
+                                    <div class="card-body">
+                                        <a th:href="|@{/download/e-book/{productNo}(productNo=${product.productNo})}|">E-Book
+                                            다운로드</a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
-                <h4>카테고리</h4>
-                <div th:each="category : ${product.categories}">
-                    <p th:text="${category}"></p>
+                <hr/>
+
+                <div class="row">
+                    <div style="display: flex; justify-content: space-between">
+                        <span style="font-size: 1.25rem; font-weight: bold">연관 상품 목록</span>
+
+                        <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                data-target="#relationProductAdd">
+                            연관 상품 등록
+                        </button>
+
+                    </div>
+
+                    <hr/>
+
+                    <div style="width: 90%; margin: auto">
+                        <table class="table table-hover">
+                            <thead>
+                            <tr>
+                                <th>상품 번호</th>
+                                <th style="width: 40%">이미지</th>
+                                <th>제목</th>
+                                <th>판매가</th>
+                                <th style="text-align: center">비고</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="relation: ${product.info}">
+                                <td th:text="${relation.productNo}"></td>
+                                <td>
+                                    <div th:if="${relation.filePath} != null">
+                                        <img width="40%" height="40%" th:src="${relation.filePath}" alt=""
+                                             th:onclick="'location.href=\'' + @{/admin/products/{productNo}(productNo=${relation.productNo})} + '\''  "
+                                             class="img-thumbnail cursor">
+                                    </div>
+                                    <div th:unless="${relation.filePath} != null">
+                                        <img src="/static/img/main/no-image.png" alt="" class="img-thumbnail cursor">
+                                    </div>
+                                </td>
+                                <td th:text="${relation.title}"></td>
+                                <td th:text="|${#numbers.formatInteger(relation.salesPrice, 0, 'COMMA')}원|"></td>
+                                <td style="text-align: center">
+                                    <form th:action="@{/admin/products/{parentNo}/cut/{childNo}(parentNo=${product.productNo}, childNo=${relation.productNo})}"
+                                          method="post">
+                                        <button class="btn btn-outline-danger">연관 상품 삭제</button>
+                                    </form>
+                                </td>
+                            </tr>
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
                 </div>
 
-                <h4>태그</h4>
-                <div th:each="tag : ${product.tags}">
-                    <p th:text="${tag}"></p>
+                <hr/>
+
+                <div class="row">
+                    <div>
+                        <div>
+                            <div class="row">
+                                <div class="col-sm-4">
+                                    <span style="font-size: 1.25rem; font-weight: bold">책 설명</span>
+
+                                </div>
+                                <div class="col-sm-2">
+                                    <button class="btn btn-outline-dark" data-toggle="modal"
+                                            data-target="#descriptionModify">
+                                        상품 설명 수정
+                                    </button>
+                                </div>
+                                <div class="col-sm-2" th:if="${product.ebook} != null">
+                                    <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                            data-target="#eBookModify">
+                                        E-Book 수정
+                                    </button>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div th:if="${product.thumbnail} == null">
+                                        <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                                data-target="#imageAdd">
+                                            이미지 추가
+                                        </button>
+                                    </div>
+                                    <div th:unless="${product.thumbnail} == null">
+                                        <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                                data-target="#imageModify">
+                                            이미지 수정
+                                        </button>
+                                    </div>
+                                </div>
+                                <div class="col-sm-2">
+                                    <div th:if="${product.detail} == null">
+                                        <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                                data-target="#deepImageAdd">
+                                            상세 이미지 추가
+                                        </button>
+                                    </div>
+                                    <div th:unless="${product.detail} == null">
+                                        <button class="btn btn-outline-dark float-right" data-toggle="modal"
+                                                data-target="#deepImageModify">
+                                            상세 이미지 수정
+                                        </button>
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                        <br/>
+
+                        <span style="width: 100%; height: 500px; " th:if="${not #strings.isEmpty(product.getDetail())}">
+                        <img style="width: 100%; height: 100%; object-fit: cover;" th:src="@{${product.getDetail()}}"
+                             alt="No image">
+                        </span>
+
+                        <p id="editor-hidden" style="display: none" th:text="${product.productDescription}"></p>
+
+                        <div id="viewer"></div>
+                    </div>
                 </div>
 
-                <h4>태그컬러</h4>
-                <div th:each="tagColor : ${product.tagsColors}">
-                    <p th:text="${tagColor}"></p>
-                </div>
             </div>
         </main>
 
-        <th:block th:include="admin/fragments/adminFooter"/>
     </div>
 </div>
 </body>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 <script src="/static/js/admin/scripts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="/static/js/admin/chart-area-demo.js"></script>
-<script src="/static/js/admin/chart-bar-demo.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
-<script src="/static/js/admin/datatables-simple-demo.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+
+<script>
+    const Editor = toastui.Editor;
+
+    const modify_editor = new toastui.Editor({
+        el: document.querySelector('#modify_editor'),
+        height: '300px',
+        initialEditType: 'markdown',
+        previewStyle: 'vertical'
+    });
+
+    function getDescription() {
+        let hiddenDes = document.getElementById("hiddenDes");
+        hiddenDes.textContent = modify_editor.getMarkdown();
+    }
+
+    const viewer = toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true
+    });
+
+    let elem = document.getElementById('editor-hidden');
+    viewer.setMarkdown(elem.textContent);
+</script>
+
+
 </html>

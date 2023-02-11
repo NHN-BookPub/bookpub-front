@@ -413,7 +413,7 @@ textarea.input {
 #top-header {
   padding-top: 10px;
   padding-bottom: 10px;
-  background-color: #1E1F29;
+  background-color: #0d0e16;
 }
 
 .header-links li {
@@ -446,7 +446,7 @@ textarea.input {
 #header {
   padding-top: 15px;
   padding-bottom: 15px;
-  background-color: #15161D;
+  background-color: #0d0e16;
 }
 
 .header-logo {
@@ -724,7 +724,7 @@ textarea.input {
   top: 0;
   bottom: 0;
   left: 0px;
-  width: 40%;
+  width: 50%;
   background: #000000;
   opacity: 0.9;
   -webkit-transform: skewX(-45deg);

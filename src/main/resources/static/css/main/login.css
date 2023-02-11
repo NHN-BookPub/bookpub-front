@@ -44,8 +44,8 @@
 
 .login-sec .copy-text {
     position: absolute;
-    width: 80%;
-    bottom: 20px;
+    width: 73%;
+    bottom: 10px;
     font-size: 13px;
     text-align: center;
 }
@@ -89,9 +89,9 @@
     justify-content: center;
     align-items: center;
     gap: 10px;
-    padding: 10px;
+    /*padding: 10px;*/
     font-weight: 600;
-    font-size: 18px;
+    /*font-size: 18px;*/
 }
 
 .banner-text {
@@ -106,7 +106,7 @@
 }
 
 .banner-text h2 {
-    color: #000000;
+    color: #ffffff;
     font-weight: 600;
 }
 
@@ -114,14 +114,14 @@
     content: " ";
     width: 100px;
     height: 5px;
-    background: #000000;
+    background: #ffffff;
     display: block;
     margin-top: 20px;
     border-radius: 3px;
 }
 
 .banner-text p {
-    color: #030303;
+    color: #ffffff;
 }
 
 .login-form-check {
@@ -143,7 +143,7 @@
     margin-left: -15px;
 }
 
-#loading{
+#loading {
     display: none;
     position: fixed;
     z-index: 999;
@@ -154,4 +154,52 @@
     background: rgba(0, 0, 0, 0.4);
     justify-content: center;
     align-items: center;
+}
+
+.order-find {
+    position: absolute;
+    width: 73%;
+    bottom: 35px;
+    font-size: 13px;
+    text-align: center;
+    color: #808080 !important;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+#notMember-order {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.modal_box {
+    background-color: white;
+    display: flex;
+    justify-content: start;
+    border-radius: 10px;
+    width: 30rem;
+    height: 23rem;
+    align-items: center;
+    padding: 30px 0;
+    flex-direction: column;
+    gap: 13px;
+}
+
+#click {
+    background-color: white;
+    padding: 3px 10px 3px 10px;
+    border-radius: 14px;
+    border: 1px solid #7f7f7f;
+}
+
+#click:hover {
+    background-color: #dcdcdc;
 }

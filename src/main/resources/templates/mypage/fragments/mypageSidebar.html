@@ -13,14 +13,19 @@
                 <a href="/" class="nav__logo">Book-Pub</a>
             </div>
             <div class="nav__list">
-                <a th:href="@{/members/{memberNo}(memberNo=${member.memberNo})}" class="nav__link active">
+                <a th:href="@{/members/{memberNo}(memberNo=${member.memberNo})}" class="nav__link">
                     <ion-icon name="home-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">내 정보</span>
                 </a>
 
-                <a href="#" class="nav__link">
+                <a href="/orders/list" class="nav__link">
+                    <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">주문내역</span>
+                </a>
+
+                <a href="/orders/ebooks" class="nav__link">
                     <ion-icon name="chatbubbles-outline" class="nav__icon"></ion-icon>
-                    <span class="nav_name">메신저</span>
+                    <span class="nav_name">E-Book</span>
                 </a>
 
                 <a th:href="@{/members/{memberNo}/wishlist(memberNo=${member.memberNo})}" class="nav__link">
