@@ -21,6 +21,10 @@
         .wish-title:hover {
             color: #D10024;
         }
+
+        .cursor {
+            cursor: pointer;
+        }
     </style>
 
 </head>
@@ -39,7 +43,7 @@
             <div class="row" style="padding: 4%">
                 <div class="col-3" th:each="wishlist: ${wishlists}" style="flex: auto">
                     <div class="card" style="margin-bottom: 15%">
-                        <img th:src="${wishlist.thumbnail}" style="object-fit: cover; height: 300px"
+                        <img class="cursor" th:src="${wishlist.thumbnail}" style="object-fit: cover; height: 300px"
                              onerror="this.src=null; this.src='/static/image.review/no-image.png';"
                              th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${wishlist.productNo})} + '\''">
                         <div class="card-body">
@@ -48,11 +52,11 @@
                                     <strong th:text="'[' + ${wishlist.title} + ']'"
                                             th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${wishlist.productNo})} + '\''"
                                             style="font-size: 16px"
-                                            class="wish-title"></strong>
+                                            class="wish-title cursor"></strong>
                                     <p th:text="${wishlist.productPublisher}" style="font-size: 12px"></p>
                                 </div>
                                 <div class="col-sm-2">
-                                    <ion-icon name="heart"
+                                    <ion-icon class="cursor" name="heart"
                                               color="danger"
                                               th:productNo="${wishlist.productNo}"
                                               th:onclick="cancelLike(this.getAttribute('productNo'))"
@@ -61,13 +65,13 @@
 
                                     <br/>
                                     <div th:if="${wishlist.wishlistApplied == false}">
-                                        <ion-icon name="notifications-outline"
+                                        <ion-icon class="cursor" name="notifications-outline"
                                                   th:productNo="${wishlist.productNo}"
                                                   th:onclick="alarm(this.getAttribute('productNo'))">
                                         </ion-icon>
                                     </div>
                                     <div th:unless="${wishlist.wishlistApplied == false}">
-                                        <ion-icon name="notifications"
+                                        <ion-icon class="cursor" name="notifications"
                                                   th:productNo="${wishlist.productNo}"
                                                   th:onclick="alarm(this.getAttribute('productNo'))">
                                         </ion-icon>
