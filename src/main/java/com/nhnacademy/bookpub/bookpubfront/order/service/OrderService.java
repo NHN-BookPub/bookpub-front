@@ -76,4 +76,6 @@ public interface OrderService {
     GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
 
     PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo);
+
+    void refundOrder(Long orderNo);
 }
