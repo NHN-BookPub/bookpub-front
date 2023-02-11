@@ -24,12 +24,13 @@
     <hr/>
 
     <div align="right">
-        <form th:action="@{/members/{memberNo}/writable-reviews(memberNo=${member.memberNo})}">
+        <form action="/members/writable-reviews">
             <button class="btn btn-dark float-right" style="box-shadow: 3px 3px #888888;"> 작성 가능한 리뷰 ></button>
         </form>
 
-        <form th:action="@{/members/{memberNo}/written-reviews(memberNo=${member.memberNo})}">
-            <button class="btn btn-dark float-right" style="margin-right: 8px; box-shadow: 3px 3px #888888;"> 작성한 리뷰 ></button>
+        <form action="/members/written-reviews">
+            <button class="btn btn-dark float-right" style="margin-right: 8px; box-shadow: 3px 3px #888888;"> 작성한 리뷰 >
+            </button>
         </form>
     </div>
 
@@ -81,17 +82,19 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/{memberNo}/writable-reviews?(page=(${currentPage}-1), memberNo=${member.memberNo})}">Previous</a>
+                       th:href="@{/members/writable-reviews?(page=(${currentPage}-1))}">Previous</a>
                 </li>
                 <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                        <a class="page-link" th:href="@{/members/{memberNo}/writable-reviews?(page=(${page-1}), memberNo=${member.memberNo})}"
-                           th:text="${page}"></a></li>
+                        <a class="page-link" th:href="@{/members/writable-reviews?(page=(${page-1}))}"
+                           th:text="${page}">
+                        </a>
+                    </li>
                 </th:block>
                 <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/{memberNo}/writable-reviews?(page=(${currentPage}+1), memberNo=${member.memberNo})}">Next</a>
+                       th:href="@{/members/writable-reviews?(page=(${currentPage}+1))}">Next</a>
                 </li>
             </ul>
         </nav>
@@ -107,7 +110,7 @@
                 <h5 class="modal-title" id="staticBackdropLabel">리뷰 작성</h5>
             </div>
             <div class="modal-body">
-                <form th:action="@{/members/{memberNo}/writable-reviews(memberNo=${member.memberNo})}" class="was-validated" method="post"
+                <form action="/members/writable-reviews" class="was-validated" method="post"
                       enctype="multipart/form-data">
 
                     <input type="hidden" value="0" id="productNo" name="productNo">

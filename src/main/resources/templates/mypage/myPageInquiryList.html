@@ -52,12 +52,12 @@
                     <div>
                         <div>
                             <span th:if="${inquiry.inquiryDisplayed}">
-                                <a th:href="@{/members/{memberNo}/inquiries/{inquiryNo}(memberNo=${member.memberNo}, inquiryNo=${inquiry.inquiryNo})}"
+                                <a th:href="@{/members/inquiries/{inquiryNo}(inquiryNo=${inquiry.inquiryNo})}"
                                    th:text="${inquiry.inquiryTitle}">
                                 </a>
                             </span>
                             <span th:unless="${inquiry.inquiryDisplayed}">
-                                <a th:href="@{/members/{memberNo}/inquiries/{inquiryNo}/private(memberNo=${member.memberNo}, inquiryNo=${inquiry.inquiryNo})}"
+                                <a th:href="@{/members/inquiries/{inquiryNo}/private(inquiryNo=${inquiry.inquiryNo})}"
                                    th:text="${inquiry.inquiryTitle}">
                                 </a>
                             </span>
@@ -80,18 +80,18 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/{memberNo}/inquiries?(page=(${currentPage}-1), memberNo=${member.memberNo})}">Previous</a>
+                       th:href="@{/members/inquiries?(page=(${currentPage}-1))}">Previous</a>
                 </li>
                 <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
                         <a class="page-link"
-                           th:href="@{/members/{memberNo}/inquiries?(page=(${page-1}), memberNo=${member.memberNo})}"
+                           th:href="@{/members/inquiries?(page=(${page-1}))}"
                            th:text="${page}"></a></li>
                 </th:block>
                 <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/members/{memberNo}/inquiries?(page=(${currentPage}+1), memberNo=${member.memberNo})}">Next</a>
+                       th:href="@{/members/inquiries?(page=(${currentPage}+1))}">Next</a>
                 </li>
             </ul>
         </nav>

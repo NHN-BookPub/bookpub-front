@@ -82,19 +82,19 @@
     <ul class="pagination justify-content-center">
       <li class="page-item" th:classappend="${!positiveIsPrevious} ? 'disabled'">
         <a class="page-link"
-           th:href="@{/members/{memberNo}/coupon/positive?(memberNo=${member.memberNo}, page=(${positiveCurrentPage}-1))}">Previous</a>
+           th:href="@{/members/coupon/positive?(page=(${positiveCurrentPage}-1))}">Previous</a>
       </li>
       <th:block th:with="start=${(positiveCurrentPage/positivePageButtonNum)*positivePageButtonNum + 1}, end=(${(positiveTotalPages == 0) ?
                                  1 : (start + (positivePageButtonNum - 1) < positiveTotalPages ? start + (positivePageButtonNum - 1) : positiveTotalPages)})">
         <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
           <a class="page-link"
-             th:href="@{/members/{memberNo}/coupon/positive?(memberNo=${member.memberNo}, page=(${page-1}))}"
+             th:href="@{/members/coupon/positive?(page=(${page-1}))}"
              th:text="${page}"></a>
         </li>
       </th:block>
       <li class="page-item" th:classappend="${!positiveIsNext} ? 'disabled'">
         <a class="page-link"
-           th:href="@{/members/{memberNo}/coupon/positive?(memberNo=${member.memberNo}, page=(${positiveCurrentPage}+1))}">Next</a>
+           th:href="@{/members/coupon/positive?(page=(${positiveCurrentPage}+1))}">Next</a>
       </li>
     </ul>
   </nav>

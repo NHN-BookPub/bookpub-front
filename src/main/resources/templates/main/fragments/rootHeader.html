@@ -42,7 +42,7 @@
 
                 <li class="nav-item">
                     <a sec:authorize="isAnonymous()" class="nav-link" style="color: white" href="/signup">회원가입</a>
-                    <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" th:href="'/members/' + ${#authentication.principal}">마이페이지</a>
+                    <a sec:authorize="isAuthenticated()" class="nav-link" style="color: white" href="/members">마이페이지</a>
                 </li>
             </ul>
         </div>

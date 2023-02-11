@@ -103,7 +103,7 @@ public class TierCouponController {
     public String tierCouponEvent(@CookieValue(name = CART, required = false) Cookie cookie,
             Model model) {
 
-        memberUtils.getMemberNo(model);
+        memberUtils.modelRequestMemberNo(model);
 
         cartUtils.getCountInCart(cookie.getValue(), model);
         categoryUtils.categoriesView(model);

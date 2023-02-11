@@ -60,7 +60,7 @@ public class ProductController {
 
         cartUtils.getCountInCart(cookie.getValue(), model);
         categoryUtils.categoriesView(model);
-        memberUtils.getMemberNo(model);
+        memberUtils.modelRequestMemberNo(model);
 
         model.addAttribute("product", product);
         model.addAttribute("free", DELIVERY_FREE_FEE_STANDARD.getFee());
@@ -89,7 +89,7 @@ public class ProductController {
 
         cartUtils.getCountInCart(cookie.getValue(), model);
         categoryUtils.categoriesView(model);
-        memberUtils.getMemberNo(model);
+        memberUtils.modelRequestMemberNo(model);
 
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", products.getTotalPages());
