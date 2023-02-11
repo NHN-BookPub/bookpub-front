@@ -15,26 +15,35 @@
 //
 // showMenu('nav-toggle', 'navbar', 'body-pd')
 
-/* LINK ACTIVE */
-const linkColor = document.querySelectorAll('.nav__link')
-
-function colorLink() {
-  linkColor.forEach(l => l.classList.remove('active'))
-  this.classList.add('active')
-}
-
-linkColor.forEach(l => l.addEventListener('click', colorLink))
-
 /* COLLAPSE MENU */
 const linkCollapse = document.getElementsByClassName('collapse__link')
 var i
 
 for (i = 0; i < linkCollapse.length; i++) {
-  linkCollapse[i].addEventListener('click', function () {
-    const collapseMenu = this.nextElementSibling
-    collapseMenu.classList.toggle('showCollapse')
+    linkCollapse[i].addEventListener('click', function () {
+        const collapseMenu = this.nextElementSibling
+        collapseMenu.classList.toggle('showCollapse')
 
-    const rotate = collapseMenu.previousElementSibling
-    rotate.classList.toggle('rotate')
-  });
+        const rotate = collapseMenu.previousElementSibling
+        rotate.classList.toggle('rotate')
+    });
 }
+
+document.addEventListener("DOMContentLoaded", function () {
+    var url = document.location.href;
+
+    let linkList = document.querySelectorAll('.nav__link')
+
+    for (var i = 0; i < linkList.length; i++) {
+        let navLink = linkList[i].href
+        if (url.toString() === (navLink)) {
+            linkList[i].classList.add('active')
+            for (var j = 0; j < linkList.length; j++) {
+                if (i !== j) {
+                    linkList[j].classList.remove('active')
+                    break;
+                }
+            }
+        }
+    }
+})
