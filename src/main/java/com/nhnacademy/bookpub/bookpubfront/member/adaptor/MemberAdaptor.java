@@ -86,6 +86,13 @@ public interface MemberAdaptor {
     void requestMemberBlock(Long memberNo);
 
     /**
+     * 멤버의 삭제를 위한 메서드입니다.
+     *
+     * @param memberNo the member no
+     */
+    void requestMemberDelete(Long memberNo);
+
+    /**
      * 회원의 전체 통계가 나오는 메서드입니다.
      *
      * @return 회원의 통계가 반환.

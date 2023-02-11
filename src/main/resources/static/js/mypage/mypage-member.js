@@ -57,16 +57,16 @@ function smsConfirm() {
     }
 }
 
-const rawPwd = document.getElementById("currentPwd").value;
 let elementById = document.getElementById("member-no").value;
 
 function pwdCheck() {
+    const rawPwd = document.getElementById("currentPwd").value;
     $.ajax({
         type: "post",
         async: false,
         dataType: 'json',
         data: {rawPassword: rawPwd},
-        url: "/members/" + 388 + "/password-check"
+        url: "/members/" + elementById + "/password-check"
         , success: function (result) {
             console.log(result);
             if (result === true) {
@@ -82,8 +82,6 @@ function pwdCheck() {
                     .disabled = true;
             } else {
                 alert("비밀번호가 맞지않습니다.")
-                document.getElementById(checkPwd)
-                    .value = '';
             }
         }
     })

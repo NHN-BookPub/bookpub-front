@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.member.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
-
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.IdCheckRequestDto;
@@ -173,6 +172,19 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     public void requestMemberBlock(Long memberNo) {
         restTemplate.exchange(
                 GateWayConfig.getGatewayUrl() + "/token/admin/members/" + memberNo,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestMemberDelete(Long memberNo){
+        restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() +TOKEN_API + memberNo,
                 HttpMethod.PUT,
                 new HttpEntity<>(makeHeader()),
                 Void.class

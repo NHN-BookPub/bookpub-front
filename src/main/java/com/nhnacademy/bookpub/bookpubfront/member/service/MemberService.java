@@ -95,6 +95,8 @@ public interface MemberService {
      */
     void memberBlock(Long memberNo);
 
+    void memberDelete(Long memberNo);
+
     /**
      * 회원들의 통계를 반환합니다.
      *
