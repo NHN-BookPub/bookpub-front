@@ -1,4 +1,6 @@
 let couponConfirmList = new Set();
+const policy_actualPrice = '실구매가';
+const policy_salePrice = '판매가';
 
 function findAddress() {
     new daum.Postcode({
@@ -34,9 +36,14 @@ function usePoint() {
         usePoint = useUserPoint.value;
     }
 
-    if (parseInt(userPoint) < usePoint) {
-        console.log(userPoint)
-        console.log(usePoint)
+    let couponDiscount = document.getElementById("couponDiscount");
+    let value = parsingNumber(couponDiscount.innerText);
+
+    if (value === '0') {
+        alert("쿠폰을 먼저 적용해주세요!")
+        relievedPoint.innerText = "0";
+        useUserPoint.value = 0;
+    } else if (parseInt(userPoint) < usePoint) {
         alert("포인트가 부족합니다.")
         relievedPoint.innerText = "0";
         useUserPoint.value = "";
@@ -59,12 +66,16 @@ function usePoint() {
 
 function amountLogicCheck_gift(packPolicy) {
     let totalAmount = document.getElementById("totalAmount");
-    if (parseInt(totalAmount.innerText) === 0) {
+    if (parseInt(totalAmount.innerText) === 100) {
         let relievedPoint = document.getElementById("usePoint")
         let useUserPoint = document.getElementById("tbl-point")
 
         let result = relievedPoint.innerText;
         result = (parseInt(parsingNumber(result)) - packPolicy.policyFee)
+
+        if (result < 0) {
+            result = 0;
+        }
 
         relievedPoint.innerText = parseKRW(result.toString());
         useUserPoint.value = result
@@ -92,7 +103,6 @@ function calTotalAmount() {
     let relievedPoint = document.getElementById("usePoint")
     let couponDiscount = document.getElementById("couponDiscount")
     let giftPrice = document.getElementById("gift-price");
-    let savingPoint = document.getElementById("savingPoint");
     let deliveryAmount = document.getElementById("shipAmount");
 
     let result = parseInt(parsingNumber(commodity.innerText)) +
@@ -101,8 +111,21 @@ function calTotalAmount() {
         (parseInt(parsingNumber(relievedPoint.innerText)) +
             parseInt(parsingNumber(couponDiscount.innerText)));
 
+
+    if (result === 0) {
+        if (parseInt(parsingNumber(relievedPoint.innerText)) >= 100) {
+            let point = parseInt(parsingNumber(relievedPoint.innerText)) - 100;
+            relievedPoint.innerText = parseKRW(point.toString());
+            let input = document.getElementById("tbl-point")
+            input.value = point;
+        } else {
+            let coupon = parseInt(parsingNumber(couponDiscount.innerText)) - 100;
+            couponDiscount.innerText = parseKRW(coupon.toString());
+        }
+        result = result + 100;
+    }
+
     totalAmount.innerText = parseKRW(result.toString());
-    savingPoint.innerText = parseKRW(((result * 0.07).toFixed()).toString());
 }
 
 function selectCoupon(product) {
@@ -147,7 +170,7 @@ function paintCouponModalPage(product) {
         }
 
         let inputValue = product.productNo + "|" +
-            product.title + "-" +
+            "-" +
             couponList[i].couponNo + "|" +
             couponList[i].templateName + "|" +
             sale;
@@ -263,10 +286,11 @@ function cancelCoupon(product) {
     saleInfo.innerText = "";
 }
 
-function applyCouponOrder() {
+function couponCalculateAndParsingLogic() {
     var productList = []
     var couponList = []
     var resultList = []
+    var productSalePriceList = []
     let totalSalePrice = 0;
 
     $('input[name="order-product"]').each(function () {
@@ -276,24 +300,50 @@ function applyCouponOrder() {
         couponList.push($(this).val());
     });
 
+    let changePriceList = document.querySelectorAll(".changePrice");
+    let productPriceList = document.querySelectorAll('.product-total-price');
+    let productDiscountList = document.querySelectorAll('.product-per-discount');
+
     for (var i = 0; i < productList.length; i++) {
         resultList.push(productList[i] + "- ");
         for (var j = 0; j < couponList.length; j++) {
+            let productInfo = productList[i].split("|");
+            let productNo = productInfo[0]
+            let productCount = productInfo[1]
+            let productPrice = productInfo[2]
+
+            productSalePriceList.push(productPrice);
             if (couponList[j] === "") {
                 continue;
             }
-            let productNo = productList[i].split("|")[0]
+
             let couponParsingProductNo = couponList[i].split("|")[0]
 
             if (productNo === couponParsingProductNo) {
                 let couponInfo = couponList[i].split("-")[1]
+                let discountAmount = couponInfo.split("|")[2]
                 resultList[i] = (resultList[i] + couponInfo);
-
-                totalSalePrice += parseInt(couponInfo.split("|")[2])
+                productSalePriceList[i] -= parseInt(discountAmount)
+                totalSalePrice += parseInt(discountAmount)
+                productPriceList[i].innerText = parseKRW(productSalePriceList[i].toString()) + '원';
+                productDiscountList[i].innerText = '-' + parseKRW(discountAmount.toString()) + '원'
                 break;
             }
         }
     }
+
+    for (var i = 0; i < changePriceList.length; i++) {
+        changePriceList[i].value = productSalePriceList[i];
+    }
+
+    calculateSavePoint()
+    return {resultList, totalSalePrice};
+}
+
+function applyCouponOrder() {
+    const __ret = couponCalculateAndParsingLogic();
+    var resultList = __ret.resultList;
+    let totalSalePrice = __ret.totalSalePrice;
 
     let result = document.getElementById("product-coupon-result")
     let couponDiscount = document.getElementById("couponDiscount")
@@ -310,20 +360,31 @@ function applyCouponOrder() {
 
 function amountLogicCheck_coupon(totalSalePrice) {
     let totalAmount = document.getElementById("totalAmount");
-    if (parseInt(parsingNumber(totalAmount.innerText)) === 0) {
-        let relievedPoint = document.getElementById("usePoint")
-        let useUserPoint = document.getElementById("tbl-point")
+    let commodity = document.getElementById('commodity');
+    let relievedPoint = document.getElementById("usePoint")
+    let useUserPoint = document.getElementById("tbl-point")
+    let result = relievedPoint.innerText;
 
-        let result = relievedPoint.innerText;
+    if (parseInt(parsingNumber(totalAmount.innerText)) === 100) {
         result = (parseInt(parsingNumber(result)) - totalSalePrice)
+
+        if (result < 0) {
+            result = 0;
+        }
 
         relievedPoint.innerText = parseKRW(result.toString());
         useUserPoint.value = result
     }
+
+    if (parseInt(parsingNumber(commodity.innerText)) === totalSalePrice) {
+        relievedPoint.innerText = '0';
+        useUserPoint.value = 0;
+    }
+
 }
 
 function finalLogic() {
-    applyCouponOrder();
+    couponCalculateAndParsingLogic()
 
     let pointResult = document.getElementById("pointAmount")
     let couponResult = document.getElementById("couponAmount")
@@ -347,6 +408,42 @@ function parseKRW(data) {
 
 function parsingNumber(data) {
     return data.replaceAll(",", "")
+}
+
+function calculateSavePoint() {
+    let save = document.getElementById("savingPoint")
+
+    let saveList = document.querySelectorAll(".prd_savePoint")
+    let policyList = document.querySelectorAll(".point_policy")
+    let priceList = document.querySelectorAll(".changePrice");
+    let methodList = document.querySelectorAll(".policy-method")
+
+    let totalSave = 0;
+
+    for (var i = 0; i < policyList.length; i++) {
+        let policy = policyList[i].value.split('|');
+        let rate;
+        let method = policy[0];
+        let isSaved = policy[1];
+
+        if (methodList[i].innerText === '') {
+            methodList[i].innerText = '적립방식 : ' + method;
+        }
+
+        if (method === policy_salePrice && saveList[i].innerText !== '') {
+            totalSave += parseInt(parsingNumber(saveList[i].innerText));
+            continue;
+        }
+
+        if (isSaved) {
+            rate = policy[2];
+            let savePoint = parseInt(parsingNumber(priceList[i].value)) * (rate / 100);
+            saveList[i].innerText = parseKRW((savePoint.toFixed()).toString())
+            totalSave += savePoint;
+        }
+    }
+
+    save.innerText = parseKRW((totalSave.toFixed()).toString());
 }
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -382,6 +479,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let orderNameInput = document.getElementById("order-name")
     orderNameInput.value = orderName;
+
+    calculateSavePoint()
 })
 
 

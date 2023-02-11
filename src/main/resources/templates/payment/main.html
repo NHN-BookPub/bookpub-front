@@ -100,7 +100,7 @@
                                     <p class="label2">총 결제금액</p>
                                     <div class="right_box">
                                     <span class="price">
-                                        <span class="val spot" id="total-amount" th:text="${order.totalAmount}"></span>
+                                        <span class="val spot" id="total-amount" th:text="${#numbers.formatInteger(order.totalAmount,0,'COMMA')}"></span>
                                         <span class="unit">원</span>
                                     </span>
                                     </div>
@@ -108,14 +108,7 @@
                             </ul>
                         </div>
                         <div class="btn_wrap full" style="flex-direction: column">
-                            <div th:if="${order.totalAmount == 0}" id="pay_success">
-                                <button type="button" class="btn btn-primary pay-btn"
-                                        onclick="paySuccess()">
-                                    <span class="text">결제하기</span>
-                                </button>
-                                <span style="color: #8b8b8b;">결제 완료 페이지로 이동합니다</span>
-                            </div>
-                            <div th:if="${order.totalAmount != 0}">
+                            <div>
                                 <button type="button" class="btn btn-primary pay-btn"
                                         th:onclick="paymentBtn('카드', [[${toss}]], [[${order}]])" id="card">
                                     <span class="text">카드결제</span>
