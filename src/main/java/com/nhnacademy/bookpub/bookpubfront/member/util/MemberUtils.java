@@ -1,5 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.member.util;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,6 +21,9 @@ import org.springframework.ui.Model;
 @RequiredArgsConstructor
 @Slf4j
 public class MemberUtils {
+
+    private final ObjectMapper objectMapper;
+
     /**
      * 현재 로그인한 사용자의 멤버 번호를 model 쪽에 담는 메서드.
      * 로그인 한 사람     : 멤버 번호.
@@ -27,7 +33,23 @@ public class MemberUtils {
      *
      * @param model model
      */
-    public void getMemberNo(Model model) {
+    public void modelRequestMemberNo(Model model) {
+        String credential =
+                (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
+        MemberDetailResponseDto member;
+
+        try {
+            member = objectMapper.readValue(credential, MemberDetailResponseDto.class);
+        } catch (JsonProcessingException e) {
+            member = null;
+        }
+
+        model.addAttribute("memberNo", getMemberNo());
+        model.addAttribute("member", member);
+    }
+
+    public Long getMemberNo() {
         String principal =
                 (String) SecurityContextHolder.getContext()
                         .getAuthentication().getPrincipal();
@@ -38,6 +60,6 @@ public class MemberUtils {
             memberNo = Long.parseLong(principal);
         }
 
-        model.addAttribute("memberNo", memberNo);
+        return memberNo;
     }
 }

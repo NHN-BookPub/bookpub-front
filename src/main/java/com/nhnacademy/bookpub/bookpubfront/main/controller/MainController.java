@@ -79,7 +79,7 @@ public class MainController {
 
         order = getOrderAndPaymentInfo(order, model);
 
-        memberUtils.getMemberNo(model);
+        memberUtils.modelRequestMemberNo(model);
         categoryUtils.categoriesView(model);
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);

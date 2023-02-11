@@ -68,7 +68,7 @@ public class CartController {
 
             cartUtils.getCountInCart(cookie.getValue(), model);
             categoryUtils.categoriesView(model);
-            memberUtils.getMemberNo(model);
+            memberUtils.modelRequestMemberNo(model);
 
             List<GetProductDetailResponseDto> products =
                     productService.findProductInCart(productNos);

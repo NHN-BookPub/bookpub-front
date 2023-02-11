@@ -47,7 +47,6 @@ function smsConfirm() {
     }
 }
 
-let elementById = document.getElementById("member-no").value;
 
 function pwdCheck() {
     const rawPwd = document.getElementById("currentPwd").value;
@@ -56,11 +55,9 @@ function pwdCheck() {
         async: false,
         dataType: 'json',
         data: {rawPassword: rawPwd},
-        url: "/members/" + elementById + "/password-check"
+        url: "/members/password-check"
         , success: function (result) {
-            console.log(result);
             if (result === true) {
-                console.log("result: {}", result);
                 alert("성공했습니다.")
                 document.getElementById("exchangePwd")
                     .disabled = false;
