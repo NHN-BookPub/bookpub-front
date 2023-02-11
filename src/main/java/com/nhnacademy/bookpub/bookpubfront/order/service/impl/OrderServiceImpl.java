@@ -166,7 +166,13 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo) {
+    public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
+            Pageable pageable, Long memberNo) {
         return orderAdaptor.getEbooksByMember(pageable, memberNo);
+    }
+
+    @Override
+    public void refundOrder(Long orderNo) {
+        orderAdaptor.refundOrder(orderNo);
     }
 }

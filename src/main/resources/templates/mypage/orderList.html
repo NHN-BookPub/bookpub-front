@@ -31,7 +31,6 @@
         <h3>주문 목록</h3>
         </br>
         <div class="container" style="padding-bottom: 5%">
-
             <div style="display: flex; flex-direction: column; gap: 8px">
                 <div class="order_summary_box" th:each="order : ${orderList}">
                     <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
@@ -55,73 +54,78 @@
                             <span class="gap">|</span>
                             <span class="order_num">배송일 <span class="num"
                                                               th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
+                            <span class="gap">|</span>
+                            <button class="refund-btn" type="button" th:onclick="modal(event, [[${order.getOrderNo()}]])" style="font-size: 14px">환불
+                            </button>
                         </div>
                     </div>
-                    <table class="tbl_prod">
-                        <colgroup>
-                            <col style="width: 4rem"/>
-                            <col style="width: 18rem;"/>
-                            <col style="width: 4rem;"/>
-                            <col style="width: 4rem;"/>
-                        </colgroup>
-                        <thead class="hidden">
-                        <tr>
-                            <th scope="col">상품정보</th>
-                            <th scope="col">금액</th>
-                            <th scope="col">배송정보</th>
-                            <th scope="col"></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="product : ${order.getOrderProducts()}">
-                            <td class="prod_img">
-                                <div>
+                    <div class="table-box">
+                        <table class="tbl_prod">
+                            <colgroup>
+                                <col style="width: 4rem"/>
+                                <col style="width: 18rem;"/>
+                                <col style="width: 4rem;"/>
+                                <col style="width: 4rem;"/>
+                            </colgroup>
+                            <thead class="hidden">
+                            <tr>
+                                <th scope="col">상품정보</th>
+                                <th scope="col">금액</th>
+                                <th scope="col">배송정보</th>
+                                <th scope="col"></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="product : ${order.getOrderProducts()}">
+                                <td class="prod_img">
                                     <div>
+                                        <div>
                                     <span class="img_box" th:if="${#strings.isEmpty(product.getThumbnail)}">
                                         <img class="img_thumbnail"
                                              src="/static/img/main/no-image.png">
                                     </span>
-                                        <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                            <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
                                         <img class="img_thumbnail" th:src="@{${product.getThumbnail()}}" alt="No image">
                                     </span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
 
-                            <td class="prod">
-                                <div class="prod_area horizontal">
-                                    <div class="prod_thumb_box size_sm">
+                                <td class="prod">
+                                    <div class="prod_area horizontal">
+                                        <div class="prod_thumb_box size_sm">
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                        <a th:href="|../../../products/${product.getProductNo()}|">
-                                            <h3 th:text="${product.getTitle()}"></h3>
-                                        </a>
-                                        <span class="text">수량 : </span><span class="val"
-                                                                             th:text="${product.getProductAmount()}"></span>
+                                            <a th:href="|../../../products/${product.getProductNo()}|">
+                                                <h3 th:text="${product.getTitle()}"></h3>
+                                            </a>
+                                            <span class="text">수량 : </span><span class="val"
+                                                                                 th:text="${product.getProductAmount()}"></span>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
+                                </td>
 
-                            <td class="prod">
+                                <td class="prod">
                                 <span class="price">
                                     <span class="val" th:text="${product.getSalesPrice()}"></span>
                                     <span class="unit">원</span>
                                 </span>
-                            </td>
+                                </td>
 
-                            <td class="prod">
-                                <div class="btn_wrap full">
-                                    <div class="right_box">
-                                        <button type="button" class="btn_xs btn_light_gray"><span
-                                                class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
+                                <td class="prod">
+                                    <div class="btn_wrap full">
+                                        <div class="right_box">
+                                            <button type="button" class="btn_xs btn_light_gray"><span
+                                                    class="text">리뷰 작성</span><span class="ico_arw_white"></span>
+                                            </button>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
@@ -146,7 +150,60 @@
         </div>
     </section>
 </div>
+<div id="refund" class="modal-overlay2">
 
+</div>
+
+<script>
+    var modal1 = document.getElementById("refund");
+
+    function modal(event, orderNum) {
+        event.stopPropagation();
+
+        let refund = document.getElementById('refund');
+        refund.innerHTML='';
+
+        let modalDiv = document.createElement('div');
+        modalDiv.classList.add('modal_box');
+        modalDiv.innerHTML = `<h2>환불</h2>
+            <form action="/orders/refund/${orderNum}" method="post" style="width: 100%;">
+            <table style="width: 100%">
+                <tbody>
+                <tr>
+                    <th scope="row" style="padding: 10px 20px;" class="has_ip">환불사유</th>
+                </tr>
+                <tr>
+                    <td style="padding: 0 1rem 1rem 1rem;">
+                        <textarea id="refund-text"
+                                  name="refund"
+                                  placeholder="환불 사유를 입력해주세요"></textarea>
+                    </td>
+                </tbody>
+            </table>
+            <div style="display: flex;justify-content: flex-end;padding: 0 1rem 0 0;">
+                <button type="submit" id="click"
+                        style="background-color: white;border: 1px solid #888888;border-radius: 10px;">환불신청
+                </button>
+            </div>
+        </form>`;
+
+        refund.appendChild(modalDiv);
+        modal1.style.display = "flex";
+    }
+
+    modal1.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay2")) {
+            modal1.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal1.style.display === "flex" && e.key === "Escape") {
+            modal1.style.display = "none"
+        }
+    })
+</script>
 
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="/static/js/mypage/main.js"></script>

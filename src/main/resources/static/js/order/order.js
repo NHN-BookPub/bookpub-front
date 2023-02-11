@@ -39,11 +39,13 @@ function usePoint() {
     let couponDiscount = document.getElementById("couponDiscount");
     let value = parsingNumber(couponDiscount.innerText);
 
-    if (value === '0') {
-        alert("쿠폰을 먼저 적용해주세요!")
-        relievedPoint.innerText = "0";
-        useUserPoint.value = 0;
-    } else if (parseInt(userPoint) < usePoint) {
+    // if (value === '0') {
+    //     alert("쿠폰을 먼저 적용해주세요!")
+    //     relievedPoint.innerText = "0";
+    //     useUserPoint.value = 0;
+    // } else
+
+    if (parseInt(userPoint) < usePoint) {
         alert("포인트가 부족합니다.")
         relievedPoint.innerText = "0";
         useUserPoint.value = "";
@@ -371,15 +373,16 @@ function amountLogicCheck_coupon(totalSalePrice) {
         if (result < 0) {
             result = 0;
         }
-
         relievedPoint.innerText = parseKRW(result.toString());
         useUserPoint.value = result
     }
 
-    if (parseInt(parsingNumber(commodity.innerText)) === totalSalePrice) {
+    if (parseInt(parsingNumber(totalAmount.innerText)) - totalSalePrice < 100) {
+        alert("최대 할인 금액을 넘어 포인트 사용을 취소합니다")
         relievedPoint.innerText = '0';
         useUserPoint.value = 0;
     }
+
 
 }
 
@@ -426,20 +429,23 @@ function calculateSavePoint() {
         let method = policy[0];
         let isSaved = policy[1];
 
-        if (methodList[i].innerText === '') {
-            methodList[i].innerText = '적립방식 : ' + method;
-        }
-
         if (method === policy_salePrice && saveList[i].innerText !== '') {
             totalSave += parseInt(parsingNumber(saveList[i].innerText));
             continue;
         }
+        if (isSaved === true) {
+            if (methodList[i].innerText === '') {
+                methodList[i].innerText = '적립방식 : ' + method;
+            }
 
-        if (isSaved) {
             rate = policy[2];
             let savePoint = parseInt(parsingNumber(priceList[i].value)) * (rate / 100);
             saveList[i].innerText = parseKRW((savePoint.toFixed()).toString())
             totalSave += savePoint;
+        } else {
+            if (methodList[i].innerText === '') {
+                methodList[i].innerText = '포인트 적립이 안되는 상품입니다';
+            }
         }
     }
 

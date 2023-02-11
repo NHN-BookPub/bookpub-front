@@ -17,69 +17,68 @@
 <body>
 <th:block th:include="mypage/fragments/mypageSidebar"></th:block>
 </br>
-    <div class="body-pd">
-            <h3>주문/배송 조회 상세</h3>
-        <div class="order_summary_box">
-                <div class="box_header">
-                    <div class="label">
-                        <span class="order_date" th:text="${#temporals.format(orderDetail.getCreatedAt, 'yyyy.MM.dd')}"></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">주문번호 <span class="num" th:text="${orderDetail.getOrderNo()}"></span></span>
-                        <span class="gap">|</span>
-                        <span class="order_num">송장번호 <span class="num" th:text="${orderDetail.getInvoiceNo()}"></span></span>
-                        <span class="gap">|</span>
-                        <span class="order_num"><span class="num" th:text="${orderDetail.getOrderState()}"></span></span>
-                    </div>
-                </div>
+<div class="body-pd">
+    <h3>주문/배송 조회 상세</h3>
+    <div class="order_summary_box">
+        <div class="box_header">
+            <div class="label">
+                <span class="order_date" th:text="${#temporals.format(orderDetail.getCreatedAt, 'yyyy.MM.dd')}"></span>
+                <span class="gap">|</span>
+                <span class="order_num">주문번호 <span class="num" th:text="${orderDetail.getOrderNo()}"></span></span>
+                <span class="gap">|</span>
+                <span class="order_num">송장번호 <span class="num" th:text="${orderDetail.getInvoiceNo()}"></span></span>
+                <span class="gap">|</span>
+                <span class="order_num"><span class="num" th:text="${orderDetail.getOrderState()}"></span></span>
             </div>
-        </br>
-        </br>
-            <!--상품관련-->
-            <div class="tbl_prod_wrap type_myroom" id="commodityList">
-                <h3>상품</h3>
-
-                <table class="tbl_prod">
-                    <colgroup>
-                        <col style="width: 4rem"/>
-                        <col style="width: 18rem;" />
-                        <col style="width: 4rem;" />
-                        <col style="width: 4rem;" />
-                    </colgroup>
-                    <thead class="hidden">
-                    <tr>
-                        <th scope="col">상품정보</th>
-                        <th scope="col">금액</th>
-                        <th scope="col">배송정보</th>
-                        <th scope="col"></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                        <tr th:each="product : ${orderDetail.getOrderProducts()}">
-                            <td class="prod_img">
-                                <div>
-                                    <div>
+        </div>
+    </div>
+    </br>
+    </br>
+    <!--상품관련-->
+    <div class="tbl_prod_wrap type_myroom" id="commodityList">
+        <h3>상품</h3>
+        <table class="tbl_prod">
+            <colgroup>
+                <col style="width: 4rem"/>
+                <col style="width: 18rem;"/>
+                <col style="width: 4rem;"/>
+                <col style="width: 4rem;"/>
+            </colgroup>
+            <thead class="hidden">
+            <tr>
+                <th scope="col">상품정보</th>
+                <th scope="col">금액</th>
+                <th scope="col">배송정보</th>
+                <th scope="col"></th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="product : ${orderDetail.getOrderProducts()}">
+                <td class="prod_img">
+                    <div>
+                        <div>
                                     <span class="img_box" th:if="${#strings.isEmpty(product.getThumbnail)}">
                                         <img class="img_thumbnail" src="/static/img/main/no-image.png">
                                     </span>
-                                        <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                            <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
                                         <img class="img_thumbnail" th:src="@{${product.getThumbnail()}}" alt="No image">
                                     </span>
-                                    </div>
-                                </div>
-                            </td>
+                        </div>
+                    </div>
+                </td>
 
-                            <td class="prod">
+                <td class="prod">
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                <a th:href="|../../products/${product.getProductNo()}|">
-                                    <h3 th:text="${product.getTitle()}"></h3>
-                                </a>
-                                <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
-                            </td>
+                    <a th:href="|../../products/${product.getProductNo()}|">
+                        <h3 th:text="${product.getTitle()}"></h3>
+                    </a>
+                    <span class="text">수량 : </span><span class="val" th:text="${product.getProductAmount()}"></span>
+                </td>
 
 
-                            <td class="prod">
+                <td class="prod">
                                 <span class="price">
                                     <div class="order_num" th:if="${!product.getStateCode().equals('결제완료')}">
                                         <span class="order_num" th:text="${product.getStateCode()}"></span>
@@ -87,148 +86,155 @@
                                     <span class="val" th:text="${product.getSalesPrice()}"></span>
                                     <span class="unit">원</span>
                                 </span>
-                            </td>
+                </td>
 
-                            <td class="prod">
-                                <div class="right_box">
-                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span class="ico_arw_white"></span></button>
-                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">반품 신청</span><span class="ico_arw_white"></span></button>
-                                    <button type="button" class="btn_xs btn_light_gray"><span class="text">교환 신청</span><span class="ico_arw_white"></span></button>
-                                </div>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            </div>
-    </div>
-
-
-    <div class="body-pd">
-        <div style="margin-top: 50px;">
-            <!-- 배송정보 -->
-            <div class="title_wrap title_size_md">
-                <h3>배송</h3>
-            </div>
-
-            <div class="tbl_row_wrap">
-                <table class="tbl_row">
-                    <colgroup>
-                        <col style="width: 140px;" />
-                        <col style="width: auto;" />
-                    </colgroup>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-                <tr>
-                    <h4>송장 번호</h4>
-                    <td>
-                        <div class="address_item no_line">
-                            <div class="address_info_box">
-                                <div class="address_person">
-                                    <span class="phone_number" th:text="${orderDetail.getInvoiceNo()}"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    </br>
-                    <h4 th:if="${orderDetail.getBuyerName() != orderDetail.getRecipientName()}">주문자 정보</h4>
-                    <td>
-                        <div class="address_item no_line">
-                            <div class="address_info_box">
-                                <div class="address_person">
-                                    <span class="name"><span th:text="${orderDetail.getBuyerName()}"></span> / </span>
-                                    <span class="phone_number" th:text="${orderDetail.getBuyerNumber()}"></span>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                    </br>
-                    <h4>배송지 정보</h4>
-                    <td>
-                        <div class="address_item no_line">
-                            <div class="address_info_box">
-                                <div class="address_person">
-                                    <span class="name"><span th:text="${orderDetail.getRecipientName()}"></span> / </span>
-                                    <span class="phone_number" th:text="${orderDetail.getRecipientNumber()}"></span>
-                                </div>
-                                <div class="address" th:text="${orderDetail.getAddressBase() + ' ' + orderDetail.getAddressDetail()}"></div>
-                                <div class="msg">
-                                    <div>배송선택일자 :</div>&ensp;
-                                    <div class="text">
-                                        <span th:text="${#temporals.format(orderDetail.getReceivedAt(), 'yyyy.MM.dd')}"></span>
-                                    </div>
-                                </div>
-                                <div class="msg">
-                                    <div>배송요청사항 :</div>&ensp;
-                                    <div class="text">
-                                        <span th:text="${orderDetail.getOrderRequest()}"></span>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </td>
-                </tr>
-        </div>
-    </div>
-
-    <div class="body-pd">
-        <div style="margin-top: 50px;">
-            <div class="title_wrap title_size_md">
-                <h3>결제</h3>
-            </div>
-
-            <div class="tbl_row_wrap">
-                <table class="tbl_row">
-                    <colgroup>
-                        <col style="width: 140px;" />
-                        <col style="width: auto;" />
-                    </colgroup>
-                    <tbody>
-                    </tbody>
-                </table>
-            </div>
-
-            <tr>
-                <h4>쿠폰 할인액</h4>
-                <td>
-                    <div class="address_item no_line">
-                        <div class="address_info_box">
-                            <div class="address_person">
-                                <h5><span th:text="${orderDetail.getCouponAmount()}"></span>원</h5>
-                            </div>
-                        </div>
+                <td class="prod">
+                    <div class="right_box">
+                        <button type="button" class="btn_xs btn_light_gray"><span class="text">리뷰 작성</span><span
+                                class="ico_arw_white"></span></button>
+                        <button type="button" class="btn_xs btn_light_gray"><span class="text">반품 신청</span><span
+                                class="ico_arw_white"></span></button>
+                        <button type="button" class="btn_xs btn_light_gray"><span class="text">교환 신청</span><span
+                                class="ico_arw_white"></span></button>
                     </div>
                 </td>
-                </br>
-                <h4>포인트 사용량</h4>
-                <td>
-                    <div class="address_item no_line">
-                        <div class="address_info_box">
-                            <div class="address_person">
-                                <h5><span th:text="${orderDetail.getPointAmount()}"></span>원</h5>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                </br>
-                <h4>결제 금액</h4>
-                <td>
-                    <div class="address_item no_line">
-                        <div class="address_info_box">
-                            <div class="address_person">
-                                <h5 th:if="${orderDetail.isPackaged()}">포장비 : <span th:text="${orderDetail.getPackageAmount()}"></span>원</h5>
-                                <h5>배송비 : <span th:text="${orderDetail.getDeliveryAmount()}"></span>원</h5>
-                                <h5>최종 결제 금액 : <span th:text="${orderDetail.getTotalAmount()}"></span>원</h5>
-                            </div>
-                        </div>
-                    </div>
-                </td>
-                </br>
             </tr>
-
-        </div>
+            </tbody>
+        </table>
     </div>
+</div>
+
+
+<div class="body-pd">
+    <div style="margin-top: 50px;">
+        <!-- 배송정보 -->
+        <div class="title_wrap title_size_md">
+            <h3>배송</h3>
+        </div>
+
+        <div class="tbl_row_wrap">
+            <table class="tbl_row">
+                <colgroup>
+                    <col style="width: 140px;"/>
+                    <col style="width: auto;"/>
+                </colgroup>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+        <tr>
+            <h4>송장 번호</h4>
+            <td>
+                <div class="address_item no_line">
+                    <div class="address_info_box">
+                        <div class="address_person">
+                            <span class="phone_number" th:text="${orderDetail.getInvoiceNo()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            </br>
+            <h4 th:if="${orderDetail.getBuyerName() != orderDetail.getRecipientName()}">주문자 정보</h4>
+            <td>
+                <div class="address_item no_line">
+                    <div class="address_info_box">
+                        <div class="address_person">
+                            <span class="name"><span th:text="${orderDetail.getBuyerName()}"></span> / </span>
+                            <span class="phone_number" th:text="${orderDetail.getBuyerNumber()}"></span>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            </br>
+            <h4>배송지 정보</h4>
+            <td>
+                <div class="address_item no_line">
+                    <div class="address_info_box">
+                        <div class="address_person">
+                            <span class="name"><span th:text="${orderDetail.getRecipientName()}"></span> / </span>
+                            <span class="phone_number" th:text="${orderDetail.getRecipientNumber()}"></span>
+                        </div>
+                        <div class="address"
+                             th:text="${orderDetail.getAddressBase() + ' ' + orderDetail.getAddressDetail()}"></div>
+                        <div class="msg">
+                            <div>배송선택일자 :</div>&ensp;
+                            <div class="text">
+                                <span th:text="${#temporals.format(orderDetail.getReceivedAt(), 'yyyy.MM.dd')}"></span>
+                            </div>
+                        </div>
+                        <div class="msg">
+                            <div>배송요청사항 :</div>&ensp;
+                            <div class="text">
+                                <span th:text="${orderDetail.getOrderRequest()}"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </div>
+</div>
+
+<div class="body-pd">
+    <div style="margin-top: 50px;">
+        <div class="title_wrap title_size_md">
+            <h3>결제</h3>
+        </div>
+
+        <div class="tbl_row_wrap">
+            <table class="tbl_row">
+                <colgroup>
+                    <col style="width: 140px;"/>
+                    <col style="width: auto;"/>
+                </colgroup>
+                <tbody>
+                </tbody>
+            </table>
+        </div>
+
+        <tr>
+            <h4>쿠폰 할인액</h4>
+            <td>
+                <div class="address_item no_line">
+                    <div class="address_info_box">
+                        <div class="address_person">
+                            <h5><span th:text="${orderDetail.getCouponAmount()}"></span>원</h5>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            </br>
+            <h4>포인트 사용량</h4>
+            <td>
+                <div class="address_item no_line">
+                    <div class="address_info_box">
+                        <div class="address_person">
+                            <h5><span th:text="${orderDetail.getPointAmount()}"></span>원</h5>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            </br>
+            <h4>결제 금액</h4>
+            <td>
+                <div class="address_item no_line">
+                    <div class="address_info_box">
+                        <div class="address_person">
+                            <h5 th:if="${orderDetail.isPackaged()}">포장비 : <span
+                                    th:text="${orderDetail.getPackageAmount()}"></span>원</h5>
+                            <h5>배송비 : <span th:text="${orderDetail.getDeliveryAmount()}"></span>원</h5>
+                            <h5>최종 결제 금액 : <span th:text="${orderDetail.getTotalAmount()}"></span>원</h5>
+                        </div>
+                    </div>
+                </div>
+            </td>
+            </br>
+        </tr>
+    </div>
+    <div>결제 취소</div>
+</div>
+
+
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="/static/js/mypage/main.js"></script>
 </body>

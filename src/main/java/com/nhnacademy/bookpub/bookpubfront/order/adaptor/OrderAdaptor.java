@@ -10,6 +10,7 @@ import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 
 /**
  * 주문 api 와 연동하기 위한 adaptor 입니다.
@@ -94,5 +95,8 @@ public interface OrderAdaptor {
      * @param memberNo 회원번호
      * @return 이북 리스트
      */
-    PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo);
+    PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
+            Pageable pageable, Long memberNo);
+
+    ResponseEntity<Void> refundOrder(Long orderNo);
 }

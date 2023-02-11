@@ -110,8 +110,10 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public GetOrderDetailResponseDto getOrderDetailByOrderIdRequest(String orderId, String phoneNo) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL + "/non/" + orderId + "?phoneNo=" + phoneNo;
+    public GetOrderDetailResponseDto getOrderDetailByOrderIdRequest(
+            String orderId, String phoneNo) {
+        String url = GateWayConfig.getGatewayUrl()
+                + ORDER_URL + "/non/" + orderId + "?phoneNo=" + phoneNo;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
@@ -171,9 +173,10 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo) {
+    public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
+            Pageable pageable, Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl()
-                        + "/token/product/"+ memberNo + "/ebooks/")
+                        + "/token/product/" + memberNo + "/ebooks/")
                 .build()
                 .toUriString();
 
@@ -181,8 +184,13 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                         url,
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {
-                        })
+                        new ParameterizedTypeReference<
+                                PageResponse<GetProductByCategoryResponseDto>>() {})
                 .getBody();
+    }
+
+    @Override
+    public ResponseEntity<Void> refundOrder(Long orderNo) {
+        return null;
     }
 }

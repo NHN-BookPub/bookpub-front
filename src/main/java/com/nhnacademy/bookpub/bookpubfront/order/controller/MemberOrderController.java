@@ -61,7 +61,8 @@ public class MemberOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
-        PageResponse<GetOrderListResponseDto> orders = orderService.getOrderListByMemberNo(memberNo, pageable);
+        PageResponse<GetOrderListResponseDto> orders =
+                orderService.getOrderListByMemberNo(memberNo, pageable);
 
         model.addAttribute(MEMBER, memberService.getTokenMember(memberNo));
         model.addAttribute("orderList", orders.getContent());
@@ -98,7 +99,7 @@ public class MemberOrderController {
     /**
      * 비회원 주문 상세페이지입니다.
      *
-     * @param model 모델
+     * @param model   모델
      * @param request dto
      * @return 주문 상세 뷰
      */
@@ -176,7 +177,7 @@ public class MemberOrderController {
 
         PageResponse<GetProductByCategoryResponseDto> products =
                 orderService.getEbooksByMember(pageable, memberNo);
-        
+
         model.addAttribute("products", products.getContent());
         model.addAttribute("totalPages", products.getTotalPages());
         model.addAttribute("currentPage", products.getNumber());
@@ -185,5 +186,12 @@ public class MemberOrderController {
         model.addAttribute("pageButtonNum", 5);
 
         return "/mypage/myPageEbooks";
+    }
+
+    @PostMapping("/refund/{orderNo}")
+    public String orderRefundRequest(@PathVariable Long orderNo) {
+        orderService.refundOrder(orderNo);
+
+        return "/mypage/orderList";
     }
 }
