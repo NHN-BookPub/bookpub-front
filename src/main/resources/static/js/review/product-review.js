@@ -49,8 +49,6 @@ window.onload = function () {
         dateType: "JSON",
 
         success: function (responses) {
-            // let bodyHtml =
-
             responses.content.forEach((response, index) => {
                 reviewList[index].innerHTML = response.memberNickname + '<br/>' +
                     response.createdAt[0] + '/' + response.createdAt[1] + '/' + response.createdAt[2] + ' ' +

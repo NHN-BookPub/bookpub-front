@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css"/>
+</head>
+<body>
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+<div class="body-pd">
+    <br>
+
+    <h1 class="mt-4">상품 문의</h1>
+    <hr/>
+
+    <div>
+        <div>
+            공개 여부 :
+            <span th:if="${inquiry.inquiryDisplayed}" th:text="공개"></span>
+            <span th:unless="${inquiry.inquiryDisplayed}" th:text="비공개"></span>
+            <br/>
+            문의 유형 :
+            <span th:text="${inquiry.inquiryStateCodeName}"></span>
+            <br/>
+            제목 :
+            <span th:text="${inquiry.inquiryTitle}"></span>
+            <br/>
+        </div>
+        <div id="viewer"></div>
+    </div>
+</div>
+
+<p id="question-hidden" style="display: none" th:text="${inquiry.inquiryContent}"></p>
+<!--<div th:each="answer, index : ${inquiry.childInquiries}">-->
+<!--<p th:id="answer-hidden+${index}" style="display: none" th:text="${inquiry.inquiryContent}"></p>-->
+<!--</div>-->
+
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
+<script src="/static/js/inquiry/mypage-inquirydetail.js"></script>
+</body>
+</html>
