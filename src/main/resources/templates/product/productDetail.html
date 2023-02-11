@@ -305,12 +305,12 @@
                 <li class="page-item" id="reviewPreviousBtn">
                     <a class="page-link" id="reviewPreviousLink" onclick="reviewPrevious()">Previous</a>
                 </li>
-<!--                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?-->
-<!--                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">-->
-<!--                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">-->
-<!--                        <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${page-1}))}"-->
-<!--                           th:text="${page}"></a></li>-->
-<!--                </th:block>-->
+                <!--                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?-->
+                <!--                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">-->
+                <!--                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">-->
+                <!--                        <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${page-1}))}"-->
+                <!--                           th:text="${page}"></a></li>-->
+                <!--                </th:block>-->
                 <li class="page-item" id="reviewNextBtn">
                     <a class="page-link" id="reviewNextLink" onclick="reviewNext()">Next</a>
                 </li>
@@ -321,17 +321,46 @@
 
     <hr/>
 
-    <div class="row" style="background-color: #86b7fe">
-        문의
+    <div>
+        <h3>문의</h3>
+        <br/>
+        <table class="table table-bordered">
+            <tr id="inquirytest1"></tr>
+            <tr id="inquirytest2"></tr>
+            <tr id="inquirytest3"></tr>
+            <tr id="inquirytest4"></tr>
+            <tr id="inquirytest5"></tr>
+            <tr id="inquirytest6"></tr>
+            <tr id="inquirytest7"></tr>
+            <tr id="inquirytest8"></tr>
+            <tr id="inquirytest9"></tr>
+            <tr id="inquirytest10"></tr>
+        </table>
 
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" id="inquiryPreviousBtn">
+                    <a class="page-link" id="inquiryPreviousLink" onclick="inquiryPrevious()">Previous</a>
+                </li>
+                <!--                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?-->
+                <!--                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">-->
+                <!--                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">-->
+                <!--                        <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${page-1}))}"-->
+                <!--                           th:text="${page}"></a></li>-->
+                <!--                </th:block>-->
+                <li class="page-item" id="inquiryNextBtn">
+                    <a class="page-link" id="inquiryNextLink" onclick="inquiryNext()">Next</a>
+                </li>
+            </ul>
+        </nav>
     </div>
 
-</div>
-<p id="editor-hidden" style="display: none" th:text="${product.productDescription}"></p>
-<!-- FOOTER -->
-<th:block th:include="main/fragments/rootFooter"></th:block>
-<!-- /FOOTER -->
+    <p id="editor-hidden" style="display: none" th:text="${product.productDescription}"></p>
+    <!-- FOOTER -->
+    <th:block th:include="main/fragments/rootFooter"></th:block>
+    <!-- /FOOTER -->
 
+</div>
 
 </body>
 <!-- jQuery Plugins -->
@@ -342,7 +371,9 @@
 <script src="/static/js/main/jquery.zoom.min.js"></script>
 <script src="/static/js/main/main.js"></script>
 <script src="/static/js/review/product-review.js"></script>
+<script src="/static/js/inquiry/product-inquiry.js"></script>
 <script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
+
 
 <script>
     const productNo = $('#productNo').text();

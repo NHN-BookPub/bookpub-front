@@ -47,6 +47,20 @@
                     <span class="nav_name">마이 리뷰</span>
                 </a>
 
+                <div href="#" class="nav__link collapse show">
+                    <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">문의내역</span>
+
+                    <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                    <ul class="collapse__menu">
+                        <a th:href="@{/members/{memberNo}/inquiries(memberNo=${member.memberNo})}"
+                           class="collapse__sublink">상품 문의 내역</a>
+                        <a th:href="@{/members/{memberNo}/coupon/negative(memberNo=${member.memberNo})}"
+                           class="collapse__sublink">1:1 문의 조회</a>
+                    </ul>
+                </div>
+
                 <a href="/orders/list" class="nav__link">
                     <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">주문내역</span>

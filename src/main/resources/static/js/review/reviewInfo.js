@@ -28,6 +28,8 @@ function clickInfo(number) {
         dateType: "JSON",
 
         success: function (response) {
+            console.log("안돼");
+            console.log(response);
 
             switch (response.reviewStar) {
                 case 1:
