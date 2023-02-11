@@ -18,7 +18,14 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
+    <link rel="stylesheet" href="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.css"/>
+    <script src="https://unpkg.com/swiper@6.8.4/swiper-bundle.min.js"></script>
+
     <style>
+        .cursor {
+            cursor: pointer;
+        }
+
         .product-detail-price {
             color: #ff6666;
             font-size: 20px;
@@ -40,6 +47,40 @@
         .product-info-body {
             padding-left: 3%;
             font-size: 18px;
+        }
+
+        /* 기본 구조 */
+        .wrap {
+            /*max-width:500px;*/
+            margin: 50px auto;
+            background: #f7f7f7;
+        }
+
+        /* 가로 스크롤 적용 */
+        .scroll__wrap {
+            overflow-x: auto;
+            white-space: nowrap;
+            font-size: 0
+        }
+
+        .scroll__wrap::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll--element {
+            display: inline-block;
+            width: 250px;
+            /*height:300px;*/
+            /*border:2px solid #222;*/
+            background: #f7f7f7;
+            font-size: 16px;
+            /*line-height:150px;*/
+            text-align: center;
+            margin: 2%;
+        }
+
+        .title:hover {
+            color: #D10024;
         }
 
     </style>
@@ -203,6 +244,38 @@
     </div>
 
     <hr/>
+
+    <div th:if="${product.info.size() != 0}">
+
+        <div class="row">
+            <h2>연관 상품</h2>
+            <hr/>
+
+            <div class="wrap-vertical" style="width: 95%; background-color: #f7f7f7; margin: auto">
+                <div class="wrap">
+                    <div class="scroll__wrap">
+                        <div class="scroll--element" th:each="relation: ${product.info}">
+                            <div class="panel" style="background-color: #f7f7f7">
+                                <img class="cursor" th:src="${relation.filePath}"
+                                     style="object-fit: cover; width: 140px; height: 200px" alt=""
+                                     onerror="this.src=null; this.src='/static/image.review/no-image.png';"
+                                     th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${relation.productNo})} + '\''">
+                                <hr>
+                                <strong class="cursor title"
+                                        th:text="${relation.title}"
+                                        th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${relation.productNo})} + '\''">
+
+                                </strong>
+                                <p th:text="|${#numbers.formatInteger(relation.salesPrice, 0, 'COMMA')}원|"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <hr/>
+    </div>
 
     <div class="row">
         <div>

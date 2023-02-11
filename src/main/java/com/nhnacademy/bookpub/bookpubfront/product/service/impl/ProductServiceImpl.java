@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeRes
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateRelationProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.InputProductFormRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductAuthorRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductCategoryRequestDto;
@@ -354,5 +355,29 @@ public class ProductServiceImpl implements ProductService {
         fileMap.put("detailImage", detailImage);
 
         productAdaptor.requestAddProductDetailImage(productNo, fileMap);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void addRelationProduct(Long productNo, String relationProducts) {
+        String[] tmp = relationProducts.split(",");
+        List<Long> list = new ArrayList<>();
+
+        for (String str : tmp) {
+            list.add(Long.parseLong(str));
+        }
+
+        CreateRelationProductRequestDto request = new CreateRelationProductRequestDto(list);
+        productAdaptor.requestAddRelationProducts(productNo, request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void disconnectRelationProduct(Long childNo) {
+        productAdaptor.requestDisconnectRelationProduct(childNo);
     }
 }

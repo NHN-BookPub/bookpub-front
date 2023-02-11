@@ -7,6 +7,7 @@ import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponRes
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.adaptor.ProductAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateRelationProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductAuthorRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductDescriptionRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductInfoRequestDto;
@@ -502,6 +503,42 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 url,
                 HttpMethod.PUT,
                 entity,
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestAddRelationProducts(Long productNo, CreateRelationProductRequestDto request) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/relation")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(request, makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestDisconnectRelationProduct(Long childNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + childNo + "/relation")
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
+                new HttpEntity<>(makeHeader()),
                 Void.class
         );
     }

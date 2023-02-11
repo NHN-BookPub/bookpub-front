@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.product.adaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetOrderCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateProductRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.CreateRelationProductRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductAuthorRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductDescriptionRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.reqeust.ModifyProductInfoRequestDto;
@@ -204,4 +205,19 @@ public interface ProductAdaptor {
      * @param fileMap   Detail Image 정보가 담긴 Map
      */
     void requestAddProductDetailImage(Long productNo, Map<String, MultipartFile> fileMap);
+
+    /**
+     * 연관 관계 상품 등록 API 호출 메서드.
+     *
+     * @param productNo 상품 번호
+     * @param request   등록할 연관 관계 상품 번호
+     */
+    void requestAddRelationProducts(Long productNo, CreateRelationProductRequestDto request);
+
+    /**
+     * 연관 관계 삭제 API 호출 메서드.
+     *
+     * @param childNo 자식 상품 번호
+     */
+    void requestDisconnectRelationProduct(Long childNo);
 }
