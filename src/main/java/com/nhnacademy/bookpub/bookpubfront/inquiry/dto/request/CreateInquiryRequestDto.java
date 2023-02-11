@@ -12,10 +12,10 @@ import lombok.Getter;
 @Getter
 @AllArgsConstructor
 public class CreateInquiryRequestDto {
-    Long inquiryParentNo;
-    Long productNo;
-    Integer inquiryStateCodeNo;
-    String inquiryTitle;
-    String inquiryContent;
-    boolean inquiryDisplayed;
+    private Long inquiryParentNo;
+    private Long productNo;
+    private Integer inquiryStateCodeNo;
+    private String inquiryTitle;
+    private String inquiryContent;
+    private boolean inquiryDisplayed;
 }
