@@ -1,11 +1,12 @@
 package com.nhnacademy.bookpub.bookpubfront.order.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
-import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -41,7 +42,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public Long createOrderRequest(CreateOrderRequestDto requestDto) {
-        String url = GateWayConfig.getGatewayUrl() + ORDER_URL;
+        String url = getGatewayUrl() + ORDER_URL;
         HttpEntity<CreateOrderRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
         ResponseEntity<Long> response =
                 restTemplate.exchange(url, HttpMethod.POST, httpEntity, Long.class);
@@ -55,7 +56,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetOrderListForAdminResponseDto> getAllOrdersRequest(Pageable pageable) {
         String url =
-                UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL)
+                UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + AUTH_ORDER_URL)
                         .queryParam("page", pageable.getPageNumber())
                         .queryParam("size", pageable.getPageSize())
                         .encode()
@@ -75,7 +76,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public PageResponse<GetOrderListResponseDto> getAllOrdersByMemberNoRequest(
             Pageable pageable, Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL + "/member/" + memberNo)
+                        getGatewayUrl() + AUTH_ORDER_URL + "/member/" + memberNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -96,7 +97,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo) {
-        String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL + "/" + orderNo;
+        String url = getGatewayUrl() + AUTH_ORDER_URL + "/" + orderNo;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
@@ -110,9 +111,23 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
+    public GetOrderConfirmResponseDto getOrderConfirmRequest(Long orderNo) {
+        String url = getGatewayUrl() + ORDER_URL + "/" + orderNo;
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                GetOrderConfirmResponseDto.class
+        ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GetOrderDetailResponseDto getOrderDetailByOrderIdRequest(
             String orderId, String phoneNo) {
-        String url = GateWayConfig.getGatewayUrl()
+        String url = getGatewayUrl()
                 + ORDER_URL + "/non/" + orderId + "?phoneNo=" + phoneNo;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
@@ -128,7 +143,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public void modifyInvoiceNoRequest(Long orderNo, String invoiceNo) {
-        String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
+        String url = getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/invoice?no=" + invoiceNo;
         restTemplate.exchange(url, HttpMethod.PUT,
                 new HttpEntity<>(makeHeader()),
@@ -143,7 +158,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public void modifyStateCodeRequest(Long orderNo,
                                        @StateCode(enumClass = OrderState.class)
                                        String codeName) {
-        String url = GateWayConfig.getGatewayUrl() + AUTH_ORDER_URL
+        String url = getGatewayUrl() + AUTH_ORDER_URL
                 + "/" + orderNo + "/state?no" + codeName;
 
 
@@ -158,7 +173,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + ORDER_URL)
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + ORDER_URL)
                 .path("/payment")
                 .path("/" + orderId).build().toUriString();
         return restTemplate.exchange(
@@ -175,7 +190,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
             Pageable pageable, Long memberNo) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl()
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl()
                         + "/token/product/" + memberNo + "/ebooks/")
                 .build()
                 .toUriString();
@@ -189,8 +204,4 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 .getBody();
     }
 
-    @Override
-    public ResponseEntity<Void> refundOrder(Long orderNo) {
-        return null;
-    }
 }

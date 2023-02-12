@@ -4,6 +4,7 @@ import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -133,6 +134,14 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
+    public GetOrderConfirmResponseDto getOrderConfirmInfo(Long orderNo) {
+        return orderAdaptor.getOrderConfirmRequest(orderNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public GetOrderDetailResponseDto getOrderDetailResponseDto(String orderId, String phoneNo) {
         return orderAdaptor.getOrderDetailByOrderIdRequest(orderId, phoneNo);
     }
@@ -171,8 +180,5 @@ public class OrderServiceImpl implements OrderService {
         return orderAdaptor.getEbooksByMember(pageable, memberNo);
     }
 
-    @Override
-    public void refundOrder(Long orderNo) {
-        orderAdaptor.refundOrder(orderNo);
-    }
+
 }

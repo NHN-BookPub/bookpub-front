@@ -22,21 +22,8 @@
     <!-- js-->
     <script src="https://js.tosspayments.com/v1/payment"></script>
     <script src="/static/js/payment/main.js"></script>
-
-    <script>
-        function revert() {
-            let arrow = $('#arrow');
-            let option = $('#img-option');
-            if (option.val() === '1') {
-                option.val('2')
-                arrow.css("transform", "rotate(360deg)")
-            } else {
-                option.val('1')
-                arrow.css("transform", "rotate(180deg)")
-            }
-        }
-    </script>
     <script src="../../static/js/order/order.js"></script>
+
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>

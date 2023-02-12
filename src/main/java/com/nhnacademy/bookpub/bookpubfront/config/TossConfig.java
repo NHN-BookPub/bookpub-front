@@ -1,6 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.config;
 
-import com.nhnacademy.bookpub.bookpubfront.payment.dto.TossProviderDto;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.TossProviderDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;

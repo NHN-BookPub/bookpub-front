@@ -27,7 +27,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -183,12 +182,5 @@ public class MemberOrderController {
         model.addAttribute("pageButtonNum", 5);
 
         return "/mypage/myPageEbooks";
-    }
-
-    @PostMapping("/refund/{orderNo}")
-    public String orderRefundRequest(@PathVariable Long orderNo) {
-        orderService.refundOrder(orderNo);
-
-        return "/mypage/orderList";
     }
 }

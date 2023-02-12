@@ -2,6 +2,8 @@ package com.nhnacademy.bookpub.bookpubfront.payment.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.payment.adaptor.PaymentAdaptor;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.RefundRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.payment.exception.NotNormalPaymentException;
 import com.nhnacademy.bookpub.bookpubfront.payment.service.PaymentService;
 import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
@@ -49,6 +51,22 @@ public class PaymentServiceImpl implements PaymentService {
                               Long amount, HttpServletResponse response) {
         paymentAdaptor.createPayment(orderId, paymentKey, amount);
         deleteCookie(response);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void refundOrder(RefundRequestDto refundRequestDto) {
+        paymentAdaptor.refundOrder(refundRequestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto) {
+        paymentAdaptor.refundOrderProduct(refundRequestDto);
     }
 
     /**

@@ -14,13 +14,13 @@
     <!-- Toast UI Editor -->
     <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css" />
 
-    <script>
-        var tagList = []
+<!--    <script>-->
+<!--        var tagList = []-->
 
-        $('input[name="tagList"]:checked').each(function (i) {
-            tagList.push($(this).val());
-        });
-    </script>
+<!--        $('input[name="tagList2"]:checked').each(function (i) {-->
+<!--            tagList.push($(this).val());-->
+<!--        });-->
+<!--    </script>-->
 </head>
 <body class="sb-nav-fixed">
 <div id="layoutSidenav">
@@ -156,7 +156,7 @@
                             <br/>
                             <label th:each="tag : ${tags}" th:for="${tag.tagName}+'id'">&nbsp;&nbsp;
                                 <input type="checkbox" class="form-check-label" th:id="${tag.tagName}+'id'"
-                                       name="tagList" th:value="${tag.tagNo}" th:text="${tag.tagName}">
+                                       name="tagList2" th:value="${tag.tagNo}" th:text="${tag.tagName}">
                             </label>
                         </div>
 
