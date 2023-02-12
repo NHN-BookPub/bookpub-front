@@ -1,5 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.adaptor;
 
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.RefundRequestDto;
+
 /**
  * 결제 어댑터.
  *
@@ -24,4 +27,18 @@ public interface PaymentAdaptor {
      * @param amount 주문 금액
      */
     void createPayment(String orderId, String paymentKey, Long amount);
+
+    /**
+     * 주문 결제를 취소하는 메소드.
+     *
+     * @param refundRequestDto 환불요청 dto.
+     */
+    void refundOrder(RefundRequestDto refundRequestDto);
+
+    /**
+     * 주문 상품 결제를 취소하는 메소드.
+     *
+     * @param refundRequestDto 환불요청 dto.
+     */
+    void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto);
 }

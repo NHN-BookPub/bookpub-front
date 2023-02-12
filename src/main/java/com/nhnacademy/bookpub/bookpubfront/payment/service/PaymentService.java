@@ -1,5 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.service;
 
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.RefundRequestDto;
 import javax.servlet.http.HttpServletResponse;
 
 /**
@@ -27,4 +29,20 @@ public interface PaymentService {
      */
     void createPayment(String orderId, String paymentKey, Long amount,
                        HttpServletResponse response);
+
+    /**
+     * 주문 결제를 취소하는 메소드.
+     *
+     * @param refundRequestDto 환불요청 dto.
+     */
+    void refundOrder(RefundRequestDto refundRequestDto);
+
+
+    /**
+     * 주문상품 결제를 취소하는 메소드.
+     *
+     * @param refundRequestDto 환불요청 dto.
+     */
+    void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto);
+
 }

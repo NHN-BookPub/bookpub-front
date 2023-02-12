@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -10,7 +11,6 @@ import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 
 /**
  * 주문 api 와 연동하기 위한 adaptor 입니다.
@@ -52,6 +52,15 @@ public interface OrderAdaptor {
      * @return 주문상세 Dto 반환.
      */
     GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo);
+
+
+    /**
+     * 주문 버튼 클릭 이후 결제페이지에서 주문 정보를 확인하기 위한 메서드.
+     *
+     * @param orderNo 주문번호.
+     * @return 주문정보.
+     */
+    GetOrderConfirmResponseDto getOrderConfirmRequest(Long orderNo);
 
     /**
      * 주문을 상세조회하기 위한 메서드입니다.(비회원)
@@ -97,6 +106,4 @@ public interface OrderAdaptor {
      */
     PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
             Pageable pageable, Long memberNo);
-
-    ResponseEntity<Void> refundOrder(Long orderNo);
 }

@@ -1,16 +1,20 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.config.TossConfig;
-import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.RefundRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.payment.service.PaymentService;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -29,6 +33,8 @@ public class PaymentController {
     private final OrderService orderService;
     private final TossConfig tossConfig;
 
+    private static final String WAITING_PAYMENT = "결제대기";
+
     /**
      * 결제페이지를 로딩하는 컨트롤러입니다.
      *
@@ -38,8 +44,14 @@ public class PaymentController {
      */
     @GetMapping("/{orderNo}")
     public String paymentPage(@PathVariable Long orderNo, Model model) {
-        GetOrderDetailResponseDto order = orderService.getOrderDetailByNo(orderNo);
-        model.addAttribute("order", order);
+        GetOrderConfirmResponseDto orderConfirmInfo =
+                orderService.getOrderConfirmInfo(orderNo);
+
+        if (!orderConfirmInfo.getOrderState().equals(WAITING_PAYMENT)) {
+            return "error/401";
+        }
+
+        model.addAttribute("order", orderConfirmInfo);
         model.addAttribute("toss", tossConfig.makeTossProvider());
         return "payment/main";
     }
@@ -61,5 +73,32 @@ public class PaymentController {
         paymentService.createPayment(orderId, paymentKey, amount, response);
 
         return "redirect:/?order=" + orderId;
+    }
+
+    /**
+     * 결제를 취소하여 환불 받은 후 주문내역 페이지로 다시 돌아가는 컨트롤러.
+     *
+     * @param refundRequestDto 환불 정보.
+     * @return 환불 후 주문내역으로.
+     */
+    @PostMapping("/refund")
+    public String orderRefundRequest(@Valid RefundRequestDto refundRequestDto) {
+        paymentService.refundOrder(refundRequestDto);
+
+        return "redirect:/orders/list";
+    }
+
+    /**
+     * 주문상품의 결제를 취소하여 환불 받은 후 주문상세 페이지로 다시 돌아가는 컨트롤러.
+     *
+     * @param orderProductRefundRequestDto 환불 정보.
+     * @return 환불.
+     */
+    @PostMapping("/order-product/refund")
+    public String orderProductRefundRequest(
+            @Valid OrderProductRefundRequestDto orderProductRefundRequestDto) {
+        paymentService.refundOrderProduct(orderProductRefundRequestDto);
+
+        return "redirect:/orders?orderNo=" + orderProductRefundRequestDto.getOrderNo();
     }
 }

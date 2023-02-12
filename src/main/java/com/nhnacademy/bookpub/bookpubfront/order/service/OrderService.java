@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.service;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
@@ -48,6 +49,14 @@ public interface OrderService {
     GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo);
 
     /**
+     * 주문번호로 결제 전 주문정보를 확인합니다.
+     *
+     * @param orderNo 주문번호.
+     * @return 주문정보.
+     */
+    GetOrderConfirmResponseDto getOrderConfirmInfo(Long orderNo);
+
+    /**
      * 주문번호로 상세정보를 조회합니다.(비회원)
      *
      * @param orderId 주문 Id
@@ -75,7 +84,6 @@ public interface OrderService {
 
     GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
 
-    PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(Pageable pageable, Long memberNo);
-
-    void refundOrder(Long orderNo);
+    PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
+            Pageable pageable, Long memberNo);
 }

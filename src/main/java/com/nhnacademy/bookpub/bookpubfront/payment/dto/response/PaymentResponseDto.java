@@ -1,4 +1,4 @@
-package com.nhnacademy.bookpub.bookpubfront.payment.dto;
+package com.nhnacademy.bookpub.bookpubfront.payment.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

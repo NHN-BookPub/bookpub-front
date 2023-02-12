@@ -4,6 +4,8 @@ import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewa
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.payment.adaptor.PaymentAdaptor;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.RefundRequestDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
@@ -24,6 +26,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class PaymentAdaptorImpl implements PaymentAdaptor {
     private final RestTemplate restTemplate;
     private static final String API_URL = "/api/payment";
+    private static final String TOKEN_URL = "/token/payment";
 
     /**
      * {@inheritDoc}
@@ -57,6 +60,30 @@ public class PaymentAdaptorImpl implements PaymentAdaptor {
         restTemplate.postForEntity(
                 url,
                 new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    @Override
+    public void refundOrder(RefundRequestDto refundRequestDto) {
+        String url = getGatewayUrl() + TOKEN_URL + "/order";
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(refundRequestDto, makeHeader()),
+                Void.class
+        );
+    }
+
+    @Override
+    public void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto) {
+        String url = getGatewayUrl() + TOKEN_URL + "/order-product";
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(refundRequestDto, makeHeader()),
                 Void.class
         );
     }
