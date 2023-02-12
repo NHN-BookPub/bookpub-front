@@ -23,7 +23,12 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * 회원의 주문에 관련된 뷰를 위한 컨트롤러입니다.
@@ -186,12 +191,5 @@ public class MemberOrderController {
         model.addAttribute("pageButtonNum", 5);
 
         return "/mypage/myPageEbooks";
-    }
-
-    @PostMapping("/refund/{orderNo}")
-    public String orderRefundRequest(@PathVariable Long orderNo) {
-        orderService.refundOrder(orderNo);
-
-        return "/mypage/orderList";
     }
 }
