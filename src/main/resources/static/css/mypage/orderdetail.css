@@ -9,7 +9,7 @@
 
 .box_header {
     display: flex;
-    justify-content: flex-start;
+    justify-content: space-between;
     align-items: center;
     flex-direction: row;
     min-height: 60px;
@@ -89,7 +89,8 @@
 }
 
 .section_wrap {
-    width: calc(100% - 10rem);
+    width: 100%;
+    min-width: 900px;
 }
 
 .table-box {

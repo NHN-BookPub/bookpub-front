@@ -17,6 +17,12 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script>
+        function payment(event, orderNo) {
+            event.stopPropagation();
+            window.location.href = "/payment/" + orderNo;
+        }
+    </script>
 
     <link rel='stylesheet'
           href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
@@ -50,12 +56,17 @@
                                                              th:text="${order.getOrderState()}"></span></span>
                             <span class="gap">|</span>
                             <span class="order_num">결제금액 <span class="num"
-                                                               th:text="${order.getTotalAmount()}"></span></span>
+                                                               th:text="${#numbers.formatInteger(order.getTotalAmount(),0,'COMMA')}"></span></span>
                             <span class="gap">|</span>
                             <span class="order_num">배송일 <span class="num"
                                                               th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
-                            <span class="gap">|</span>
-                            <button class="refund-btn" type="button" th:onclick="modal(event, [[${order.getOrderNo()}]])" style="font-size: 14px">환불
+                        </div>
+                        <div class="btn-box">
+                            <button th:if="${order.orderState != '결제대기' && order.orderState != '결제취소' && order.orderState != '구매확정'}" class="refund-btn" type="button"
+                                    th:onclick="modal(event, [[${order.getOrderNo()}]])">환불
+                            </button>
+                            <button th:if="${order.orderState == '결제대기'}" class="refund-btn" type="button"
+                                    th:onclick="payment(event, [[${order.orderNo}]])">결제하러 가기
                             </button>
                         </div>
                     </div>
@@ -161,23 +172,25 @@
         event.stopPropagation();
 
         let refund = document.getElementById('refund');
-        refund.innerHTML='';
+        refund.innerHTML = '';
 
         let modalDiv = document.createElement('div');
         modalDiv.classList.add('modal_box');
         modalDiv.innerHTML = `<h2>환불</h2>
-            <form action="/orders/refund/${orderNum}" method="post" style="width: 100%;">
+            <form action="/payment/refund" method="post" style="width: 100%;">
             <table style="width: 100%">
                 <tbody>
-                <tr>
+               <tr>
                     <th scope="row" style="padding: 10px 20px;" class="has_ip">환불사유</th>
                 </tr>
                 <tr>
+                    <input type="hidden" name="orderNo" value="${orderNum}">
                     <td style="padding: 0 1rem 1rem 1rem;">
                         <textarea id="refund-text"
-                                  name="refund"
+                                  name="cancelReason"
                                   placeholder="환불 사유를 입력해주세요"></textarea>
                     </td>
+                </tr>
                 </tbody>
             </table>
             <div style="display: flex;justify-content: flex-end;padding: 0 1rem 0 0;">

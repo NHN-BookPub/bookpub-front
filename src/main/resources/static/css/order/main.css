@@ -726,3 +726,25 @@ label, input[type=radio] {
     color: #D52929FF;
     font-weight: 500;
 }
+
+.custom-th {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+}
+
+.buyer-info-btn {
+    font-size: 14px;
+    padding: 7px;
+    background-color: white;
+    border: 1px solid #a3a3a3;
+    border-radius: 14px;
+    position: relative;
+    right: 3px;
+}
+
+.buyer-info-btn:hover {
+    background-color: #cfcfcf;;
+}

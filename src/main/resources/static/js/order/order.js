@@ -10,6 +10,16 @@ function findAddress() {
     }).open();
 }
 
+function getBuyerInfo() {
+    let buyerNameInput = document.getElementById('buyerName')
+    let buyerPhoneInput = document.getElementById('buyerPhone')
+    let receiverNameInput = document.getElementById('receiverName')
+    let receiverPhoneInput = document.getElementById('receiverPhone')
+
+    receiverNameInput.value = buyerNameInput.value;
+    receiverPhoneInput.value = buyerPhoneInput.value;
+}
+
 function saveAddress(id) {
     let num = id.substring(7);
     let roadAddr = 'roadAddr' + num;
@@ -308,6 +318,7 @@ function couponCalculateAndParsingLogic() {
 
     for (var i = 0; i < productList.length; i++) {
         resultList.push(productList[i] + "- ");
+        console.log("실행")
         for (var j = 0; j < couponList.length; j++) {
             let productInfo = productList[i].split("|");
             let productNo = productInfo[0]
@@ -338,19 +349,17 @@ function couponCalculateAndParsingLogic() {
         changePriceList[i].value = productSalePriceList[i];
     }
 
+    let result = document.getElementById("product-coupon-result")
+    result.value = resultList;
+
     calculateSavePoint()
-    return {resultList, totalSalePrice};
+    return totalSalePrice;
 }
 
 function applyCouponOrder() {
-    const __ret = couponCalculateAndParsingLogic();
-    var resultList = __ret.resultList;
-    let totalSalePrice = __ret.totalSalePrice;
+    let totalSalePrice = couponCalculateAndParsingLogic();
 
-    let result = document.getElementById("product-coupon-result")
     let couponDiscount = document.getElementById("couponDiscount")
-
-    result.value = resultList;
     couponDiscount.innerText = parseKRW(totalSalePrice.toString())
 
     amountLogicCheck_coupon(totalSalePrice);
@@ -433,7 +442,7 @@ function calculateSavePoint() {
             totalSave += parseInt(parsingNumber(saveList[i].innerText));
             continue;
         }
-        if (isSaved === true) {
+        if (isSaved === 'true') {
             if (methodList[i].innerText === '') {
                 methodList[i].innerText = '적립방식 : ' + method;
             }

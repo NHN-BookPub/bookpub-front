@@ -146,6 +146,7 @@
                                         <div class="form_col_group">
                                             <div class="col_box">
                                                 <input type="text" class="form_ip" placeholder="주문인 이름을 입력해주세요."
+                                                       id="buyerName"
                                                        title="이름 입력"
                                                        maxlength="200"
                                                        name="buyerName"
@@ -156,6 +157,7 @@
                                                  style="display: flex; flex-direction: column; gap: 4px">
                                                 <input type="tel" class="form_ip" placeholder="휴대폰 번호를 ‘-’없이 입력해주세요"
                                                        title="휴대폰 번호 입력"
+                                                       id="buyerPhone"
                                                        maxlength="11"
                                                        name="buyerNumber"
                                                        required
@@ -177,11 +179,15 @@
                                     <col style="width: auto">
                                 </colgroup>
                                 <tr>
-                                    <th scope="row" class="has_ip">수령인 정보 입력</th>
+                                    <th scope="row" class="has_ip custom-th">
+                                        <span>수령인 정보 입력</span>
+                                        <button class="buyer-info-btn" type="button" onclick="getBuyerInfo()">주문인 정보 가져오기</button>
+                                    </th>
                                     <td class="col-box-wrapper">
                                         <div class="form_col_group">
                                             <div class="col_box">
                                                 <input type="text" class="form_ip" placeholder="수령인 이름을 입력해주세요."
+                                                       id="receiverName"
                                                        title="이름 입력"
                                                        maxlength="200"
                                                        name="recipientName" required>
@@ -190,6 +196,7 @@
                                                  style="display: flex; flex-direction: column; gap: 4px">
                                                 <input type="tel" class="form_ip" placeholder="휴대폰 번호를 ‘-’없이 입력해주세요"
                                                        title="휴대폰 번호 입력"
+                                                       id="receiverPhone"
                                                        maxlength="11"
                                                        name="recipientNumber" required>
                                                 <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>

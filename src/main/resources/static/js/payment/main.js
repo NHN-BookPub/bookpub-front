@@ -8,7 +8,3 @@ function paymentBtn(method, toss, order) {
         failUrl: toss.failUrl
     })
 }
-
-function paySuccess() {
-    window.location.href = "#";
-}
