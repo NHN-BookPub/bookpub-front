@@ -169,7 +169,7 @@ function wishlist() {
 			text: '로그인을 먼저 해주세요'
 		})
 	} else {
-		window.location = '/members/' + memberNo + '/wishlist';
+		window.location = '/members/wishlist';
 	}
 }
 

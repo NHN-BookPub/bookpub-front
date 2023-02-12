@@ -39,7 +39,6 @@
         <div class="container" style="padding-bottom: 5%">
             <div style="display: flex; flex-direction: column; gap: 8px">
                 <div class="order_summary_box" th:each="order : ${orderList}">
-                    <!--                    th:href="@{/member/modify(id=${ dto.id})}"-->
                     <div class="box_header"
                          th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
                         <div class="label">
@@ -127,9 +126,12 @@
                                 <td class="prod">
                                     <div class="btn_wrap full">
                                         <div class="right_box">
-                                            <button type="button" class="btn_xs btn_light_gray"><span
-                                                    class="text">리뷰 작성</span><span class="ico_arw_white"></span>
-                                            </button>
+                                            <form th:action="@{/members/inquiryForm/products/{productNo}(productNo=${product.productNo})}"
+                                                  method="get">
+                                                <button type="submit" class="btn_xs btn_light_gray"><span
+                                                        class="text">상품 문의</span><span class="ico_arw_white"></span>
+                                                </button>
+                                            </form>
                                         </div>
                                     </div>
                                 </td>

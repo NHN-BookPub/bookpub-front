@@ -216,4 +216,19 @@ public interface ProductService {
      * @param detailImage 추가할 Detail Image
      */
     void addNewDetailImage(Long productNo, MultipartFile detailImage);
+
+    /**
+     * 연관관계 상품 추가 메서드.
+     *
+     * @param productNo        상품 번호
+     * @param relationProducts 연관 관계 상품 번호
+     */
+    void addRelationProduct(Long productNo, String relationProducts);
+
+    /**
+     * 연관관계 상품을 삭제하는 메서드.
+     *
+     * @param childNo 자식 상품 번호
+     */
+    void disconnectRelationProduct(Long childNo);
 }

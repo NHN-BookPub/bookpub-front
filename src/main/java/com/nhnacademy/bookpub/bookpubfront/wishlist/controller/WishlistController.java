@@ -1,8 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.wishlist.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
-import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.CreateWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.DeleteWishlistRequestDto;
@@ -17,7 +17,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -35,26 +34,25 @@ public class WishlistController {
 
     private final WishlistService wishlistService;
     private final MemberService memberService;
+    private final MemberUtils memberUtils;
     private static final String MEMBER = "member";
 
     /**
      * 멤버별 위시리스트 view controller.
      *
-     * @param memberNo 멤버 번호
      * @param pageable 페이징 정보
      * @param model    model
      * @return 멤버별 위시리스트 화면
      */
     @Auth
-    @GetMapping("/members/{memberNo}/wishlist")
-    public String memberWishList(@PathVariable("memberNo") Long memberNo,
-                                 @PageableDefault(size = 8) Pageable pageable,
+    @GetMapping("/members/wishlist")
+    public String memberWishList(@PageableDefault(size = 8) Pageable pageable,
                                  Model model) {
+        Long memberNo = memberUtils.getMemberNo();
         PageResponse<GetWishlistResponseDto> wishlist =
                 wishlistService.getWishlistByMember(memberNo, pageable);
-        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
-        model.addAttribute(MEMBER, member);
 
+        memberUtils.modelRequestMemberNo(model);
         model.addAttribute("wishlists", wishlist.getContent());
         model.addAttribute("totalPages", wishlist.getTotalPages());
         model.addAttribute("currentPage", wishlist.getNumber());

@@ -10,6 +10,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailRespo
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.oauth.dto.request.OauthMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import javax.servlet.http.HttpServletRequest;
@@ -37,10 +38,11 @@ import org.springframework.web.bind.annotation.RequestParam;
 @RequiredArgsConstructor
 public class MemberController {
 
-    private static final String REDIRECT_MY_PAGE = "redirect:/members/";
+    private static final String REDIRECT_MY_PAGE = "redirect:/members";
     private static final String MEMBER = "member";
     private static final String AUTH_MEMBER = "oauthMember";
     private final MemberService memberService;
+    private final MemberUtils memberUtils;
 
     private final CouponService couponService;
 
@@ -133,24 +135,6 @@ public class MemberController {
     }
 
     /**
-     * 관리자 멤버의 세부정보를 파악하기위한 메서드입니다.
-     *
-     * @param memberNo 멤버번호.
-     * @param model    모델.
-     * @return 관리자 의 멤버 상세페이지.
-     */
-    @GetMapping("/admin/members/{memberNo}")
-    @Auth
-    public String adminMemberInfo(@PathVariable("memberNo") Long memberNo,
-                                  Model model) {
-        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
-
-        model.addAttribute(MEMBER, member);
-
-        return "admin/member/memberInfo";
-    }
-
-    /**
      * 관리자가 사용자를 차단하기위해 쓰이는 컨트롤러.
      *
      * @param memberNo 멤버번호.
@@ -169,33 +153,32 @@ public class MemberController {
     /**
      * 멤버가 멤버 정보를 보기위한 요청.
      *
-     * @param memberNo 멤버 정보가 기입
-     * @param model    모델.
+     * @param model 모델.
      * @return 멤버의 개인정보 페이지로 이동.
      */
-    @GetMapping("/members/{memberNo}")
+    @GetMapping("/members")
     @Auth
-    public String memberInfo(@PathVariable("memberNo") Long memberNo, Model model) {
+    public String memberInfo(Model model) {
+        Long memberNo = memberUtils.getMemberNo();
         MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
-        model.addAttribute(MEMBER, member);
+
+        model.addAttribute("member", member);
+
         return "mypage/memberInfo";
     }
 
     /**
      * 멤버의 사용가능한 쿠폰 리스트를 조회하기 위한 요청.
      *
-     * @param memberNo 멤버 번호
      * @param pageable 페이징 정보
      * @param model    모델
      * @return 멤버의 사용 가능 쿠폰함 페이지로 이동.
      */
-    @GetMapping("/members/{memberNo}/coupon/positive")
+    @GetMapping("/members/coupon/positive")
     @Auth
-    public String memberCouponList(@PathVariable("memberNo") Long memberNo,
-                                   @PageableDefault Pageable pageable, Model model) {
-        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
-        model.addAttribute(MEMBER, member);
-
+    public String memberCouponList(@PageableDefault Pageable pageable, Model model) {
+        Long memberNo = memberUtils.getMemberNo();
+        memberUtils.modelRequestMemberNo(model);
         PageResponse<GetCouponResponseDto> positiveCoupons = couponService.getPositiveCoupons(
                 pageable, memberNo);
 
@@ -212,17 +195,15 @@ public class MemberController {
     /**
      * 멤버의 사용 불가능 쿠폰 리스트를 조회하기 위한 요청.
      *
-     * @param memberNo 멤버 번호
      * @param pageable 페이징 정보
      * @param model    모델
      * @return 멤버의 사용 불가능 쿠폰함 페이지로 이동.
      */
     @Auth
-    @GetMapping("/members/{memberNo}/coupon/negative")
-    public String memberCouponListNegative(@PathVariable("memberNo") Long memberNo,
-                                           @PageableDefault Pageable pageable, Model model) {
-        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
-        model.addAttribute(MEMBER, member);
+    @GetMapping("/members/coupon/negative")
+    public String memberCouponListNegative(@PageableDefault Pageable pageable, Model model) {
+        Long memberNo = memberUtils.getMemberNo();
+        memberUtils.modelRequestMemberNo(model);
 
         PageResponse<GetCouponResponseDto> negativeCoupons = couponService.getNegativeCoupons(
                 pageable, memberNo);
@@ -266,133 +247,139 @@ public class MemberController {
      * 회원의 이름을 바꾸는 메서드입니다.
      * 마이페이지 내정보로 리다이렉트 됩니다.
      *
-     * @param memberNo 회원번호
-     * @param name     변경할 이름
+     * @param name 변경할 이름
      * @return 마이페이지 내정보.
      */
-    @PostMapping("/members/{memberNo}/name")
+    @PostMapping("/members/name")
     @Auth
-    public String memberExchangeName(@PathVariable("memberNo") Long memberNo,
-                                     @RequestParam("exchangeName") String name) {
+    public String memberExchangeName(@RequestParam("exchangeName") String name) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.modifyMemberName(memberNo, name);
 
-        return REDIRECT_MY_PAGE + memberNo;
+        return REDIRECT_MY_PAGE;
     }
 
     /**
      * 회원의 닉네임을 변경하기위한 메서드입니다.
      * 마이페이지의 내정보창으로 반환됩니다.
      *
-     * @param memberNo 회원번호.
      * @param nickname the nickname
      * @return the string
      */
-    @PostMapping("/members/{memberNo}/nickname")
+    @PostMapping("/members/nickname")
     @Auth
-    public String memberExchangeNickname(@PathVariable("memberNo") Long memberNo,
-                                         @RequestParam("exchangeNickname") String nickname) {
+    public String memberExchangeNickname(@RequestParam("exchangeNickname") String nickname) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.modifyMemberNickName(memberNo, nickname);
 
-        return REDIRECT_MY_PAGE + memberNo;
+        return REDIRECT_MY_PAGE;
     }
 
     /**
      * 회원의 이메일을 변경할때쓰이는 메서드입니다.
      * 마이페이지 내정보창으로 이동합니다.
      *
-     * @param memberNo 회원번호
-     * @param email    변경할 이메일.
+     * @param email 변경할 이메일.
      * @return 마이페이지 내정보.
      */
-    @PostMapping("/members/{memberNo}/email")
+    @PostMapping("/members/email")
     @Auth
-    public String memberExchangeEmail(@PathVariable("memberNo") Long memberNo,
-                                      @RequestParam("exchangeEmail") String email) {
+    public String memberExchangeEmail(@RequestParam("exchangeEmail") String email) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.modifyMemberEmail(memberNo, email);
 
-        return REDIRECT_MY_PAGE + memberNo;
+        return REDIRECT_MY_PAGE;
     }
 
     /**
      * 회원의 휴대전화번호가 변경될때 사용되는 메서드입니다.
      * 마이페이의 내정보 페이지로 이동합니다.
      *
-     * @param memberNo 회원번호
      * @param phone    휴대전화번호기입
      * @return 마이페이지 내정보
      */
-    @PostMapping("/members/{memberNo}/phone")
+    @PostMapping("/members/phone")
     @Auth
-    public String memberExchangePhone(@PathVariable("memberNo") Long memberNo,
-                                      @RequestParam("exchangePhone") String phone) {
+    public String memberExchangePhone(@RequestParam("exchangePhone") String phone) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.modifyMemberPhone(memberNo, phone);
 
-        return REDIRECT_MY_PAGE + memberNo;
+        return REDIRECT_MY_PAGE;
     }
 
     /**
      * 멤버의 비밀번호가 변경될때 쓰이는 메서드입니다.
      * 마이페이지의 내정보 페이지로 이동합니다.
      *
-     * @param memberNo 회원번호
      * @param password 변경할 비밀번호
      * @return the string
      */
-    @PostMapping("/members/{memberNo}/password")
+    @PostMapping("/members/password")
     @Auth
-    public String memberExchangePassword(@PathVariable("memberNo") Long memberNo,
-                                         @RequestParam("exchangePwd") String password) {
-
+    public String memberExchangePassword(@RequestParam("exchangePwd") String password) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.modifyMemberPassword(memberNo, password);
-        return REDIRECT_MY_PAGE + memberNo;
+
+        return REDIRECT_MY_PAGE;
     }
 
 
     /**
      * 멤버의 기준주소지를 변경하기위한 메서드입니다.
      *
-     * @param memberNo  회원번호
      * @param addressNo 주소번호
      * @return the string
      */
-    @PostMapping("/members/{memberNo}/addresses/{addressNo}")
+    @PostMapping("/members/addresses/{addressNo}")
     @Auth
-    public String memberExchangeBaseAddress(@PathVariable("memberNo") Long memberNo,
-                                            @PathVariable("addressNo") Long addressNo) {
-
+    public String memberExchangeBaseAddress(@PathVariable("addressNo") Long addressNo) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.modifyMemberAddress(memberNo, addressNo);
-        return REDIRECT_MY_PAGE + memberNo;
+
+        return REDIRECT_MY_PAGE;
+    }
+
+    /**
+     * 회원을 탈퇴하기위한 메서드입니다.
+     *
+     * @return 메인페이지
+     */
+    @Auth
+    @PostMapping("/members")
+    public String memberDelete() {
+        Long memberNo = memberUtils.getMemberNo();
+        memberService.memberDelete(memberNo);
+
+        return "redirect:/logout";
     }
 
     /**
      * 회원의 주소를 추가하기위한 메서드입니다.
      *
-     * @param memberNo   회원번호
      * @param requestDto 주소를 등록하기위한 정보.
      * @return the string
      */
-    @PostMapping("/members/{memberNo}/addresses")
+    @PostMapping("/members/addresses")
     @Auth
-    public String memberAddAddress(@PathVariable("memberNo") Long memberNo,
-                                   MemberAddressRequestDto requestDto) {
-
+    public String memberAddAddress(MemberAddressRequestDto requestDto) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.addMemberAddress(memberNo, requestDto);
 
-        return REDIRECT_MY_PAGE + memberNo;
+        return REDIRECT_MY_PAGE;
     }
 
     /**
      * 회원의 주소를 삭제하기위한 메서드입니다.
      *
-     * @param memberNo  회원 번호 기입.
      * @param addressNo 삭제할 주소번호 기압.
      * @return the string
      */
-    @PostMapping("/members/{memberNo}/addresses-delete/{addressNo}")
+    @PostMapping("/members/addresses-delete/{addressNo}")
     @Auth
-    public String memberDeleteAddress(@PathVariable("memberNo") Long memberNo,
-                                      @PathVariable("addressNo") Long addressNo) {
+    public String memberDeleteAddress(@PathVariable("addressNo") Long addressNo) {
+        Long memberNo = memberUtils.getMemberNo();
         memberService.deleteMemberAddress(memberNo, addressNo);
-        return REDIRECT_MY_PAGE + memberNo;
+
+        return REDIRECT_MY_PAGE;
     }
 }

@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+</head>
+<body>
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+<div class="body-pd">
+    <br>
+
+    <h1 class="mt-4">상품문의 내역</h1>
+    <h6> - 내 상품문의 내역 조회 </h6>
+    <hr/>
+
+    <div>
+        <table class="table">
+            <thead class="table-light">
+            <tr style="text-align: center">
+                <th style="width: 10%">유형</th>
+                <th style="width: 20%">문의 상품</th>
+                <th style="width: 60%">문의 제목</th>
+                <th style="width: 20%">답변 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="inquiry: ${inquiryMemberList}">
+                <td style="text-align: center">
+                    <span th:text="${inquiry.inquiryStateCodeName}"></span>
+                </td>
+                <td>
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <img th:src="${inquiry.productImagePath}" alt="." style="width: 90%; height: auto;">
+                        </div>
+                        <div class="col-sm-9">
+                            <span><a th:href="@{/products/{productNo}(productNo=${inquiry.productNo})}"
+                                     th:text="${inquiry.productTitle}"></a></span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div>
+                        <div>
+                            <span th:if="${inquiry.inquiryDisplayed}">
+                                <a th:href="@{/members/inquiries/{inquiryNo}(inquiryNo=${inquiry.inquiryNo})}"
+                                   th:text="${inquiry.inquiryTitle}">
+                                </a>
+                            </span>
+                            <span th:unless="${inquiry.inquiryDisplayed}">
+                                <a th:href="@{/members/inquiries/{inquiryNo}/private(inquiryNo=${inquiry.inquiryNo})}"
+                                   th:text="${inquiry.inquiryTitle}">
+                                </a>
+                            </span>
+                        </div>
+                    </div>
+                </td>
+                <td>
+                    <div style="text-align: center">
+                        <div>
+                            <span th:if="${inquiry.inquiryAnswered}">답변 완료</span>
+                            <span th:unles="${inquiry.inquiryAnswered}">미완료</span>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/members/inquiries?(page=(${currentPage}-1))}">Previous</a>
+                </li>
+                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link"
+                           th:href="@{/members/inquiries?(page=(${page-1}))}"
+                           th:text="${page}"></a></li>
+                </th:block>
+                <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/members/inquiries?(page=(${currentPage}+1))}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+</div>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+</body>
+</html>

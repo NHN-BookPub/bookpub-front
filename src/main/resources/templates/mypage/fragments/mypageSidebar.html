@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
 </head>
@@ -13,14 +13,9 @@
                 <a href="/" class="nav__logo">Book-Pub</a>
             </div>
             <div class="nav__list">
-                <a th:href="@{/members/{memberNo}(memberNo=${member.memberNo})}" class="nav__link">
+                <a href="/members" class="nav__link">
                     <ion-icon name="home-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">내 정보</span>
-                </a>
-
-                <a href="/orders/list" class="nav__link">
-                    <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
-                    <span class="nav_name">주문내역</span>
                 </a>
 
                 <a href="/orders/ebooks" class="nav__link">
@@ -28,7 +23,7 @@
                     <span class="nav_name">E-Book</span>
                 </a>
 
-                <a th:href="@{/members/{memberNo}/wishlist(memberNo=${member.memberNo})}" class="nav__link">
+                <a href="/members/wishlist" class="nav__link">
                     <ion-icon name="heart-circle-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">위시리스트</span>
                 </a>
@@ -40,18 +35,36 @@
                     <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
 
                     <ul class="collapse__menu">
-                        <a th:href="@{/members/{memberNo}/coupon/positive(memberNo=${member.memberNo})}"
+                        <a href="/members/coupon/positive"
                            class="collapse__sublink">사용 가능 쿠폰</a>
-                        <a th:href="@{/members/{memberNo}/coupon/negative(memberNo=${member.memberNo})}"
+                        <a href="/members/coupon/negative"
                            class="collapse__sublink">사용 만료 쿠폰</a>
                     </ul>
                 </div>
 
-                <a th:href="@{/members/{memberNo}/written-reviews(memberNo=${member.memberNo})}" class="nav__link">
+                <a href="/members/written-reviews" class="nav__link">
                     <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
                     <span class="nav_name">마이 리뷰</span>
                 </a>
 
+                <div href="#" class="nav__link collapse show">
+                    <ion-icon name="folder-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">문의내역</span>
+
+                    <ion-icon name="chevron-down-outline" class="collapse__link"></ion-icon>
+
+                    <ul class="collapse__menu">
+                        <a href="/members/inquiries"
+                           class="collapse__sublink">상품 문의 내역</a>
+                        <a href="/members/coupon/negative"
+                           class="collapse__sublink">1:1 문의 조회</a>
+                    </ul>
+                </div>
+
+                <a href="/orders/list" class="nav__link">
+                    <ion-icon name="pie-chart-outline" class="nav__icon"></ion-icon>
+                    <span class="nav_name">주문내역</span>
+                </a>
 
                 <!--        <a href="#" class="nav__link">-->
                 <!--          <ion-icon name="settings-outline" class="nav__icon"></ion-icon>-->

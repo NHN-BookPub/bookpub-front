@@ -1,4 +1,3 @@
-let memberNo = document.getElementById("memberNumber");
 
 window.onload = function() {
     const pathname = window.location.pathname
@@ -28,6 +27,7 @@ function clickInfo(number) {
         dateType: "JSON",
 
         success: function (response) {
+            console.log("안돼 -유진 초이-");
 
             switch (response.reviewStar) {
                 case 1:
@@ -63,7 +63,6 @@ function clickInfo(number) {
             }
 
             modifyNo.value = response.reviewNo;
-            console.log(modifyNo.value);
         }
     })
 }
@@ -93,9 +92,7 @@ function submitForm() {
     const submit = document.getElementById("submitForm");
     const modifyNo = document.getElementById("reviewNumber");
 
-    const tmp = submit.action = "/members/" + memberNo.value + "/written-reviews/" + modifyNo.value +"/modify";
-    console.log(modifyNo.value);
-    console.log(memberNo.value);
+    const tmp = submit.action = "/members/written-reviews/" + modifyNo.value + "/modify";
 
     submit.method = "POST";
     submit.submit();

@@ -32,9 +32,6 @@ public class GetProductDetailResponseDto {
     private boolean productSubscribed;
     private String saleStateCodeCategory;
     private String typeStateCodeName;
-
-    // TODO: 매입이력 추가
-
     private String policyMethod;
     private boolean policySaved;
     private Integer policySaveRate;
@@ -44,4 +41,5 @@ public class GetProductDetailResponseDto {
     private List<String> categories = new ArrayList<>();
     private List<String> tags = new ArrayList<>();
     private List<String> tagsColors = new ArrayList<>();
+    private List<GetRelationProductInfoResponseDto> info = new ArrayList<>();
 }

@@ -26,6 +26,20 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,6 +62,7 @@ public class MemberOrderController {
     private final MemberService memberService;
     private final ProductService productService;
     private final PricePolicyService pricePolicyService;
+    private final MemberUtils memberUtils;
 
 
     /**
@@ -89,13 +104,8 @@ public class MemberOrderController {
      */
     @GetMapping
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
-        Long memberNo = Long.parseLong(
-                (String) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal());
+        memberUtils.modelRequestMemberNo(model);
 
-        model.addAttribute(MEMBER, memberService.getApiMember(memberNo));
         model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
 
         return "mypage/orderDetail";
@@ -171,14 +181,8 @@ public class MemberOrderController {
 
     @GetMapping("/ebooks")
     public String viewEbooksByMember(Model model, @PageableDefault Pageable pageable) {
-        Long memberNo = Long.parseLong(
-                (String) SecurityContextHolder
-                        .getContext()
-                        .getAuthentication()
-                        .getPrincipal());
-
-        MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
-        model.addAttribute(MEMBER, member);
+        Long memberNo = memberUtils.getMemberNo();
+        memberUtils.modelRequestMemberNo(model);
 
         PageResponse<GetProductByCategoryResponseDto> products =
                 orderService.getEbooksByMember(pageable, memberNo);

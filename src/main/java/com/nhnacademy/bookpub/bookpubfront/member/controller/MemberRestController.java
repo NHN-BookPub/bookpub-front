@@ -5,12 +5,12 @@ import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.config.DoorayConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberPasswordResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -28,6 +28,7 @@ public class MemberRestController {
     private final MemberService memberService;
     private final DoorayConfig doorayConfig;
     private final PasswordEncoder passwordEncoder;
+    private final MemberUtils memberUtils;
     private final Random random = new Random();
 
     /**
@@ -73,16 +74,15 @@ public class MemberRestController {
     /**
      * 패스워드 값을 확인하기위한 메서드입니다.
      *
-     * @param memberNo    회원번호
      * @param rawPassword 땡값 패스워드
      * @return the boolean
      */
-    @PostMapping("/members/{memberNo}/password-check")
+    @PostMapping("/members/password-check")
     @Auth
-    public boolean passwordCheck(@PathVariable("memberNo") Long memberNo,
-                                 @RequestParam("rawPassword") String rawPassword) {
+    public boolean passwordCheck(@RequestParam("rawPassword") String rawPassword) {
+        Long memberNo = memberUtils.getMemberNo();
         MemberPasswordResponseDto memberPassword = memberService.getMemberPassword(memberNo);
-        log.error(rawPassword);
+
         return passwordEncoder.matches(rawPassword, memberPassword.getPassword());
     }
 

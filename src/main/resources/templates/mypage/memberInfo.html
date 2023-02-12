@@ -91,7 +91,7 @@
                             <h5 class="modal-title">이름 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} + '/name'" class="was-validated"
+                            <form action="/members/name" class="was-validated"
                                   method="POST">
                                 <input type="hidden" id="member-no" th:value="${#authentication.principal}">
                                 <br/>
@@ -140,7 +140,7 @@
                             <h5 class="modal-title">닉네임 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} + '/nickname'" class="was-validated"
+                            <form action="/members/nickname" class="was-validated"
                                   method="post">
                                 <br/>
                                 <div class="form-group">
@@ -195,7 +195,7 @@
                             <h5 class="modal-title" id="phoneExLabel">휴대전화 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} + '/phone'" class="was-validated"
+                            <form action="/members/phone" class="was-validated"
                                   method="post">
                                 <br/>
                                 <div class="form-group">
@@ -246,7 +246,7 @@
                             <h5 class="modal-title" id="staticBackdropLabel">비밀번호 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} + '/password'" class="was-validated"
+                            <form action="/members/password" class="was-validated"
                                   method="post">
                                 <br/>
                                 <div class="form-group">
@@ -309,7 +309,7 @@
                             <h5 class="modal-title" id="emailExLabel">이메일 변경</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} +'/email'" class="was-validated"
+                            <form action="/members/email" class="was-validated"
                                   method="post">
                                 <br/>
                                 <div class="form-group">
@@ -347,7 +347,7 @@
                             <h5 class="modal-title">주소 등록하기</h5>
                         </div>
                         <div class="modal-body">
-                            <form th:action="'/members/' + ${member.memberNo} +'/addresses'" class="was-validated"
+                            <form action="/members/addresses" class="was-validated"
                                   method="post">
                                 <div class="form-group">
                                     <label for="roadAddress">도로명 주소</label>
@@ -392,11 +392,11 @@
                                 기준주소지
                             </td>
                             <td th:unless="${address.addressBased}">
-                                <form th:action="'/members/' + ${member.memberNo} +'/addresses/' +${address.addressNo}"
+                                <form th:action="'/members/addresses/' +${address.addressNo}"
                                       method="post">
                                     <button type="submit" class="btn btn-outline-info">기준 주소지변경</button>
                                 </form>
-                                <form th:action="'/members/' + ${member.memberNo} +'/addresses-delete/' +${address.addressNo}"
+                                <form th:action="'/members/addresses-delete/' +${address.addressNo}"
                                       method="post">
                                     <button type="submit" class="btn btn-outline-danger">기준 주소지삭제</button>
                                 </form>
