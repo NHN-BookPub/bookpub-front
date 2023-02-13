@@ -59,16 +59,16 @@
       <td th:text="${coupon.templateName}"></td>
       <td>
         <div th:if="${coupon.policyFixed == true}">
-          <span th:text="${coupon.policyPrice} + '원'"></span>
+          <span th:text="${#numbers.formatInteger(coupon.policyPrice,0,'COMMA')} + '원'"></span>
         </div>
         <div th:unless="${coupon.policyFixed == true}">
           <span th:text="${coupon.policyPrice} + '%'"></span>
         </div>
       </td>
-      <td th:text="${coupon.policyMinimum} + '원'"></td>
+      <td th:text="${#numbers.formatInteger(coupon.policyMinimum,0,'COMMA')} + '원'"></td>
       <td>
         <div th:if="${coupon.maxDiscount != null}">
-          <span th:text="${coupon.maxDiscount} + '원'"></span>
+          <span th:text="${#numbers.formatInteger(coupon.maxDiscount,0,'COMMA')} + '원'"></span>
         </div>
         <div th:unless="${coupon.maxDiscount != null}">
           <span>x</span>

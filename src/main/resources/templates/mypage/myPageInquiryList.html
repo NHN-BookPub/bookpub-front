@@ -40,7 +40,8 @@
                 <td>
                     <div class="row">
                         <div class="col-sm-3">
-                            <img th:src="${inquiry.productImagePath}" alt="." style="width: 90%; height: auto;">
+                            <img th:src="${inquiry.productImagePath}" style="width: 90%; height: auto;"
+                                 onerror="this.onerror=null; this.src='/static/image.review/no-image.png'">
                         </div>
                         <div class="col-sm-9">
                             <span><a th:href="@{/products/{productNo}(productNo=${inquiry.productNo})}"
@@ -67,8 +68,8 @@
                 <td>
                     <div style="text-align: center">
                         <div>
-                            <span th:if="${inquiry.inquiryAnswered}">답변 완료</span>
-                            <span th:unles="${inquiry.inquiryAnswered}">미완료</span>
+                            <span th:if="${inquiry.inquiryAnswered}" style="color: #3c763d">답변 완료</span>
+                            <span th:unless="${inquiry.inquiryAnswered}" style="color: #ac2925">미완료</span>
                         </div>
                     </div>
                 </td>

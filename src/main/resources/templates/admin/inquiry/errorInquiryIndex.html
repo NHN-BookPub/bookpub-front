@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>BookPub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">불량상품문의 조회</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active"> - 회원들의 불량상품 문의 조회</li>
+                </ol>
+
+                <hr/>
+            </div>
+
+            <br/>
+
+            <div class="card mb-4">
+                <div class="card-header">
+                    <i class="fas fa-table me-1"></i>
+                    불량상품문의 목록
+                </div>
+
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th style="width: 10%; text-align: center">유형</th>
+                            <th style="width: 15%">문의 상품</th>
+                            <th style="width: 10%">문의자 닉네임</th>
+                            <th style="width: 45%; text-align: center">문의 제목</th>
+                            <th style="width: 20%; text-align: center">답변 여부</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr th:each="inquiry: ${errorInquiryList}">
+                            <td style="text-align: center">
+                                <span th:text="${inquiry.inquiryStateCodeName}"></span>
+                            </td>
+                            <td>
+                                <div class="row">
+                                    <div>
+                            <span><a style="text-decoration-line: none"
+                                     th:href="@{/products/{productNo}(productNo=${inquiry.productNo})}"
+                                     th:text="${inquiry.productTitle}"></a></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <span th:text="${inquiry.memberNickname}"></span>
+                            </td>
+                            <td>
+                                <div>
+                                    <div>
+                            <span th:if="${inquiry.inquiryDisplayed}">
+                                <a style="text-decoration-line: none"
+                                   th:href="@{/admin/inquiries/{inquiryNo}(inquiryNo=${inquiry.inquiryNo})}"
+                                   th:text="${inquiry.inquiryTitle}">
+                                </a>
+                            </span>
+                                        <span th:unless="${inquiry.inquiryDisplayed}">
+                                <a style="text-decoration-line: none"
+                                   th:href="@{/admin/inquiries/{inquiryNo}/private(inquiryNo=${inquiry.inquiryNo})}"
+                                   th:text="${inquiry.inquiryTitle}">
+                                </a>
+                            </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div style="text-align: center">
+                                    <div>
+                                        <span th:if="${inquiry.inquiryAnswered}" style="color: #3c763d">답변 완료</span>
+                                        <span th:unless="${inquiry.inquiryAnswered}" style="color: red">미완료</span>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/error-inquiries?(page=(${currentPage}-1))}">Previous</a>
+                            </li>
+                            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="@{/admin/error-inquiries?(page=(${page-1}))}"
+                                       th:text="${page}"></a></li>
+                            </th:block>
+                            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/error-inquiries?(page=(${currentPage}+1))}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+
+
+                </div>
+            </div>
+        </main>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+</body>
+</html>

@@ -21,10 +21,11 @@
         <div class="modal-lg modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h3 class="modal-title">상품 등록</h3>
+                    <h3 class="modal-title">매입 등록</h3>
                 </div>
                 <div class="modal-body">
-                    <form action="/admin/purchases" class="was-validated" method="post" id="requestDto" name="requestDto">
+                    <form action="/admin/purchases" class="was-validated" method="post" id="requestDto"
+                          name="requestDto">
                         <div class="form-group">
                             <div>
                                 <label>상품번호</label>
@@ -52,6 +53,16 @@
                             </div>
                         </div>
                         <br/>
+                        <div class="form-group">
+                            <label>변경하고자하는 상품 타입</label>
+                            <select class="form-control" name="productType" required>
+                                <option value="" selected disabled hidden>==상품 유형 선택==</option>
+                                <option th:each="typeStateCode : ${typeStateCodes}"
+                                        th:value="${typeStateCode.codeNo}"
+                                        th:text="${typeStateCode.codeName}"></option>
+                            </select>
+                        </div>
+
                         <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left: 80%;">취소
                         </button>
                         <button type="submit" class="btn btn-primary">등록</button>
@@ -86,11 +97,10 @@
                     </button>
                 </div>
 
-
                 <br/>
 
                 <div>
-                    <table class="table table-striped">
+                    <table class="table table-hover">
                         <thead>
                         <tr>
                             <th>상품번호</th>
@@ -111,40 +121,41 @@
                             <td th:text="${#temporals.format(purchase.createdAt, 'yyyy.MM.dd HH:mm')}"></td>
                             <td>
                                 <form th:action="@{/admin/products/{productNo}(productNo=${purchase.productNo})}"
-                                      method="post">
-                                    <button type="submit" class="btn btn-info">정보조회</button>
+                                      method="get">
+                                    <button type="submit" class="btn btn-outline-info">정보조회</button>
                                 </form>
                             </td>
                         </tr>
                         </tbody>
                     </table>
+
+                    <nav aria-label="Page navigation example">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/purchases?(page=(${currentPage}-1))}">Previous</a>
+                            </li>
+                            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="@{/admin/purchases(page=(${page}-1))}"
+                                       th:text="${page}"></a></li>
+                            </th:block>
+                            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/admin/purchases?(page=(${currentPage}+1))}">Next</a>
+                            </li>
+                        </ul>
+                    </nav>
+
                 </div>
             </div>
 
-            <nav style="text-align: center">
-                <ul class="pagination justify-content-center">
-                    <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/admin/purchases/page=(${currentPage}-1)}">Previous</a>
-                    </li>
-                    <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
-                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
-                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                            <a class="page-link"
-                               th:href="@{/admin/purchases/page=(${page - 1})}"
-                               th:text="${page}"></a></li>
-                    </th:block>
-                    <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
-                        <a class="page-link"
-                           th:href="@{/admin/purchases/page=(${currentPage + 1})}">Next</a>
-                    </li>
-                </ul>
-            </nav>
         </main>
 
+        <th:block th:include="admin/fragments/adminFooter"/>
     </div>
 </div>
-<th:block th:include="admin/fragments/adminFooter"/>
 </body>
 <script>
     const findProductNo = document.getElementById("findProductNo");

@@ -21,11 +21,12 @@ public interface PurchaseService {
     PageResponse<GetPurchaseListResponseDto> getPurchases(Pageable pageable);
 
     /**
-     * 매입 이력을 등록합니다.
+     * 매입 이력을 등록합니다. <Br/>
+     * 등록과 동시에 위시리스트에 등록된 사용자에게 알림을 줍니다.
      *
      * @param request 이력등록에 필요한 정보.
      */
-    void createPurchase(CreatePurchaseRequestDto request);
+    void createPurchaseAndAlarm(CreatePurchaseRequestDto request);
 
     /**
      * 상품 번호로 이력을 조회합니다.

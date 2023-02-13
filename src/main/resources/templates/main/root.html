@@ -55,7 +55,7 @@
                     </div>
                     <div class="shop-body">
                         <h3>Subscription<br>Collection</h3>
-                        <a href="#" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="/subscribes" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -141,7 +141,7 @@
                                                 </button>
                                                 <button class="quick-view"
                                                         th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${newBook.productNo})} + '\''">
-                                                    <i class="fa fa-eye"></i><span class="tooltipp">Information</span>
+                      ㄱ                             <i class="fa fa-eye"></i><span class="tooltipp">Information</span>
                                                 </button>
                                             </div>
                                         </div>
@@ -206,7 +206,7 @@
                                             <del class="product-old-price"
                                                  th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></del>
                                             <h4 id="money" class="product-price"
-                                                th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></h4>
+                                                th:text="|${#numbers.formatInteger(bestSeller.salesPrice, 0, 'COMMA')}원|"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>
@@ -815,10 +815,10 @@
         </div>
     </div>
 </div>
-
+<!--주문결과창 모달-->
 <div th:if="${order != '0'}">
-    <div id="order-modal-container" class="modal-overlay2">
-        <div class="modal_box">
+    <div id="order-modal-container" class="modal-overlay1">
+        <div class="modal_box1">
             <div id="payment-success-body" style="width: 100%;height: 100%;">
                 <div id="body-inner">
                     <div id="payment-header">
@@ -826,6 +826,7 @@
                             <button id="receipt-btn" type="button" th:onclick="receipt([[${opInfo.receiptUrl}]])">결제 영수증
                             </button>
                         </div>
+                        <p style="margin: 0 !important;color: #5f5e5e;">비회원 주문 시 주문번호를 꼭 저장해 주세요 주문조회에 사용됩니다.</p>
                         <span onclick="modalClose()" style="cursor:pointer; font-size: 26px;font-weight: 600;">X</span>
                     </div>
                     <div id="payment-body">
@@ -886,9 +887,47 @@
         </div>
     </div>
 </div>
-
+<!--로딩창-->
 <div id="loading">
     <span style="font-size: 7rem;color: white;" class="visually-hidden">Loading...</span>
+</div>
+<!--비회원 주문 모달창-->
+<div id="notMember-order" class="modal-overlay2">
+    <div class="notMember-order-modal">
+        <h2>비회원 주문 조회</h2>
+        <form action="/orders/non" method="post" style="width: 100%">
+            <table style="width: 100%">
+                <tbody>
+                <tr>
+                    <th scope="row" style="padding: 10px" class="has_ip">주문번호</th>
+                </tr>
+                <tr>
+                    <td style="padding: 0 60px 10px 10px;">
+                        <input style="width: 100%; padding: 7px;border-radius: 18px;border: 1px solid #848383;"
+                               id="orderId"
+                               name="orderId"
+                               placeholder="주문 번호를 입력해주세요">
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row" style="padding: 10px">주문인 전화번호</th>
+                </tr>
+                <tr>
+                    <td style="padding: 0 60px 10px 10px;">
+                        <input style="width: 100%;padding: 7px;border-radius: 18px;border: 1px solid #848383;"
+                               id="phoneNo"
+                               name="phoneNo"
+                               placeholder="전화번호를 입력해주세요(-제외)">
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+            <div class="modal-btn-box">
+                <button type="submit" id="click">조회</button>
+            </div>
+        </form>
+
+    </div>
 </div>
 
 <th:block th:include="main/fragments/rootFooter"></th:block>
@@ -898,6 +937,25 @@
         var option = "width = 800, height = 500, top = 500, left = 500"
         window.open(url, name, option);
     }
+
+    function modalOpen() {
+        let modal1 = document.getElementById("notMember-order");
+        modal1.style.display = "flex";
+    }
+
+    let modal1 = document.getElementById("notMember-order");
+    modal1.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay2")) {
+            modal1.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal1.style.display === "flex" && e.key === "Escape") {
+            modal1.style.display = "none"
+        }
+    })
 
     let modal = document.getElementById("order-modal-container")
     let loading = document.getElementById("loading")
@@ -909,11 +967,15 @@
 
     modal.addEventListener("click", e => {
         const evTarget = e.target
-        if (evTarget.classList.contains("modal-overlay2")) {
+        if (evTarget.classList.contains("modal-overlay1")) {
             loading.style.display = "flex"
             window.location.href = "/";
         }
     })
+</script>
+<!--주소 모달 js-->
+<script>
+
 </script>
 <script src="/static/js/main/jquery.min.js"></script>
 <script src="/static/js/main/bootstrap.min.js"></script>
@@ -921,7 +983,5 @@
 <script src="/static/js/main/nouislider.min.js"></script>
 <script src="/static/js/main/jquery.zoom.min.js"></script>
 <script src="/static/js/main/main.js"></script>
-
-</body>
 </body>
 </html>

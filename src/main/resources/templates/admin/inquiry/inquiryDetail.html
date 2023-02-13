@@ -105,12 +105,11 @@
                 </table>
             </div>
 
-
-            <div style="width:90%; margin-left: auto; margin-right: 3%;">
+            <div style="width:90%; margin-left: auto; margin-right: 1%;">
                 <div th:each="answer, stat : ${inquiry.childInquiries}">
                     <div style="display: flex">
-                        <h4 style="display: inline">ㄴ&nbsp;</h4>
-                        <table class="table table-light">
+                        <!--                        <h4 style="display: inline">&nbsp;</h4>-->
+                        <table class="table table-light" style="width: 90%;">
                             <tr>
                                 <td width="60%">답변 제목</td>
                                 <td>답변자 : <span th:text="${answer.memberNickname}"></span></td>
@@ -135,7 +134,8 @@
                             </tr>
                         </table>
                         <form th:action="@{/admin/inquiries/{inquiryNo}/cancel(inquiryNo=${answer.inquiryNo})}"
-                              th:method="post">
+                              th:method="post"
+                              style="width: 5%">
                             <button class="btn btn-outline-danger" type="submit">삭제</button>
                         </form>
                     </div>
@@ -145,11 +145,12 @@
 
             <div style="width:90%; margin-left: auto; margin-right: 3%">
                 <h4>ㄴ</h4>
-                <form th:action="@{/admin/inquiryForm}" th:method="post" onsubmit="return checkInfo();">
+                <form action="/admin/inquiryForm" th:method="post" onsubmit="return checkInfo();">
                     <input type="hidden" name="inquiryParentNo" th:value="${inquiry.inquiryNo}">
                     <input type="hidden" name="productNo" th:value="${inquiry.productNo}">
                     <input type="hidden" name="inquiryStateCodeNo" value="5">
                     <input type="hidden" name="inquiryDisplayed" value="true">
+                    <input type="hidden" id="imagePathList" name="imagePathList">
                     <div class="form-group">
                         답변 제목 : <input type="text" name="inquiryTitle" placeholder="제목을 입력해주세요." required maxlength="50"
                                        style="width: 400px;">

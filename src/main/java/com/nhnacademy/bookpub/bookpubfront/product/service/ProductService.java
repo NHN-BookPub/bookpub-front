@@ -29,7 +29,7 @@ public interface ProductService {
      * @param dto     상품 등록 폼에서 입력을 받은 DTO
      * @param tagList 상품 등록 폼에서 입력을 받는 태그 리스트
      */
-    void createCategory(InputProductFormRequestDto dto, List<Integer> tagList, Map<String, MultipartFile> fileMap);
+    void createProduct(InputProductFormRequestDto dto, List<Integer> tagList, Map<String, MultipartFile> fileMap);
 
     /**
      * 전체 상품을 받아오려는 메서드.

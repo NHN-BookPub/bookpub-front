@@ -46,8 +46,8 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
-    public void createCategory(InputProductFormRequestDto dto, List<Integer> tagList,
-                               Map<String, MultipartFile> fileMap) {
+    public void createProduct(InputProductFormRequestDto dto, List<Integer> tagList,
+                              Map<String, MultipartFile> fileMap) {
         dto.setSalePrice(dto.getProductPrice(), dto.getSaleRate());
 
         final boolean subscribed = dto.getSubscribed().equals("구독가능");
@@ -87,8 +87,7 @@ public class ProductServiceImpl implements ProductService {
                 dto.getTypeStateNo(),
                 authors,
                 categories,
-                tagList,
-                new ArrayList<>()
+                tagList
         );
 
         productAdaptor.requestCreateProduct(request, fileMap);

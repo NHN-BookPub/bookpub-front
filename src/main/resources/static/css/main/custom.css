@@ -1,7 +1,9 @@
 
 #order-modal-container {
-    display: block;
+    display: flex;
     position: fixed;
+    justify-content: center;
+    align-items: center;
     z-index: 999;
     top: 0;
     left: 0;
@@ -10,10 +12,7 @@
     background: rgba(0, 0, 0, 0.8);
 }
 
-.modal_box {
-    position: absolute;
-    top: calc(50vh - 34rem);
-    left: calc(50vw - 32rem);
+.modal_box1 {
     background-color: #f4ede7e3;
     display: flex;
     justify-content: start;
@@ -112,4 +111,48 @@ h3 {
     background: rgba(0, 0, 0, 0.4);
     justify-content: center;
     align-items: center;
+}
+
+#notMember-order {
+    display: none;
+    justify-content: center;
+    align-items: center;
+    position: fixed;
+    z-index: 999;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    background: rgba(0, 0, 0, 0.8);
+}
+
+.notMember-order-modal {
+    background-color: white;
+    display: flex;
+    justify-content: start;
+    border-radius: 10px;
+    width: 40%;
+    height: 40vh;
+    align-items: center;
+    padding: 30px 0;
+    flex-direction: column;
+    gap: 13px;
+}
+
+#click {
+    background-color: white;
+    padding: 3px 10px 3px 10px;
+    border-radius: 14px;
+    border: 1px solid #7f7f7f;
+}
+
+#click:hover {
+    background-color: #dcdcdc;
+}
+
+.modal-btn-box {
+    display: flex;
+    padding-bottom: 20px;
+    justify-content: end;
+    padding-right: 2rem;
 }
