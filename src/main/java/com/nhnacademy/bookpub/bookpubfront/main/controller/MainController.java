@@ -66,13 +66,19 @@ public class MainController {
         }
 
         List<GetProductByTypeResponseDto> bestSellers =
-                productService.findProductsByType(ProductType.POPULAR.getTypeNo(), LIMIT);
+                productService.findProductsByType(ProductType.BEST_SELLER.getTypeNo(), LIMIT);
 
         List<GetProductByTypeResponseDto> newBooks =
-                productService.findProductsByType(ProductType.DISCOUNT.getTypeNo(), LIMIT);
+                productService.findProductsByType(ProductType.NEW.getTypeNo(), LIMIT);
 
         List<GetProductByTypeResponseDto> recommends =
                 productService.findProductsByType(ProductType.RECOMMENDATION.getTypeNo(), LIMIT);
+
+        List<GetProductByTypeResponseDto> populars =
+                productService.findProductsByType(ProductType.POPULAR.getTypeNo(), LIMIT);
+
+        List<GetProductByTypeResponseDto> discounts =
+                productService.findProductsByType(ProductType.DISCOUNT.getTypeNo(), LIMIT);
 
 
         if (Objects.nonNull(cookie)) {
@@ -86,6 +92,9 @@ public class MainController {
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);
         model.addAttribute("recommends", recommends);
+        model.addAttribute("populars", populars);
+        model.addAttribute("discounts", discounts);
+
         model.addAttribute("order", order);
 
         return "main/root";
