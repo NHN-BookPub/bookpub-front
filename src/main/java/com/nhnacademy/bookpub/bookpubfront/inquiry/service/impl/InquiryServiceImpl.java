@@ -9,8 +9,10 @@ import com.nhnacademy.bookpub.bookpubfront.inquiry.dto.response.GetInquirySummar
 import com.nhnacademy.bookpub.bookpubfront.inquiry.service.InquiryService;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -50,7 +52,10 @@ public class InquiryServiceImpl implements InquiryService {
      */
     @Override
     public void submitInquiry(Long memberNo, CreateInquiryRequestDto request, String imagePaths) {
-        List<String> resultImagePaths = Arrays.asList(imagePaths.split("\\$"));
+        List<String> resultImagePaths = new ArrayList<>();
+        if (Objects.nonNull(imagePaths)) {
+            resultImagePaths = Arrays.asList(imagePaths.split("\\$"));
+        }
 
         inquiryAdaptor.requestSubmitInquiry(memberNo, request.transform(resultImagePaths));
     }
