@@ -27,7 +27,6 @@ function clickInfo(number) {
         dateType: "JSON",
 
         success: function (response) {
-            console.log("안돼 -유진 초이-");
 
             switch (response.reviewStar) {
                 case 1:

@@ -1,185 +1,94 @@
-let currentInquiryPageNo;
-let totalInquiryPages;
+function inquiryInfo(inquiryNo, memberNo, displayed) {
+    if (displayed == 'true') {
+        $.ajax({
+            url: "/members/inquiries/" + inquiryNo + "/modal",
+            type: "get",
+            async: true,
+            dateType: "JSON",
 
-const pageInquiryButtonNum = 5;
-
-let inquiryOne = document.getElementById("inquirytest1");
-let inquiryTwo = document.getElementById("inquirytest2");
-let inquiryThree = document.getElementById("inquirytest3");
-let inquiryFour = document.getElementById("inquirytest4");
-let inquiryFive = document.getElementById("inquirytest5");
-let inquirySix = document.getElementById("inquirytest6");
-let inquirySeven = document.getElementById("inquirytest7");
-let inquiryEight = document.getElementById("inquirytest8");
-let inquiryNine = document.getElementById("inquirytest9");
-let inquiryTen = document.getElementById("inquirytest10");
-
-let inquiryList = []
-inquiryList.push(inquiryOne)
-inquiryList.push(inquiryTwo)
-inquiryList.push(inquiryThree)
-inquiryList.push(inquiryFour)
-inquiryList.push(inquiryFive)
-inquiryList.push(inquirySix)
-inquiryList.push(inquirySeven)
-inquiryList.push(inquiryEight)
-inquiryList.push(inquiryNine)
-inquiryList.push(inquiryTen)
-
-let pathInquiryVariable;
-
-let inquiryPreviousBtn = document.getElementById("inquiryPreviousBtn");
-let inquiryPreviousLink = document.getElementById("inquiryPreviousLink");
-let inquiryNextBtn = document.getElementById("inquiryNextBtn");
-let inquiryNextLink = document.getElementById("inquiryNextLink");
-
-window.addEventListener('load', function () {
-
-    const pathname = window.location.pathname
-    pathInquiryVariable = pathname.split('/')[pathname.split('/').length - 1]
-
-    $.ajax({
-        url: "/inquiries/products/" + pathInquiryVariable,
-        data: {
-            page: 0,
-            size: 10
-        },
-        type: "get",
-        async: true,
-        dateType: "JSON",
-
-        success: function (responses) {
-            let answerYes = document.createElement('span');
-            answerYes.innerHTML = "답변 완료";
-            let answerNo = document.createElement('span');
-            answerNo.innerHTML = "답변 미완료";
-
-            responses.content.forEach((response, index) => {
-                if (!response.inquiryDisplayed) {
-                    inquiryList[index].innerHTML = '<span style="width=80%">비밀글입니다.</span>'
-                } else {
-                    inquiryList[index].innerHTML = "<span style='width=80%'>" + response.inquiryTitle + response.memberNickname + response.createdAt[0] + "/" + response.createdAt[1] + "/" + response.createdAt[2] + " " + response.createdAt[3] + ":" + response.createdAt[4] + ":" + response.createdAt[5] + "</span>";
-                    if (response.inquiryAnswered) {
-                        inquiryList[index].append(answerYes)
+            success: function (response) {
+                callInquiryInfo(response);
+            }
+        })
+    } else {
+        if (memberNo < 0) {
+            Swal.fire({
+                icon: 'warning',
+                title: '권한이 없습니다.',
+                text: '작성자만 조회 가능합니다.'
+            })
+        } else {
+            $.ajax({
+                url: "/inquiries/" + inquiryNo + "/verify/" + memberNo,
+                type: "get",
+                async: true,
+                dateType: "JSON",
+                success: function (response) {
+                    if (response == false) {
+                        console.log(response);
+                        Swal.fire({
+                            icon: 'warning',
+                            title: '권한이 없습니다.',
+                            text: '작성자만 조회 가능합니다.'
+                        })
                     } else {
-                        inquiryList[index].append(answerNo);
+                        $.ajax({
+                            url: "/members/inquiries/" + inquiryNo + "/private/modal",
+                            type: "get",
+                            async: true,
+                            dateType: "JSON",
+
+                            success: function (response) {
+                                console.log(response);
+                                callInquiryInfo(response);
+                            }
+                        })
                     }
                 }
             })
-
-            currentInquiryPageNo = 0;
-            totalInquiryPages = responses.totalPages;
-
-            inquiryPreviousBtn.classList.add('disabled');
-            inquiryPreviousLink.onclick = null;
-
-            if (responses.next) {
-                inquiryNextBtn.classList.remove('disabled');
-                inquiryNextLink.setAttribute("onClick", "inquiryNext()");
-            } else {
-                inquiryNextBtn.classList.add('disabled');
-                inquiryNextLink.onclick = null;
-            }
         }
-    })
-});
-
-function inquiryPageNum(pageNo) {
-
+    }
 }
 
-function inquiryPrevious() {
-    $.ajax({
-        url: "/inquiries/products/" + pathInquiryVariable,
-        data: {
-            page: currentInquiryPageNo - 1,
-            size: 10
-        },
-        type: "get",
-        async: true,
-        dateType: "JSON",
 
-        success: function (responses) {
-            inquiryList.forEach((inquiry) => {
-                inquiry.innerHTML = "";
-            })
-            console.log(responses);
+function callInquiryInfo(response) {
+    let displayed = "";
+    if (response.inquiryDisplayed == true) {
+        displayed = "공개 문의글";
+    } else {
+        displayed = "비공개 문의글";
+    }
+    document.getElementById("inquiryQuestionDisplayed").textContent = displayed;
+    document.getElementById("inquiryQuestionType").textContent = response.inquiryStateCodeName;
+    document.getElementById("inquiryQuestionNickname").textContent = response.memberNickname;
+    document.getElementById("inquiryQuestionCreatedAt").textContent = response.createdAt[0] + "/" + response.createdAt[1] + "/" + response.createdAt[2] + " " +
+        response.createdAt[3] + ":" + response.createdAt[4] + ":" + response.createdAt[5];
+    document.getElementById("inquiryQuestionTitle").textContent = response.inquiryTitle;
+    document.getElementById("inquiryViewer").innerText = "";
+    inquiryViewer = toastui.Editor.factory({
+        el: document.querySelector('#inquiryViewer'),
+        viewer: true
+    });
+    inquiryViewer.setMarkdown(response.inquiryContent);
 
-            // responses.content.forEach((response, index) => {
-            //     inquiryList[index].innerHTML = response.memberNickname + '<br/>' +
-            //         response.createdAt[0] + '/' + response.createdAt[1] + '/' + response.createdAt[2] + ' ' +
-            //         response.createdAt[3] + ':' + response.createdAt[4] + ':' + response.createdAt[5] + '  ' + '<br/>' + response.reviewContent +
-            //         "<div className='col-sm-2' style='text-align: right'>" +
-            //         "<img src=\"" + response.imagePath +
-            //         " \"style='width: 10%; height: auto'" + "onerror=\"this.onerror=null; this.src='/static/image.review/no-image.png'\">" +
-            //         "</div>";
-            // })
-
-            currentInquiryPageNo -= 1;
-            totalInquiryPages = responses.totalPages;
-
-            if (responses.previous) {
-                inquiryPreviousBtn.classList.remove('disabled');
-                inquiryPreviousLink.setAttribute("onClick", "inquiryPrevious()");
-            } else {
-                inquiryPreviousBtn.classList.add('disabled');
-                inquiryPreviousLink.onclick = null;
-            }
-
-            if (responses.next) {
-                inquiryNextBtn.classList.remove('disabled');
-                inquiryNextLink.setAttribute("onClick", "inquiryNext()");
-            } else {
-                inquiryNextBtn.classList.add('disabled');
-                inquiryNextLink.onclick = null;
-            }
-        }
+    document.getElementById("answerTable").innerText = "";
+    response.childInquiries.forEach(function (child, index) {
+        document.getElementById("answerTable").innerHTML =
+            document.getElementById("answerTable").innerHTML + 'ㄴ <table class="table table-striped table-bordered"><tr><td width="50%">답변 제목</td><td>관리자</td>' +
+            '<td>답변 일자 : <span>' + child.createdAt[0] + '/' + child.createdAt[1] + '/' + child.createdAt[2] + " " + child.createdAt[3] + ':' + child.createdAt[4] + ':' + child.createdAt[5] + '</span></td></tr> <tr> <td colspan="3">' +
+            '<div>' + child.inquiryTitle + '</div></td></tr><tr><td colspan="3">답변 내용</td> </tr> <tr>' +
+            '<td colspan="3"><div class="viewerGroup" id="inquiryAnswerViewer' + index + '"></div>' +
+            // '<p id="childContent' + index + '" style="display: none" text="' + ${answer.inquiryContent}">'
+            '</td></tr></table>';
     })
-}
 
-function inquiryNext() {
-    $.ajax({
-        url: "/inquiries/products/" + pathInquiryVariable,
-        data: {
-            page: currentInquiryPageNo + 1,
-            size: 10
-        },
-        type: "get",
-        async: true,
-        dateType: "JSON",
+    response.childInquiries.forEach(function (child, index) {
+        window['inquiryAnswerViewer' + index] = toastui.Editor.factory({
+            el: document.getElementById('inquiryAnswerViewer' + index),
+            viewer: true
+        });
+        window['inquiryAnswerViewer' + index].setMarkdown(child.inquiryContent);
+    });
 
-        success: function (responses) {
-            inquiryList.forEach((inquiry) => {
-                inquiry.innerHTML = "";
-            })
-
-            // responses.content.forEach((response, index) => {
-            //     inquiryList[index].innerHTML = response.memberNickname + '<br/>' +
-            //         response.createdAt[0] + '/' + response.createdAt[1] + '/' + response.createdAt[2] + ' ' +
-            //         response.createdAt[3] + ':' + response.createdAt[4] + ':' + response.createdAt[5] + '  ' + '<br/>' + response.reviewContent +
-            //         "<div className='col-sm-2' style='text-align: right'>" +
-            //         "<img src=\"" + response.imagePath +
-            //         " \"style='width: 10%; height: auto'" + "onerror=\"this.onerror=null; this.src='/static/image.review/no-image.png'\">" +
-            //         "</div>";
-            // })
-            currentInquiryPageNo += 1;
-            totalInquiryPages = responses.totalPages;
-
-            if (responses.previous) {
-                inquiryPreviousBtn.classList.remove('disabled');
-                inquiryPreviousLink.setAttribute("onClick", "inquiryPrevious()");
-            } else {
-                inquiryPreviousBtn.classList.add('disabled');
-                inquiryPreviousLink.onclick = null;
-            }
-
-            if (responses.next) {
-                inquiryNextBtn.classList.remove('disabled');
-                inquiryNextLink.setAttribute("onClick", "inquiryNext()");
-            } else {
-                inquiryNextBtn.classList.add('disabled');
-                inquiryNextLink.onclick = null;
-            }
-        }
-    })
+    $("#inquiryDetail").modal().show();
 }

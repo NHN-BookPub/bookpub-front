@@ -12,7 +12,8 @@
 
     <link rel='stylesheet'
           href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
 </head>
 <body>
 <th:block th:include="mypage/fragments/mypageSidebar"></th:block>
@@ -20,23 +21,93 @@
     <br>
 
     <h1 class="mt-4">상품 문의</h1>
+    <h6> - 상세 조회</h6>
     <hr/>
 
-    <div>
-        <div>
-            공개 여부 :
-            <span th:if="${inquiry.inquiryDisplayed}" th:text="공개"></span>
-            <span th:unless="${inquiry.inquiryDisplayed}" th:text="비공개"></span>
-            <br/>
-            문의 유형 :
-            <span th:text="${inquiry.inquiryStateCodeName}"></span>
-            <br/>
-            제목 :
-            <span th:text="${inquiry.inquiryTitle}"></span>
-            <br/>
-        </div>
-        <div id="viewer"></div>
+    <div style="width: 95%; margin: auto">
+        <table style="width: 100%" class="table table-striped table-bordered">
+            <tbody>
+            <tr>
+                <td colspan="2">
+                    <span th:if="${inquiry.inquiryDisplayed}">공개 문의글</span>
+                    <span th:unless="${inquiry.inquiryDisplayed}">비공개 문의글</span>
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 60%">
+                    문의 유형 :
+                    <span th:text="${inquiry.inquiryStateCodeName}"></span>
+                </td>
+                <td>
+                    문의일자 :
+                    <span th:text="${#temporals.format(inquiry.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    문의 제목
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <span th:text="${inquiry.inquiryTitle}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    문의 내용
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="viewer"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
     </div>
+    <div style="float: right; margin-right: 3%">
+        <form th:action="@{/members/inquiries/{inquiryNo}/cancel(inquiryNo=${inquiry.inquiryNo})}" method="post">
+            <button type="submit" class="btn btn-outline-danger" th:text="삭제"></button>
+        </form>
+
+    </div>
+    <br/>
+    <br/>
+    <hr/>
+
+    <div style="width:90%; margin-left: auto; margin-right: 3%;">
+        <div th:each="answer, stat : ${inquiry.childInquiries}">
+            <div style="display: flex">
+                <h4 style="display: inline">ㄴ&nbsp;</h4>
+                <table class="table table-striped table-bordered">
+                    <tr>
+                        <td width="60%">답변 제목</td>
+                        <td>관리자</td>
+                        <td>답변 일자 : <span
+                                th:text="${#temporals.format(answer.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div th:text="${answer.inquiryTitle}"></div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">답변 내용</td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div class="viewerGroup" th:id="viewer + ${stat.index}"></div>
+                            <p th:id="childContent + ${stat.index}" style="display: none"
+                               th:text="${answer.inquiryContent}">
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
 </div>
 
 <p id="question-hidden" style="display: none" th:text="${inquiry.inquiryContent}"></p>
@@ -50,7 +121,7 @@
         data-stencil-namespace="ionicons"></script>
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="/static/js/mypage/main.js"></script>
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 <script src="/static/js/inquiry/mypage-inquirydetail.js"></script>
 </body>
 </html>
