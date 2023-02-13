@@ -7,7 +7,6 @@ import com.nhnacademy.bookpub.bookpubfront.inquiry.dto.response.GetInquirySummar
 import com.nhnacademy.bookpub.bookpubfront.inquiry.dto.response.GetInquirySummaryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import org.springframework.data.domain.Pageable;
-import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -16,7 +15,6 @@ import org.springframework.web.multipart.MultipartFile;
  * @author : 정유진
  * @since : 1.0
  **/
-@Component
 public interface InquiryAdaptor {
     /**
      * 해당 회원이 해당 상품을 구매한 이력이 있는지 확인하기 위한 메서드입니다.

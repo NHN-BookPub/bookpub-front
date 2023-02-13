@@ -8,7 +8,6 @@ import com.nhnacademy.bookpub.bookpubfront.inquirystatecode.service.InquiryState
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
@@ -25,7 +24,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author : 정유진
  * @since : 1.0
  **/
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 public class InquiryController {

@@ -10,7 +10,6 @@ import com.nhnacademy.bookpub.bookpubfront.inquiry.dto.response.GetInquirySummar
 import com.nhnacademy.bookpub.bookpubfront.inquiry.dto.response.GetInquirySummaryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -30,7 +29,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author : 정유진
  * @since : 1.0
  **/
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class InquiryAdaptorImpl implements InquiryAdaptor {
@@ -116,7 +114,6 @@ public class InquiryAdaptorImpl implements InquiryAdaptor {
                 new HttpEntity<>(body, makeHeader(MediaType.MULTIPART_FORM_DATA)),
                 String.class
         );
-        log.info(response.getBody());
 
         return response.getBody();
     }
