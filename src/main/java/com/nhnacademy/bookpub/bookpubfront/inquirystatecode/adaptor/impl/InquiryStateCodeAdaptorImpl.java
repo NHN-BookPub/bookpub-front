@@ -26,6 +26,9 @@ public class InquiryStateCodeAdaptorImpl implements InquiryStateCodeAdaptor {
 
     private static final String INQUIRY_STATE_CODE_URL = "/api/inquiry-state-codes";
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<GetInquiryStateCodeResponseDto> requestInquiryStateCodeForMember() {
         String url = GateWayConfig.getGatewayUrl() + INQUIRY_STATE_CODE_URL

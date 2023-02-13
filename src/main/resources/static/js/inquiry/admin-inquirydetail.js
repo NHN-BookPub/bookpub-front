@@ -29,15 +29,37 @@ for (let i = 0; i < childGroup.length; i++) {
     window['viewer' + i].setMarkdown(document.getElementById('childContent' + i).textContent);
 }
 
-// // tui editor 이미지 저장 함수
-// editor.addHook("addImageBlobHook", function(callback){
-//
-//     // !!!!! 여기서 이미지를 받아와서 이미지 주소를 받아오고 (ajax 등으로)
-//     // callback의 인수로 넣으시면 됩니다.
-//     callback("콜백으로 받아온 이미지 URL")
-// })
-// // 텍스트 가지고 오기
-// console.log(editor.getMarkdown())
+var imagePathList = [];
+let imagePath;
+// tui editor 이미지 저장 함수
+editor.addHook("addImageBlobHook", function (blob, callback) {
+    const formData = new FormData();
+    formData.append('image', blob);
+
+    $.ajax({
+        url: "/inquiries/image/save",
+        type: "post",
+        async: true,
+        contentType: false,
+        processData: false,
+        enctype: 'multipart/form-data',
+        data: formData,
+        success: function (response) {
+            let tmpText = "";
+            imagePath = response;
+            callback(imagePath);
+            imagePathList.push(imagePath);
+            imagePathList.forEach((path) => {
+                tmpText += (path + "$");
+            })
+            document.getElementById("imagePathList").value = tmpText;
+        }
+    })
+})
+
+
+// 텍스트 가지고 오기
+console.log(editor.getMarkdown())
 
 
 function checkInfo() {

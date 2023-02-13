@@ -13,7 +13,8 @@
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link href="/static/css/review/star.css" rel="stylesheet"/>
 
-    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -409,43 +410,118 @@
         <h3>문의</h3>
         <br/>
         <table class="table table-bordered">
-            <tr id="inquirytest1"></tr>
-            <tr id="inquirytest2"></tr>
-            <tr id="inquirytest3"></tr>
-            <tr id="inquirytest4"></tr>
-            <tr id="inquirytest5"></tr>
-            <tr id="inquirytest6"></tr>
-            <tr id="inquirytest7"></tr>
-            <tr id="inquirytest8"></tr>
-            <tr id="inquirytest9"></tr>
-            <tr id="inquirytest10"></tr>
+            <thead>
+            <tr>
+                <th style="width: 40%">문의 제목</th>
+                <th>닉네임</th>
+                <th>문의 날짜</th>
+                <th>답변 여부</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="inquiry : ${inquiryList}">
+                <td>
+                    <div style="color: #0a53be; cursor:pointer;" th:text="${inquiry.inquiryTitle}"
+                         th:onclick="|javascript:inquiryInfo('${inquiry.inquiryNo}','${memberNo}','${inquiry.inquiryDisplayed}')|"></div>
+                </td>
+                <td th:text="${inquiry.memberNickname}"></td>
+                <td th:text="${inquiry.createdAt}"></td>
+                <td th:text="${inquiry.inquiryAnswered} ? '답변 완료' : '답변 미완료'"></td>
+            </tr>
+            </tbody>
         </table>
+
 
         <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-                <li class="page-item" id="inquiryPreviousBtn">
-                    <a class="page-link" id="inquiryPreviousLink" onclick="inquiryPrevious()">Previous</a>
+                <li class="page-item" th:classappend="${!inquiryIsPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/products/{productNo}?(productNo=${product.productNo}, inquiryPage=(${inquiryCurrentPage}-1))}">Previous</a>
                 </li>
-                <!--                <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?-->
-                <!--                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">-->
-                <!--                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">-->
-                <!--                        <a class="page-link" th:href="@{/admin/coupon/coupon-templates?(page=(${page-1}))}"-->
-                <!--                           th:text="${page}"></a></li>-->
-                <!--                </th:block>-->
-                <li class="page-item" id="inquiryNextBtn">
-                    <a class="page-link" id="inquiryNextLink" onclick="inquiryNext()">Next</a>
+                <th:block th:with="start=${(inquiryCurrentPage/inquiryPageButtonNum)*inquiryPageButtonNum + 1}, end=(${(inquiryTotalPages == 0) ?
+                                 1 : (start + (inquiryPageButtonNum - 1) < inquiryTotalPages ? start + (inquiryPageButtonNum - 1) : inquiryTotalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link"
+                           th:href="@{/products/{productNo}?(productNo=${product.productNo}, inquiryPage=(${page-1}))}"
+                           th:text="${page}"></a></li>
+                </th:block>
+                <li class="page-item" th:classappend="${!inquiryIsNext} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="@{/products/{productNo}?(productNo=${product.productNo}, inquiryPage=(${inquiryCurrentPage}+1))}">Next</a>
                 </li>
             </ul>
         </nav>
     </div>
 
-    <p id="editor-hidden" style="display: none" th:text="${product.productDescription}"></p>
-    <!-- FOOTER -->
-    <!-- /FOOTER -->
+    <!-- modal -->
+    <div class="modal fade" id="inquiryDetail" data-backdrop="static" tabindex="-1" role="dialog"
+         aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">문의 상세</h5>
+                </div>
+                <div class="modal-body">
+                    <table style="width: 100%" class="table table-striped table-bordered">
+                        <tbody>
+                        <tr>
+                            <td colspan="3"><span id="inquiryQuestionDisplayed"></span></td>
+                        </tr>
+                        <tr>
+                            <td style="width: 40%">
+                                문의 유형 :
+                                <span id="inquiryQuestionType"></span>
+                            </td>
+                            <td>
+                                문의자 닉네임 :
+                                <span id="inquiryQuestionNickname"></span>
+                            </td>
+                            <td>
+                                문의일자 :
+                                <span id="inquiryQuestionCreatedAt"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                문의 제목
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <span id="inquiryQuestionTitle"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                문의 내용
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="3">
+                                <div id="inquiryViewer"></div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <hr/>
+
+                    <div id="answerTable">
+                    </div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<p id="editor-hidden" style="display: none" th:text="${product.productDescription}"></p>
+<!-- FOOTER -->
+<!-- /FOOTER -->
 
 </div>
 <th:block th:include="main/fragments/rootFooter"></th:block>
-
 </body>
 <!-- jQuery Plugins -->
 <script src="/static/js/main/jquery.min.js"></script>
@@ -456,7 +532,7 @@
 <script src="/static/js/main/main.js"></script>
 <script src="/static/js/review/product-review.js"></script>
 <script src="/static/js/inquiry/product-inquiry.js"></script>
-<script src="https://uicdn.toast.com/editor/latest/toastui-editor-viewer.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
 
 
 <script>
@@ -530,10 +606,7 @@
         }
     }
 
-
-    const Editor = toastui.Editor;
-
-    const viewer = new Editor({
+    const viewer = toastui.Editor.factory({
         el: document.querySelector('#viewer'),
         viewer: true
     });

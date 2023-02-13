@@ -28,9 +28,9 @@
     <div id="layoutSidenav_content">
         <main>
             <div class="container-fluid px-4">
-                <h1 class="mt-4">상품문의 조회</h1>
+                <h1 class="mt-4">불량상품문의 조회</h1>
                 <ol class="breadcrumb mb-4">
-                    <li class="breadcrumb-item active"> - 회원들의 상품문의 조회</li>
+                    <li class="breadcrumb-item active"> - 회원들의 불량상품 문의 조회</li>
                 </ol>
 
                 <hr/>
@@ -41,32 +41,8 @@
             <div class="card mb-4">
                 <div class="card-header">
                     <i class="fas fa-table me-1"></i>
-                    상품문의 목록
+                    불량상품문의 목록
                 </div>
-
-                <form action="/admin/inquiries" method="get"
-                      class="d-none d-md-inline-block form-inline ms-auto me-0 me-md-3 my-2 my-md-0">
-                    <div class="input-group">
-                        <select name="searchKeyFir">
-                            <option value="">--검색 조건1 선택--</option>
-                            <option value="category">상품 카테고리</option>
-                        </select>
-                        <input class="form-control" type="text" name="searchValueFir" placeholder="조건1 입력"
-                               aria-label="Search for..."
-                               aria-describedby="btnNavbarSearch"/>
-                        <select name="searchKeySec">
-                            <option value="">--검색 조건2 선택--</option>
-                            <option value="productTitle">상품명</option>
-                            <option value="productIsbn">상품 ISBN</option>
-                            <option value="inquiryTitle">질문</option>
-                        </select>
-                        <input class="form-control" type="text" name="searchValueSec" placeholder="조건2 입력"
-                               aria-label="Search for..."
-                               aria-describedby="btnNavbarSearch"/>
-                        <button class="btn btn-primary" id="btnNavbarSearch" type="submit"><i class="fas fa-search"></i>
-                        </button>
-                    </div>
-                </form>
 
                 <div class="card-body">
                     <table class="table table-striped">
@@ -81,7 +57,7 @@
                         </thead>
                         <tbody>
 
-                        <tr th:each="inquiry: ${inquiryList}">
+                        <tr th:each="inquiry: ${errorInquiryList}">
                             <td style="text-align: center">
                                 <span th:text="${inquiry.inquiryStateCodeName}"></span>
                             </td>
@@ -131,17 +107,17 @@
                         <ul class="pagination justify-content-center">
                             <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                                 <a class="page-link"
-                                   th:href="@{/admin/inquiries?(page=(${currentPage}-1))}">Previous</a>
+                                   th:href="@{/admin/error-inquiries?(page=(${currentPage}-1))}">Previous</a>
                             </li>
                             <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                                    <a class="page-link" th:href="@{/admin/inquiries?(page=(${page-1}))}"
+                                    <a class="page-link" th:href="@{/admin/error-inquiries?(page=(${page-1}))}"
                                        th:text="${page}"></a></li>
                             </th:block>
                             <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                                 <a class="page-link"
-                                   th:href="@{/admin/inquiries?(page=(${currentPage}+1))}">Next</a>
+                                   th:href="@{/admin/error-inquiries?(page=(${currentPage}+1))}">Next</a>
                             </li>
                         </ul>
                     </nav>
@@ -157,8 +133,6 @@
         crossorigin="anonymous"></script>
 <script src="/static/js/admin/scripts.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="/static/js/admin/chart-area-demo.js"></script>
-<script src="/static/js/admin/chart-bar-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 <script src="/static/js/admin/datatables-simple-demo.js"></script>
 </body>

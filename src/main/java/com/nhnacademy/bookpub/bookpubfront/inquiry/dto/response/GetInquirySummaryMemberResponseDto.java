@@ -4,7 +4,7 @@ import java.time.LocalDateTime;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 마이페이지의 상품문의 간단한 정보 조회를 위한 dto.
  *
  * @author : 정유진
  * @since : 1.0
