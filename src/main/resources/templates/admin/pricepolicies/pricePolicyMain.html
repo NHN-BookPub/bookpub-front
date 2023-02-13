@@ -41,7 +41,7 @@
                   <span class="gap">|</span>
                   <span class="order_num">정책 명 <span class="num" th:text="${policy.getPolicyName()}"></span></span>
                   <span class="gap">|</span>
-                  <span class="order_num">설정 가격 <span class="num" th:text="${policy.getPolicyFee()}"></span></span>
+                  <span class="order_num">설정 가격 <span class="num" th:text="${#numbers.formatInteger(policy.getPolicyFee(),0,'COMMA')}"></span></span>
                 </div>
               </div>
             </div>

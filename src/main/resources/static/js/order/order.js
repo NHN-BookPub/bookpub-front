@@ -46,15 +46,6 @@ function usePoint() {
         usePoint = useUserPoint.value;
     }
 
-    let couponDiscount = document.getElementById("couponDiscount");
-    let value = parsingNumber(couponDiscount.innerText);
-
-    // if (value === '0') {
-    //     alert("쿠폰을 먼저 적용해주세요!")
-    //     relievedPoint.innerText = "0";
-    //     useUserPoint.value = 0;
-    // } else
-
     if (parseInt(userPoint) < usePoint) {
         alert("포인트가 부족합니다.")
         relievedPoint.innerText = "0";
@@ -485,6 +476,10 @@ document.addEventListener("DOMContentLoaded", function () {
     totalCnt.innerText = count.toString() + "개";
 
     let shipAmount = document.getElementById("shipAmount")
+
+    if (parseInt(parsingNumber(commodity.innerText)) > 30000) {
+        shipAmount.innerText = '0'
+    }
 
     totalPrice += parseInt(parsingNumber(shipAmount.innerText))
     totalAmount.innerText = parseKRW(totalPrice.toString());

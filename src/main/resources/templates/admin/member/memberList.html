@@ -49,7 +49,7 @@
                             <td th:text="${member.birthYear}"></td>
                             <td th:text="${member.birthMonth}"></td>
                             <td th:text="${member.email}"></td>
-                            <td th:text="${member.point}"></td>
+                            <td th:text="${#numbers.formatInteger(member.point,0,'COMMA')}"></td>
                             <td th:text="${member.isSocial}"></td>
                             <td th:text="${member.isDeleted}"></td>
                             <td>
