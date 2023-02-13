@@ -1,9 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.main.controller;
 
 import static com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils.CART_COOKIE;
-import static com.nhnacademy.bookpub.bookpubfront.state.ProductType.BEST_SELLER;
-import static com.nhnacademy.bookpub.bookpubfront.state.ProductType.NEW;
-
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
@@ -11,6 +8,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
+import com.nhnacademy.bookpub.bookpubfront.state.ProductType;
 import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
 import java.util.List;
 import java.util.Objects;
@@ -68,10 +66,14 @@ public class MainController {
         }
 
         List<GetProductByTypeResponseDto> bestSellers =
-                productService.findProductsByType(BEST_SELLER.getTypeNo(), LIMIT);
+                productService.findProductsByType(ProductType.POPULAR.getTypeNo(), LIMIT);
 
         List<GetProductByTypeResponseDto> newBooks =
-                productService.findProductsByType(NEW.getTypeNo(), LIMIT);
+                productService.findProductsByType(ProductType.DISCOUNT.getTypeNo(), LIMIT);
+
+        List<GetProductByTypeResponseDto> recommends =
+                productService.findProductsByType(ProductType.RECOMMENDATION.getTypeNo(), LIMIT);
+
 
         if (Objects.nonNull(cookie)) {
             cartUtils.getCountInCart(cookie.getValue(), model);
@@ -83,6 +85,7 @@ public class MainController {
         categoryUtils.categoriesView(model);
         model.addAttribute("bestSellers", bestSellers);
         model.addAttribute("newBooks", newBooks);
+        model.addAttribute("recommends", recommends);
         model.addAttribute("order", order);
 
         return "main/root";
