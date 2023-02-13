@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.wishlist.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
-import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.CreateWishlistRequestDto;
@@ -33,9 +32,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class WishlistController {
 
     private final WishlistService wishlistService;
-    private final MemberService memberService;
     private final MemberUtils memberUtils;
-    private static final String MEMBER = "member";
 
     /**
      * 멤버별 위시리스트 view controller.

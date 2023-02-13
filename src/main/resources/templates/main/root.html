@@ -55,7 +55,7 @@
                     </div>
                     <div class="shop-body">
                         <h3>Subscription<br>Collection</h3>
-                        <a href="#" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
+                        <a href="/subscribes" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
                     </div>
                 </div>
             </div>
@@ -206,7 +206,7 @@
                                             <del class="product-old-price"
                                                  th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></del>
                                             <h4 id="money" class="product-price"
-                                                th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></h4>
+                                                th:text="|${#numbers.formatInteger(bestSeller.salesPrice, 0, 'COMMA')}원|"></h4>
                                             <div class="product-rating">
                                                 <i class="fa fa-star"></i>
                                                 <i class="fa fa-star"></i>

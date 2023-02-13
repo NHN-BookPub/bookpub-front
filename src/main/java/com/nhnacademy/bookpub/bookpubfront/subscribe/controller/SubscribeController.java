@@ -1,6 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.subscribe.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
+import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
+import com.nhnacademy.bookpub.bookpubfront.review.service.ReviewService;
 import com.nhnacademy.bookpub.bookpubfront.subscribe.dto.request.CreateSubscribeRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.subscribe.dto.request.ModifySubscribeRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.subscribe.dto.response.GetSubscribeDetailResponseDto;
@@ -32,6 +35,8 @@ import org.springframework.web.multipart.MultipartFile;
 @RequiredArgsConstructor
 public class SubscribeController {
     private final SubscribeService service;
+    private final ProductService productService;
+    private final ReviewService reviewService;
 
     private static final String RE_SUBSCRIBE = "redirect:/admin/subscribes";
 
@@ -98,7 +103,7 @@ public class SubscribeController {
     /**
      * 구독상세조회
      *
-     * @param subscribeNo  구독번호
+     * @param subscribeNo 구독번호
      * @param model       모델
      * @return the string
      */
@@ -123,8 +128,7 @@ public class SubscribeController {
     @Auth
     @PostMapping("/admin/subscribes-removed/{subscribeNo}")
     public String subscribeDelete(@PathVariable("subscribeNo") Long subscribeNo,
-                                  @RequestParam("deleted") boolean deleted,
-                                  Model model) {
+                                  @RequestParam("deleted") boolean deleted) {
         service.deleteSubscribe(subscribeNo, deleted);
         return RE_SUBSCRIBE;
     }
@@ -169,11 +173,39 @@ public class SubscribeController {
      */
     @GetMapping("/subscribes")
     public String mainSubscribes(@PageableDefault Pageable pageable,
-                                 Model model){
-        PageResponse<GetSubscribeResponseDto> subscribes = service.getSubscribeList(pageable);
-        model.addAttribute("subscribes", subscribes);
+                                 Model model) {
 
-        return null;
+        PageResponse<GetSubscribeResponseDto> subscribes = service.getSubscribeList(pageable);
+        model.addAttribute("content", subscribes.getContent());
+        model.addAttribute("next", subscribes.isNext());
+        model.addAttribute("previous", subscribes.isPrevious());
+        model.addAttribute("totalPage", subscribes.getTotalPages());
+        model.addAttribute("pageNum", subscribes.getNumber());
+        model.addAttribute("previousPageNo", subscribes.getNumber() - 1);
+        model.addAttribute("nextPageNo", subscribes.getNumber() + 1);
+        model.addAttribute("size", pageable.getPageSize());
+        model.addAttribute("uri", "/subscribes");
+        return "subscription/subscribeMain";
     }
 
+    /**
+     * 구독상세페이지
+     *
+     * @param subscribeNo 구독번호
+     * @param model       the model
+     * @return the string
+     */
+    @GetMapping("/subscribes/{subscribeNo}")
+    public String subscribeDetail(@PathVariable("subscribeNo") Long subscribeNo,
+                                  Model model) {
+
+        GetSubscribeDetailResponseDto subscribe = service.getSubscribeDetail(subscribeNo);
+        Long productNo = subscribe.getProductLists().get(0).getProductNo();
+        GetProductDetailResponseDto product = productService.findProduct(productNo);
+
+        model.addAttribute("subscribe", subscribe);
+        model.addAttribute("product", product);
+        model.addAttribute("reviewInfo", reviewService.getProductReviewInfo(productNo));
+        return "subscription/subscribeDetail";
+    }
 }

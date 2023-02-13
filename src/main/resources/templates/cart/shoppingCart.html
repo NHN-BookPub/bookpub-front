@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -22,7 +24,7 @@
 <th:block th:include="main/fragments/rootHeader"></th:block>
 
 
-<div class="container" style="padding-top: 3%; height: 1000px">
+<div class="container" style="padding-top: 3%; padding-bottom: 5%">
     <h2 class="text-center">장바구니</h2>
 
     <table class="table">
@@ -35,6 +37,7 @@
             <th class="text-center" style="width:10%">정가</th>
             <th class="text-center" style="width:10%">수량</th>
             <th class="text-center" style="width:20%">판매가</th>
+            <th class="text-center" style="width:20%">비고</th>
         </tr>
         </thead>
         <tbody id="cart">
@@ -45,7 +48,13 @@
                 <b id="productNo" th:text="${product.productNo}" style="display: none"></b>
                 <div class="row">
                     <div class="col-sm-2">
-                        <img class="img-thumbnail" src="https://dummyimage.com/450x300/dee2e6/6c757d.jpg" alt="..."/>
+                        <div th:if="${product.thumbnail} != null">
+                            <img width="200px" height="400px" th:src="${product.thumbnail}" alt=""
+                                 class="img-thumbnail cursor">
+                        </div>
+                        <div th:unless="${product.thumbnail} != null">
+                            <img src="/static/img/main/no-image.png" alt="" class="img-thumbnail cursor">
+                        </div>
                     </div>
 
                     <div class="col-sm-10">
@@ -54,25 +63,36 @@
                     </div>
                 </div>
             </td>
-            <td th:text="${#numbers.formatInteger(product.productPrice,0,'COMMA')} + '원'"></td>
+            <td style="text-align: right" th:text="|${#numbers.formatInteger(product.productPrice, 0, 'COMMA')}원|"></td>
             <td>
                 <input type="number" id="num" name="number" min="1" max="99" value="1" class="form-control text-right">
             </td>
-            <td th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')} + '원'"></td>
+            <td style="text-align: right" th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></td>
+            <td style="text-align: center">
+                <form th:action="@{/cart/{productNo}(productNo=${product.productNo})}" method="post">
+                    <button class="btn btn-warning">
+                        삭제
+                    </button>
+                </form>
+            </td>
         </tr>
         </tbody>
         <tfoot>
         <tr>
-            <td><a href="/" class="btn btn-warning"><i class="fa fa-angle-left"></i> 계속 쇼핑하기</a></td>
-            <td colspan="3" class="hidden-xs"></td>
+            <td><a href="/" class="btn" style="background-color: #fff7ce">
+                <i class="fa fa-angle-left"></i> 계속 쇼핑하기</a></td>
+            <td colspan="4" class="hidden-xs"></td>
 
             <td>
-                <button class="btn btn-primary btn-block" type="submit" onclick="order()"> 주문하기 <i
-                        class="fa fa-angle-right"></i></button>
+                <button class="btn btn-block" style="background-color: #5055b1; border: 1px solid #5055b1; color: #fff"
+                        type="submit" onclick="order()"> 주문하기
+                    <i class="fa fa-angle-right"></i></button>
             </td>
         </tr>
         </tfoot>
     </table>
+
+    <i style="float: right; text-align: right; font-size: 14px; color: #ababb2">장바구니 상품은 24시간(하루)동안만 저장됩니다.</i>
 
 
 </div>

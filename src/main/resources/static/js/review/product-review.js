@@ -50,37 +50,23 @@ window.onload = function () {
 
         success: function (responses) {
             responses.content.forEach((response, index) => {
-                reviewList[index].innerHTML = response.memberNickname + '<br/>' +
+                var percent = Number(response.reviewStar) * 20.0;
+                reviewList[index].innerHTML =
+                    "<div class='star-ratings'><div class='star-ratings-fill space-x-2 text-sm reviewView'" +
+                    " style='width:" + percent + "%;'>" +
+                    "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
+                    "</div>" +
+                    "<div class='star-ratings-base space-x-2 text-sm reviewView'>" +
+                    "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
+                    "</div></div>" +
+                    response.memberNickname + '<br/>' +
                     response.createdAt[0] + '/' + response.createdAt[1] + '/' + response.createdAt[2] + ' ' +
                     response.createdAt[3] + ':' + response.createdAt[4] + ':' + response.createdAt[5] + '  ' + '<br/>' + response.reviewContent +
                     "<div className='col-sm-2' style='text-align: right'>" +
                     "<img src=\"" + response.imagePath +
                     " \"style='width: 10%; height: auto'" + "onerror=\"this.onerror=null; this.src='/static/image.review/no-image.png'\">" +
                     "</div>";
-                //     = "<td><div className='row'> <div className='col-sm-9'> <div className='row' style='padding-left: 3%'>" +
-                //                 "<div className='star-ratings'> <div className='star-ratings-fill space-x-2 text-sm reviewView'" +
-                //                          "th:with='percent='" + response.reviewStar + "* 20" +
-                //                          "th:style='width: + ${percent} + %'>" +
-                //                         "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
-                //                     "</div>" +
-                //                     "<div className='star-ratings-base space-x-2 text-sm reviewView'>" +
-                //                         "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
-                //                     "</div>" +
-                //                 "</div>" +
-                //                 "<span>" + response.reviewStar +"</span>" +
-                //                 "<span>" + response.created_at + "</span>" +
-                //                 "<div>" +
-                //                     response.reviewContent +
-                //                 "</div>" +
-                //             "</div>" +
-                //         "</div>" +
-                //         "<div className='col-sm-2' style='text-align: right'>" +
-                //             "<img src='/static/image.review/no-image.png' style='width: 90%; height: auto'>" +
-                //         "</div>" +
-                //     "</div>"
-                //     response.memberNickname + response.reviewStar + response.reviewContent;
             })
-            console.log(responses);
 
             currentPageNo = 0;
             totalPages = responses.totalPages;
@@ -121,14 +107,23 @@ function reviewPrevious() {
             console.log(responses);
 
             responses.content.forEach((response, index) => {
-                reviewList[index].innerHTML = response.memberNickname + '<br/>' +
+                var percent = Number(response.reviewStar) * 20.0;
+                reviewList[index].innerHTML =
+                    "<div class='star-ratings'><div class='star-ratings-fill space-x-2 text-sm reviewView'" +
+                    " style='width:" + percent + "%;'>" +
+                    "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
+                    "</div>" +
+                    "<div class='star-ratings-base space-x-2 text-sm reviewView'>" +
+                    "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
+                    "</div></div>" +
+                    response.memberNickname + '<br/>' +
                     response.createdAt[0] + '/' + response.createdAt[1] + '/' + response.createdAt[2] + ' ' +
                     response.createdAt[3] + ':' + response.createdAt[4] + ':' + response.createdAt[5] + '  ' + '<br/>' + response.reviewContent +
                     "<div className='col-sm-2' style='text-align: right'>" +
                     "<img src=\"" + response.imagePath +
                     " \"style='width: 10%; height: auto'" + "onerror=\"this.onerror=null; this.src='/static/image.review/no-image.png'\">" +
                     "</div>";
-            })
+            });
 
             currentPageNo -= 1;
             totalPages = responses.totalPages;
@@ -169,7 +164,16 @@ function reviewNext() {
             })
 
             responses.content.forEach((response, index) => {
-                reviewList[index].innerHTML = response.memberNickname + '<br/>' +
+                var percent = Number(response.reviewStar) * 20.0;
+                reviewList[index].innerHTML =
+                    "<div class='star-ratings'><div class='star-ratings-fill space-x-2 text-sm reviewView'" +
+                    " style='width:" + percent + "%;'>" +
+                    "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
+                    "</div>" +
+                    "<div class='star-ratings-base space-x-2 text-sm reviewView'>" +
+                    "<span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>" +
+                    "</div></div>" +
+                    response.memberNickname + '<br/>' +
                     response.createdAt[0] + '/' + response.createdAt[1] + '/' + response.createdAt[2] + ' ' +
                     response.createdAt[3] + ':' + response.createdAt[4] + ':' + response.createdAt[5] + '  ' + '<br/>' + response.reviewContent +
                     "<div className='col-sm-2' style='text-align: right'>" +

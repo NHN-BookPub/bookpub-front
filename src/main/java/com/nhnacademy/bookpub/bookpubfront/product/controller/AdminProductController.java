@@ -150,7 +150,7 @@ public class AdminProductController {
             fileMap.put("ebook", ebook);
         }
 
-        productService.createCategory(inputProduct, tagList, fileMap);
+        productService.createProduct(inputProduct, tagList, fileMap);
 
         return REDIRECT;
     }

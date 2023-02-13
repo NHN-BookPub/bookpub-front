@@ -44,4 +44,16 @@ public class CartUtils {
         return Arrays.stream(cart.split("/")).collect(Collectors.toList());
     }
 
+    /**
+     * 현재 장바구니에서 삭제한 상품을 처리할 메서드.
+     *
+     * @param redisKey  Redis Key 값
+     * @param productNo 삭제된 상품 번호
+     */
+    public void deleteProductInCart(String redisKey, Long productNo) {
+        if (Objects.nonNull(redisTemplate.opsForSet().size(redisKey))) {
+            redisTemplate.opsForSet().remove(redisKey, productNo);
+        }
+    }
+
 }
