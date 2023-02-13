@@ -831,7 +831,9 @@
                                              class="img-thumbnail cursor">
                                     </div>
                                     <div th:unless="${relation.filePath} != null">
-                                        <img src="/static/img/main/no-image.png" alt="" class="img-thumbnail cursor">
+                                        <img src="/static/img/main/no-image.png" alt=""
+                                             th:onclick="'location.href=\'' + @{/admin/products/{productNo}(productNo=${relation.productNo})} + '\''  "
+                                             class="img-thumbnail cursor">
                                     </div>
                                 </td>
                                 <td th:text="${relation.title}"></td>

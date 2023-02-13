@@ -19,10 +19,16 @@ import org.springframework.web.client.RestTemplate;
 public class DoorayConfig {
     private final RestTemplate restTemplate;
     private String hookUrl;
+    private String wishlistHookUrl;
 
     @Bean
     public DoorayHookSender doorayHookSender() {
         return new DoorayHookSender(restTemplate, getHookUrl());
+    }
+
+    @Bean
+    public DoorayHookSender doorayHookWishlistAlarmSender() {
+        return new DoorayHookSender(restTemplate, getWishlistHookUrl());
     }
 
     public String getHookUrl() {
@@ -33,5 +39,11 @@ public class DoorayConfig {
         this.hookUrl = hookUrl;
     }
 
+    public String getWishlistHookUrl() {
+        return wishlistHookUrl;
+    }
 
+    public void setWishlistHookUrl(String wishlistHookUrl) {
+        this.wishlistHookUrl = wishlistHookUrl;
+    }
 }

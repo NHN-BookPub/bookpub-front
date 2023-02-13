@@ -18,12 +18,12 @@ import java.util.Set;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -37,7 +37,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 @RequestMapping("/cart")
 @RequiredArgsConstructor
-@Slf4j
 public class CartController {
     private final ProductService productService;
     private final ObjectMapper objectMapper;
@@ -90,6 +89,14 @@ public class CartController {
         redisTemplate.opsForSet().add(cookie.getValue(), productNo);
 
         return productNo;
+    }
+
+    @PostMapping("/{productNo}")
+    public String deleteProductInCart(@PathVariable("productNo") Long productNo,
+                                      @CookieValue(name = CART_COOKIE) String cartRedisKey) {
+        cartUtils.deleteProductInCart(cartRedisKey, productNo);
+
+        return "redirect:/cart";
     }
 
     /**

@@ -1,10 +1,15 @@
 package com.nhnacademy.bookpub.bookpubfront.purchase.service.impl;
 
+import com.nhn.dooray.client.DoorayHook;
+import com.nhnacademy.bookpub.bookpubfront.config.DoorayConfig;
 import com.nhnacademy.bookpub.bookpubfront.purchase.adaptor.PurchaseAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.purchase.dto.request.CreatePurchaseRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.purchase.dto.response.GetPurchaseListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.purchase.service.PurchaseService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetAppliedMemberResponseDto;
+import java.util.List;
+import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +23,7 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class PurchaseServiceImpl implements PurchaseService {
+    private final DoorayConfig doorayConfig;
     private final PurchaseAdaptor purchaseAdaptor;
 
     /**
@@ -30,10 +36,40 @@ public class PurchaseServiceImpl implements PurchaseService {
 
     /**
      * {@inheritDoc}
+     *
+     * @return
      */
     @Override
-    public void createPurchase(CreatePurchaseRequestDto request) {
-        purchaseAdaptor.createPurchase(request);
+    public void createPurchaseAndAlarm(CreatePurchaseRequestDto request) {
+        List<GetAppliedMemberResponseDto> members = purchaseAdaptor.createPurchase(request);
+
+        if (Objects.nonNull(members)) {
+            StringBuilder sb = makingMessage(members);
+            doorayConfig.doorayHookWishlistAlarmSender().send(
+                    DoorayHook.builder()
+                            .botName("wishlist")
+                            .text(sb.toString())
+                            .build()
+            );
+        }
+    }
+
+    /**
+     * 회원들에게 알림 메세지를 만드는 메서드 입니다.
+     *
+     * @param members 위시리스트에 알림을 설정한 멤버들.
+     * @return StringBuilder
+     */
+    private StringBuilder makingMessage(List<GetAppliedMemberResponseDto> members) {
+        StringBuilder sb = new StringBuilder();
+        for (GetAppliedMemberResponseDto member : members) {
+            sb.append("To. ");
+            sb.append(member.getMemberNickname());
+            sb.append("님 '");
+            sb.append(member.getTitle());
+            sb.append("' 책이 입고 되었습니다.\n");
+        }
+        return sb;
     }
 
     /**
