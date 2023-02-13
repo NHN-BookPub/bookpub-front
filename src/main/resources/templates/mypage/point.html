@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>myPage-Point</title>
+    <!-- css -->
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="/static/css/mypage/point.css">
+
+    <!-- js -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script src="/static/js/mypage/point.js"></script>
+
+    <script>
+        function typeAll() {
+            window.location.href = "/members/point?type=1"
+        }
+
+        function typeGet() {
+            window.location.href = "/members/point?type=2"
+        }
+
+        function typeUse() {
+            window.location.href = "/members/point?type=3"
+        }
+    </script>
+</head>
+<body>
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+
+<div id="point-body">
+    <div style="position: relative">
+        <h2 style="border-bottom: 2px solid black;padding: 1rem 0;">포인트</h2>
+    </div>
+    <div class="point-show-gift">
+        <div class="description">
+            <strong>꼭 확인하세요</strong>
+            <div style="margin-top: 12px"></div>
+            <p>상품 주문에 사용된 포인트는 환불되지 않습니다</p>
+            <p>포인트 쿠폰 사용 시 다시 쿠폰으로 되돌릴 수 없습니다</p>
+            <p>리뷰 작성시 포인트가 지급됩니다.</p>
+            <p>등급에 따라 매 달 지급되는 포인트가 다릅니다</p>
+        </div>
+        <div class="point-show">
+            <label>보유 포인트</label>
+            <strong th:text="${#numbers.formatInteger(member.point,0,'COMMA')}+'원'"></strong>
+        </div>
+        <div class="point-gift">
+            <button type="button" class="gift-btn" onclick="modal()">포인트 선물하기</button>
+        </div>
+    </div>
+    <div>
+        <div class="pointList-select-box">
+            <button class="point-select bold" value="1" onclick="typeAll()">전체</button>
+            <button class="point-select bold" value="2" onclick="typeGet()">획득</button>
+            <button class="point-select bold" value="3" onclick="typeUse()">사용</button>
+        </div>
+        <div style="margin-top: 26px; min-height: 763px">
+            <div class="point-tr-header">
+                <div class="point-td-header">포인트</div>
+                <div class="point-td-header">적립 구분</div>
+                <div class="point-td-header">적립 날짜</div>
+            </div>
+            <div class="point-tr-body" th:each="history : ${pointHistories}">
+                <div class="center"
+                     th:text="${history.increased ? '+' + #numbers.formatInteger(history.pointHistoryAmount,0,'COMMA') : '-' + #numbers.formatInteger(history.pointHistoryAmount,0,'COMMA')}"></div>
+                <div class="left" th:text="${history.pointHistoryReason}"></div>
+                <div class="center" th:text="${history.createdAt}"></div>
+            </div>
+        </div>
+    </div>
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="'/members/point?page='+
+                   ${currentPage - 1}+
+                   '&type='+${type}">Previous</a>
+            </li>
+            <th:block th:with="start=${(currentPage/pageButtonNum) * pageButtonNum + 1},
+            end=(${(totalPages == 0) ? 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                    <a class="page-link"
+                       th:href="'/members/point?page='+${page - 1}+'&type='+${type}"
+                       th:text="${page}"></a></li>
+            </th:block>
+            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                <a class="page-link"
+                   th:href="'/members/point?page='+${currentPage + 1}+'&type='+${type}">Next</a>
+            </li>
+        </ul>
+    </nav>
+</div>
+
+<!--주소입력 모달창-->
+<div id="gift" class="modal-overlay2">
+    <div class="modal_box">
+        <h2>포인트 선물하기</h2>
+        <form action="/members/point" method="post" style="width: 100%;" id="gift-form">
+            <input type="hidden" name="memberNo" th:value="${member.memberNo}">
+            <div style="width: 100%">
+                <div class="modal-row">
+                    <div>
+                        <div>선물할 유저 닉네임</div>
+                    </div>
+                    <div>
+                        <div>
+                            <input type="text" id="nickname" name="nickname" placeholder="닉네임을 입력해주세요">
+                            <input type="hidden" id="check" value="0">
+                        </div>
+                    </div>
+                    <button type="button" id="nick-check" onclick="nickCheckFunc()">닉네임 확인</button>
+                </div>
+                <div class="modal-row">
+                    <div>
+                        <div class="has_ip">포인트 액수</div>
+                    </div>
+                    <div>
+                        <div>
+                            <input type="hidden" id="hold-point" th:value="${member.point}">
+                            <input type="number" id="point-amount" name="pointAmount" placeholder="포인트 액수를 적어주세요">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex;justify-content: flex-end;padding: 0 1rem 0 0;">
+                <button type="button" onclick="pointGift()" id="click">선물하기</button>
+            </div>
+        </form>
+    </div>
+</div>
+<!--주소 모달 js-->
+<script>
+    var modal1 = document.getElementById("gift");
+
+    function modal() {
+        modal1.style.display = 'flex';
+    }
+
+    modal1.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay2")) {
+            modal1.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal1.style.display === "flex" && e.key === "Escape") {
+            modal1.style.display = "none"
+        }
+    })
+</script>
+</body>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+</html>
