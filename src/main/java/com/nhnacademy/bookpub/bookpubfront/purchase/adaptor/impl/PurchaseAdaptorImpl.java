@@ -1,11 +1,14 @@
 package com.nhnacademy.bookpub.bookpubfront.purchase.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.purchase.adaptor.PurchaseAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.purchase.dto.request.CreatePurchaseRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.purchase.dto.response.GetPurchaseListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetAppliedMemberResponseDto;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
@@ -40,34 +43,35 @@ public class PurchaseAdaptorImpl implements PurchaseAdaptor {
                         .encode()
                         .toUriString();
 
-        ResponseEntity<PageResponse<GetPurchaseListResponseDto>> response =
-                restTemplate.exchange(url,
-                        HttpMethod.GET,
-                        new HttpEntity<>(makeHeader()),
-                        new ParameterizedTypeReference<>() {
-                        });
-
-        return response.getBody();
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetPurchaseListResponseDto>>() {
+                }
+        ).getBody();
     }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void createPurchase(CreatePurchaseRequestDto request) {
+    public List<GetAppliedMemberResponseDto> createPurchase(CreatePurchaseRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                GateWayConfig.getGatewayUrl() + AUTH_PURCHASE_URL + "/absorption")
+                        GateWayConfig.getGatewayUrl() + AUTH_PURCHASE_URL + "/absorption")
                 .encode()
                 .toUriString();
 
         HttpEntity<CreatePurchaseRequestDto> entity =
                 new HttpEntity<>(request, makeHeader());
 
-        restTemplate.exchange(
-                url,
-                HttpMethod.POST,
-                entity,
-                Void.class);
+        return restTemplate.exchange(
+                        url,
+                        HttpMethod.POST,
+                        entity,
+                        new ParameterizedTypeReference<List<GetAppliedMemberResponseDto>>() {
+                        })
+                .getBody();
     }
 
     /**
