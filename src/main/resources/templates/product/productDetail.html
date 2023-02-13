@@ -557,7 +557,14 @@
                 cancelButtonText: '취소'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
+                    Swal.fire({
+                        timer: 10000,
+                        icon: 'success',
+                        title: '상품이 카트에 담겼습니다.',
+                        text: '즐거운 쇼핑 되세요~',
+                        showConfirmButton: false
+                    })
+
                     $.ajax({
                         type: "post",
                         async: false,
@@ -565,6 +572,8 @@
                         data: {"productNo": productNo},
                         dataType: "json"
                     })
+
+                    // '상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
                 }
 
                 location.reload();
@@ -594,13 +603,14 @@
                 cancelButtonText: '취소'
             }).then((result) => {
                 if (result.isConfirmed) {
-                    Swal.fire('위시리스트에 담겼습니다.', '즐거운 쇼핑 되세요~~~~', 'success')
+                    Swal.fire('위시리스트에 담겼습니다.', '즐거운 쇼핑 되세요~~~~', 'success',)
                     $.ajax({
                         type: "post",
                         url: "/wishlist",
                         dataType: 'json',
                         data: {"memberNo": memberNo, "productNo": productNo}
                     })
+
                 }
             })
         }
