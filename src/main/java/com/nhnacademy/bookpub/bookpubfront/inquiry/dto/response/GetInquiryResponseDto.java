@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Getter;
 
 /**
- * Some description here.
+ * 상품문의 상세 조회를 위한 dto.
  *
  * @author : 정유진
  * @since : 1.0
