@@ -16,7 +16,6 @@
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-    <script src="/static/js/coupon/couponMonth.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
 
 </head>
@@ -58,10 +57,7 @@
                                         <label for="templateNo">이달의 쿠폰으로 등록할 쿠폰템플릿 번호</label>
                                         <input class="col-10" type="text" id="templateNo" placeholder="번호를 입력하세요." name="templateNo" required
                                                oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');">
-                                        <button type="button" class="btn btn-success col-2" onclick="checkTemplateNo()">확인</button>
-                                        <span class="invalid-feedback">
-                                        쿠폰 템플릿 번호를 입력해주세요.
-                                        </span>
+                                        <span class="invalid-feedback">쿠폰 템플릿 번호를 입력해주세요.</span>
                                         <span class="invalid-feedback no-templateNo" style="display: none">없는 쿠폰템플릿 번호입니다.</span>
                                         <input type="hidden" id="templateCheck" value="unChecked">
 
@@ -84,7 +80,7 @@
                                     <br/>
 
                                     <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                                    <button type="submit" class="btn btn-primary" id="submitBtn" disabled="disabled">
+                                    <button type="submit" class="btn btn-primary" id="submitBtn">
                                         등록
                                     </button>
                                 </form>
@@ -197,5 +193,8 @@
 <script src="/static/js/admin/chart-bar-demo.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 <script src="/static/js/admin/datatables-simple-demo.js"></script>
+<script src="/static/js/coupon/couponMonth.js"></script>
+<script src="/static/js/coupon/couponCheck.js"></script>
+
 </body>
 </html>
