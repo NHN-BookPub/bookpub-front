@@ -46,7 +46,9 @@
                 <img th:src="${coupon.templateImage}" alt="...">
                 <div class="caption">
                   <h3 th:text="${coupon.templateName}"></h3>
-                  <a type="button" class="btn btn-warning"
+                  <div style="font-weight: bold" th:id="${coupon.templateNo}"
+                       th:text="${#temporals.format(coupon.openedAt, 'yyyy-MM-dd HH:mm:ss')}"></div>
+                  <a type="button" class="btn btn-warning" style="margin-top: 1rem"
                      th:templateNo="${coupon.templateNo}"
                      th:onclick="clickInfo(this.getAttribute('templateNo'))">발급받기</a>
                 </div>
