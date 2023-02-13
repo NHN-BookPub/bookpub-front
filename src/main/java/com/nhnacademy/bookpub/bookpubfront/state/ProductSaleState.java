@@ -12,8 +12,8 @@ import lombok.Getter;
 @Getter
 public enum ProductSaleState implements States {
     SALE("판매중", true),
-    SOLD_OUT("품절", true),
-    STOP("중단", true);
+    STOP("중단", true),
+    SOLD_OUT("품절", true);
     private final String name;
     private final boolean isUsed;
 
