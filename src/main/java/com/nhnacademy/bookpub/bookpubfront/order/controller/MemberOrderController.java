@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
@@ -51,6 +52,8 @@ public class MemberOrderController {
     private final ProductService productService;
     private final PricePolicyService pricePolicyService;
     private final MemberUtils memberUtils;
+    private final CategoryUtils categoryUtils;
+    private final CartUtils cartUtils;
 
 
     /**
@@ -123,6 +126,7 @@ public class MemberOrderController {
      */
     @GetMapping("/order")
     public String memberOrder(Model model,
+                              @CookieValue(name = CartUtils.CART_COOKIE, required = false) String cartCookie,
                               @CookieValue(name = "orderInfo", required = false) String cart) {
         boolean isLoginUser = false;
         String principal =
@@ -146,6 +150,8 @@ public class MemberOrderController {
         List<GetOrderPolicyResponseDto> orderRequestPolicy
                 = pricePolicyService.getOrderRequestPolicy();
 
+        categoryUtils.categoriesView(model);
+        cartUtils.getCountInCart(cartCookie, model);
         model.addAttribute("packPolicy", orderRequestPolicy.get(PACKING));
         model.addAttribute("shipPolicy", orderRequestPolicy.get(SHIPPING));
 
