@@ -114,7 +114,7 @@ public class SubscribeController {
         model.addAttribute("subscribe", subscribe);
         model.addAttribute("content", subscribe.getProductLists());
 
-        return "/admin/subscribe/subscribesDetail";
+        return "admin/subscribe/subscribesDetail";
     }
 
     /**
@@ -122,7 +122,6 @@ public class SubscribeController {
      *
      * @param subscribeNo 구독번호
      * @param deleted     삭제여부
-     * @param model       모델
      * @return the string
      */
     @Auth
