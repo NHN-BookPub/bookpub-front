@@ -4,7 +4,7 @@ document.addEventListener("DOMContentLoaded", function () {
     for (var i = 0; i < linkList.length; i++) {
         let navLink = new URL(location.href).searchParams
         let param = navLink.get('type')
-        if (param === '') {
+        if (param === null) {
             if (linkList[i].value === '1') {
                 linkList[i].style.fontWeight = 'bold';
                 linkList[i].style.color = 'black';

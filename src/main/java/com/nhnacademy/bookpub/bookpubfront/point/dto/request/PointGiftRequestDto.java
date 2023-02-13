@@ -14,8 +14,6 @@ import lombok.Getter;
 @Getter
 public class PointGiftRequestDto {
     @NotNull
-    private Long memberNo;
-    @NotNull
     private String nickname;
     @NotNull
     private Long pointAmount;

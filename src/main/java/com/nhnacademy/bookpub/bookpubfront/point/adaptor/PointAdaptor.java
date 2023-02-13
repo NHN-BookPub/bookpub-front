@@ -25,8 +25,8 @@ public interface PointAdaptor {
 
     /**
      * 포인트 선물 메소드.
-     *
+     * @param memberNo 회원번호.
      * @param requestDto 포인트 선물 요청 dto.
      */
-    void giftPoint(PointGiftRequestDto requestDto);
+    void giftPoint(Long memberNo, PointGiftRequestDto requestDto);
 }
