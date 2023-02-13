@@ -220,4 +220,13 @@ public interface ProductAdaptor {
      * @param childNo 자식 상품 번호
      */
     void requestDisconnectRelationProduct(Long childNo);
+
+    /**
+     * 상품 유형으로 상품을 조회합니다.
+     *
+     * @param typeNo 유형번호
+     * @param pageable 페이징
+     * @return 상품들
+     */
+    PageResponse<GetProductByCategoryResponseDto> requestProductsByType(Integer typeNo, Pageable pageable);
 }
