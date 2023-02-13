@@ -3,21 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <title>주문 관리</title>
+<link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
     <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
-    <link rel="stylesheet" href="/static/css/mypage/styles.css">
-
-    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
-    <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
-
-    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
-    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
-    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-
-    <link rel='stylesheet'
-          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -43,27 +31,30 @@
                     <div style="display: flex; flex-direction: column; gap: 8px">
                         <div class="order_summary_box" th:each="order : ${orderList}">
                             <div class="box_header"
-                                 th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
+                                 th:onclick="|location.href='../orders?orderNo=${order.orderNo}'|">
                                 <div class="label">
                         <span class="order_date"
-                              th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd HH:mm')}"></span>
+                              th:text="${#temporals.format(order.createdAt, 'yyyy.MM.dd HH:mm')}"></span>
                                     <span class="gap">|</span>
-                                    <span class="order_num" th:if="not ${#strings.isEmpty(order.getMemberId())}">회원ID
+                                    <span class="order_num" th:if="not ${#strings.isEmpty(order.memberId)}">회원ID
                                         <span class="num"
                                               th:text="${order.getMemberId()}"></span>
                                     </span>
+                                    <span class="order_num" th:if="${#strings.isEmpty(order.memberId)}">회원ID
+                                        <span class="num">비회원</span>
+                                    </span>
                                     <span class="gap">|</span>
                                     <span class="order_num">주문번호 <span class="num"
-                                                                       th:text="${order.getOrderNo()}"></span></span>
+                                                                       th:text="${order.orderNo}"></span></span>
                                     <span class="gap">|</span>
                                     <span class="order_num">송장번호 <span class="num"
-                                                                       th:text="${order.getInvoiceNo()}"></span></span>
+                                                                       th:text="${order.invoiceNo}"></span></span>
                                     <span class="gap">|</span>
                                     <span class="order_num">상태 <span class="num"
-                                                                     th:text="${order.getOrderState()}"></span></span>
+                                                                     th:text="${order.orderState}"></span></span>
                                     <span class="gap">|</span>
                                     <span class="order_num">결제금액 <span class="num"
-                                                                       th:text="${order.getTotalAmount()}"></span></span>
+                                                                       th:text="${order.totalAmount}"></span></span>
                                 </div>
                             </div>
                         </div>
@@ -96,9 +87,10 @@
     </div>
 </div>
 </body>
-<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
-<script src="/static/js/mypage/main.js"></script>
 <script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
         data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
 </html>
