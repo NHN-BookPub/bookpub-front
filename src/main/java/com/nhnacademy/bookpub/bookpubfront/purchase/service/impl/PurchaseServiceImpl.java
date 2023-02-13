@@ -9,7 +9,6 @@ import com.nhnacademy.bookpub.bookpubfront.purchase.service.PurchaseService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetAppliedMemberResponseDto;
 import java.util.List;
-import java.util.Objects;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -43,7 +42,7 @@ public class PurchaseServiceImpl implements PurchaseService {
     public void createPurchaseAndAlarm(CreatePurchaseRequestDto request) {
         List<GetAppliedMemberResponseDto> members = purchaseAdaptor.createPurchase(request);
 
-        if (Objects.nonNull(members)) {
+        if (!members.isEmpty()) {
             StringBuilder sb = makingMessage(members);
             doorayConfig.doorayHookWishlistAlarmSender().send(
                     DoorayHook.builder()
