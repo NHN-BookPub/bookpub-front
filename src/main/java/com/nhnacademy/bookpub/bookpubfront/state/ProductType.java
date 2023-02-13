@@ -3,7 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.state;
 import lombok.Getter;
 
 /**
- * 상품 유형을 관리하기 위한 enum class.
+ * 상품 유형을 관리하기 위한 Enum class.
  *
  * @author : 박경서
  * @since : 1.0
