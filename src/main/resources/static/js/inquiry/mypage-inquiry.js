@@ -32,6 +32,7 @@ editor.addHook("addImageBlobHook", function (blob, callback) {
                 tmpText += (path + "$");
             })
             document.getElementById("imagePathList").value = tmpText;
+            console.log(document.getElementById("imagePathList").value);
         }
     })
 })
