@@ -164,7 +164,7 @@
                         <td th:text="${couponMonth.templateNo}"></td>
                         <td th:text="${couponMonth.templateName}"></td>
                         <td>
-                            <div><img th:src="@{'data:image/*;base64,'+${couponMonth.templateImage}}" alt="이미지 없음"/>
+                            <div><img th:src="${couponMonth.templateImage}" alt="이미지 없음"/>
                             </div>
                         </td>
                         <td th:text="${#temporals.format(couponMonth.openedAt, 'yyyy-MM-dd HH:mm:ss')}"></td>
