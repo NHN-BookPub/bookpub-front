@@ -542,4 +542,24 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 Void.class
         );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> requestProductsByType(Integer typeNo, Pageable pageable) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + PRODUCT_URI
+                                + "/type/" + typeNo)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {
+                }
+        ).getBody();
+    }
 }

@@ -12,7 +12,7 @@ import lombok.Getter;
 @Getter
 public enum CustomerServiceState implements States {
     FAQ("FAQ", true),
-    NOTICE("공지사항", true);
+    NOTICE("notice", true);
     private final String name;
     private final boolean isUsed;
 

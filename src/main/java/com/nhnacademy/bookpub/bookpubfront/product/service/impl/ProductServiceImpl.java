@@ -379,4 +379,12 @@ public class ProductServiceImpl implements ProductService {
     public void disconnectRelationProduct(Long childNo) {
         productAdaptor.requestDisconnectRelationProduct(childNo);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetProductByCategoryResponseDto> findProductByType(Integer typeNo, Pageable pageable) {
+        return productAdaptor.requestProductsByType(typeNo, pageable);
+    }
 }

@@ -11,6 +11,8 @@ import com.nhnacademy.bookpub.bookpubfront.inquiry.service.InquiryService;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.relationship.dto.response.GetProductTypeStateCodeResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.product.relationship.service.ProductTypeStateCodeService;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.review.service.ReviewService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -46,6 +48,7 @@ public class ProductController {
     private final CartUtils cartUtils;
     private final CategoryUtils categoryUtils;
     private final MemberUtils memberUtils;
+    private final ProductTypeStateCodeService productTypeStateCodeService;
     private static final String CART = "CART";
 
     /**
@@ -113,6 +116,39 @@ public class ProductController {
         model.addAttribute("pageButtonNum", 5);
         model.addAttribute("categoryNo", categoryNo);
         model.addAttribute("categoryName", category.getCategoryName());
+
+        return "product/productListByCategory";
+    }
+
+    /**
+     * 상품 유형으로 상품을 조회합니다.
+     *
+     * @param typeNo 유형번호
+     * @param pageable 페이징
+     * @param cookie 쿠키
+     * @param model 모델
+     * @return 상품들
+     */
+    @GetMapping("/types/{typeNo}")
+    public String viewProductsByType(@PathVariable Integer typeNo,
+                                     @PageableDefault Pageable pageable,
+                                     @CookieValue(name = CART, required = false) Cookie cookie,
+                                     Model model) {
+        PageResponse<GetProductByCategoryResponseDto> products = productService.findProductByType(typeNo, pageable);
+        GetProductTypeStateCodeResponseDto type = productTypeStateCodeService.getProductTypeStateCodes().get(typeNo - 1);
+
+        cartUtils.getCountInCart(cookie.getValue(), model);
+        categoryUtils.categoriesView(model);
+        memberUtils.modelRequestMemberNo(model);
+
+        model.addAttribute("products", products.getContent());
+        model.addAttribute("totalPages", products.getTotalPages());
+        model.addAttribute("currentPage", products.getNumber());
+        model.addAttribute("isNext", products.isNext());
+        model.addAttribute("isPrevious", products.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
+        model.addAttribute("categoryNo", typeNo);
+        model.addAttribute("categoryName", type.getCodeName());
 
         return "product/productListByCategory";
     }
