@@ -54,7 +54,7 @@ public class PurchaseController {
         model.addAttribute("isPrevious", purchases.isPrevious());
         model.addAttribute("pageButtonNum", 5);
 
-        return "/admin/product/purchaseIndex";
+        return "admin/product/purchaseIndex";
     }
 
     /**
@@ -98,6 +98,6 @@ public class PurchaseController {
         model.addAttribute("isPrevious", purchases.isPrevious());
         model.addAttribute("pageButtonNum", 5);
 
-        return "/admin/product/purchaseIndex";
+        return "admin/product/purchaseIndex";
     }
 }
