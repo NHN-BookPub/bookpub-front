@@ -68,6 +68,6 @@ public class AdminOrderController {
         model.addAttribute("isNext", orders.isNext());
         model.addAttribute("isPrevious", orders.isPrevious());
         model.addAttribute("pageButtonNum", 5);
-        return "/admin/order/orderMain";
+        return "admin/order/orderMain";
     }
 }

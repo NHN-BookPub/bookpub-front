@@ -187,6 +187,6 @@ public class MemberOrderController {
         model.addAttribute("isPrevious", products.isPrevious());
         model.addAttribute("pageButtonNum", 5);
 
-        return "/mypage/myPageEbooks";
+        return "mypage/myPageEbooks";
     }
 }
