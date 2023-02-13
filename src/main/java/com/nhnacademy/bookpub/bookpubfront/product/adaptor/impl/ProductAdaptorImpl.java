@@ -543,6 +543,9 @@ public class ProductAdaptorImpl implements ProductAdaptor {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public PageResponse<GetProductByCategoryResponseDto> requestProductsByType(Integer typeNo, Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(
