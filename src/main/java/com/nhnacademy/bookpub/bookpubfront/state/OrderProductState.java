@@ -11,12 +11,15 @@ import lombok.Getter;
  **/
 @Getter
 public enum OrderProductState implements States {
-    COMPLETE("결제완료", true),
+    WAITING_PURCHASE_CONFIRMATION("구매확정대기", true),
     CONFIRMED("구매확정", true),
     REFUND("환불", true),
-    WAITING_EXCHANGE("교환중", true),
+    SHIPPING_DELIVERY("배송중", true),
     COMPLETE_EXCHANGE("교환완료", true),
-    CANCEL_EXCHANGE("교환취소", true);
+    CANCEL_EXCHANGE("교환취소", true),
+    WAITING_PAYMENT("결제대기", true),
+    COMPLETE_PAYMENT("결제완료", true),
+    WAITING_DELIVERY("배송준비", true);
     private final String name;
     private final boolean isUsed;
 

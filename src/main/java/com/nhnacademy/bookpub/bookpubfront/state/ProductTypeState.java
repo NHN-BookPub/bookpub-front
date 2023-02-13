@@ -12,8 +12,8 @@ import lombok.Getter;
 @Getter
 public enum ProductTypeState implements States {
     BEST_SELLER("베스트셀러", true),
-    RECOMMENDATION("추천", true),
     NEW("신간", true),
+    RECOMMENDATION("추천", true),
     POPULAR("인기", true),
     DISCOUNT("할인", true),
     NORMAL("기본", true);
