@@ -70,7 +70,7 @@ public class PointController {
      */
     @PostMapping
     public String giftMemberPoint(@Valid PointGiftRequestDto requestDto) {
-        pointService.giftPoint(requestDto);
+        pointService.giftPoint(memberUtils.getMemberNo(), requestDto);
         return "redirect:/members/point";
     }
 }

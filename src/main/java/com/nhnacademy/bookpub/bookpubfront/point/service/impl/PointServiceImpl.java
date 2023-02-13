@@ -33,7 +33,7 @@ public class PointServiceImpl implements PointService {
      * {@inheritDoc}
      */
     @Override
-    public void giftPoint(PointGiftRequestDto requestDto) {
-        pointAdaptor.giftPoint(requestDto);
+    public void giftPoint(Long memberNo, PointGiftRequestDto requestDto) {
+        pointAdaptor.giftPoint(memberNo, requestDto);
     }
 }

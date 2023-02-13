@@ -38,10 +38,10 @@ public class PointAdaptorImpl implements PointAdaptor {
             Pageable pageable, Long memberNo, String type) {
 
         String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + TOKEN_URL)
+                .path("/" + memberNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .queryParam("type", type)
-                .queryParam("memberNo", memberNo)
                 .encode().toUriString();
 
         return restTemplate.exchange(
@@ -57,9 +57,9 @@ public class PointAdaptorImpl implements PointAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public void giftPoint(PointGiftRequestDto requestDto) {
+    public void giftPoint(Long memberNo, PointGiftRequestDto requestDto) {
         restTemplate.exchange(
-                getGatewayUrl() + TOKEN_URL,
+                getGatewayUrl() + TOKEN_URL + "/" + memberNo,
                 HttpMethod.POST,
                 new HttpEntity<>(requestDto, makeHeader()),
                 Void.class
