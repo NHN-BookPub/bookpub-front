@@ -40,29 +40,29 @@
             <div style="display: flex; flex-direction: column; gap: 8px">
                 <div class="order_summary_box" th:each="order : ${orderList}">
                     <div class="box_header"
-                         th:onclick="|location.href='../orders?orderNo=${order.getOrderNo()}'|">
+                         th:onclick="|location.href='/orders?orderNo=${order.orderNo}'|">
                         <div class="label">
                         <span class="order_date"
-                              th:text="${#temporals.format(order.getCreatedAt(), 'yyyy.MM.dd')}"></span>
+                              th:text="${#temporals.format(order.createdAt, 'yyyy.MM.dd')}"></span>
                             <span class="gap">|</span>
                             <span class="order_num">주문번호 <span class="num"
-                                                               th:text="${order.getOrderNo()}"></span></span>
+                                                               th:text="${order.orderNo}"></span></span>
                             <span class="gap">|</span>
                             <span class="order_num">송장번호 <span class="num"
-                                                               th:text="${order.getInvoiceNo()}"></span></span>
+                                                               th:text="${order.invoiceNo}"></span></span>
                             <span class="gap">|</span>
                             <span class="order_num">상태 <span class="num"
-                                                             th:text="${order.getOrderState()}"></span></span>
+                                                             th:text="${order.orderState}"></span></span>
                             <span class="gap">|</span>
                             <span class="order_num">결제금액 <span class="num"
-                                                               th:text="${#numbers.formatInteger(order.getTotalAmount(),0,'COMMA')}"></span></span>
+                                                               th:text="${#numbers.formatInteger(order.totalAmount,0,'COMMA')}"></span></span>
                             <span class="gap">|</span>
                             <span class="order_num">배송일 <span class="num"
-                                                              th:text="${#temporals.format(order.getReceivedAt(), 'yyyy.MM.dd')}"></span></span>
+                                                              th:text="${#temporals.format(order.receivedAt, 'yyyy.MM.dd')}"></span></span>
                         </div>
                         <div class="btn-box">
                             <button th:if="${order.orderState != '결제대기' && order.orderState != '결제취소' && order.orderState != '구매확정'}" class="refund-btn" type="button"
-                                    th:onclick="modal(event, [[${order.getOrderNo()}]])">환불
+                                    th:onclick="modal(event, [[${order.orderNo}]])">환불
                             </button>
                             <button th:if="${order.orderState == '결제대기'}" class="refund-btn" type="button"
                                     th:onclick="payment(event, [[${order.orderNo}]])">결제하러 가기
@@ -86,16 +86,16 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="product : ${order.getOrderProducts()}">
+                            <tr th:each="product : ${order.orderProducts}">
                                 <td class="prod_img">
                                     <div>
                                         <div>
-                                    <span class="img_box" th:if="${#strings.isEmpty(product.getThumbnail)}">
+                                    <span class="img_box" th:if="${#strings.isEmpty(product.thumbnail)}">
                                         <img class="img_thumbnail"
                                              src="/static/img/main/no-image.png">
                                     </span>
-                                            <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
-                                        <img class="img_thumbnail" th:src="@{${product.getThumbnail()}}" alt="No image">
+                                            <span class="img_box" th:if="${not #strings.isEmpty(product.thumbnail)}">
+                                        <img class="img_thumbnail" th:src="@{${product.thumbnail}}" alt="No image">
                                     </span>
                                         </div>
                                     </div>
@@ -107,18 +107,18 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                            <a th:href="|../../../products/${product.getProductNo()}|">
-                                                <h3 th:text="${product.getTitle()}"></h3>
+                                            <a th:href="|../../../products/${product.productNo}|">
+                                                <h3 th:text="${product.title}"></h3>
                                             </a>
                                             <span class="text">수량 : </span><span class="val"
-                                                                                 th:text="${product.getProductAmount()}"></span>
+                                                                                 th:text="${product.productAmount}"></span>
                                         </div>
                                     </div>
                                 </td>
 
                                 <td class="prod">
                                 <span class="price">
-                                    <span class="val" th:text="${#numbers.formatInteger(product.getSalesPrice(),0,'COMMA')}"></span>
+                                    <span class="val" th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
                                     <span class="unit">원</span>
                                 </span>
                                 </td>

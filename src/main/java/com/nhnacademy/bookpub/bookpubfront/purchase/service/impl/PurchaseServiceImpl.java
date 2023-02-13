@@ -42,15 +42,29 @@ public class PurchaseServiceImpl implements PurchaseService {
     public void createPurchaseAndAlarm(CreatePurchaseRequestDto request) {
         List<GetAppliedMemberResponseDto> members = purchaseAdaptor.createPurchase(request);
 
-        if (!members.isEmpty()) {
-            StringBuilder sb = makingMessage(members);
-            doorayConfig.doorayHookWishlistAlarmSender().send(
-                    DoorayHook.builder()
+        for (GetAppliedMemberResponseDto next : members) {
+            String stringBuilder = "To. " +
+                    next.getMemberNickname() +
+                    "님 '" +
+                    next.getTitle() +
+                    "' 책이 입고 되었습니다.\n";
+
+            doorayConfig.doorayHookWishlistAlarmSender()
+                    .send(DoorayHook.builder()
                             .botName("wishlist")
-                            .text(sb.toString())
-                            .build()
-            );
+                            .text(stringBuilder)
+                            .build());
         }
+//
+//        if (!members.iterator().hasNext()) {
+//            StringBuilder sb = makingMessage(members);
+//            doorayConfig.doorayHookWishlistAlarmSender().send(
+//                    DoorayHook.builder()
+//                            .botName("wishlist")
+//                            .text(sb.toString())
+//                            .build()
+//            );
+//        }
     }
 
     /**

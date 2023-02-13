@@ -1,5 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.subscribe.controller;
 
+import static com.nhnacademy.bookpub.bookpubfront.state.DeliveryFeeType.DELIVERY_FEE;
+import static com.nhnacademy.bookpub.bookpubfront.state.DeliveryFeeType.DELIVERY_FREE_FEE_STANDARD;
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
@@ -204,6 +206,8 @@ public class SubscribeController {
 
         model.addAttribute("subscribe", subscribe);
         model.addAttribute("product", product);
+        model.addAttribute("free", DELIVERY_FREE_FEE_STANDARD.getFee());
+        model.addAttribute("deliveryFee", DELIVERY_FEE.getFee());
         model.addAttribute("reviewInfo", reviewService.getProductReviewInfo(productNo));
         return "subscription/subscribeDetail";
     }
