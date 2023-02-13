@@ -36,7 +36,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     for (var i = 0; i < linkList.length; i++) {
         let navLink = linkList[i].href
-        if (url.toString() === (navLink)) {
+        if (url.toString().includes(navLink)) {
             linkList[i].classList.add('active')
             for (var j = 0; j < linkList.length; j++) {
                 if (i !== j) {

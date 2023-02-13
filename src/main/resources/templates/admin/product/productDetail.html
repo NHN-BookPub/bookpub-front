@@ -61,7 +61,7 @@
                                 <label for="modifyPrice">정가</label>
                                 <input type="text" class="form-control" id="modifyPrice" placeholder="00"
                                        name="productPrice" min="100"
-                                       th:value="${product.productPrice}"
+                                       th:value="${#numbers.formatInteger(product.productPrice,0,'COMMA')}"
                                        oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                        required>
                                 <div class="invalid-feedback">최소 100원</div>

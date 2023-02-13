@@ -57,7 +57,8 @@
                                     <div class="form-group">
                                         <label for="sendPoint">상품평 지급 포인트 금액</label>
                                         <input type="text" class="form-control" id="sendPoint"
-                                               placeholder="0이상의 값을 입력해주세요." name="sendPoint" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               placeholder="0이상의 값을 입력해주세요." name="sendPoint"
+                                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                                maxlength="8"
                                                required>
                                         <div class="valid-feedback">완료</div>
@@ -87,7 +88,9 @@
                                         <label for="modifyPolicyNo">정책번호</label>
                                         <input type="text" class="form-control" id="modifyPolicyNo"
                                                placeholder="수정할 정책 번호"
-                                               name="policyNo" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');" required>
+                                               name="policyNo"
+                                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               required>
                                         <div class="valid-feedback">완료</div>
                                         <div class="invalid-feedback">수정할 정책 번호를 기입해주세요.</div>
                                     </div>
@@ -95,7 +98,8 @@
                                     <div class="form-group">
                                         <label for="modifyPolicyPrice">상품평 지급 포인트 금액</label>
                                         <input type="text" class="form-control" id="modifyPolicyPrice"
-                                               placeholder="0이상의 값을 입력해주세요." name="sendPoint" oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
+                                               placeholder="0이상의 값을 입력해주세요." name="sendPoint"
+                                               oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*)\./g, '$1');"
                                                required>
                                         <div class="valid-feedback">완료</div>
                                         <div class="invalid-feedback">0이상의 값을 입력해주세요.</div>
@@ -126,10 +130,11 @@
                     <tbody>
                     <tr th:each="reviewPolicy : ${reviewPolicyList}">
                         <td th:text="${reviewPolicy.policyNo}"></td>
-                        <td th:text="${reviewPolicy.sendPoint} + 'P'"></td>
+                        <td th:text="${#numbers.formatInteger(reviewPolicy.sendPoint,0,'COMMA')} + 'P'"></td>
                         <td th:text="${reviewPolicy.policyUsed}"></td>
                         <td>
-                            <form th:action="@{/admin/review/review-policies/{policyNo}/used(policyNo=${reviewPolicy.policyNo})}" th:method="post">
+                            <form th:action="@{/admin/review/review-policies/{policyNo}/used(policyNo=${reviewPolicy.policyNo})}"
+                                  th:method="post">
                                 <button type="submit" class="btn btn-outline-info mb-1 ms-auto">사용하기</button>
                             </form>
                         </td>
