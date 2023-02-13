@@ -62,6 +62,12 @@ public class PointController {
         return "mypage/point";
     }
 
+    /**
+     * 포인트 선물 메소드.
+     *
+     * @param requestDto 선물 dto.
+     * @return 멤버 포인트 화면.
+     */
     @PostMapping
     public String giftMemberPoint(@Valid PointGiftRequestDto requestDto) {
         pointService.giftPoint(requestDto);
