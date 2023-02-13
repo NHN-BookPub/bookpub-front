@@ -106,7 +106,7 @@
                      th:src="@{${product.getThumbnail()}}" alt="No image">
             </span>
         </div>
-        <div class="col-sm-7">
+        <div class="col-sm-6">
             <div class="row mb-3" style="display: none">
                 <p id="productNo" th:text="${product.productNo}"></p>
             </div>
@@ -219,25 +219,36 @@
 
         </div>
 
-        <div class="col-sm-2">
+        <div class="col-sm-3">
             <div class="row text-center">
-                <button class="btn btn-primary" onclick="cart()" style="width: 80%;">장바구니 담기</button>
+                <button class="btn btn-primary" onclick="cart()" style="width: 60%; float: right">장바구니 담기</button>
             </div>
 
             <hr/>
 
             <div class="row text-center">
                 <form action="" method="post">
-                    <button type="submit" class="btn btn-info" style="width: 80%">바로 주문</button>
+                    <button type="submit" class="btn btn-info" style="width: 60%; float: right">바로 주문</button>
                 </form>
             </div>
 
             <hr/>
 
             <div class="row text-center">
-                <button class="btn" onclick="putWishlist()" style="width: 80%; background-color: #ffa8a8; color: white">
+                <button class="btn" onclick="putWishlist()"
+                        style="width: 60%; float: right; background-color: #ffa8a8; color: white">
                     위시리스트 담기
                 </button>
+            </div>
+
+            <p th:text="${product.saleStateCodeCategory}" style="display: none" id="productSaleState"></p>
+            <div th:if="${product.saleStateCodeCategory} != '판매중'">
+                <br/>
+                <div style="text-align: right">
+                    <img src="/static/img/main/sold_out.png" alt="">
+                    <p>현재 이 상품은<strong> <u>품절</u></strong>입니다.</p>
+
+                </div>
             </div>
         </div>
 
@@ -450,29 +461,39 @@
 
 <script>
     const productNo = $('#productNo').text();
-
+    const productSaleState = $('#productSaleState').text();
 
     function cart() {
-        Swal.fire({
-            title: '카트에 담으시겠습니까?',
-            icon: 'info',
-            showCancelButton: true,
-            confirmButtonColor: '#3085d6',
-            cancelButtonColor: '#d33',
-            confirmButtonText: '확인',
-            cancelButtonText: '취소'
-        }).then((result) => {
-            if (result.isConfirmed) {
-                Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
-                $.ajax({
-                    type: "post",
-                    async: false,
-                    url: "/cart",
-                    data: {"productNo": productNo},
-                    dataType: "json"
-                })
-            }
-        })
+        if (productSaleState === '품절') {
+            Swal.fire({
+                icon: 'info',
+                title: '품절된 상품입니다.',
+                text: '위시리스트 등록후 알림 신청을 해보세요'
+            })
+        } else {
+            Swal.fire({
+                title: '카트에 담으시겠습니까?',
+                icon: 'info',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: '확인',
+                cancelButtonText: '취소'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire('상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
+                    $.ajax({
+                        type: "post",
+                        async: false,
+                        url: "/cart",
+                        data: {"productNo": productNo},
+                        dataType: "json"
+                    })
+                }
+
+                location.reload();
+            })
+        }
     }
 
     function putWishlist() {

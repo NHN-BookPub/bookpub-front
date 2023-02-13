@@ -64,17 +64,19 @@
                                     </ion-icon>
 
                                     <br/>
-                                    <div th:if="${wishlist.wishlistApplied == false}">
-                                        <ion-icon class="cursor" name="notifications-outline"
-                                                  th:productNo="${wishlist.productNo}"
-                                                  th:onclick="alarm(this.getAttribute('productNo'))">
-                                        </ion-icon>
-                                    </div>
-                                    <div th:unless="${wishlist.wishlistApplied == false}">
-                                        <ion-icon class="cursor" name="notifications"
-                                                  th:productNo="${wishlist.productNo}"
-                                                  th:onclick="alarm(this.getAttribute('productNo'))">
-                                        </ion-icon>
+                                    <div th:if="${wishlist.codeCategory != '판매중'}">
+                                        <div th:if="${wishlist.wishlistApplied == false}">
+                                            <ion-icon class="cursor" name="notifications-outline"
+                                                      th:productNo="${wishlist.productNo}"
+                                                      th:onclick="alarm(this.getAttribute('productNo'))">
+                                            </ion-icon>
+                                        </div>
+                                        <div th:unless="${wishlist.wishlistApplied == false}">
+                                            <ion-icon class="cursor" name="notifications"
+                                                      th:productNo="${wishlist.productNo}"
+                                                      th:onclick="alarm(this.getAttribute('productNo'))">
+                                            </ion-icon>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
