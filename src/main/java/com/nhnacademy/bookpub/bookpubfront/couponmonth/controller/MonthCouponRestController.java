@@ -2,7 +2,6 @@ package com.nhnacademy.bookpub.bookpubfront.couponmonth.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
-import com.nhnacademy.bookpub.bookpubfront.coupontemplate.service.CouponTemplateService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,7 +18,6 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class MonthCouponRestController {
 
-    private final CouponTemplateService couponTemplateService;
     private final CouponService couponService;
 
     private final RedisTemplate<String, Object> redisTemplate;

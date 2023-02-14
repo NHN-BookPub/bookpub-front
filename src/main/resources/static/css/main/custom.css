@@ -113,32 +113,6 @@ h3 {
     align-items: center;
 }
 
-#notMember-order {
-    display: none;
-    justify-content: center;
-    align-items: center;
-    position: fixed;
-    z-index: 999;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    right: 0;
-    background: rgba(0, 0, 0, 0.8);
-}
-
-.notMember-order-modal {
-    background-color: white;
-    display: flex;
-    justify-content: start;
-    border-radius: 10px;
-    width: 40%;
-    height: 40vh;
-    align-items: center;
-    padding: 30px 0;
-    flex-direction: column;
-    gap: 13px;
-}
-
 #click {
     background-color: white;
     padding: 3px 10px 3px 10px;

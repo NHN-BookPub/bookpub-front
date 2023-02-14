@@ -309,7 +309,6 @@ function couponCalculateAndParsingLogic() {
 
     for (var i = 0; i < productList.length; i++) {
         resultList.push(productList[i] + "- ");
-        console.log("실행")
         for (var j = 0; j < couponList.length; j++) {
             let productInfo = productList[i].split("|");
             let productNo = productInfo[0]

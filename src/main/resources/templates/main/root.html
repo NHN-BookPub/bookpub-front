@@ -891,44 +891,6 @@
 <div id="loading">
     <span style="font-size: 7rem;color: white;" class="visually-hidden">Loading...</span>
 </div>
-<!--비회원 주문 모달창-->
-<div id="notMember-order" class="modal-overlay2">
-    <div class="notMember-order-modal">
-        <h2>비회원 주문 조회</h2>
-        <form action="/orders/non" method="post" style="width: 100%">
-            <table style="width: 100%">
-                <tbody>
-                <tr>
-                    <th scope="row" style="padding: 10px" class="has_ip">주문번호</th>
-                </tr>
-                <tr>
-                    <td style="padding: 0 60px 10px 10px;">
-                        <input style="width: 100%; padding: 7px;border-radius: 18px;border: 1px solid #848383;"
-                               id="orderId"
-                               name="orderId"
-                               placeholder="주문 번호를 입력해주세요">
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row" style="padding: 10px">주문인 전화번호</th>
-                </tr>
-                <tr>
-                    <td style="padding: 0 60px 10px 10px;">
-                        <input style="width: 100%;padding: 7px;border-radius: 18px;border: 1px solid #848383;"
-                               id="phoneNo"
-                               name="phoneNo"
-                               placeholder="전화번호를 입력해주세요(-제외)">
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div class="modal-btn-box">
-                <button type="submit" id="click">조회</button>
-            </div>
-        </form>
-
-    </div>
-</div>
 
 <th:block th:include="main/fragments/rootFooter"></th:block>
 <script>
@@ -937,25 +899,6 @@
         var option = "width = 800, height = 500, top = 500, left = 500"
         window.open(url, name, option);
     }
-
-    function modalOpen() {
-        let modal1 = document.getElementById("notMember-order");
-        modal1.style.display = "flex";
-    }
-
-    let modal1 = document.getElementById("notMember-order");
-    modal1.addEventListener("click", e => {
-        const evTarget = e.target
-        if (evTarget.classList.contains("modal-overlay2")) {
-            modal1.style.display = "none"
-        }
-    })
-
-    window.addEventListener("keyup", e => {
-        if (modal1.style.display === "flex" && e.key === "Escape") {
-            modal1.style.display = "none"
-        }
-    })
 
     let modal = document.getElementById("order-modal-container")
     let loading = document.getElementById("loading")
