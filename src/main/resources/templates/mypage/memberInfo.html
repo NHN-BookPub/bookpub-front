@@ -4,34 +4,13 @@
     <meta charset="UTF-8">
     <link rel="stylesheet" href="/static/css/mypage/styles.css">
     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="/static/css/mypage/myPage.css">
+
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
     <script src="https://code.jquery.com/jquery-latest.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
-    <style>
-
-        .control-label {
-            text-align: start;
-        }
-
-        .myPageBody {
-            padding-right: 20px;
-            padding-left: 20px;
-        }
-
-        .member-info-point {
-            background: #E7DBF2;
-        }
-
-        .check-member-info {
-            padding-left: 10px;
-        }
-
-        .height-0 {
-            height: 0 !important;
-        }
-    </style>
 </head>
 <body>
 <div id="body-pd">
@@ -49,9 +28,8 @@
                         <span class="float-end check-member-info justify-content-end"
                               th:text="${member.tierName}"></span>
                     </div>
-                    <div class="card-footer d-flex align-items-center">
-                        <a class="text-white stretched-link justify-content-end" href="#">등급</a>
-                        <div class="small text-white"><i class="fas fa-angle-right"></i></div>
+                    <div class="card-footer d-flex align-items-center" onclick="modalOpen()">
+                        <p class="text-white stretched-link justify-content-end" style="margin: 0 !important; cursor: pointer">등급</p>
                     </div>
                 </div>
             </div>
@@ -63,7 +41,7 @@
                               th:text="${#numbers.formatInteger(member.point,0,'COMMA')}"></span>
                     </div>
                     <div class="card-footer d-flex align-items-center">
-                        <a class="text-white stretched-link justify-content-end" href="#">포인트 사용 내역</a>
+                        <a class="text-white stretched-link justify-content-end" href="/members/point">포인트 사용 내역</a>
                         <div class="small text-white"><i class="fas fa-angle-right"></i></div>
                     </div>
                 </div>
@@ -409,6 +387,63 @@
         </div>
     </div>
 </div>
+<div id="tier-info" class="modal-overlay">
+    <div id="tier-modal-box">
+        <p class="box_title">
+            <span class="title-box">Tier <span class="korSub">등급정보</span></span>
+            <span class="close-modal" onclick="modalClose()">X</span>
+        </p>
+        <div class="box_info_cell">
+            <ul>
+                <li class="popup_info_title">등급</li>
+                <li class="popup_info_title">조건</li>
+            </ul>
+            <ul>
+                <li class="popup_info_detail">BASIC</li>
+                <li class="popup_info_detail">기본등급</li>
+            </ul>
+            <ul>
+                <li class="popup_info_detail">WHITE</li>
+                <li class="popup_info_detail">100,000 이상 주문</li>
+            </ul>
+            <ul>
+                <li class="popup_info_detail">SILVER</li>
+                <li class="popup_info_detail">200,000 이상 주문</li>
+            </ul>
+            <ul>
+                <li class="popup_info_detail">GOLD</li>
+                <li class="popup_info_detail">300,000 이상 주문</li>
+            </ul>
+            <ul>
+                <li class="popup_info_detail">PLATINUM</li>
+                <li class="popup_info_detail">500,000 이상 주문</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<script>
+    let modal = document.getElementById("tier-info");
+    function modalOpen() {
+        modal.style.display = "flex";
+    }
+
+    modal.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay")) {
+            modal.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal.style.display === "flex" && e.key === "Escape") {
+            modal.style.display = "none"
+        }
+    })
+
+    function modalClose() {
+        modal.style.display = "none"
+    }
+</script>
 <script>
     var exPwd = document.getElementById("exchangePwd");
     var checkPwd = document.getElementById("exchangeCheckPwd");

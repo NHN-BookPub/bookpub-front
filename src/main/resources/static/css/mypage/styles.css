@@ -112,6 +112,7 @@ a {
 
 .nav__link:hover {
     background-color: var(--first-color);
+    color: white;
 }
 
 .nav__icon {
