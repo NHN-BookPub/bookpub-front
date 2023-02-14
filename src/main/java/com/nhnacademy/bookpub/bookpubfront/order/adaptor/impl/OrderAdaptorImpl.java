@@ -96,8 +96,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo) {
-        String url = getGatewayUrl() + AUTH_ORDER_URL + "/" + orderNo;
+    public GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo, Long memberNo) {
+        String url = getGatewayUrl() + AUTH_ORDER_URL + "/" + orderNo + "/members/" + memberNo;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
@@ -200,7 +200,8 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                         HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),
                         new ParameterizedTypeReference<
-                                PageResponse<GetProductByCategoryResponseDto>>() {})
+                                PageResponse<GetProductByCategoryResponseDto>>() {
+                        })
                 .getBody();
     }
 

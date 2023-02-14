@@ -44,7 +44,7 @@ public class AdminOrderController {
                         .getPrincipal());
 
         model.addAttribute("member", memberService.getApiMember(memberNo));
-        model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
+        model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo, memberNo));
 
         return "admin/order/adminOrderDetail";
     }

@@ -95,8 +95,9 @@ public class MemberOrderController {
     @GetMapping
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
         memberUtils.modelRequestMemberNo(model);
+        Long memberNo = memberUtils.getMemberNo();
 
-        model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo));
+        model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo, memberNo));
 
         return "mypage/orderDetail";
     }

@@ -67,12 +67,7 @@
       </td>
       <td th:text="${#numbers.formatInteger(coupon.policyMinimum,0,'COMMA')} + '원'"></td>
       <td>
-        <div th:if="${coupon.maxDiscount != null}">
-          <span th:text="${#numbers.formatInteger(coupon.maxDiscount,0,'COMMA')} + '원'"></span>
-        </div>
-        <div th:unless="${coupon.maxDiscount != null}">
-          <span>x</span>
-        </div>
+        <span th:text="${coupon.maxDiscount != null ? #numbers.formatInteger(coupon.maxDiscount,0,'COMMA') +'원' : '제한없음'}"></span>
       </td>
       <td th:text="${#temporals.format(coupon.finishedAt, 'yyyy년 MM월 dd일 HH시 mm분')}"></td>
       <td>
