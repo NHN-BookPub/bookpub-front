@@ -51,7 +51,7 @@ public interface OrderAdaptor {
      * @param orderNo 주문번호입니다.
      * @return 주문상세 Dto 반환.
      */
-    GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo);
+    GetOrderDetailResponseDto getOrderDetailByOrderNoRequest(Long orderNo, Long memberNo);
 
 
     /**

@@ -46,7 +46,7 @@ public interface OrderService {
      * @param orderNo 주문번호.
      * @return 상세정보를 반환.
      */
-    GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo);
+    GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo, Long memberNo);
 
     /**
      * 주문번호로 결제 전 주문정보를 확인합니다.

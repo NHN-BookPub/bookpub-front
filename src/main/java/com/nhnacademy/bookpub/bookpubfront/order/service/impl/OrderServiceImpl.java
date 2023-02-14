@@ -126,8 +126,8 @@ public class OrderServiceImpl implements OrderService {
      * {@inheritDoc}
      */
     @Override
-    public GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo) {
-        return orderAdaptor.getOrderDetailByOrderNoRequest(orderNo);
+    public GetOrderDetailResponseDto getOrderDetailByNo(Long orderNo, Long memberNo) {
+        return orderAdaptor.getOrderDetailByOrderNoRequest(orderNo, memberNo);
     }
 
     /**
