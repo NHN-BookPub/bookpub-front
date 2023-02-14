@@ -1,10 +1,23 @@
 function clickInfo(templateNo) {
     const memberNo = $('#memberNo').text();
+
+    var openedAt = document.getElementById(templateNo).textContent;
+
+    openedAt = new Date(openedAt);
+
+    const current = new Date();
+
     if (memberNo === '-1') {
         Swal.fire({
             icon: 'warning',
             title: '회원만 수령 가능합니다.',
             text: '로그인을 먼저 해주세요'
+        })
+    } else if (openedAt > current) {
+        Swal.fire({
+            icon: 'warning',
+            title: '오픈 시간을 확인 해주세요',
+            text: '오픈 시간 : ' + openedAt.toUTCString()
         })
     } else {
         $.ajax({
@@ -12,7 +25,6 @@ function clickInfo(templateNo) {
             url: "/coupon/month-coupon",
             data: {"memberNo": memberNo, "templateNo": templateNo},
             success: function (result) {
-                console.log(result);
                 if (result === 3) {
                     Swal.fire({
                         icon: 'success',
@@ -38,4 +50,5 @@ function clickInfo(templateNo) {
         })
     }
 }
+
 
