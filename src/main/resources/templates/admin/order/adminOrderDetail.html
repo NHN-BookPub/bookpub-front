@@ -98,7 +98,8 @@
                                     <div class="order_num" th:if="${product.stateCode != '결제완료'}">
                                         <span class="order_num" th:text="${product.stateCode}"></span>
                                     </div>
-                                    <span class="val" th:text="${product.salesPrice}"></span>
+                                    <span class="val"
+                                          th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
                                     <span class="unit">원</span>
                                 </span>
                             </td>
@@ -160,7 +161,8 @@
                             <div class="address_item no_line">
                                 <div class="address_info_box">
                                     <div class="address_person">
-                                        <span class="name"><span th:text="${orderDetail.recipientName}"></span> / </span>
+                                        <span class="name"><span
+                                                th:text="${orderDetail.recipientName}"></span> / </span>
                                         <span class="phone_number" th:text="${orderDetail.recipientNumber}"></span>
                                     </div>
                                     <div class="address"
@@ -207,7 +209,9 @@
                             <div class="address_item no_line">
                                 <div class="address_info_box">
                                     <div class="address_person">
-                                        <h5><span th:text="${orderDetail.couponAmount}"></span>원</h5>
+                                        <h5><span
+                                                th:text="${#numbers.formatInteger(orderDetail.couponAmount,0,'COMMA')}"></span>원
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
@@ -218,7 +222,9 @@
                             <div class="address_item no_line">
                                 <div class="address_info_box">
                                     <div class="address_person">
-                                        <h5><span th:text="${orderDetail.pointAmount}"></span>원</h5>
+                                        <h5><span
+                                                th:text="${#numbers.formatInteger(orderDetail.pointAmount,0,'COMMA')}"></span>원
+                                        </h5>
                                     </div>
                                 </div>
                             </div>
@@ -230,9 +236,14 @@
                                 <div class="address_info_box">
                                     <div class="address_person">
                                         <h5 th:if="${orderDetail.packaged == true}">포장비 : <span
-                                                th:text="${orderDetail.packageAmount}"></span>원</h5>
-                                        <h5>배송비 : <span th:text="${orderDetail.deliveryAmount}"></span>원</h5>
-                                        <h5>최종 결제 금액 : <span th:text="${orderDetail.totalAmount}"></span>원</h5>
+                                                th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>원
+                                        </h5>
+                                        <h5>배송비 : <span
+                                                th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>원
+                                        </h5>
+                                        <h5>최종 결제 금액 : <span
+                                                th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원
+                                        </h5>
                                     </div>
                                 </div>
                             </div>

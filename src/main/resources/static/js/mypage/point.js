@@ -54,12 +54,22 @@ function pointGift() {
             icon: 'warning',
             text: '포인트가 부족합니다.'
         })
+    } else if (parseInt(usePoint.value) <= 0) {
+        Swal.fire({
+            icon: 'warning',
+            text: '0원 이상을 선물해주세요'
+        })
     } else if (check.value === '0') {
         Swal.fire({
             icon: 'warning',
             text: '닉네임 확인 버튼을 눌러주세요'
         })
     } else {
+        let loading = document.getElementById("loading");
+        let img = document.getElementById("loading-img");
+        loading.style.display = "flex";
+        img.style.display = "block";
+
         let form = document.getElementById('gift-form')
         form.submit();
     }
