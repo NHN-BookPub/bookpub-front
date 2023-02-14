@@ -180,6 +180,8 @@ public class ProductAdaptorImpl implements ProductAdaptor {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + PRODUCT_URI
                                 + "/product/categories/" + categoryNo)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
                 .encode()
                 .toUriString();
 
