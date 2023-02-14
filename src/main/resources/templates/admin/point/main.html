@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Points</title>
+  <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+  <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+  <th:block th:include="admin/fragments/adminHeader"/>
+  <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid px-4">
+        <h1 class="mt-4">포인트 내역</h1>
+        <ol class="breadcrumb mb-4">
+          포인트 내역 정보
+        </ol>
+        <hr/>
+        <div>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">회원 아이디</th>
+              <th scope="col">포인트 금액</th>
+              <th scope="col">포인트 사유</th>
+              <th scope="col">증감 여부</th>
+              <th scope="col">증감 일자</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="point : ${content}">
+              <td th:text="${point.memberId}"></td>
+              <td th:text="${#numbers.formatInteger(point.pointHistoryAmount,0,'COMMA')}"></td>
+              <td th:text="${point.pointHistoryReason}"></td>
+              <td th:text="${point.increased}"></td>
+              <td th:text="${point.createdAt}"></td>
+            </tr>
+            </tbody>
+          </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" th:classappend="${!previous} ? 'disabled'">
+                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum -1}+
+                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}" tabindex="-1">Previous</a>
+              </li>
+              <th:block th:with="
+                            start=${(pageNum/5)*5 + 1},
+                            end=(${(totalPage ==0) ? 1 : (start + (4) < totalPage ? start + 4 : totalPage)})">
+                <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}">
+                  <a class="page-link"
+                     th:href="@{ ${uri} + '?page=' + ${page - 1}+
+                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}"
+                     th:text="${page}">
+                  </a>
+                </li>
+              </th:block>
+              <li class="page-item" th:classappend="${!next} ? 'disabled'">
+                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum + 1}+
+                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </main>
+    <th:block th:include="admin/fragments/adminFooter"/>
+  </div>
+</div>
+</body>
+</html>
