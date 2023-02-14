@@ -417,10 +417,15 @@
             </tr>
             </thead>
             <tbody>
+            <input type="hidden" th:id="myAuthorities" th:if="${member} != null"
+                   th:value="${member.authorities.toString()}">
+            <input type="hidden" th:id="myAuthorities" th:unless="${member} != null" th:value="null">
             <tr th:each="inquiry : ${inquiryList}">
                 <td>
-                    <div style="color: #0a53be; cursor:pointer;" th:text="${inquiry.inquiryTitle}"
-                         th:onclick="|javascript:inquiryInfo('${inquiry.inquiryNo}','${memberNo}','${inquiry.inquiryDisplayed}')|"></div>
+                    <div style="color: #0a53be; cursor:pointer; display: inline" th:text="${inquiry.inquiryTitle}"
+                         th:onclick="|javascript:inquiryInfo('${inquiry.inquiryNo}', '${inquiry.memberNo}', '${memberNo}','${inquiry.inquiryDisplayed}')|"></div>
+                    <img th:if="${!inquiry.inquiryDisplayed}" src="/static/img/main/inquiry_secret_key.png"
+                         style="width: 13px; height: auto; display: inline">
                 </td>
                 <td th:text="${inquiry.memberNickname}"></td>
                 <td th:text="${inquiry.createdAt}"></td>

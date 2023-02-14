@@ -50,7 +50,7 @@ public class InquiryRestController {
     }
 
     /**
-     * 마이페이지의 상품문의 상세 조회를 위한 메서드입니다.
+     * 상품문의 상세 조회를 위한 메서드입니다.
      * 해당 상품문의가 비밀글인 경우 사용됩니다.
      *
      * @param inquiryNo 상품문의 번호
@@ -58,20 +58,20 @@ public class InquiryRestController {
      */
     @Auth
     @GetMapping("/members/inquiries/{inquiryNo}/private/modal")
-    public GetInquiryResponseDto myPagePrivateInquiryDetails(
+    public GetInquiryResponseDto privateInquiryDetails(
             @PathVariable("inquiryNo") Long inquiryNo) {
         return inquiryService.getPrivateInquiry(inquiryNo);
     }
 
     /**
-     * 마이페이지의 상품문의 상세 조회를 위한 메서드입니다.
+     * 상품문의 상세 조회를 위한 메서드입니다.
      * 해당 상품문의가 공개글 경우 사용됩니다.
      *
      * @param inquiryNo 상품문의 번호
      * @return 상품문의 상세 정보를 담은 dto
      */
     @GetMapping("/members/inquiries/{inquiryNo}/modal")
-    public GetInquiryResponseDto myPagePublicInquiryDetails(
+    public GetInquiryResponseDto publicInquiryDetails(
             @PathVariable("inquiryNo") Long inquiryNo) {
         return inquiryService.getPublicInquiry(inquiryNo);
     }

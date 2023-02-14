@@ -1,4 +1,4 @@
-function inquiryInfo(inquiryNo, memberNo, displayed) {
+function inquiryInfo(inquiryNo, inquiryMemberNo, memberNo, displayed) {
     if (displayed == 'true') {
         $.ajax({
             url: "/members/inquiries/" + inquiryNo + "/modal",
@@ -18,34 +18,28 @@ function inquiryInfo(inquiryNo, memberNo, displayed) {
                 text: '작성자만 조회 가능합니다.'
             })
         } else {
-            $.ajax({
-                url: "/inquiries/" + inquiryNo + "/verify/" + memberNo,
-                type: "get",
-                async: true,
-                dateType: "JSON",
-                success: function (response) {
-                    if (response == false) {
-                        console.log(response);
-                        Swal.fire({
-                            icon: 'warning',
-                            title: '권한이 없습니다.',
-                            text: '작성자만 조회 가능합니다.'
-                        })
-                    } else {
-                        $.ajax({
-                            url: "/members/inquiries/" + inquiryNo + "/private/modal",
-                            type: "get",
-                            async: true,
-                            dateType: "JSON",
+            var authorities = document.getElementById("myAuthorities").value;
+            console.log(authorities);
 
-                            success: function (response) {
-                                console.log(response);
-                                callInquiryInfo(response);
-                            }
-                        })
+            if (!(inquiryMemberNo == memberNo) && !authorities.includes("ROLE_ADMIN")) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: '권한이 없습니다.',
+                    text: '작성자만 조회 가능합니다.'
+                })
+            } else {
+                $.ajax({
+                    url: "/members/inquiries/" + inquiryNo + "/private/modal",
+                    type: "get",
+                    async: true,
+                    dateType: "JSON",
+
+                    success: function (response) {
+                        console.log(response);
+                        callInquiryInfo(response);
                     }
-                }
-            })
+                })
+            }
         }
     }
 }
