@@ -2,9 +2,11 @@ package com.nhnacademy.bookpub.bookpubfront.point.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.point.adaptor.PointAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.request.PointGiftRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.service.PointService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -35,5 +37,14 @@ public class PointServiceImpl implements PointService {
     @Override
     public void giftPoint(Long memberNo, PointGiftRequestDto requestDto) {
         pointAdaptor.giftPoint(memberNo, requestDto);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetPointAdminResponseDto> getPoints(Pageable pageable, LocalDateTime start,
+                                                            LocalDateTime end) {
+        return pointAdaptor.getPoints(pageable, start, end);
     }
 }
