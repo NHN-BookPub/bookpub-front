@@ -2,11 +2,13 @@ package com.nhnacademy.bookpub.bookpubfront.point.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
-
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.nhnacademy.bookpub.bookpubfront.point.adaptor.PointAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.request.PointGiftRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.time.LocalDateTime;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
@@ -28,6 +30,7 @@ import org.springframework.web.util.UriComponentsBuilder;
 @Slf4j
 public class PointAdaptorImpl implements PointAdaptor {
     private final RestTemplate restTemplate;
+    private final ObjectMapper objectMapper;
     private static final String TOKEN_URL = "/token/point";
 
     /**
@@ -65,4 +68,25 @@ public class PointAdaptorImpl implements PointAdaptor {
                 Void.class
         );
     }
+
+    @Override
+    public PageResponse<GetPointAdminResponseDto> getPoints(Pageable pageable, LocalDateTime start,
+                                                            LocalDateTime end) {
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + "/token/points")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .queryParam("start", start)
+                .queryParam("end", end)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetPointAdminResponseDto>>() {
+                }
+        ).getBody();
+    }
+
 }

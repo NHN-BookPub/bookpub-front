@@ -4,13 +4,16 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberDetailRespo
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.request.PointGiftRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.service.PointService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,7 +28,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @since : 1.0
  **/
 @Controller
-@RequestMapping("/members/point")
+@RequestMapping
 @RequiredArgsConstructor
 public class PointController {
     private static final String ALL = "1";
@@ -41,7 +44,7 @@ public class PointController {
      * @param model    모델.
      * @return 마이페이지 - 포인트 페이지.
      */
-    @GetMapping
+    @GetMapping("/members/point")
     public String getMemberPoint(@RequestParam(defaultValue = ALL) String type,
                                  @PageableDefault(size = 20) Pageable pageable,
                                  Model model) {
@@ -68,10 +71,34 @@ public class PointController {
      * @param requestDto 선물 dto.
      * @return 멤버 포인트 화면.
      */
-    @PostMapping
+    @PostMapping("/members/point")
     public String giftMemberPoint(@Valid PointGiftRequestDto requestDto) {
         pointService.giftPoint(memberUtils.getMemberNo(), requestDto);
         return "redirect:/members/point";
     }
+
+    @GetMapping("/admin/points")
+    public String points(@PageableDefault Pageable pageable,
+                         @RequestParam(value = "start",required = false)
+                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                         LocalDateTime start,
+                         @RequestParam(value = "end",required = false)
+                         @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
+                         LocalDateTime end,
+                         Model model) {
+
+        PageResponse<GetPointAdminResponseDto> result = pointService.getPoints(pageable, start, end);
+        model.addAttribute("content", result.getContent());
+        model.addAttribute("next", result.isNext());
+        model.addAttribute("previous", result.isPrevious());
+        model.addAttribute("totalPage", result.getTotalPages());
+        model.addAttribute("pageNum", result.getNumber());
+        model.addAttribute("previousPageNo", result.getNumber() - 1);
+        model.addAttribute("nextPageNo", result.getNumber() + 1);
+        model.addAttribute("size", pageable.getPageSize());
+        model.addAttribute("uri", "/admin/points");
+        return "admin/point/main";
+    }
+
 }
 

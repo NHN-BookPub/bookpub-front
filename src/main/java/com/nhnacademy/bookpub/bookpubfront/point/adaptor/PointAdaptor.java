@@ -1,8 +1,10 @@
 package com.nhnacademy.bookpub.bookpubfront.point.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.point.dto.request.PointGiftRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import java.time.LocalDateTime;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -29,4 +31,15 @@ public interface PointAdaptor {
      * @param requestDto 포인트 선물 요청 dto.
      */
     void giftPoint(Long memberNo, PointGiftRequestDto requestDto);
+
+    /**
+     * 포인트내역을 반환합니다.
+     *
+     * @param pageable 페이징정보
+     * @param start    시작일자
+     * @param end      종료일자
+     * @return 포인트 내역 반환.
+     */
+    PageResponse<GetPointAdminResponseDto> getPoints(Pageable pageable, LocalDateTime start,
+                                                     LocalDateTime end);
 }
