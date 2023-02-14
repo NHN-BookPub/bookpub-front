@@ -24,11 +24,11 @@
             <div class="label">
                 <span class="order_date" th:text="${#temporals.format(orderDetail.getCreatedAt, 'yyyy.MM.dd')}"></span>
                 <span class="gap">|</span>
-                <span class="order_num">주문번호 <span class="num" th:text="${orderDetail.getOrderNo()}"></span></span>
+                <span class="order_num">주문번호 <span class="num" th:text="${orderDetail.orderNo}"></span></span>
                 <span class="gap">|</span>
-                <span class="order_num">송장번호 <span class="num" th:text="${orderDetail.getInvoiceNo()}"></span></span>
+                <span class="order_num">송장번호 <span class="num" th:text="${orderDetail.invoiceNo}"></span></span>
                 <span class="gap">|</span>
-                <span class="order_num"><span class="num" th:text="${orderDetail.getOrderState()}"></span></span>
+                <span class="order_num"><span class="num" th:text="${orderDetail.orderState}"></span></span>
             </div>
         </div>
     </div>
@@ -53,15 +53,15 @@
             </tr>
             </thead>
             <tbody>
-            <tr th:each="product : ${orderDetail.getOrderProducts()}">
+            <tr th:each="product : ${orderDetail.orderProducts}">
                 <td class="prod_img">
                     <div>
                         <div>
                                     <span class="img_box" th:if="${#strings.isEmpty(product.getThumbnail)}">
                                         <img class="img_thumbnail" src="/static/img/main/no-image.png">
                                     </span>
-                            <span class="img_box" th:if="${not #strings.isEmpty(product.getThumbnail)}">
-                                        <img class="img_thumbnail" th:src="@{${product.getThumbnail()}}" alt="No image">
+                            <span class="img_box" th:if="${not #strings.isEmpty(product.thumbnail)}">
+                                        <img class="img_thumbnail" th:src="@{${product.thumbnail}}" alt="No image">
                                     </span>
                         </div>
                     </div>
@@ -71,21 +71,21 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                    <a th:href="|../../products/${product.getProductNo()}|">
-                        <h3 th:text="${product.getTitle()}"></h3>
+                    <a th:href="'/products/'+ ${product.productNo}">
+                        <h3 th:text="${product.title}"></h3>
                     </a>
                     <span class="text">수량 : </span><span class="val"
-                                                         th:text="${#numbers.formatInteger(product.getProductAmount(),0,'COMMA')}"></span>
+                                                         th:text="${#numbers.formatInteger(product.productAmount,0,'COMMA')}"></span>
                 </td>
 
 
                 <td class="prod">
                                 <span class="price">
-                                    <div class="order_num" th:if="${!product.getStateCode().equals('결제완료')}">
-                                        <span class="order_num" th:text="${product.getStateCode()}"></span>
+                                    <div class="order_num" th:if="${!product.stateCode.equals('결제완료')}">
+                                        <span class="order_num" th:text="${product.stateCode}"></span>
                                     </div>
                                     <span class="val"
-                                          th:text="${#numbers.formatInteger(product.getSalesPrice(),0,'COMMA')}"></span>
+                                          th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
                                     <span class="unit">원</span>
                                 </span>
                 </td>
@@ -131,19 +131,19 @@
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="phone_number" th:text="${orderDetail.getInvoiceNo()}"></span>
+                            <span class="phone_number" th:text="${orderDetail.invoiceNo}"></span>
                         </div>
                     </div>
                 </div>
             </td>
             </br>
-            <h4 th:if="${orderDetail.getBuyerName() != orderDetail.getRecipientName()}">주문자 정보</h4>
+            <h4 th:if="${orderDetail.getBuyerName() != orderDetail.recipientName}">주문자 정보</h4>
             <td>
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="name"><span th:text="${orderDetail.getBuyerName()}"></span> / </span>
-                            <span class="phone_number" th:text="${orderDetail.getBuyerNumber()}"></span>
+                            <span class="name"><span th:text="${orderDetail.buyerName}"></span> / </span>
+                            <span class="phone_number" th:text="${orderDetail.buyerNumber}"></span>
                         </div>
                     </div>
                 </div>
@@ -154,21 +154,21 @@
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="name"><span th:text="${orderDetail.getRecipientName()}"></span> / </span>
-                            <span class="phone_number" th:text="${orderDetail.getRecipientNumber()}"></span>
+                            <span class="name"><span th:text="${orderDetail.recipientName}"></span> / </span>
+                            <span class="phone_number" th:text="${orderDetail.recipientNumber}"></span>
                         </div>
                         <div class="address"
-                             th:text="${orderDetail.getAddressBase() + ' ' + orderDetail.getAddressDetail()}"></div>
+                             th:text="${orderDetail.addressBase + ' ' + orderDetail.addressDetail}"></div>
                         <div class="msg">
                             <div>배송선택일자 :</div>&ensp;
                             <div class="text">
-                                <span th:text="${#temporals.format(orderDetail.getReceivedAt(), 'yyyy.MM.dd')}"></span>
+                                <span th:text="${#temporals.format(orderDetail.receivedAt, 'yyyy.MM.dd')}"></span>
                             </div>
                         </div>
                         <div class="msg">
                             <div>배송요청사항 :</div>&ensp;
                             <div class="text">
-                                <span th:text="${orderDetail.getOrderRequest()}"></span>
+                                <span th:text="${orderDetail.orderRequest}"></span>
                             </div>
                         </div>
                     </div>
@@ -202,7 +202,7 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5><span
-                                    th:text="${#numbers.formatInteger(orderDetail.getCouponAmount(),0,'COMMA')}"></span>원
+                                    th:text="${#numbers.formatInteger(orderDetail.couponAmount,0,'COMMA')}"></span>원
                             </h5>
                         </div>
                     </div>
@@ -215,7 +215,7 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5><span
-                                    th:text="${#numbers.formatInteger(orderDetail.getPointAmount(),0,'COMMA')}"></span>원
+                                    th:text="${#numbers.formatInteger(orderDetail.pointAmount,0,'COMMA')}"></span>원
                             </h5>
                         </div>
                     </div>
@@ -228,9 +228,9 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5 th:if="${orderDetail.isPackaged()}">포장비 : <span
-                                    th:text="${#numbers.formatInteger(orderDetail.getPackageAmount(),0,'COMMA')}"></span>원</h5>
-                            <h5>배송비 : <span th:text="${#numbers.formatInteger(orderDetail.getDeliveryAmount(),0,'COMMA')}"></span>원</h5>
-                            <h5>최종 결제 금액 : <span th:text="${#numbers.formatInteger(orderDetail.getTotalAmount(),0,'COMMA')}"></span>원</h5>
+                                    th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>원</h5>
+                            <h5>배송비 : <span th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>원</h5>
+                            <h5>최종 결제 금액 : <span th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원</h5>
                         </div>
                     </div>
                 </div>
