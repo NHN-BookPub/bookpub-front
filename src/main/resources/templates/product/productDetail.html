@@ -228,9 +228,7 @@
             <hr/>
 
             <div class="row text-center">
-                <form action="" method="post">
-                    <button type="submit" class="btn btn-info" style="width: 60%; float: right">바로 주문</button>
-                </form>
+                <button class="btn btn-info" onclick="direct_order()" style="width: 60%; float: right">바로 주문</button>
             </div>
 
             <hr/>
@@ -572,11 +570,34 @@
                         data: {"productNo": productNo},
                         dataType: "json"
                     })
-
-                    // '상품이 카트에 담겼습니다.', '즐거운 쇼핑 되세요~~~', 'success');
                 }
 
                 location.reload();
+            })
+        }
+    }
+
+    function direct_order() {
+        if (productSaleState === '품절') {
+            Swal.fire({
+                icon: 'info',
+                title: '품절된 상품입니다.',
+                text: '위시리스트 등록후 알림 신청을 해보세요'
+            })
+        } else {
+            console.log(productNo);
+
+            $.ajax({
+                type: "post",
+                url: "/cart/direct-order",
+                async: true,
+                data: {"productNo": productNo},
+                dataType: "json",
+
+                success: function () {
+                    alert('결제하러가기')
+                    window.location = '/orders/order';
+                }
             })
         }
     }

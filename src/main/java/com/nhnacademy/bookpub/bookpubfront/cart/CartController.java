@@ -16,8 +16,10 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +36,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
  * @author : 박경서
  * @since : 1.0
  **/
+@Slf4j
 @Controller
 @RequestMapping("/cart")
 @RequiredArgsConstructor
@@ -127,6 +130,25 @@ public class CartController {
         response.addCookie(cookie);
 
         return jsonData;
+    }
+
+    /**
+     * 바로 주문 정보를 만들어주는 메서드.
+     *
+     * @param request  HttpServletRequest
+     * @param response HttpServletResponse
+     * @return 상품 번호
+     */
+    @PostMapping("/direct-order")
+    public @ResponseBody Object directOrder(HttpServletRequest request, HttpServletResponse response) {
+        String productNo = request.getParameter("productNo");
+
+        Cookie cookie = new Cookie(CartUtils.ORDER_INFO, productNo + "-1");
+        cookie.setPath("/");
+        cookie.setMaxAge(86400);
+        response.addCookie(cookie);
+
+        return productNo;
     }
 
 }
