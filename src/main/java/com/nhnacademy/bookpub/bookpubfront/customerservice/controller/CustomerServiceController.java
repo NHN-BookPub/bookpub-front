@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.customerservice.controller;
 import com.nhnacademy.bookpub.bookpubfront.customerservice.dto.CreateCustomerServiceRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.customerservice.dto.GetCustomerServiceListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.customerservice.service.CustomerServiceService;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.state.CustomerServiceState;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import javax.validation.Valid;
@@ -22,9 +23,9 @@ import org.springframework.web.multipart.MultipartFile;
  **/
 @Controller
 @RequiredArgsConstructor
-@RequestMapping
 public class CustomerServiceController {
     private final CustomerServiceService customerServiceService;
+    private final MemberUtils memberUtils;
 
     /**
      * 고객서비스 전체 조회.
@@ -34,13 +35,20 @@ public class CustomerServiceController {
      * @return 고객서비스 전체
      */
     @GetMapping("/admin/services")
-    public String viewAdminCustomerService(Model model, Pageable pageable) {
+    public String viewAdminCustomerService(Model model,
+                                           @PageableDefault Pageable pageable) {
         PageResponse<GetCustomerServiceListResponseDto> services =
                 customerServiceService.getCustomerServices(pageable);
 
+        for(GetCustomerServiceListResponseDto responseDto : services.getContent()) {
+            setCategoryEngToKor(responseDto);
+        }
+
         setServicesInModel(model, services);
 
-        return "/admin/customerservice/adminCustomerServiceMain";
+        memberUtils.modelRequestMemberNo(model);
+
+        return "admin/customerservice/adminCustomerServiceMain";
     }
 
     /**
@@ -52,9 +60,42 @@ public class CustomerServiceController {
      */
     @PostMapping("/admin/services")
     public String createCustomerService(
-            @Valid @RequestPart CreateCustomerServiceRequestDto request,
+            @Valid @ModelAttribute CreateCustomerServiceRequestDto request,
             @RequestPart(required = false) MultipartFile image) {
+
         customerServiceService.createCustomerService(request, image);
+
+        return "redirect:/admin/services";
+    }
+
+    /**
+     * 고객서비스 단건조회(관리자).
+     *
+     * @param serviceNo 서비스번호
+     * @param model 모델
+     * @return 단건반환
+     */
+    @GetMapping("/admin/service/{serviceNo}")
+    public String getCustomerService(@PathVariable Integer serviceNo, Model model) {
+        GetCustomerServiceListResponseDto response =
+                customerServiceService.getCustomerServiceByNo(serviceNo);
+
+        setCategoryEngToKor(response);
+
+        model.addAttribute("service", response);
+
+        return "admin/customerservice/adminCustomerServiceView";
+    }
+
+    /**
+     * 고객서비스를 삭제합니다.
+     *
+     * @param serviceNo 서비스번호
+     * @return 서비스뷰
+     */
+    @GetMapping("/admin/services/{serviceNo}")
+    public String deleteCustomerService(@PathVariable Integer serviceNo) {
+        customerServiceService.deleteCustomerService(serviceNo);
 
         return "redirect:/admin/services";
     }
@@ -67,8 +108,8 @@ public class CustomerServiceController {
      * @param model 모델
      * @return FAQ
      */
-    @GetMapping("/services/faq/{category}")
-    public String viewCustomerServiceFAQ(@PathVariable(required = false) String category,
+    @GetMapping("/services/faq")
+    public String viewCustomerServiceFAQ(@RequestParam(required = false) String category,
                                          @PageableDefault Pageable pageable,
                                          Model model) {
         PageResponse<GetCustomerServiceListResponseDto> services;
@@ -76,14 +117,20 @@ public class CustomerServiceController {
         if (category == null) {
             services = customerServiceService
                     .getCustomerServiceByCodeName(CustomerServiceState.FAQ.getName(), pageable);
+            model.addAttribute("paramValue", null);
         } else {
             services = customerServiceService
                     .getCustomerServiceByCategory(category, pageable);
+            model.addAttribute("paramValue", category);
+        }
+
+        for (GetCustomerServiceListResponseDto responseDto : services.getContent()) {
+            setCategoryEngToKor(responseDto);
         }
 
         setServicesInModel(model, services);
 
-        return "/customerservice/customerServiceFAQ";
+        return "customerservice/customerServiceFAQ";
     }
 
     /**
@@ -94,8 +141,8 @@ public class CustomerServiceController {
      * @param model 모델
      * @return 고객서비스
      */
-    @GetMapping("/services/notice/{category}")
-    public String viewCustomerServiceNotice(@PathVariable(required = false) String category,
+    @GetMapping("/services/notice")
+    public String viewCustomerServiceNotice(@RequestParam(required = false) String category,
                                            @PageableDefault Pageable pageable,
                                            Model model) {
         PageResponse<GetCustomerServiceListResponseDto> services;
@@ -103,14 +150,56 @@ public class CustomerServiceController {
         if (category == null) {
             services = customerServiceService
                     .getCustomerServiceByCodeName(CustomerServiceState.NOTICE.getName(), pageable);
+            model.addAttribute("paramValue", null);
         } else {
             services = customerServiceService
                     .getCustomerServiceByCategory(category, pageable);
+            model.addAttribute("paramValue", category);
+        }
+
+        for (GetCustomerServiceListResponseDto responseDto : services.getContent()) {
+            setCategoryEngToKor(responseDto);
         }
 
         setServicesInModel(model, services);
 
-        return "/customerservice/customerServiceFAQ";
+        return "customerservice/customerServiceNotification";
+    }
+
+    /**
+     * 고객서비스 단건 조회 뷰입니다.(공지사항)
+     *
+     * @param no 서비스 번호
+     * @param model 모델
+     * @return 단건
+     */
+    @GetMapping("/service/notice")
+    public String viewCustomerServiceNotice(@RequestParam(name = "no") Integer no, Model model) {
+        GetCustomerServiceListResponseDto response = customerServiceService.getCustomerServiceByNo(no);
+
+        setCategoryEngToKor(response);
+
+        model.addAttribute("service", response);
+
+        return "customerservice/customerServiceNoticeView";
+    }
+
+    /**
+     * 고객서비스 단건 조회 뷰입니다.(FAQ)
+     *
+     * @param no 서비스 번호
+     * @param model 모델
+     * @return 단건
+     */
+    @GetMapping("/service/faq")
+    public String viewCustomerServiceFAQ(@RequestParam(name = "no") Integer no, Model model) {
+        GetCustomerServiceListResponseDto response = customerServiceService.getCustomerServiceByNo(no);
+
+        setCategoryEngToKor(response);
+
+        model.addAttribute("service", response);
+
+        return "customerservice/customerServiceNoticeView";
     }
 
     /**
@@ -119,12 +208,37 @@ public class CustomerServiceController {
      * @param model 모델
      * @param services 서비스 페이지
      */
-    private static void setServicesInModel(Model model, PageResponse<GetCustomerServiceListResponseDto> services) {
+    private void setServicesInModel(Model model, PageResponse<GetCustomerServiceListResponseDto> services) {
         model.addAttribute("services", services.getContent());
         model.addAttribute("totalPages", services.getTotalPages());
         model.addAttribute("currentPage", services.getNumber());
         model.addAttribute("isNext", services.isNext());
         model.addAttribute("isPrevious", services.isPrevious());
         model.addAttribute("pageButtonNum", 5);
+    }
+
+    /**
+     * 영어로 저장된 카테고리를 한글로 변환합니다.
+     *
+     * @param response 변환할 dto
+     */
+    private void setCategoryEngToKor(GetCustomerServiceListResponseDto response) {
+        if (response.getServiceCategory().equals("faqUsing")) {
+            response.setCategory("이용안내");
+        } else if (response.getServiceCategory().equals("faqAccount")) {
+            response.setCategory("계정안내");
+        } else if (response.getServiceCategory().equals("faqPayment")) {
+            response.setCategory("결제안내");
+        } else if (response.getServiceCategory().equals("faqOthers")) {
+            response.setCategory("기타안내");
+        } else if (response.getServiceCategory().equals("noteNormal")) {
+            response.setCategory("일반");
+        } else if (response.getServiceCategory().equals("noteServer")) {
+            response.setCategory("서버");
+        }  else if (response.getServiceCategory().equals("notePayment")) {
+            response.setCategory("결제");
+        } else if (response.getServiceCategory().equals("noteOthers")) {
+            response.setCategory("기타");
+        }
     }
 }
