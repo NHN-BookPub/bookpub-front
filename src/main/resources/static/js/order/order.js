@@ -303,11 +303,14 @@ function couponCalculateAndParsingLogic() {
         couponList.push($(this).val());
     });
 
+    let pointList = document.querySelectorAll('.prd_savePoint')
+
     let changePriceList = document.querySelectorAll(".changePrice");
     let productPriceList = document.querySelectorAll('.product-total-price');
     let productDiscountList = document.querySelectorAll('.product-per-discount');
 
     for (var i = 0; i < productList.length; i++) {
+        productList[i] += "|" + parsingNumber(pointList[i].innerText)
         resultList.push(productList[i] + "- ");
         for (var j = 0; j < couponList.length; j++) {
             let productInfo = productList[i].split("|");
@@ -421,6 +424,10 @@ function calculateSavePoint() {
     let methodList = document.querySelectorAll(".policy-method")
 
     let totalSave = 0;
+
+    if (saveList.length === 0) {
+        return;
+    }
 
     for (var i = 0; i < policyList.length; i++) {
         let policy = policyList[i].value.split('|');

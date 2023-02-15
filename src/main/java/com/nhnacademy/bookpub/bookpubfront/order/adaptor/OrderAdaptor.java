@@ -106,4 +106,12 @@ public interface OrderAdaptor {
      */
     PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
             Pageable pageable, Long memberNo);
+
+    /**
+     * 주문상품 구매확정 메소드.
+     *
+     * @param orderProductNo 주문상품번호.
+     * @param memberNo 회원번호.
+     */
+    void confirmOrderProduct(String orderProductNo, Long memberNo);
 }

@@ -14,7 +14,7 @@
     flex-direction: row;
     min-height: 60px;
     padding: 15px 24px;
-    background-color: rgba(80, 85, 177, 0.06);
+    background-color: rgb(84 87 165 / 27%);
     box-sizing: border-box;
     cursor: pointer;
 }
@@ -64,6 +64,9 @@
     margin-left: auto;
     padding-left: 20px;
     box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
 }
 
 .tbl_summary {
@@ -414,9 +417,9 @@ thead {
     gap: 13px;
 }
 
-.refund-btn {
+.prd_btn {
     font-size: 14px;
-    background-color: #f5f5fa;
+    background-color: white;
     border: 1px solid #7e7b7b;
     border-radius: 10px;
     padding: 5px 10px 5px 10px;
@@ -431,4 +434,8 @@ thead {
     height: 105px;
     width: 100%;
     max-height: 105px;
+}
+
+.prd_btn:hover {
+    background-color: #ddd;
 }

@@ -22,6 +22,14 @@
             event.stopPropagation();
             window.location.href = "/payment/" + orderNo;
         }
+
+        function inquiry(productNo) {
+            window.location.href = '/members/inquiryForm/products/' + productNo;
+        }
+
+        function confirmBuy(orderProductNo) {
+            window.location.href = '/orders/confirm/order-product/' + orderProductNo;
+        }
     </script>
 
     <link rel='stylesheet'
@@ -61,10 +69,11 @@
                                                               th:text="${#temporals.format(order.receivedAt, 'yyyy.MM.dd')}"></span></span>
                         </div>
                         <div class="btn-box">
-                            <button th:if="${order.orderState != '결제대기' && order.orderState != '결제취소' && order.orderState != '구매확정'}" class="refund-btn" type="button"
+                            <button th:if="${order.orderState != '결제대기' && order.orderState != '결제취소' && order.orderState != '구매확정'}"
+                                    class="prd_btn" type="button"
                                     th:onclick="modal(event, [[${order.orderNo}]])">환불
                             </button>
-                            <button th:if="${order.orderState == '결제대기'}" class="refund-btn" type="button"
+                            <button th:if="${order.orderState == '결제대기'}" class="prd_btn" type="button"
                                     th:onclick="payment(event, [[${order.orderNo}]])">결제하러 가기
                             </button>
                         </div>
@@ -107,8 +116,8 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                                            <a th:href="|../../../products/${product.productNo}|">
-                                                <h3 th:text="${product.title}"></h3>
+                                            <a th:href="'/products/'+${product.productNo}">
+                                                <h3 style="font-size: 1.25rem !important;" th:text="${product.title}"></h3>
                                             </a>
                                             <span class="text">수량 : </span><span class="val"
                                                                                  th:text="${product.productAmount}"></span>
@@ -118,7 +127,8 @@
 
                                 <td class="prod">
                                 <span class="price">
-                                    <span class="val" th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
+                                    <span class="val"
+                                          th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
                                     <span class="unit">원</span>
                                 </span>
                                 </td>
@@ -126,12 +136,18 @@
                                 <td class="prod">
                                     <div class="btn_wrap full">
                                         <div class="right_box">
-                                            <form th:action="@{/members/inquiryForm/products/{productNo}(productNo=${product.productNo})}"
-                                                  method="get">
-                                                <button type="submit" class="btn_xs btn_light_gray"><span
-                                                        class="text">상품 문의</span><span class="ico_arw_white"></span>
-                                                </button>
-                                            </form>
+                                            <button th:if="${product.stateCode == '구매확정대기'}" type="button"
+                                                    style="color: black !important;"
+                                                    th:onclick="confirmBuy([[${product.orderProductNo}]])"
+                                                    class="prd_btn">
+                                                구매 확정
+                                            </button>
+                                            <button th:if="${product.stateCode != '결제대기'}"
+                                                    style="color: black !important;"
+                                                    type="button" class="prd_btn"
+                                                    th:onclick="inquiry([[${product.productNo}]])">
+                                                상품 문의
+                                            </button>
                                         </div>
                                     </div>
                                 </td>
