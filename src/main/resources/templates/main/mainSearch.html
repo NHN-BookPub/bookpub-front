@@ -2,9 +2,32 @@
 <html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <title>BookPub</title>
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/custom.css"/>
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
     <style>
+        .cursor {
+            cursor: pointer;
+        }
+
         #category-list-div {
             min-width: 15rem;
         }
@@ -57,7 +80,6 @@
             justify-content: end;
             padding-right: 2rem;
         }
-
     </style>
 </head>
 <body>
@@ -103,8 +125,8 @@
                     </div>
                 </div>
 
-                <div class="col-md-6">
-                    <div class="header-search">
+                <div class="col-md-9">
+                    <div class="header-search" style="width: 80%">
                         <form action="/search" method="get">
                             <select class="input-select" name="type">
                                 <!--                                <option value="0">통합 검색</option>-->
@@ -113,26 +135,6 @@
                             <input class="input" name="q" placeholder="Search here">
                             <button class="search-btn">검색</button>
                         </form>
-                    </div>
-                </div>
-
-                <div class="col-md-3 clearfix">
-                    <div class="header-ctn">
-                        <div>
-                            <a href="javascript:void(0)" onclick="wishlist()">
-                                <i class="fa fa-heart"></i>
-                                <span>찜 목록</span>
-                            </a>
-                        </div>
-
-                        <div class="dropdown">
-                            <a href="/cart">
-                                <i class="fa fa-shopping-cart"></i>
-                                <span>장바구니</span>
-                                <div class="qty" th:text="${cartCount}"></div>
-                            </a>
-
-                        </div>
                     </div>
                 </div>
             </div>
@@ -175,8 +177,10 @@
                             <li><a href="/tier-coupons">등급별 쿠폰</a></li>
                         </ul>
                     </li>
+                    <li><a href="javascript:void(0)">추천도서</a></li>
                     <li><a href="javascript:void(0)">공지사항</a></li>
-                    <li><a sec:authorize="!isAuthenticated()" href="javascript:void(0)" onclick="modalOpen()">비회원 주문조회</a>
+                    <li><a sec:authorize="!isAuthenticated()" href="javascript:void(0)" onclick="modalOpen()">비회원
+                        주문조회</a>
                     </li>
 
                 </ul>
@@ -221,26 +225,103 @@
 
         </div>
     </div>
-<script>
-    function modalOpen() {
+    <script>
+        function modalOpen() {
+            let modal1 = document.getElementById("notMember-order");
+            modal1.style.display = "flex";
+        }
+
         let modal1 = document.getElementById("notMember-order");
-        modal1.style.display = "flex";
-    }
+        modal1.addEventListener("click", e => {
+            const evTarget = e.target
+            if (evTarget.classList.contains("modal-overlay2")) {
+                modal1.style.display = "none"
+            }
+        })
 
-    let modal1 = document.getElementById("notMember-order");
-    modal1.addEventListener("click", e => {
-        const evTarget = e.target
-        if (evTarget.classList.contains("modal-overlay2")) {
-            modal1.style.display = "none"
-        }
-    })
-
-    window.addEventListener("keyup", e => {
-        if (modal1.style.display === "flex" && e.key === "Escape") {
-            modal1.style.display = "none"
-        }
-    })
-</script>
+        window.addEventListener("keyup", e => {
+            if (modal1.style.display === "flex" && e.key === "Escape") {
+                modal1.style.display = "none"
+            }
+        })
+    </script>
 </header>
+
+<div class="container" style="padding-top: 1%; padding-bottom: 3%">
+    <h3 style="padding-top: 2%" th:text="'검색어 : [ \'' + ${keyword} + '\' ]'"></h3>
+    <hr/>
+
+    <div th:if="${type} == '0'">
+        <span class="badge rounded-pill" style="font-size: 26px;
+                color: #212529!important;
+                background-color: #f8f9fa!important">
+            상품
+        </span>
+
+        <hr/>
+
+        <span class="badge rounded-pill" style="font-size: 26px;
+         color: #212529!important; background-color: #f8f9fa!important">공지사항</span>
+
+    </div>
+
+    <div th:if="${type} == '1'">
+        <span class="badge rounded-pill" style="font-size: 26px;
+                color: #212529!important;
+                background-color: #f8f9fa!important">
+            상품
+        </span>
+        <br/>
+        <div th:if="${#lists.isEmpty(products)}">
+            <div class="row">
+                <div class="col-sm-5">
+                    <h4>검색 결과가 없습니다...</h4>
+                </div>
+                <div class="col-sm-7">
+                    <img src="/static/img/main/no_search.png">
+                </div>
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(products)}">
+            <div style="flex-wrap: wrap; display: flex; justify-content: center">
+                <div th:each="product: ${products}" style="width: 280px; padding: 2%">
+                    <div class="well well-sm">
+                        <div class="col" style="text-align: center">
+                            <a th:href="@{/products/{productNo}(productNo=${product.id})}">
+                                <span th:if="${#strings.isEmpty(product.filePath)}">
+                                    <img class="cursor" width="200px" height="300px"
+                                         src="/static/img/main/no-image.png">
+                                </span>
+                                <span th:if="${not #strings.isEmpty(product.filePath)}">
+                                    <img class="cursor" width="200px" height="300px" th:src="${product.filePath}">
+                                </span>
+                            </a>
+                            <hr/>
+                            <a th:href="@{/products/{productNo}(productNo=${product.id})}">
+                                <p class="cursor" th:text="${product.title}"></p>
+                            </a>
+                            <div style="display: inline-block">
+                                <span th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></span>
+                                <span style="color: #ef0d0d" th:text="'(' + ${product.salesRate} + '% 할인)'"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>
+
+
+<th:block th:include="main/fragments/rootFooter"></th:block>
 </body>
+<script src="/static/js/main/jquery.min.js"></script>
+<script src="/static/js/main/bootstrap.min.js"></script>
+<script src="/static/js/main/slick.min.js"></script>
+<script src="/static/js/main/nouislider.min.js"></script>
+<script src="/static/js/main/jquery.zoom.min.js"></script>
+<script src="/static/js/main/main.js"></script>
 </html>
