@@ -48,7 +48,7 @@ public class CustomerServiceController {
 
         memberUtils.modelRequestMemberNo(model);
 
-        return "/admin/customerservice/adminCustomerServiceMain";
+        return "admin/customerservice/adminCustomerServiceMain";
     }
 
     /**
@@ -84,7 +84,7 @@ public class CustomerServiceController {
 
         model.addAttribute("service", response);
 
-        return "/admin/customerservice/adminCustomerServiceView";
+        return "admin/customerservice/adminCustomerServiceView";
     }
 
     /**
@@ -130,7 +130,7 @@ public class CustomerServiceController {
 
         setServicesInModel(model, services);
 
-        return "/customerservice/customerServiceFAQ";
+        return "customerservice/customerServiceFAQ";
     }
 
     /**
@@ -163,7 +163,7 @@ public class CustomerServiceController {
 
         setServicesInModel(model, services);
 
-        return "/customerservice/customerServiceNotification";
+        return "customerservice/customerServiceNotification";
     }
 
     /**
@@ -181,7 +181,7 @@ public class CustomerServiceController {
 
         model.addAttribute("service", response);
 
-        return "/customerservice/customerServiceNoticeView";
+        return "customerservice/customerServiceNoticeView";
     }
 
     /**
@@ -199,7 +199,7 @@ public class CustomerServiceController {
 
         model.addAttribute("service", response);
 
-        return "/customerservice/customerServiceNoticeView";
+        return "customerservice/customerServiceNoticeView";
     }
 
     /**
