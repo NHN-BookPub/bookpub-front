@@ -127,11 +127,11 @@ public class PersonalInquiryAdaptorImpl implements PersonalInquiryAdaptor {
     @Override
     public void requestDeletePersonalInquiry(Long inquiryNo) {
         String url = GateWayConfig.getGatewayUrl() + TOKEN_PERSONAL_INQUIRY_API + "/" + inquiryNo
-                + "/members/" + memberUtils.getMemberNo() + "/cancel";
+                + "/members/" + memberUtils.getMemberNo();
 
         restTemplate.exchange(
                 url,
-                HttpMethod.PUT,
+                HttpMethod.DELETE,
                 new HttpEntity<>(Utils.makeHeader()),
                 Void.class
         );

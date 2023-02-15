@@ -9,7 +9,17 @@ import com.nhnacademy.bookpub.bookpubfront.personalinquiryanswer.dto.request.Cre
  * @since : 1.0
  **/
 public interface PersonInquiryAnswerAdaptor {
+    /**
+     * 1대1문의답변 생성을 위한 메서드입니다.
+     *
+     * @param createDto 1대1문의답변 생성에 필요한 정보를 담은 dto
+     */
     void requestCreatePersonalInquiryAnswer(CreatePersonalInquiryAnswerRequestDto createDto);
 
+    /**
+     * 1대1문의답변 삭제를 위한 메서드입니다.
+     *
+     * @param answerNo 삭제할 1대1문의답변 번호
+     */
     void requestDeletePersonalInquiryAnswer(Long answerNo);
 }
