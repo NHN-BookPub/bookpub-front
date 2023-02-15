@@ -11,7 +11,7 @@ import lombok.Getter;
  **/
 @Getter
 public enum CustomerServiceState implements States {
-    FAQ("FAQ", true),
+    FAQ("faq", true),
     NOTICE("notice", true);
     private final String name;
     private final boolean isUsed;
