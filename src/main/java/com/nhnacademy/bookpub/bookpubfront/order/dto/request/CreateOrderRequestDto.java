@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.order.dto.request;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Builder;
@@ -21,6 +22,7 @@ public class CreateOrderRequestDto {
     private Map<Long, Long> productAmount;
     private Map<Long, Long> productCoupon;
     private Map<Long, Long> productSaleAmount;
+    private Map<Long, Long> productPointSave;
     private Long memberNo;
     private Integer deliveryFeePolicyNo;
     private Integer packingFeePolicyNo;
@@ -48,6 +50,7 @@ public class CreateOrderRequestDto {
      * @param productAmount     주문상품 별 쿠폰 할인금액 맵.
      * @param productCoupon     상품에 적용된 쿠폰 맵.
      * @param productSaleAmount 상품에 적용된 쿠폰 할인가 맵.
+     * @param productPointSave  상품 구매시 적립되는 포인트 액수.
      */
     @Builder
     public CreateOrderRequestDto(OrderFormRequestDto orderInfo,
@@ -56,7 +59,8 @@ public class CreateOrderRequestDto {
                                  Map<Long, Integer> productCount,
                                  Map<Long, Long> productAmount,
                                  Map<Long, Long> productCoupon,
-                                 Map<Long, Long> productSaleAmount) {
+                                 Map<Long, Long> productSaleAmount,
+                                 Map<Long, Long> productPointSave) {
         final String[] receive = orderInfo.getReceivedAt().split("-");
         packaged = orderInfo.getPackaged() != null;
 
@@ -65,6 +69,7 @@ public class CreateOrderRequestDto {
         this.productAmount = productAmount;
         this.productCoupon = productCoupon;
         this.productSaleAmount = productSaleAmount;
+        this.productPointSave = productPointSave;
         this.memberNo = memberNo;
         this.deliveryFeePolicyNo = orderInfo.getDeliveryFeePolicyNo();
         this.packingFeePolicyNo = orderInfo.getPackingFeeFeePolicyNo();

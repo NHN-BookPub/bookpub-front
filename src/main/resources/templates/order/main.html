@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -113,8 +113,10 @@
                                         <div class="point_box">
                                             <input class="changePrice" type="hidden" th:value="${product.totalPrice}">
                                             <input class="point_policy" type="hidden" th:value="${product.pointPolicy}">
-                                            <span class="prd_savePoint"></span>
-                                            <span class="policy-method"></span>
+                                            <span sec:authorize="isAuthenticated()" class="prd_savePoint"></span>
+                                            <span sec:authorize="isAuthenticated()" class="policy-method"></span>
+                                            <span sec:authorize="!isAuthenticated()" style="display: none" class="prd_savePoint">0</span>
+                                            <span sec:authorize="!isAuthenticated()">비회원은 포인트 적립이 안됩니다</span>
                                         </div>
                                     </td>
                                     <td class="product-td prd_num">
@@ -415,9 +417,13 @@
                                     <tr th:each="product : ${products}">
                                         <td class="td-css">
                                             <div class="n-prd-row">
-                                                <span class="img-block">
-                                                    <img src="/static/img/main/no-image.png"
-                                                         alt="no-image" style="width: 50px; height: 60px">
+                                                <span class="item-img-wrap"
+                                                      th:if="${#strings.isEmpty(product.getThumbnail)}">
+                                                    <img src="/static/img/main/no-image.png">
+                                                </span>
+                                                <span class="item-img-wrap"
+                                                      th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                                                    <img th:src="${product.getThumbnail()}" alt="No image">
                                                 </span>
                                                 <ul class="info">
                                                     <li class="name" th:text="${product.title}"></li>

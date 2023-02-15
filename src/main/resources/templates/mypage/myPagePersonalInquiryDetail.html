@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="/static/css/mypage/styles.css">
+    <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+    <link rel='stylesheet'
+          href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+</head>
+<body>
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+<div class="body-pd">
+    <br>
+
+    <h1 class="mt-4">1대1 문의</h1>
+    <h6> - 상세 조회</h6>
+    <hr/>
+
+    <div style="width: 95%; margin: auto">
+        <table style="width: 100%" class="table table-striped table-bordered">
+            <tbody>
+            <tr>
+                <td style="width: 70%">문의 제목
+                </td>
+                <td>
+                    문의일자
+                </td>
+            </tr>
+            <tr>
+                <td style="width: 70%">
+                    <span th:text="${personalInquiry.inquiryTitle}"></span>
+                </td>
+                <td>
+                    <span th:text="${#temporals.format(personalInquiry.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    문의 내용
+                    <p id="question-hidden" style="display: none" th:text="${personalInquiry.inquiryContent}"></p>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <div id="viewer"></div>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+    <div style="float: right; margin-right: 3%">
+        <form th:action="@{/members/personal-inquiries/{inquiryNo}/cancel(inquiryNo=${personalInquiry.inquiryNo})}"
+              method="post">
+            <button type="submit" class="btn btn-outline-danger" th:text="삭제"></button>
+        </form>
+
+    </div>
+    <br/>
+    <br/>
+    <hr/>
+
+    <div th:style="${personalInquiry.inquiryAnswerContent == null ? 'width:90%; margin-left: auto; margin-right: 3%;  display: none;'
+    : 'width:90%; margin-left: auto; margin-right: 3%;'}">
+            ㄴ
+        <table class="table table-bordered" style="width: 95%; float: right; background-color: whitesmoke">
+            <tr>
+                <td style="width: 70%">답변 내용</td>
+                <td>관리자</td>
+                <td><span th:text="${#temporals.format(personalInquiry.answerCreatedAt, 'yyyy/MM/dd HH:mm:ss')}"></span></td>
+            </tr>
+            <tr>
+                <td colspan="3">
+                    <div id="answerViewer"></div>
+                    <p id="answerContent" style="display: none" th:text="${personalInquiry.inquiryAnswerContent}"></p>
+                </td>
+            </tr>
+        </table>
+    </div>
+</div>
+</div>
+</div>
+
+</div>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="/static/js/personalinquiry/mypage-personalinquirydetail.js"></script>
+</body>
+</html>

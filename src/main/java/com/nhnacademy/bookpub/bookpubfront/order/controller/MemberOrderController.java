@@ -28,6 +28,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -189,5 +190,24 @@ public class MemberOrderController {
         model.addAttribute("pageButtonNum", 5);
 
         return "mypage/myPageEbooks";
+    }
+
+    /**
+     * 주문 상품의 상태를 구매확정으로 만드는 메소드 입니다.
+     *
+     * @param orderProductNo 주문상품번호.
+     * @return 주문리스트 페이지.
+     */
+    @GetMapping("/confirm/order-product/{orderProductNo}")
+    public String orderBuyConfirm(@PathVariable String orderProductNo) {
+        Long memberNo = memberUtils.getMemberNo();
+        orderService.confirmOrderProduct(orderProductNo, memberNo);
+
+        return "redirect:/orders/list";
+    }
+
+    @GetMapping("/confirm/order/{orderNo}")
+    public String orderProductBuyConfirm(@PathVariable String orderNo) {
+        return "redirect:/orders/list";
     }
 }

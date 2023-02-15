@@ -205,4 +205,23 @@ public class OrderAdaptorImpl implements OrderAdaptor {
                 .getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void confirmOrderProduct(String orderProductNo, Long memberNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + AUTH_ORDER_URL)
+                .path("/order-product/")
+                .path(orderProductNo)
+                .path("/member/")
+                .path(String.valueOf(memberNo)).encode().toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
 }

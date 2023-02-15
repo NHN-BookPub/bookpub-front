@@ -71,8 +71,8 @@
                                 <span class="badge_sm badge_bookpub">
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
-                    <a th:href="|../../products/${product.getProductNo()}|">
-                        <h3 th:text="${product.getTitle()}"></h3>
+                    <a th:href="'/products/'+ ${product.productNo}">
+                        <h3 style="font-size: 1.25rem !important;" th:text="${product.title}"></h3>
                     </a>
                     <span class="text">수량 : </span><span class="val"
                                                          th:text="${#numbers.formatInteger(product.productAmount,0,'COMMA')}"></span>
@@ -91,14 +91,14 @@
                 </td>
                 <td class="prod">
                     <div class="right_box">
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">구매 확정</span><span
-                                class="ico_arw_white"></span></button>
-                        <button type="button" class="btn_xs btn_light_gray"
-                                th:onclick="modal(event,[[${orderDetail.orderNo}]] ,[[${product.orderProductNo}]])"><span
-                                class="text">반품 신청</span><span
-                                class="ico_arw_white"></span></button>
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">교환 신청</span><span
-                                class="ico_arw_white"></span></button>
+                        <button th:if="${product.stateCode != '구매확정' && product.stateCode != '환불' && product.stateCode != '결제대기'}"
+                                type="button" class="prd_btn"
+                                th:onclick="modal(event,[[${orderDetail.orderNo}]] ,[[${product.orderProductNo}]])">
+                            반품 신청
+                        </button>
+                        <button type="button" class="prd_btn">
+                            교환 신청
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -131,19 +131,19 @@
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="phone_number" th:text="${orderDetail.getInvoiceNo()}"></span>
+                            <span class="phone_number" th:text="${orderDetail.invoiceNo}"></span>
                         </div>
                     </div>
                 </div>
             </td>
             </br>
-            <h4 th:if="${orderDetail.getBuyerName() != orderDetail.getRecipientName()}">주문자 정보</h4>
+            <h4 th:if="${orderDetail.getBuyerName() != orderDetail.recipientName}">주문자 정보</h4>
             <td>
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="name"><span th:text="${orderDetail.getBuyerName()}"></span> / </span>
-                            <span class="phone_number" th:text="${orderDetail.getBuyerNumber()}"></span>
+                            <span class="name"><span th:text="${orderDetail.buyerName}"></span> / </span>
+                            <span class="phone_number" th:text="${orderDetail.buyerNumber}"></span>
                         </div>
                     </div>
                 </div>
@@ -154,21 +154,21 @@
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="name"><span th:text="${orderDetail.getRecipientName()}"></span> / </span>
-                            <span class="phone_number" th:text="${orderDetail.getRecipientNumber()}"></span>
+                            <span class="name"><span th:text="${orderDetail.recipientName}"></span> / </span>
+                            <span class="phone_number" th:text="${orderDetail.recipientNumber}"></span>
                         </div>
                         <div class="address"
-                             th:text="${orderDetail.getAddressBase() + ' ' + orderDetail.getAddressDetail()}"></div>
+                             th:text="${orderDetail.addressBase + ' ' + orderDetail.addressDetail}"></div>
                         <div class="msg">
                             <div>배송선택일자 :</div>&ensp;
                             <div class="text">
-                                <span th:text="${#temporals.format(orderDetail.getReceivedAt(), 'yyyy.MM.dd')}"></span>
+                                <span th:text="${#temporals.format(orderDetail.receivedAt, 'yyyy.MM.dd')}"></span>
                             </div>
                         </div>
                         <div class="msg">
                             <div>배송요청사항 :</div>&ensp;
                             <div class="text">
-                                <span th:text="${orderDetail.getOrderRequest()}"></span>
+                                <span th:text="${orderDetail.orderRequest}"></span>
                             </div>
                         </div>
                     </div>
@@ -202,7 +202,7 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5><span
-                                    th:text="${#numbers.formatInteger(orderDetail.getCouponAmount(),0,'COMMA')}"></span>원
+                                    th:text="${#numbers.formatInteger(orderDetail.couponAmount,0,'COMMA')}"></span>원
                             </h5>
                         </div>
                     </div>
@@ -215,7 +215,7 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5><span
-                                    th:text="${#numbers.formatInteger(orderDetail.getPointAmount(),0,'COMMA')}"></span>원
+                                    th:text="${#numbers.formatInteger(orderDetail.pointAmount,0,'COMMA')}"></span>원
                             </h5>
                         </div>
                     </div>
@@ -228,9 +228,13 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5 th:if="${orderDetail.isPackaged()}">포장비 : <span
-                                    th:text="${#numbers.formatInteger(orderDetail.getPackageAmount(),0,'COMMA')}"></span>원</h5>
-                            <h5>배송비 : <span th:text="${#numbers.formatInteger(orderDetail.getDeliveryAmount(),0,'COMMA')}"></span>원</h5>
-                            <h5>최종 결제 금액 : <span th:text="${#numbers.formatInteger(orderDetail.getTotalAmount(),0,'COMMA')}"></span>원</h5>
+                                    th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>원
+                            </h5>
+                            <h5>배송비 : <span
+                                    th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>원
+                            </h5>
+                            <h5>최종 결제 금액 : <span
+                                    th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원</h5>
                         </div>
                     </div>
                 </div>

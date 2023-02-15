@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+<html lang="ko" xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -105,13 +105,12 @@
 
                 <div class="col-md-6">
                     <div class="header-search">
-                        <form>
-                            <select class="input-select">
-                                <option value="0">통합 검색</option>
-                                <option value="1">저자 검색</option>
+                        <form action="/search" method="get">
+                            <select class="input-select" name="type">
+                                <!--                                <option value="0">통합 검색</option>-->
                                 <option value="1">제목 검색</option>
                             </select>
-                            <input class="input" placeholder="Search here">
+                            <input class="input" name="q" placeholder="Search here">
                             <button class="search-btn">검색</button>
                         </form>
                     </div>

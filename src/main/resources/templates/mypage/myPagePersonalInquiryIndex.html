@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" href="/static/css/mypage/styles.css">
+  <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+
+  <link rel='stylesheet'
+        href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+</head>
+<body>
+<th:block th:include="mypage/fragments/mypageSidebar"></th:block>
+<div class="body-pd">
+  <br>
+
+  <h1 class="mt-4">1대1문의 내역</h1>
+  <h6> - 내 1대1문의 내역 조회 </h6>
+  <hr/>
+
+  <div>
+    <div style="float:right;">
+    <form action="/members/personal-inquiries/form" method="get">
+      <button type="submit" class="btn btn-primary">문의하기</button>
+    </form>
+    </div>
+    <br/>
+    <br/>
+
+    <table class="table">
+      <thead class="table-light">
+      <tr style="text-align: center">
+        <th style="width: 70%">문의 제목</th>
+        <th style="width: 20%">작성일</th>
+        <th style="width: 10%">답변 여부</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr th:each="personalInquiry: ${personalInquiryList}">
+        <td>
+          <div>
+            <a style="text-decoration-line: none; padding-left: 30px"
+               th:href="@{/members/personal-inquiries/{inquiryNo}(inquiryNo=${personalInquiry.inquiryNo})}"
+               th:text="${personalInquiry.inquiryTitle}">
+            </a>
+          </div>
+        </td>
+        <td>
+          <span th:text="${#temporals.format(personalInquiry.createdAt, 'yyyy-MM-dd HH:mm:ss')}"></span>
+        </td>
+        <td>
+          <div style="text-align: center">
+            <div>
+              <span th:if="${personalInquiry.inquiryAnswered}" style="color: #3c763d">답변 완료</span>
+              <span th:unless="${personalInquiry.inquiryAnswered}" style="color: #ac2925">미완료</span>
+            </div>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+      <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+          <a class="page-link"
+             th:href="@{/members/personal-inquiries?(page=(${currentPage}-1))}">Previous</a>
+        </li>
+        <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+          <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+            <a class="page-link"
+               th:href="@{/members/personal-inquiries?(page=(${page-1}))}"
+               th:text="${page}"></a></li>
+        </th:block>
+        <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+          <a class="page-link"
+             th:href="@{/members/personal-inquiries?(page=(${currentPage}+1))}">Next</a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>
+</div>
+
+
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+</body>
+</html>

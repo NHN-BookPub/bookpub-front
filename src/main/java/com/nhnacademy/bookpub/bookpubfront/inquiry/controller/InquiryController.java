@@ -67,7 +67,7 @@ public class InquiryController {
      * @return 마이페이지의 상품문의 페이지
      */
     @Auth
-    @PostMapping("/members/inquiryForm")
+    @PostMapping("/members/inquiries")
     public String inquirySubmit(@ModelAttribute CreateInquiryRequestDto request,
                                 @RequestParam(value = "imagePathList", required = false)
                                 String imagePaths) {
