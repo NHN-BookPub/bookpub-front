@@ -137,6 +137,9 @@ public class CustomerServiceAdaptorImpl implements CustomerServiceAdaptor {
                 }).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void deleteCustomerService(Integer serviceNo) {
         String url = UriComponentsBuilder
