@@ -9,6 +9,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.ui.Model;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
@@ -102,5 +103,22 @@ public class Utils {
     public static List<SimpleGrantedAuthority> makeAuthorities(List<String> roles) {
         return roles.stream().map(SimpleGrantedAuthority::new)
                 .collect(Collectors.toList());
+    }
+
+    /**
+     * 페이지네이션 유틸.
+     *
+     * @param model        모델.
+     * @param pageResponse 페이지 리스폰스.
+     * @param <T>          제네릭타입.
+     */
+    public static <T> void settingPagination(Model model,
+                                             PageResponse<T> pageResponse, String attributeName) {
+        model.addAttribute(attributeName, pageResponse.getContent());
+        model.addAttribute("totalPages", pageResponse.getTotalPages());
+        model.addAttribute("currentPage", pageResponse.getNumber());
+        model.addAttribute("isNext", pageResponse.isNext());
+        model.addAttribute("isPrevious", pageResponse.isPrevious());
+        model.addAttribute("pageButtonNum", 5);
     }
 }

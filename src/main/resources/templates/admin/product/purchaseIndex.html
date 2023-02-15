@@ -131,20 +131,32 @@
 
                     <nav aria-label="Page navigation example">
                         <ul class="pagination justify-content-center">
-                            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
-                                <a class="page-link"
-                                   th:href="@{/admin/purchases?(page=(${currentPage}-1))}">Previous</a>
-                            </li>
                             <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/purchases?page=0">처음</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:if="${start > 1}"
+                                       th:href="'/admin/purchases?page='+${start - pageButtonNum -1}">
+                                        이전</a>
+                                    <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                                       href="javascript:void(0)">이전</a>
+                                </li>
                                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
                                     <a class="page-link" th:href="@{/admin/purchases(page=(${page}-1))}"
                                        th:text="${page}"></a></li>
+
+                                <li class="page-item">
+                                    <a class="page-link" th:if="${end < totalPages}"
+                                       th:href="'/admin/purchases?page='+${start + pageButtonNum}">다음</a>
+                                    <a class="page-link" th:if="${end >= totalPages}" style="cursor: not-allowed; color: gray;"
+                                       href="javascript:void(0)">다음</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:href="'/admin/purchases?page='+${totalPages - 1}">마지막</a>
+                                </li>
                             </th:block>
-                            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
-                                <a class="page-link"
-                                   th:href="@{/admin/purchases?(page=(${currentPage}+1))}">Next</a>
-                            </li>
                         </ul>
                     </nav>
 

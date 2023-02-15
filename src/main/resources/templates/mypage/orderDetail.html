@@ -72,7 +72,7 @@
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
                     <a th:href="'/products/'+ ${product.productNo}">
-                        <h3 th:text="${product.title}"></h3>
+                        <h3 style="font-size: 1.25rem !important;" th:text="${product.title}"></h3>
                     </a>
                     <span class="text">수량 : </span><span class="val"
                                                          th:text="${#numbers.formatInteger(product.productAmount,0,'COMMA')}"></span>
@@ -91,14 +91,14 @@
                 </td>
                 <td class="prod">
                     <div class="right_box">
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">구매 확정</span><span
-                                class="ico_arw_white"></span></button>
-                        <button type="button" class="btn_xs btn_light_gray"
-                                th:onclick="modal(event,[[${orderDetail.orderNo}]] ,[[${product.orderProductNo}]])"><span
-                                class="text">반품 신청</span><span
-                                class="ico_arw_white"></span></button>
-                        <button type="button" class="btn_xs btn_light_gray"><span class="text">교환 신청</span><span
-                                class="ico_arw_white"></span></button>
+                        <button th:if="${product.stateCode != '구매확정' && product.stateCode != '환불' && product.stateCode != '결제대기'}"
+                                type="button" class="prd_btn"
+                                th:onclick="modal(event,[[${orderDetail.orderNo}]] ,[[${product.orderProductNo}]])">
+                            반품 신청
+                        </button>
+                        <button type="button" class="prd_btn">
+                            교환 신청
+                        </button>
                     </div>
                 </td>
             </tr>
@@ -228,9 +228,13 @@
                     <div class="address_info_box">
                         <div class="address_person">
                             <h5 th:if="${orderDetail.isPackaged()}">포장비 : <span
-                                    th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>원</h5>
-                            <h5>배송비 : <span th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>원</h5>
-                            <h5>최종 결제 금액 : <span th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원</h5>
+                                    th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>원
+                            </h5>
+                            <h5>배송비 : <span
+                                    th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>원
+                            </h5>
+                            <h5>최종 결제 금액 : <span
+                                    th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원</h5>
                         </div>
                     </div>
                 </div>

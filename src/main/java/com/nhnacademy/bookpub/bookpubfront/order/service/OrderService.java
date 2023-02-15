@@ -82,8 +82,29 @@ public interface OrderService {
      */
     PageResponse<GetOrderListResponseDto> getOrderListByMemberNo(Long memberNo, Pageable pageable);
 
+    /**
+     * 주문 결제 정보를 받아오는 메소드.
+     *
+     * @param orderId 주문 아이디.
+     * @return 주문결제 정보.
+     */
     GetOrderAndPaymentResponseDto getOrderAndPaymentInfo(String orderId);
 
+    /**
+     *  ebook 정보를 받아오는 메소드.
+     *
+     * @param pageable 페이저블.
+     * @param memberNo 멤버번호.
+     * @return ebook정보.
+     */
     PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
             Pageable pageable, Long memberNo);
+
+    /**
+     * 주문상품의 상태를 구매확정으로 바꾸는 메소드.
+     *
+     * @param orderProductNo 주문상품 번호.
+     * @param memberNo 회원번호.
+     */
+    void confirmOrderProduct(String orderProductNo, Long memberNo);
 }
