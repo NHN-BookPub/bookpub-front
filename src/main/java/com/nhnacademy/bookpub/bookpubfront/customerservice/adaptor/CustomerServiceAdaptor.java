@@ -44,4 +44,19 @@ public interface CustomerServiceAdaptor {
      * @return 고객서비스 리스트
      */
     PageResponse<GetCustomerServiceListResponseDto> getCustomerServiceByCategory(String category, Pageable pageable);
+
+    /**
+     * 고객서비스 단건 조회.
+     *
+     * @param serviceNo 서비스 번호
+     * @return 고객서비스 단건
+     */
+    GetCustomerServiceListResponseDto getCustomerServiceByNo(Integer serviceNo);
+
+    /**
+     * 고객서비스를 삭제합니다.
+     *
+     * @param serviceNo 서비스 번호
+     */
+    void deleteCustomerService(Integer serviceNo);
 }
