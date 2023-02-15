@@ -58,10 +58,6 @@ editor.addHook("addImageBlobHook", function (blob, callback) {
 })
 
 
-// 텍스트 가지고 오기
-console.log(editor.getMarkdown())
-
-
 function checkInfo() {
     if (editor.getMarkdown() == null) {
         alert("내용을 입력해주세요.");

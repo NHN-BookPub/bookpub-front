@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <meta name="description" content=""/>
+    <meta name="author" content=""/>
+    <title>BookPub</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/simple-datatables@latest/dist/style.css" rel="stylesheet"/>
+
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+    <!--tui editor-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/codemirror/5.48.4/codemirror.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+
+
+</head>
+<body class="sb-nav-fixed">
+
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">1대1문의 조회</h1>
+                <ol class="breadcrumb mb-4">
+                    <li class="breadcrumb-item active"> - 상세조회</li>
+                </ol>
+
+                <hr/>
+            </div>
+            <br/>
+            <br/>
+            <br/>
+
+            <div style="width: 95%; margin: auto">
+                <table style="width: 100%" class="table table-striped">
+                    <tbody>
+                    <tr>
+                        <td style="width: 70%">
+                            문의 제목
+                        </td>
+                        <td style="width: 10%; text-align: center">
+                            작성자 닉네임
+                        </td>
+                        <td style="width: 20%; text-align: center">
+                            작성일자
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <span th:text="${personalInquiry.inquiryTitle}"></span>
+                        </td>
+                        <td style="text-align: center">
+                            <span th:text="${personalInquiry.memberNickname}"></span>
+                        </td>
+                        <td style="text-align: center">
+                            <span th:text="${#temporals.format(personalInquiry.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            문의 내용
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div id="viewer"></div>
+                            <p id="question-hidden" style="display: none" th:text="${personalInquiry.inquiryContent}"></p>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div th:style="${personalInquiry.inquiryAnswerContent == null ? 'width:90%; margin-left: auto; margin-right: 3%;  display: none;'
+    : 'width:90%; margin-left: auto; margin-right: 3%;'}">
+                ㄴ
+                <table class="table table-light" style="width: 95%; float: right">
+                    <tr>
+                        <td style="width: 70%">답변 내용</td>
+                        <td>관리자</td>
+                        <td><span th:text="${#temporals.format(personalInquiry.answerCreatedAt, 'yyyy/MM/dd HH:mm:ss')}"></span></td>
+                    </tr>
+                    <tr>
+                        <td colspan="3">
+                            <div id="answerViewer"></div>
+                            <p id="answer" style="display: none" th:text="${personalInquiry.inquiryAnswerContent}"></p>
+                        </td>
+                    </tr>
+                </table>
+                <form th:action="@{/admin/personal-inquiry-answers/{answerNo}/cancel(answerNo=${personalInquiry.inquiryAnswerNo})}"
+                      th:method="post">
+                    <button style="width: 5%; margin-right: 3%; float: right;" class="btn btn-outline-danger" type="submit">삭제</button>
+                </form>
+            </div>
+            <br/>
+
+
+
+            <div th:style="${personalInquiry.inquiryAnswerContent != null ? 'width:90%; margin-left: auto; margin-right: 3%;  display: none;'
+    : 'width:90%; margin-left: auto; margin-right: 3%;'}">
+                <div style="width:90%; margin-left: auto; margin-right: 3%">
+                    <h4>ㄴ</h4>
+                    <form action="/admin/personal-inquiry-answers" th:method="post" onsubmit="return checkInfo();">
+                        <input type="hidden" name="personalInquiryNo" th:value="${personalInquiry.inquiryNo}">
+                        <div class="form-group">
+                            답변
+                            <br/>
+                            <div id="editor"></div>
+                            <textarea style="display: none;" id="hiddenDesc" name="personalInquiryAnswerContent"></textarea>
+                        </div>
+                        <br/>
+
+                        <button style="float: right" type="submit" class="btn btn-dark">답변 등록</button>
+                    </form>
+                </div>
+            </div>
+            <br/>
+
+        </main>
+    </div>
+</div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<!--tui editor-->
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script src="/static/js/personalinquiry/admin-personalinquirydetail.js"></script>
+</body>
+</html>
