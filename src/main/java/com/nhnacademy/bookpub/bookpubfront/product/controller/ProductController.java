@@ -18,11 +18,14 @@ import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.review.service.ReviewService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 import javax.servlet.http.Cookie;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,7 +41,6 @@ import org.springframework.web.bind.annotation.RequestParam;
  * @author : 박경서
  * @since : 1.0
  **/
-@Slf4j
 @Controller
 @RequiredArgsConstructor
 @RequestMapping
@@ -51,7 +53,10 @@ public class ProductController {
     private final CategoryUtils categoryUtils;
     private final MemberUtils memberUtils;
     private final ProductTypeStateCodeService productTypeStateCodeService;
+    private final RedisTemplate<String, Object> redisTemplate;
     private static final String CART = "CART";
+    private static final String RECENT_VIEW_COOKIE = "RECENT-VIEW";
+    private static final String DIVIDE_LINE = "======";
 
     /**
      * 상품 단건 상세 조회를 위한 메서드.
@@ -65,9 +70,13 @@ public class ProductController {
     @GetMapping("/products/{productNo}")
     public String viewProduct(@PathVariable("productNo") Long productNo,
                               @CookieValue(name = CART, required = false) Cookie cookie,
+                              @CookieValue(name = RECENT_VIEW_COOKIE, required = false) Cookie recentViewCookie,
                               @RequestParam(value = "inquiryPage", defaultValue = "0") int inquiryPage,
                               Model model) {
         GetProductDetailResponseDto product = productService.findProduct(productNo);
+
+        addRecentView(productNo, recentViewCookie, product);
+
         PageResponse<GetInquirySummaryProductResponseDto> inquiries =
                 inquiryService.getProductInquiryList(PageRequest.of(inquiryPage, 10), productNo);
 
@@ -88,6 +97,22 @@ public class ProductController {
 
         return "product/productDetail";
     }
+
+    /**
+     * 상품 상세 조회 시 redis 상품정보를 저장하는 메서드.
+     *
+     * @param productNo        상품 번호
+     * @param recentViewCookie 쿠키
+     * @param product          상품
+     */
+    private void addRecentView(Long productNo, Cookie recentViewCookie, GetProductDetailResponseDto product) {
+        if (Objects.nonNull(recentViewCookie)) {
+            redisTemplate.opsForZSet().add(recentViewCookie.getValue(),
+                    productNo + DIVIDE_LINE + product.getTitle() + DIVIDE_LINE + product.getThumbnail(),
+                    Double.parseDouble(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyyMMddHHmmss"))));
+        }
+    }
+
 
     /**
      * 카테고리를 기준으로 상품들을 조회.

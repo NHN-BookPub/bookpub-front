@@ -21,9 +21,34 @@
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+    <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
+    <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
     <style>
         .cursor {
             cursor: pointer;
+        }
+
+        .wrap {
+        }
+
+        /* 가로 스크롤 적용 */
+        .scroll__wrap {
+            overflow-x: auto;
+            white-space: nowrap;
+            font-size: 0
+        }
+
+        .scroll__wrap::-webkit-scrollbar {
+            display: none;
+        }
+
+        .scroll--element {
+            display: inline-block;
+            width: 200px;
+            height: 80px;
+            font-size: 16px;
+            text-align: center;
+            margin: 1%;
         }
     </style>
 </head>
@@ -46,18 +71,18 @@
                 </div>
             </div>
 
-            <div class="col-md-4 col-xs-6">
-                <div class="shop" style="height: 202px">
-                    <div class="shop-img">
-                        <img src="https://api-storage.cloud.toast.com/v1/AUTH_fcb81f74e379456b8ca0e091d351a7af/bookpub/front/middle.jpg"
-                             alt="">
-                    </div>
-                    <div class="shop-body">
-                        <h3>Subscription<br>Collection</h3>
-                        <a href="/subscribes" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>
-                    </div>
-                </div>
-            </div>
+            <!--            <div class="col-md-4 col-xs-6">-->
+            <!--                <div class="shop" style="height: 202px">-->
+            <!--                    <div class="shop-img">-->
+            <!--                        <img src="https://api-storage.cloud.toast.com/v1/AUTH_fcb81f74e379456b8ca0e091d351a7af/bookpub/front/middle.jpg"-->
+            <!--                             alt="">-->
+            <!--                    </div>-->
+            <!--                    <div class="shop-body">-->
+            <!--                        <h3>Subscription<br>Collection</h3>-->
+            <!--                        <a href="/subscribes" class="cta-btn">쇼핑하러 가기 <i class="fa fa-arrow-circle-right"></i></a>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
 
             <div class="col-md-4 col-xs-6">
                 <div class="shop" style="height: 202px" onclick="location.href='/products/ebooks'">
@@ -71,8 +96,34 @@
                     </div>
                 </div>
             </div>
+            <div class="col-sm-4 col-xs-6">
+                <div style="position: relative; overflow: hidden; margin: 15px 0px;">
+                    <div class="wrap-vertical">
+                        <div class="wrap" style="height: 310px">
+                            <h4 style="padding-top: 2%; padding-left: 2%">
+                                <ion-icon name="bookmark"></ion-icon>
+                                Recent Views
+                            </h4>
+                            <hr/>
+                            <div class="scroll__wrap" style="overflow-y: hidden;">
+                                <div class="scroll--element" th:each="recentView: ${recentViews}">
+                                    <div class="panel">
+                                        <img class="img-thumbnail cursor" th:src="${recentView.filePath}"
+                                             style="object-fit: cover; width: 130px; height: 180px" alt=""
+                                             onerror="this.src=null; this.src='/static/image.review/no-image.png';"
+                                             th:onclick="'location.href=\''+ @{/products/{productNo}(productNo=${recentView.productNo})} + '\''">
+                                        <hr>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
+
     </div>
+
 </div>
 
 <div class="section">
@@ -124,13 +175,6 @@
                                                  th:text="|${#numbers.formatInteger(newBook.productPrice, 0, 'COMMA')}원|"></del>
                                             <h4 class="product-price"
                                                 th:text="|${#numbers.formatInteger(newBook.salesPrice, 0, 'COMMA')}원|"></h4>
-                                            <div class="product-rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
                                             <div class="product-btns">
                                                 <button class="add-to-wishlist"
                                                         th:productNo="${newBook.productNo}"
@@ -206,13 +250,6 @@
                                                  th:text="|${#numbers.formatInteger(bestSeller.productPrice, 0, 'COMMA')}원|"></del>
                                             <h4 id="money" class="product-price"
                                                 th:text="|${#numbers.formatInteger(bestSeller.salesPrice, 0, 'COMMA')}원|"></h4>
-                                            <div class="product-rating">
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                                <i class="fa fa-star"></i>
-                                            </div>
                                             <div class="product-btns">
                                                 <button class="add-to-wishlist"
                                                         th:productNo="${bestSeller.productNo}"

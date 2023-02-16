@@ -45,9 +45,9 @@ public class FileAdaptorImpl implements FileAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public GetDownloadInfo requestEBookInfo(Long productNo) {
+    public GetDownloadInfo requestEBookInfo(Long productNo, Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + EBOOK_AUTH_URL + "/" + productNo)
+                        GateWayConfig.getGatewayUrl() + EBOOK_AUTH_URL + "/" + productNo + "/" + memberNo)
                 .encode()
                 .toUriString();
         return restTemplate.exchange(
