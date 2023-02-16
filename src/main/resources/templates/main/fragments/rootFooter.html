@@ -82,8 +82,8 @@
                         <h3 class="footer-title">Service</h3>
                         <ul class="footer-links">
                             <li>
-                                <a sec:authorize="hasAuthority('ROLE_MEMBER')" class="auth" href="#">내 정보</a>
-                                <a sec:authorize="!hasAuthority('ROLE_MEMBER')" class="unAuth" href="#">내 정보</a>
+                                <a sec:authorize="hasAuthority('ROLE_MEMBER')" class="auth" href="/members">내 정보</a>
+                                <a sec:authorize="!hasAuthority('ROLE_MEMBER')" class="unAuth" href="javascript:void(0)">내 정보</a>
                             <li>
                                 <a class="auth" href="/cart">장바구니</a>
                             </li>
