@@ -43,6 +43,12 @@ public interface PaymentService {
      *
      * @param refundRequestDto 환불요청 dto.
      */
-    void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto);
+    void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto, Long memberNo);
 
+    /**
+     * 주문상품을 교환하는 메소드.
+     *
+     * @param exchangeDto 교환신청 dto.
+     */
+    void exchangeOrderProduct(OrderProductRefundRequestDto exchangeDto, Long memberNo);
 }

@@ -77,13 +77,25 @@ public class PaymentAdaptorImpl implements PaymentAdaptor {
     }
 
     @Override
-    public void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto) {
-        String url = getGatewayUrl() + TOKEN_URL + "/order-product";
+    public void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto, Long memberNo) {
+        String url = getGatewayUrl() + TOKEN_URL + "/order-product/members/" + memberNo;
 
         restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(refundRequestDto, makeHeader()),
+                Void.class
+        );
+    }
+
+    @Override
+    public void exchangeOrderProduct(OrderProductRefundRequestDto exchangeDto, Long memberNo) {
+        String url = getGatewayUrl() + TOKEN_URL + "/order-product/members/" + memberNo;
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.PUT,
+                new HttpEntity<>(exchangeDto, makeHeader()),
                 Void.class
         );
     }

@@ -65,8 +65,13 @@ public class PaymentServiceImpl implements PaymentService {
      * {@inheritDoc}
      */
     @Override
-    public void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto) {
-        paymentAdaptor.refundOrderProduct(refundRequestDto);
+    public void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto, Long memberNo) {
+        paymentAdaptor.refundOrderProduct(refundRequestDto, memberNo);
+    }
+
+    @Override
+    public void exchangeOrderProduct(OrderProductRefundRequestDto exchangeDto, Long memberNo) {
+        paymentAdaptor.exchangeOrderProduct(exchangeDto, memberNo);
     }
 
     /**
