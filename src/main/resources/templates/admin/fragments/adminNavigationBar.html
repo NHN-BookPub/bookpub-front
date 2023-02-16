@@ -182,16 +182,14 @@
 
                 <!--      --------------------------------------------------------------------------          -->
 
-                <div class="sb-sidenav-menu-heading">고객서비스</div>
-                <a class="nav-link collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                   data-bs-target="#collapseInquiries"
-                   aria-expanded="false" aria-controls="collapseInquiries">
-                    <div class="sb-nav-link-icon"><i class="fa fa-question-circle" aria-hidden="true"></i></div>
+                <div class="sb-sidenav-menu-heading" th:onclick="|location.href='/admin/services/'|">고객서비스</div>
+                <a class="nav-link collapsed" href="/admin/service/" data-bs-toggle="collapse"
+                   aria-expanded="false" th:onclick="|location.href='/admin/services/'|">
+                    <div class="sb-nav-link-icon" th:onclick="|location.href='/admin/services/'|">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true" th:onclick="|location.href='/admin/services/'|"></i>
+                    </div>
                     고객서비스
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
-
-
             </div>
         </div>
 
