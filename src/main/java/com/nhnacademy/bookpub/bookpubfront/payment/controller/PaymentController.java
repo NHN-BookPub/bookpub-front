@@ -96,7 +96,8 @@ public class PaymentController {
      */
     @PostMapping("/refund")
     public String orderRefundRequest(@Valid RefundRequestDto refundRequestDto) {
-        paymentService.refundOrder(refundRequestDto);
+        Long memberNo = memberUtils.getMemberNo();
+        paymentService.refundOrder(refundRequestDto, memberNo);
 
         return "redirect:/orders/list";
     }

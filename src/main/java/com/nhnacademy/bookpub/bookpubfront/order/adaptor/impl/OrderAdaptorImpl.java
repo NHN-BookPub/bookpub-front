@@ -16,6 +16,7 @@ import com.nhnacademy.bookpub.bookpubfront.state.OrderState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpEntity;
@@ -33,6 +34,7 @@ import org.springframework.web.util.UriComponentsBuilder;
  **/
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OrderAdaptorImpl implements OrderAdaptor {
     private final RestTemplate restTemplate;
     private static final String ORDER_URL = "/api/orders";
@@ -43,6 +45,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public Long createOrderRequest(CreateOrderRequestDto requestDto) {
+        log.warn(String.valueOf(requestDto));
         String url = getGatewayUrl() + ORDER_URL;
         HttpEntity<CreateOrderRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
         ResponseEntity<Long> response =

@@ -406,10 +406,16 @@ function finalLogic() {
     let totalPrice = document.getElementById("totalAmount")
     let save = document.getElementById("savingPoint")
 
+    console.log(point.innerText)
+    console.log(coupon.innerText)
+    console.log(totalPrice.innerText)
+    console.log(save.innerText)
+
     pointResult.value = parsingNumber(point.innerText);
     couponResult.value = parsingNumber(coupon.innerText);
     totalResult.value = parsingNumber(totalPrice.innerText);
     savePoint.value = parsingNumber(save.innerText);
+
 }
 
 function parseKRW(data) {
