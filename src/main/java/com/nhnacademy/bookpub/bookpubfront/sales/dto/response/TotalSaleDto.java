@@ -12,10 +12,10 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 public class TotalSaleDto {
-    Integer cancelPaymentCnt;
+    private Integer cancelPaymentCnt;
     private Long cancelPaymentAmount;
-    Integer cancelOrderCnt;
-    Integer saleCnt;
+    private Integer cancelOrderCnt;
+    private Integer saleCnt;
     private Long saleAmount;
     private Long total;
 }

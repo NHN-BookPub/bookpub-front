@@ -29,6 +29,12 @@ public interface SalesService {
      */
     List<OrderCntResponseDto> getOrderCnt();
 
-    List<TotalSaleYearDto> getOrderYear(LocalDateTime start,
-                                        LocalDateTime end);
+    /**
+     * 이번년도 매출정보를 불러옵니다.
+     *
+     * @param start 시작일자
+     * @param end   만료일자
+     * @return the order year
+     */
+    List<TotalSaleYearDto> getOrderYear(LocalDateTime start, LocalDateTime end);
 }
