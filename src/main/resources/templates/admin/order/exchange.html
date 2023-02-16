@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>주문 관리</title>
+    <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    <style>
+        a {
+            text-decoration: none;
+            color: black;
+        }
+    </style>
+
+    <script>
+        function exchangeConfirm(orderProductNo) {
+            window.location.href = "/admin/orders/confirm/" + orderProductNo;
+        }
+    </script>
+
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <div class="card-header" style="justify-content: center">
+                    <h1 class="mb-3 sm">주문 목록</h1>
+                </div>
+
+                <div class="table-box">
+                    <table class="tbl_prod">
+                        <colgroup>
+                            <col style="width: 4rem"/>
+                            <col style="width: 3rem;"/>
+                            <col style="width: 11rem;"/>
+                            <col style="width: 7rem;"/>
+                            <col style="width: 4rem;"/>
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th class="custom-th" scope="col">회원 id</th>
+                            <th class="custom-th" scope="col">상품 이미지</th>
+                            <th class="custom-th" scope="col">상품정보</th>
+                            <th class="custom-th" scope="col">교환 사유</th>
+                            <th class="custom-th" scope="col"></th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="exchange : ${exchangeList}">
+                            <td class="prod">
+                                <span class="price">
+                                    <span class="val"
+                                          th:text="${exchange.memberId}"></span>
+                                </span>
+                            </td>
+                            <td class="prod_img">
+                                <div>
+                                    <div style="text-align: center;">
+                                    <span class="img_box" th:if="${#strings.isEmpty(exchange.thumbnail)}">
+                                        <img class="img_thumbnail"
+                                             src="/static/img/main/no-image.png">
+                                    </span>
+                                        <span class="img_box" th:if="${not #strings.isEmpty(exchange.thumbnail)}">
+                                        <img class="img_thumbnail" th:src="@{${exchange.thumbnail}}" alt="No image">
+                                    </span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="prod">
+                                <div class="prod_area horizontal">
+                                    <div class="prod_thumb_box size_sm">
+                                        <a th:href="'/products/'+${exchange.productNo}">
+                                            <h3 style="font-size: 1.25rem !important;" th:text="${exchange.title}"></h3>
+                                        </a>
+                                        <span class="text">수량 : </span><span class="val"
+                                                                             th:text="${exchange.productAmount}"></span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="prod">
+                                <span th:text="${exchange.exchangeReason}"></span>
+                            </td>
+                            <td class="prod">
+                                <div class="btn_wrap full">
+                                    <div class="right_box" style="padding:0 !important;">
+                                        <button type="button" class="prd_btn"
+                                                th:onclick="exchangeConfirm([[${exchange.orderProductNo}]])">
+                                            교환 수락
+                                        </button>
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <nav aria-label="Page navigation example">
+                    <ul class="pagination justify-content-center">
+                        <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                            <li class="page-item">
+                                <a class="page-link" href="/admin/orders/exchange?page=0">처음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" th:if="${start > 1}"
+                                   th:href="'/admin/orders/exchange?page='+${start - pageButtonNum -1}">
+                                    이전</a>
+                                <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                                   href="javascript:void(0)">이전</a>
+                            </li>
+                            <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                <a class="page-link" th:href="@{/admin/order/exchange(page=(${page}-1))}"
+                                   th:text="${page}"></a></li>
+
+                            <li class="page-item">
+                                <a class="page-link" th:if="${end < totalPages}"
+                                   th:href="'/admin/orders/exchange?page='+${start + pageButtonNum}">다음</a>
+                                <a class="page-link" th:if="${end >= totalPages}"
+                                   style="cursor: not-allowed; color: gray;"
+                                   href="javascript:void(0)">다음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" th:href="'/admin/orders/exchange?page='+${totalPages - 1}">마지막</a>
+                            </li>
+                        </th:block>
+                    </ul>
+                </nav>
+            </div>
+        </main>
+        <th:block th:include="admin/fragments/adminFooter"/>
+    </div>
+</div>
+</body>
+<script type="module" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.esm.js"
+        data-stencil-namespace="ionicons"></script>
+<script nomodule="" src="https://unpkg.com/ionicons@5.2.3/dist/ionicons/ionicons.js"
+        data-stencil-namespace="ionicons"></script>
+<script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
+<script src="/static/js/mypage/main.js"></script>
+</html>
