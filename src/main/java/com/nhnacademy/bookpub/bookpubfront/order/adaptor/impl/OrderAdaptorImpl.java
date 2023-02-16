@@ -191,7 +191,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public PageResponse<GetProductByCategoryResponseDto> getEbooksByMember(
             Pageable pageable, Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl()
-                        + "/token/product/" + memberNo + "/ebooks/")
+                        + "/token/product/" + memberNo + "/ebooks")
                 .build()
                 .toUriString();
 
