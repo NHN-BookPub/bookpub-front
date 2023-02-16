@@ -59,7 +59,7 @@ function totalPrice(count, productNo) {
     let totalPrice = document.getElementById('totalPrice' + productNo)
     let originPrice = document.getElementById('originPrice' + productNo)
 
-    totalPrice.innerText = parseKRW((parseInt(parsingNumber(originPrice.innerText)) * count).toString());
+    totalPrice.innerText = parseKRW((parseInt(parsingNumber(originPrice.innerText)) * count).toString() + '원');
 }
 
 

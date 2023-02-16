@@ -16,10 +16,4 @@ import lombok.NoArgsConstructor;
 public class OauthMemberRequestDto {
     private String id;
     private String pwd;
-
-    @Override
-    public String toString() {
-        return "{" + "\"id\" : " + "\"" + id + "\"" + ", \"pwd\" : " + "\"" + pwd + "\"" + "}";
-
-    }
 }

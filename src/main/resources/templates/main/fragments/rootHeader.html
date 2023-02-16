@@ -57,8 +57,22 @@
             justify-content: end;
             padding-right: 2rem;
         }
-
     </style>
+    <script>
+        function submitCheck() {
+            let form = document.getElementById('submitForm');
+
+            let order = document.getElementById('orderId');
+            let phone = document.getElementById('phoneNo');
+
+            if (order.value === "" || phone.value === "") {
+                alert('주문번호와 핸드폰번호를 입력해주세요')
+                return false;
+            }else{
+                form.submit();
+            }
+        }
+    </script>
 </head>
 <body>
 <header>
@@ -71,7 +85,7 @@
                     <span style="color: aliceblue"> 062-230-6170</span>
                 </li>
                 <li><i class="fa fa-envelope-o"></i><span style="color: aliceblue"> book-pub@gmail.com</span></li>
-                <li><i class="fa fa-map-marker"></i><span style="color: aliceblue"> Korea</span></li>
+
             </ul>
             <ul class="header-links pull-right">
                 <li>
@@ -190,7 +204,8 @@
 
                     <li><a href="/services/faq/">FAQ</a></li>
                     <li><a href="/services/notice/">공지사항</a></li>
-                    <li><a sec:authorize="!isAuthenticated()" href="javascript:void(0)" onclick="modalOpen()">비회원 주문조회</a>
+                    <li><a sec:authorize="!isAuthenticated()" href="javascript:void(0)" onclick="modalOpen()">비회원
+                        주문조회</a>
                     </li>
 
                 </ul>
@@ -201,7 +216,7 @@
     <div id="notMember-order" class="modal-overlay2">
         <div class="notMember-order-modal">
             <h2>비회원 주문 조회</h2>
-            <form action="/orders/non" method="post" style="width: 100%">
+            <form action="/orders/non" method="post" style="width: 100%" id="submitForm">
                 <table style="width: 100%">
                     <tbody>
                     <tr>
@@ -229,32 +244,32 @@
                     </tbody>
                 </table>
                 <div class="modal-btn-box">
-                    <button type="submit" id="click">조회</button>
+                    <button type="button" onclick="submitCheck()" id="click">조회</button>
                 </div>
             </form>
 
         </div>
     </div>
-<script>
-    function modalOpen() {
+    <script>
+        function modalOpen() {
+            let modal1 = document.getElementById("notMember-order");
+            modal1.style.display = "flex";
+        }
+
         let modal1 = document.getElementById("notMember-order");
-        modal1.style.display = "flex";
-    }
+        modal1.addEventListener("click", e => {
+            const evTarget = e.target
+            if (evTarget.classList.contains("modal-overlay2")) {
+                modal1.style.display = "none"
+            }
+        })
 
-    let modal1 = document.getElementById("notMember-order");
-    modal1.addEventListener("click", e => {
-        const evTarget = e.target
-        if (evTarget.classList.contains("modal-overlay2")) {
-            modal1.style.display = "none"
-        }
-    })
-
-    window.addEventListener("keyup", e => {
-        if (modal1.style.display === "flex" && e.key === "Escape") {
-            modal1.style.display = "none"
-        }
-    })
-</script>
+        window.addEventListener("keyup", e => {
+            if (modal1.style.display === "flex" && e.key === "Escape") {
+                modal1.style.display = "none"
+            }
+        })
+    </script>
 </header>
 </body>
 </html>

@@ -69,7 +69,7 @@
                                                               th:text="${#temporals.format(order.receivedAt, 'yyyy.MM.dd')}"></span></span>
                         </div>
                         <div class="btn-box">
-                            <button th:if="${order.orderState != '결제대기' && order.orderState != '결제취소' && order.orderState != '구매확정'}"
+                            <button th:if="${order.orderState != '결제대기' && order.orderState != '결제취소' && order.orderState != '구매확정' && order.orderState !='주문취소'}"
                                     class="prd_btn" type="button"
                                     th:onclick="modal(event, [[${order.orderNo}]])">환불
                             </button>
@@ -117,7 +117,8 @@
                                     <span class="text">BookPub 직배송!</span>
                                 </span>
                                             <a th:href="'/products/'+${product.productNo}">
-                                                <h3 style="font-size: 1.25rem !important;" th:text="${product.title}"></h3>
+                                                <h3 style="font-size: 1.25rem !important;"
+                                                    th:text="${product.title}"></h3>
                                             </a>
                                             <span class="text">수량 : </span><span class="val"
                                                                                  th:text="${product.productAmount}"></span>
@@ -158,23 +159,35 @@
                 </div>
                 <nav aria-label="Page navigation example">
                     <ul class="pagination justify-content-center">
-                        <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
-                            <a class="page-link"
-                               th:href="@{/orders/list(page=(${currentPage}-1))}">Previous</a>
-                        </li>
                         <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                            <li class="page-item">
+                                <a class="page-link" href="/orders/list?page=0">처음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" th:if="${start > 1}"
+                                   th:href="'/orders/list?page='+${start - pageButtonNum -1}">
+                                    이전</a>
+                                <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                                   href="javascript:void(0)">이전</a>
+                            </li>
                             <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                                <a class="page-link"
-                                   th:href="@{/orders/list(page=(${page - 1}))}"
+                                <a class="page-link" th:href="@{/orders/list(page=(${page}-1))}"
                                    th:text="${page}"></a></li>
+
+                            <li class="page-item">
+                                <a class="page-link" th:if="${end < totalPages}"
+                                   th:href="'/orders/list?page='+${start + pageButtonNum}">다음</a>
+                                <a class="page-link" th:if="${end >= totalPages}" style="cursor: not-allowed; color: gray;"
+                                   href="javascript:void(0)">다음</a>
+                            </li>
+                            <li class="page-item">
+                                <a class="page-link" th:href="'/orders/list?page='+${totalPages - 1}">마지막</a>
+                            </li>
                         </th:block>
-                        <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
-                            <a class="page-link"
-                               th:href="@{/orders/list(page=(${currentPage}+1))}">Next</a>
-                        </li>
                     </ul>
                 </nav>
+
             </div>
         </div>
     </section>

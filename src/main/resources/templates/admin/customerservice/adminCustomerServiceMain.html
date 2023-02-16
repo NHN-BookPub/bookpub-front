@@ -87,7 +87,8 @@
                                        name="serviceTitle"
                                        minlength="1" maxlength="100" required>
                                 <div class="invalid-feedback">최소 1글자, 최대 100글자</div>
-                                <input type="text" class="form-control" id="memberNo" style="display: none" name="memberNo" th:value="${memberNo}">
+                                <input type="text" class="form-control" id="memberNo" style="display: none"
+                                       name="memberNo" th:value="${memberNo}">
                             </div>
                         </div>
                         <div class="row">
@@ -106,7 +107,7 @@
                             <div class="invalid-feedback">내용을 저장해주세요.</div>
                         </div>
 
-                        <button type="button" class="btn btn-light" data-dismiss="modal" style="margin-left: 80%;">취소
+                        <button type="button" class="btn btn-light" data-dismiss="modal" onclick="modalClose()" style="margin-left: 80%;">취소
                         </button>
                         <button type="submit" class="btn btn-primary">등록</button>
                     </form>
@@ -210,6 +211,26 @@
         let modal = document.getElementById('serviceAddModal')
         modal.style.display = 'block';
     }
+
+    function modalClose() {
+        let modal = document.getElementById('serviceAddModal')
+        modal.style.display = 'none';
+    }
+
+    let modal = document.getElementById('serviceAddModal')
+
+    modal.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal")) {
+            modal.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal.style.display === "block" && e.key === "Escape") {
+            modal.style.display = "none"
+        }
+    })
 
 </script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"

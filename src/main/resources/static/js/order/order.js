@@ -45,6 +45,12 @@ function usePoint() {
         alert("1원 이상을 사용해주세요")
         return;
     }
+    let pointReg = /^\d{1,500}$/;
+    if (!pointReg.test(useUserPoint.value)) {
+        alert("포인트는 숫자만 입력 가능합니다")
+        useUserPoint.value = '';
+        return;
+    }
 
     let usePoint = 0;
     if (useUserPoint.value !== "") {
@@ -406,16 +412,78 @@ function finalLogic() {
     let totalPrice = document.getElementById("totalAmount")
     let save = document.getElementById("savingPoint")
 
-    console.log(point.innerText)
-    console.log(coupon.innerText)
-    console.log(totalPrice.innerText)
-    console.log(save.innerText)
-
     pointResult.value = parsingNumber(point.innerText);
     couponResult.value = parsingNumber(coupon.innerText);
     totalResult.value = parsingNumber(totalPrice.innerText);
     savePoint.value = parsingNumber(save.innerText);
 
+    if (patternCheck()) {
+        let form = document.getElementById('submitForm')
+        form.submit();
+    }
+}
+
+function patternCheck() {
+    let nameReg = /^[가-힣a-z]{2,200}$/;
+    let addressReg = /^[가-힣0-9\s]{2,200}$/;
+    let emptyReg = /\s/g;
+
+    let buyerName = document.getElementById('buyerName')
+    let buyerPhone = document.getElementById('buyerPhone')
+    let receiverName = document.getElementById('receiverName')
+    let receiverPhone = document.getElementById('receiverPhone')
+    let roadAddress = document.getElementById('roadAddress')
+    let detailAddress = document.getElementById('detailAddress')
+
+    if (!nameReg.test(buyerName.value)) {
+        alert('구매자 이름을 영어 또는 한글로 2글자 이상 200자 이하로 적어주세요')
+        return false;
+    }
+
+    if (!nameReg.test(receiverName.value)) {
+        alert('수령인 이름을 영어 또는 한글로 2글자 이상 200자 이하로 적어주세요')
+        return false;
+    }
+
+    if (!phonePattern(buyerPhone.value)) {
+        return false;
+    }
+
+    if (!phonePattern(receiverPhone.value)) {
+        return false;
+    }
+
+    if (roadAddress.value === "" || !addressReg.test(roadAddress.value)) {
+        alert('도로명 주소를 다시 입력해 주세요.')
+        return false;
+    }
+
+    if (detailAddress.value === "" || !addressReg.test(detailAddress.value)) {
+        alert('상세 주소를 다시 입력해 주세요.')
+        return false;
+    }
+
+    return true;
+}
+
+function phonePattern(phoneVal) {
+    let emptyReg = /\s/g;
+
+    if (isNaN(parseInt(phoneVal))) {
+        alert('전화번호를 입력해주세요')
+        return false;
+    }
+
+    if (emptyReg.test(phoneVal)) {
+        alert('전화번호에는 공백이 있을 수 없습니다.')
+        return false;
+    }
+
+    if (parseInt(phoneVal) < 1000000000 || parseInt(phoneVal) >= 1100000000) {
+        alert('유효한 전화번호 11자리를 입력해주세요 ( - 제외).')
+        return false;
+    }
+    return true;
 }
 
 function parseKRW(data) {

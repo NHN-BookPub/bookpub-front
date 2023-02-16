@@ -60,6 +60,7 @@
             <strong th:text="${#numbers.formatInteger(member.point,0,'COMMA')}+'원'"></strong>
         </div>
         <div class="point-gift">
+            <input type="hidden" th:value="${member.nickname}" id="myNickname">
             <button type="button" class="gift-btn" onclick="modal()">포인트 선물하기</button>
         </div>
     </div>

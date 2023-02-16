@@ -55,7 +55,7 @@
     <div class="contents_inner">
         <h1 id="header-h1-text">주문</h1>
 
-        <form method="post" action="/orders/order" class="cart_body_payment">
+        <form method="post" action="/orders/order" class="cart_body_payment" id="submitForm">
             <input type="hidden" name="productCoupon" id="product-coupon-result" value="">
             <!--            주문 컨테이너-->
             <div class="cart_body_inner">
@@ -656,7 +656,7 @@
                     </div>
                 </div>
                 <div class="btn_wrap full">
-                    <button type="submit" class="btn btn-primary"
+                    <button type="button" class="btn btn-primary"
                             onclick="finalLogic()"
                             id="btnOrderProcess"><span
                             class="text">결제하기</span>
