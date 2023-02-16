@@ -7,6 +7,7 @@ import java.util.Map;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 /**
  * 주문등록을 위한 Dto.
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
  **/
 @Getter
 @NoArgsConstructor
+@ToString
 public class CreateOrderRequestDto {
     private List<Long> productNos;
     private Map<Long, Integer> productCount;

@@ -35,7 +35,7 @@ public interface PaymentService {
      *
      * @param refundRequestDto 환불요청 dto.
      */
-    void refundOrder(RefundRequestDto refundRequestDto);
+    void refundOrder(RefundRequestDto refundRequestDto, Long memberNo);
 
 
     /**

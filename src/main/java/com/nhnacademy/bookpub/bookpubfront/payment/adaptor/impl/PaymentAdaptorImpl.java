@@ -65,8 +65,8 @@ public class PaymentAdaptorImpl implements PaymentAdaptor {
     }
 
     @Override
-    public void refundOrder(RefundRequestDto refundRequestDto) {
-        String url = getGatewayUrl() + TOKEN_URL + "/order";
+    public void refundOrder(RefundRequestDto refundRequestDto, Long memberNo) {
+        String url = getGatewayUrl() + TOKEN_URL + "/order/" + memberNo;
 
         restTemplate.exchange(
                 url,

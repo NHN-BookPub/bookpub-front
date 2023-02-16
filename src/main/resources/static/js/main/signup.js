@@ -139,8 +139,22 @@ function check() {
             return false;
         }
     }
-    return true;
 
+    let address = document.getElementById('address')
+
+    if (address.value === "") {
+        alert('도로명 주소를 입력해 주세요.')
+        return false;
+    }
+
+    let detailAddress = document.getElementById('detailAddress')
+
+    if (detailAddress.value === "") {
+        alert('상세 주소를 입력해 주세요.')
+        return false;
+    }
+
+    return true;
 }
 
 
