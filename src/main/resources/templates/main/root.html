@@ -167,7 +167,7 @@
                                             <div th:each="category :${newBook.productCategories}">
                                                 <span class="product-category" th:text="${category}"></span>
                                             </div>
-                                            <h3 class="product-name">
+                                            <h3 class="product-name" style="height: 5rem !important; display: flex;align-items: center;justify-content: center;">
                                                 <a th:href="@{/products/{productNo}(productNo=${newBook.productNo})}"
                                                    th:text="${newBook.title}"></a>
                                             </h3>
@@ -242,7 +242,7 @@
                                             <div th:each="category :${bestSeller.productCategories}">
                                                 <span class="product-category" th:text="${category}"></span>
                                             </div>
-                                            <h3 class="product-name">
+                                            <h3 class="product-name"  style="height: 5rem !important; display: flex;align-items: center;justify-content: center;">
                                                 <a th:href="@{/products/{productNo}(productNo=${bestSeller.productNo})}"
                                                    th:text="${bestSeller.title}"></a>
                                             </h3>

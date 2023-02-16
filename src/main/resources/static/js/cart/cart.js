@@ -54,3 +54,19 @@ function order() {
         }
     })
 }
+
+function totalPrice(count) {
+    let totalPrice = document.getElementById('totalPrice')
+    let originPrice = document.getElementById('originPrice')
+
+    totalPrice.innerText = parseKRW((parseInt(parsingNumber(originPrice.innerText)) * count).toString());
+}
+
+
+function parseKRW(data) {
+    return data.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function parsingNumber(data) {
+    return data.replaceAll(",", "")
+}

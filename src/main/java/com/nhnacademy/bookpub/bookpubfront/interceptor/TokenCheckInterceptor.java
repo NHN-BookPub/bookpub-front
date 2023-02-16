@@ -4,6 +4,7 @@ package com.nhnacademy.bookpub.bookpubfront.interceptor;
 import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.JWT_COOKIE;
 import static com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil.MILL_SEC;
 
+import com.nhnacademy.bookpub.bookpubfront.exception.NotLoginException;
 import com.nhnacademy.bookpub.bookpubfront.member.adaptor.MemberAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.token.util.JwtUtil;
 import com.nhnacademy.bookpub.bookpubfront.utils.CookieUtil;
@@ -31,7 +32,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 @RequiredArgsConstructor
 @Slf4j
 public class TokenCheckInterceptor implements HandlerInterceptor {
-    private static final Long RENEW_TIME = Duration.ofMinutes(20).toSeconds();
+    private static final Long RENEW_TIME = Duration.ofHours(1).toSeconds();
     private static final String ERROR_MESSAGE = "X-MESSAGE";
     private final MemberAdaptor memberAdaptor;
 
@@ -67,7 +68,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
 
             if (isRefreshTokenExpired(response, messages)) {
                 log.warn("refreshToken expired");
-                return false;
+                throw new NotLoginException();
             }
 
             return renewAccessToken(request, response, jwtCookie, result);
@@ -173,6 +174,7 @@ public class TokenCheckInterceptor implements HandlerInterceptor {
                                           String renewAccessToken, Long expireTime) {
         jwtCookie.setValue(renewAccessToken + "." + expireTime);
         jwtCookie.setPath("/");
+        jwtCookie.setMaxAge(7200);
         response.addCookie(jwtCookie);
     }
 

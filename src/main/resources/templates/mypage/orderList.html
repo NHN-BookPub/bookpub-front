@@ -128,7 +128,7 @@
                                 <td class="prod">
                                 <span class="price">
                                     <span class="val"
-                                          th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
+                                          th:text="${#numbers.formatInteger(product.salesPrice * product.productAmount,0,'COMMA')}"></span>
                                     <span class="unit">원</span>
                                 </span>
                                 </td>

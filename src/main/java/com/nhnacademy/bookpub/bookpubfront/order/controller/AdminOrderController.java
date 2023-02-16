@@ -2,9 +2,11 @@ package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetExchangeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
@@ -12,6 +14,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -52,7 +55,7 @@ public class AdminOrderController {
     /**
      * 관리자용 주문 뷰.
      *
-     * @param model 모델.
+     * @param model    모델.
      * @param pageable 페이징.
      * @return 주문 리스트 뷰.
      */
@@ -62,12 +65,37 @@ public class AdminOrderController {
         PageResponse<GetOrderListForAdminResponseDto> orders =
                 orderService.getOrderList(pageable);
 
-        model.addAttribute("orderList", orders.getContent());
-        model.addAttribute("totalPages", orders.getTotalPages());
-        model.addAttribute("currentPage", orders.getNumber());
-        model.addAttribute("isNext", orders.isNext());
-        model.addAttribute("isPrevious", orders.isPrevious());
-        model.addAttribute("pageButtonNum", 5);
+        Utils.settingPagination(model, orders, "orderList");
         return "admin/order/orderMain";
+    }
+
+    /**
+     * 교환 리스트를 가져오는 주문목록.
+     *
+     * @param model    모델.
+     * @param pageable 페이지.
+     * @return 교환뷰.
+     */
+    @GetMapping("/list/exchange")
+    public String adminExchangeConfirmView(Model model,
+                                           @PageableDefault Pageable pageable) {
+        PageResponse<GetExchangeResponseDto> exchange
+                = orderService.getExchangeOrderList(pageable);
+
+        Utils.settingPagination(model, exchange, "exchangeList");
+        return "admin/order/exchange";
+    }
+
+    /**
+     * 교환 요청을 한 상품을 수락해주는 메소드.
+     *
+     * @param orderProductNo 주문상품번호.
+     * @return 주문상품 교환 뷰.
+     */
+    @GetMapping("/confirm/{orderProductNo}")
+    public String adminExchangeConfirm(@PathVariable String orderProductNo) {
+        orderService.confirmExchange(orderProductNo);
+
+        return "redirect:/admin/orders/list/exchange";
     }
 }

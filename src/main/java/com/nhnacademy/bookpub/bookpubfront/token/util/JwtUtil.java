@@ -35,7 +35,7 @@ public class JwtUtil {
         Cookie cookie = new Cookie(JwtUtil.JWT_COOKIE, tokenInfo);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(-1);
+        cookie.setMaxAge(7200);
         return cookie;
     }
 }

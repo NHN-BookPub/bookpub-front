@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.config.TossConfig;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
@@ -32,6 +33,7 @@ public class PaymentController {
     private final PaymentService paymentService;
     private final OrderService orderService;
     private final TossConfig tossConfig;
+    private final MemberUtils memberUtils;
 
     private static final String WAITING_PAYMENT = "결제대기";
 
@@ -97,7 +99,23 @@ public class PaymentController {
     @PostMapping("/order-product/refund")
     public String orderProductRefundRequest(
             @Valid OrderProductRefundRequestDto orderProductRefundRequestDto) {
-        paymentService.refundOrderProduct(orderProductRefundRequestDto);
+        Long memberNo = memberUtils.getMemberNo();
+        paymentService.refundOrderProduct(orderProductRefundRequestDto, memberNo);
+
+        return "redirect:/orders?orderNo=" + orderProductRefundRequestDto.getOrderNo();
+    }
+
+    /**
+     * 주문상품을 교환신청 하는 메소드.
+     *
+     * @param orderProductRefundRequestDto 환불 정보.
+     * @return 환불.
+     */
+    @PostMapping("/order-product/exchange")
+    public String orderProductExchangeRequest(
+            @Valid OrderProductRefundRequestDto orderProductRefundRequestDto) {
+        Long memberNo = memberUtils.getMemberNo();
+        paymentService.exchangeOrderProduct(orderProductRefundRequestDto, memberNo);
 
         return "redirect:/orders?orderNo=" + orderProductRefundRequestDto.getOrderNo();
     }
