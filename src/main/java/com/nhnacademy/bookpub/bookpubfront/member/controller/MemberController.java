@@ -162,7 +162,18 @@ public class MemberController {
         Long memberNo = memberUtils.getMemberNo();
         MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
 
+        String birthYear = String.valueOf(member.getBirthYear());
+        if (birthYear.length() == 1) {
+            birthYear = "0" + birthYear;
+        }
+        String birthMonth = String.valueOf(member.getBirthMonth());
+        if (birthMonth.length() == 3) {
+            birthMonth = "0" + birthMonth;
+        }
+
         model.addAttribute("member", member);
+        model.addAttribute("birthYear", birthYear);
+        model.addAttribute("birthMonth", birthMonth);
 
         return "mypage/memberInfo";
     }

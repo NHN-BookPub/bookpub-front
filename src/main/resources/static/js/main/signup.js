@@ -1,6 +1,6 @@
 let emptyReg = /\s/g;
 let nameReg = /^[가-힣a-z]{2,200}$/;
-let idReg = /^[a-z0-9_-]{5,20}$/;
+let idReg = /^[a-z0-9]{5,20}$/;
 let pwdReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 let nickReg = /^[a-zA-Z\d]{2,8}$/;
 let birthReg = /^\d{6}$/;

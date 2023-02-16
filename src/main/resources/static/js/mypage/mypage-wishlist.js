@@ -11,7 +11,11 @@ function cancelLike(productNo) {
         cancelButtonText: '취소'
     }).then((result) => {
         if (result.isConfirmed) {
-            Swal.fire('삭제가 완료되었습니다.', '즐거운 쇼핑 되세요~~', 'success')
+            Swal.fire({
+                icon: 'success',
+                title: '삭제가 완료되었습니다.',
+                text: '즐거운 쇼핑 되세요~~',
+            })
             $.ajax({
                 type: "delete",
                 url: "/wishlist",
