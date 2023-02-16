@@ -77,7 +77,7 @@
                                     <label for="exchangeName">변경할 이름</label>
                                     <input type="text" class="form-control" id="exchangeName" placeholder="변경할 이름 기입"
                                            name="exchangeName"
-                                           pattern="^.*(?=.*[가-힣a-z])(?=.{2,200}).*$" required>
+                                           pattern="/^[가-힣a-z]{2,200}$/" required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">2자 10자</div>
                                 </div>
@@ -126,7 +126,7 @@
                                     <input type="text" class="form-control"
                                            id="nickname"
                                            placeholder="닉네임을 입력해주세요" name="exchangeNickname"
-                                           pattern="^.*(?=.*[a-z])(?=.*[a-z\d])(?=.{2,8}).*$"
+                                           pattern="/^[a-zA-Z\d]{2,8}$/"
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">닉네임은 영소문자는 필수, 숫자는 선택으로 2글자 이상, 8글자 이하로 생성해주세요.</div>
@@ -161,7 +161,7 @@
                 <div class="d-flex w-100 height-0 justify-content-end">
                     <small class="badge bg-opacity-20">수정하기</small>
                 </div>
-                <span class="mb-2" th:text="${member.phone}">01043580106</span>
+                <span class="mb-2" th:text="${member.phone}"></span>
             </a>
             <!--        휴대전화 변경 모달       -->
 
@@ -231,7 +231,7 @@
                                     <label for="currentPwd">현재 비밀번호</label>
                                     <input type="password" class="form-control" id="currentPwd"
                                            placeholder="현재 비밀번호를 입력해주세요" name="currentPwd"
-                                           pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,50}$"
+                                           pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=?<>.,/|~`])[A-Za-z\d!@#$%^&*()_+=?<>.,/|~`]{8,}$/"
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">영문 대,소 문자,숫자,특수문자 로 8~50자</div>
@@ -294,7 +294,7 @@
                                     <label for="exchangeEmail">변경할 이메일</label>
                                     <input type="email" class="form-control" id="exchangeEmail"
                                            placeholder="abc@xxxx.xxx" name="exchangeEmail"
-                                           pattern="^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                                           pattern="[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*"
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">이메일 형식에 맞지않습니다.</div>
