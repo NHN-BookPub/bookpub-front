@@ -170,7 +170,7 @@ public class ProductController {
         model.addAttribute("isNext", products.isNext());
         model.addAttribute("isPrevious", products.isPrevious());
         model.addAttribute("pageButtonNum", 5);
-        model.addAttribute("typeNO", typeNo);
+        model.addAttribute("typeNo", typeNo);
         model.addAttribute("typeName", type.getCodeName());
 
         return "product/productListByType";
