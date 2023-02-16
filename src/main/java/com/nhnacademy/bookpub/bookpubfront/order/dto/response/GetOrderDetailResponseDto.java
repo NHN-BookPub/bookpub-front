@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class GetOrderDetailResponseDto {
     private Long orderNo;
+    private Long memberNo;
     private List<GetProductListForOrderResponseDto> orderProducts = new ArrayList<>();
     private String orderState;
     private String buyerName;
@@ -37,4 +38,12 @@ public class GetOrderDetailResponseDto {
     private Long totalAmount;
     private String orderName;
     private String orderId;
+
+    public void setDeliveryAmountToZero() {
+        this.deliveryAmount = 0L;
+    }
+
+    public void setPackageAmountToZero() {
+        this.packageAmount = 0L;
+    }
 }

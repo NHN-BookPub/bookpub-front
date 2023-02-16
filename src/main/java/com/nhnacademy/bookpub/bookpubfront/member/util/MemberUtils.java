@@ -49,6 +49,21 @@ public class MemberUtils {
         model.addAttribute("member", member);
     }
 
+    public MemberDetailResponseDto getMember() {
+        String credential =
+                (String) SecurityContextHolder.getContext().getAuthentication().getCredentials();
+
+        MemberDetailResponseDto member;
+
+        try {
+            member = objectMapper.readValue(credential, MemberDetailResponseDto.class);
+        } catch (JsonProcessingException e) {
+            member = null;
+        }
+
+        return member;
+    }
+
     public Long getMemberNo() {
         String principal =
                 (String) SecurityContextHolder.getContext()

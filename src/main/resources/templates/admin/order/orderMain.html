@@ -23,7 +23,7 @@
                     <div style="display: flex; flex-direction: column; gap: 8px">
                         <div class="order_summary_box" th:each="order : ${orderList}">
                             <div class="box_header"
-                                 th:onclick="|location.href='/orders?orderNo=${order.orderNo}'|">
+                                 th:onclick="|location.href='/admin/orders?orderNo=${order.orderNo}'|">
                                 <div class="label">
                         <span class="order_date"
                               th:text="${#temporals.format(order.createdAt, 'yyyy.MM.dd HH:mm')}"></span>
