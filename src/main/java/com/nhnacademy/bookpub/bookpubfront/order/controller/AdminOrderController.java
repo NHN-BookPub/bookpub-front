@@ -1,7 +1,9 @@
 package com.nhnacademy.bookpub.bookpubfront.order.controller;
 
+import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.settingPagination;
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListForAdminResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -43,8 +45,30 @@ public class AdminOrderController {
                         .getAuthentication()
                         .getPrincipal());
 
+        GetOrderDetailResponseDto response = orderService.getOrderDetailByNo(orderNo, memberNo);
+
+        if (response.getCouponAmount()
+                + response.getPointAmount()
+                + response.getTotalAmount() >= 30000) {
+            response.setDeliveryAmountToZero();
+        }
+
+        if (!response.isPackaged()) {
+            response.setPackageAmountToZero();
+        }
+
+        Long originPrice =
+                response.getCouponAmount()
+                        + response.getPointAmount()
+                        + response.getTotalAmount()
+                        - response.getDeliveryAmount()
+                        - response.getPackageAmount();
+
+
+
+        model.addAttribute("orderDetail", response);
+        model.addAttribute("originPrice", originPrice);
         model.addAttribute("member", memberService.getApiMember(memberNo));
-        model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo, memberNo));
 
         return "admin/order/adminOrderDetail";
     }
@@ -62,12 +86,8 @@ public class AdminOrderController {
         PageResponse<GetOrderListForAdminResponseDto> orders =
                 orderService.getOrderList(pageable);
 
-        model.addAttribute("orderList", orders.getContent());
-        model.addAttribute("totalPages", orders.getTotalPages());
-        model.addAttribute("currentPage", orders.getNumber());
-        model.addAttribute("isNext", orders.isNext());
-        model.addAttribute("isPrevious", orders.isPrevious());
-        model.addAttribute("pageButtonNum", 5);
+        settingPagination(model, orders, "orderList");
+
         return "admin/order/orderMain";
     }
 }

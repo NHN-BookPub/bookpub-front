@@ -8,6 +8,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.GetOrderDetailNonMemberRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.relationship.dto.OrderProductDto;
 import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
@@ -95,12 +96,63 @@ public class MemberOrderController {
      */
     @GetMapping
     public String orderDetailView(Model model, @RequestParam Long orderNo) {
-        memberUtils.modelRequestMemberNo(model);
-        Long memberNo = memberUtils.getMemberNo();
+        MemberDetailResponseDto member = memberUtils.getMember();
+        GetOrderDetailResponseDto response = orderService.getOrderDetailByNo(orderNo, member.getMemberNo());
 
-        model.addAttribute("orderDetail", orderService.getOrderDetailByNo(orderNo, memberNo));
+        if (!member.getMemberNo().equals(response.getMemberNo())) {
+            model.addAttribute("orderDetail", null);
+        } else {
+            setResponseInModel(model, response);
+        }
 
         return "mypage/orderDetail";
+    }
+
+    /**
+     * 주문상세 정보를 모델에 넣습니다.
+     *
+     * @param model 모델
+     * @param response 주문상세 Dto
+     */
+    private void setResponseInModel(Model model, GetOrderDetailResponseDto response) {
+        Long originPrice = setOriginPrice(response);
+
+        originPrice = addDeliveryPackageFee(response, originPrice);
+
+        model.addAttribute("orderDetail", response);
+        model.addAttribute("originPrice", originPrice);
+    }
+
+    /**
+     * 원래 금액에 택배비와 포장비를 더해줍니다.
+     *
+     * @param response 상세정보 dto
+     * @param originPrice 원래금액
+     * @return 더한 가격
+     */
+    private Long addDeliveryPackageFee(GetOrderDetailResponseDto response, Long originPrice) {
+        if (originPrice >= 30000) {
+            response.setDeliveryAmountToZero();
+        }
+
+        if (!response.isPackaged()) {
+            response.setPackageAmountToZero();
+        }
+
+        originPrice -= (response.getDeliveryAmount() + response.getPackageAmount());
+        return originPrice;
+    }
+
+    /**
+     * 할인금액을 제외하고 원래 금액을 반환합니다.
+     *
+     * @param response 주문상세 dto
+     * @return 원래 금액
+     */
+    private Long setOriginPrice(GetOrderDetailResponseDto response) {
+        return response.getCouponAmount()
+                + response.getPointAmount()
+                + response.getTotalAmount();
     }
 
     /**
@@ -113,8 +165,11 @@ public class MemberOrderController {
     @PostMapping("/non")
     public String orderDetailViewNonMember(Model model,
                                            GetOrderDetailNonMemberRequestDto request) {
-        model.addAttribute("orderDetail",
-                orderService.getOrderDetailResponseDto(request.getOrderId(), request.getPhoneNo()));
+
+        GetOrderDetailResponseDto response =
+                orderService.getOrderDetailResponseDto(request.getOrderId(), request.getPhoneNo());
+
+        setResponseInModel(model, response);
 
         return "order/NonMemberOrderDetail";
     }

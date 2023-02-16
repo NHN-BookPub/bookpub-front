@@ -131,7 +131,12 @@
                 <div class="address_item no_line">
                     <div class="address_info_box">
                         <div class="address_person">
-                            <span class="phone_number" th:text="${orderDetail.invoiceNo}"></span>
+                            <span class="phone_number" th:if="${#strings.isEmpty(orderDetail.invoiceNo)}"
+                                  th:text="${orderDetail.orderState}"></span>
+                            <span class="phone_number" th:if="${#strings.isEmpty(orderDetail.invoiceNo)}">입니다.</span>
+
+                            <span class="phone_number" th:if="${not #strings.isEmpty(orderDetail.invoiceNo)}"
+                                  th:text="${orderDetail.invoiceNo}"></span>
                         </div>
                     </div>
                 </div>
@@ -183,64 +188,67 @@
         <div class="title_wrap title_size_md">
             <h3>결제</h3>
         </div>
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"> 정상가</th>
+                <th scope="col"> 쿠폰사용</th>
+                <th scope="col"> 포인트사용</th>
+                <th scope="col"> 포장비</th>
+                <th scope="col"> 배송비</th>
+                <th scope="col"> 결제가</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <th scope="row"><span th:text="${#numbers.formatInteger(originPrice,0,'COMMA')}"></span>원</th>
 
-        <div class="tbl_row_wrap">
-            <table class="tbl_row">
-                <colgroup>
-                    <col style="width: 140px;"/>
-                    <col style="width: auto;"/>
-                </colgroup>
-                <tbody>
-                </tbody>
-            </table>
-        </div>
+                <th th:if="${orderDetail.couponAmount <= 0}">
+                    <span>
+                    <span>미사용</span>
+                    </span>
+                </th>
+                <th th:if="${orderDetail.couponAmount > 0}">
+                    <span style="color: red">-
+                        <span th:text="${#numbers.formatInteger(orderDetail.couponAmount,0,'COMMA')}"></span>
+                        원</span>
+                </th>
 
-        <tr>
-            <h4>쿠폰 할인액</h4>
-            <td>
-                <div class="address_item no_line">
-                    <div class="address_info_box">
-                        <div class="address_person">
-                            <h5><span
-                                    th:text="${#numbers.formatInteger(orderDetail.couponAmount,0,'COMMA')}"></span>원
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            </br>
-            <h4>포인트 사용량</h4>
-            <td>
-                <div class="address_item no_line">
-                    <div class="address_info_box">
-                        <div class="address_person">
-                            <h5><span
-                                    th:text="${#numbers.formatInteger(orderDetail.pointAmount,0,'COMMA')}"></span>원
-                            </h5>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            </br>
-            <h4>결제 금액</h4>
-            <td>
-                <div class="address_item no_line">
-                    <div class="address_info_box">
-                        <div class="address_person">
-                            <h5 th:if="${orderDetail.isPackaged()}">포장비 : <span
-                                    th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>원
-                            </h5>
-                            <h5>배송비 : <span
-                                    th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>원
-                            </h5>
-                            <h5>최종 결제 금액 : <span
-                                    th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원</h5>
-                        </div>
-                    </div>
-                </div>
-            </td>
-            </br>
-        </tr>
+                <th th:if="${orderDetail.pointAmount <= 0}">
+                    <span>
+                    <span>미사용</span>
+                    </span>
+                </th>
+                <th th:if="${orderDetail.pointAmount > 0}">
+                    <span style="color: red">-
+                    <span th:text="${#numbers.formatInteger(orderDetail.pointAmount,0,'COMMA')}"></span>
+                    원</span>
+                </th>
+
+                <th th:if="${orderDetail.packaged}">
+                    <span style="color: blue">+
+                    <span th:text="${#numbers.formatInteger(orderDetail.packageAmount,0,'COMMA')}"></span>
+                    원</span>
+                </th>
+                <th th:if="${!orderDetail.packaged}">
+                    <span>선택 안함</span>
+                </th>
+
+                <th th:if="${orderDetail.deliveryAmount <= 0}">
+                    <span>
+                    <span>무료</span>
+                    </span>
+                </th>
+                <th th:if="${orderDetail.deliveryAmount > 0}">
+                    <span style="color: blue">+
+                    <span th:text="${#numbers.formatInteger(orderDetail.deliveryAmount,0,'COMMA')}"></span>
+                    원</span>
+                </th>
+
+                <th><span th:text="${#numbers.formatInteger(orderDetail.totalAmount,0,'COMMA')}"></span>원</th>
+            </tr>
+            </tbody>
+        </table>
     </div>
 </div>
 <div id="refund" class="modal-overlay2">
@@ -302,5 +310,8 @@
 
 <script src="https://unpkg.com/ionicons@5.2.3/dist/ionicons.js"></script>
 <script src="/static/js/mypage/main.js"></script>
+</br>
+</br>
+</br>
 </body>
 </html>
