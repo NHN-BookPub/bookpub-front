@@ -1,11 +1,11 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
-
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
@@ -32,6 +32,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
     private final RestTemplate restTemplate;
     private static final String COUPON_URL = "/api/coupons";
     private static final String COUPON_AUTH_URL = "/token/coupons";
+    private final MemberUtils memberUtils;
 
     /**
      * {@inheritDoc}
@@ -120,6 +121,21 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 });
 
         return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void requestModifyUsedPointCoupon(Long couponNo) {
+        String url = GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/" + couponNo
+                + "/point/members/" + memberUtils.getMemberNo();
+
+        restTemplate.exchange(url,
+                HttpMethod.PUT,
+                new HttpEntity<>(Utils.makeHeader()),
+                Void.class
+        );
     }
 
     /**

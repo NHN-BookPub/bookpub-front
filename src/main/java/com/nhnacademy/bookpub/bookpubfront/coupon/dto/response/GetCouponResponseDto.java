@@ -15,6 +15,7 @@ public class GetCouponResponseDto {
     private String memberId;
     private String templateName;
     private String templateImage;
+    private String typeName;
     private boolean policyFixed;
     private Long policyPrice;
     private Long policyMinimum;
