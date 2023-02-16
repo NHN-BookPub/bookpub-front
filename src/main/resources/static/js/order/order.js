@@ -41,7 +41,7 @@ function usePoint() {
     let totalAmount = document.getElementById("totalAmount")
     let userPoint = parsingNumber(document.getElementById("userPoint").innerText);
 
-    if (useUserPoint.value === "" || useUserPoint.value === "0") {
+    if (useUserPoint.value === "" || parseInt(useUserPoint.value) <= 0) {
         alert("1원 이상을 사용해주세요")
         return;
     }
