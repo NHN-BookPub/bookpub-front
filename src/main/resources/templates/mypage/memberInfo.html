@@ -337,11 +337,13 @@
                                     </button>
                                     <input type="text" class="form-control" id="address-detail" name="addressDetail"
                                            placeholder="상세주소를 입력해주세요" min="2" max="100"
+                                           onchange="checkAddress(this.value)"
+                                           disabled
                                            required>
                                     <div class="valid-feedback">완료</div>
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                                <button type="submit" class="check-address btn btn-primary">등록</button>
+                                <button type="submit" id="addressCheck" class="check-address btn btn-primary" disabled>등록</button>
                             </form>
                         </div>
                     </div>
@@ -461,15 +463,15 @@
 </script>
 <script th:inline="javascript">
     let findTier = (value) => {
-        if (value === 'white') {
+        if (value === 'WHITE') {
             return "#CCCCCC"
-        } else if (value === 'sliver') {
+        } else if (value === 'SLIVER') {
             return "#C0C0C0"
-        } else if (value === 'gold') {
+        } else if (value === 'GOLD') {
             return "#FFD700";
-        } else if (value === 'platinum') {
+        } else if (value === 'PLATINUM') {
             return "#00B4C9";
-        } else if (value === 'Diamond') {
+        } else if (value === 'DIAMOND') {
             return "#CCFFFF";
         } else
             return "#CC9999";

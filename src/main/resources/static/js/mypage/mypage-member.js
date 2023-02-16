@@ -104,4 +104,13 @@ function findAddress() {
             document.getElementById("roadAddress").value = data.roadAddress;
         }
     }).open();
+    document.getElementById("address-detail").disabled = false;
+}
+
+var address = document.getElementById("roadAddress").value;
+
+function checkAddress(obj) {
+    if (obj.value !== null) {
+        document.getElementById("addressCheck").disabled = false;
+    } else document.getElementById("addressCheck").disabled = true;
 }
