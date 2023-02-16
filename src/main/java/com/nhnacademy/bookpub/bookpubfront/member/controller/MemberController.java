@@ -1,6 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.member.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
+import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.response.GetCouponResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.request.MemberAddressRequestDto;
@@ -22,6 +24,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -43,8 +46,10 @@ public class MemberController {
     private static final String AUTH_MEMBER = "oauthMember";
     private final MemberService memberService;
     private final MemberUtils memberUtils;
-
+    private final CategoryUtils categoryUtils;
     private final CouponService couponService;
+    private final CartUtils cartUtils;
+
 
     /**
      * 관리자가 멤버 정보들을 볼수있는 View 로 갑니다.
@@ -107,10 +112,14 @@ public class MemberController {
      */
     @PostMapping("/signup")
     public String signupComplete(@Valid SignupMemberRequestDto signupMemberRequestDto,
-                                 Model model) {
+                                 Model model, @CookieValue(name = CartUtils.CART_COOKIE) String key) {
         SignupMemberResponseDto memberInfo
                 = memberService.signup(signupMemberRequestDto);
 
+        cartUtils.getCountInCart(key, model);
+        memberUtils.modelRequestMemberNo(model);
+        categoryUtils.categoriesView(model);
+        categoryUtils.categoriesView(model);
         model.addAttribute(MEMBER, memberInfo);
 
         return "member/signupComplete";
@@ -162,7 +171,18 @@ public class MemberController {
         Long memberNo = memberUtils.getMemberNo();
         MemberDetailResponseDto member = memberService.getTokenMember(memberNo);
 
+        String birthYear = String.valueOf(member.getBirthYear());
+        if (birthYear.length() == 1) {
+            birthYear = "0" + birthYear;
+        }
+        String birthMonth = String.valueOf(member.getBirthMonth());
+        if (birthMonth.length() == 3) {
+            birthMonth = "0" + birthMonth;
+        }
+
         model.addAttribute("member", member);
+        model.addAttribute("birthYear", birthYear);
+        model.addAttribute("birthMonth", birthMonth);
 
         return "mypage/memberInfo";
     }
@@ -295,7 +315,7 @@ public class MemberController {
      * 회원의 휴대전화번호가 변경될때 사용되는 메서드입니다.
      * 마이페이의 내정보 페이지로 이동합니다.
      *
-     * @param phone    휴대전화번호기입
+     * @param phone 휴대전화번호기입
      * @return 마이페이지 내정보
      */
     @PostMapping("/members/phone")

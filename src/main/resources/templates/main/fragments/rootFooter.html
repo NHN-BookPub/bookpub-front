@@ -54,7 +54,9 @@
                         <h3 class="footer-title">Categories</h3>
                         <ul class="footer-links">
                             <li><a href="/types/1">베스트 셀러</a></li>
-                            <li><a href="/subscribes">구독상품</a></li>
+                            <li><a href="/types/2">신간</a></li>
+                            <li><a href="/types/3">추천</a></li>
+                            <!--                            <li><a href="/subscribes">구독상품</a></li>-->
                             <li><a href="/products/ebooks">E-Book</a></li>
                         </ul>
                     </div>
@@ -66,11 +68,11 @@
                     <div class="footer">
                         <h3 class="footer-title">Information</h3>
                         <ul class="footer-links">
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">공지사항</a></li>
-<!--                            <li><a href="#">Privacy Policy</a></li>-->
-<!--                            <li><a href="#">Orders and Returns</a></li>-->
-<!--                            <li><a href="#">Terms & Conditions</a></li>-->
+                            <li><a href="/services/faq">FAQ</a></li>
+                            <li><a href="/services/notice">공지사항</a></li>
+                            <!--                            <li><a href="#">Privacy Policy</a></li>-->
+                            <!--                            <li><a href="#">Orders and Returns</a></li>-->
+                            <!--                            <li><a href="#">Terms & Conditions</a></li>-->
                         </ul>
                     </div>
                 </div>
@@ -80,8 +82,8 @@
                         <h3 class="footer-title">Service</h3>
                         <ul class="footer-links">
                             <li>
-                                <a sec:authorize="hasAuthority('ROLE_MEMBER')" class="auth" href="#">내 정보</a>
-                                <a sec:authorize="!hasAuthority('ROLE_MEMBER')" class="unAuth" href="#">내 정보</a>
+                                <a sec:authorize="hasAuthority('ROLE_MEMBER')" class="auth" href="/members">내 정보</a>
+                                <a sec:authorize="!hasAuthority('ROLE_MEMBER')" class="unAuth" href="javascript:void(0)">내 정보</a>
                             <li>
                                 <a class="auth" href="/cart">장바구니</a>
                             </li>

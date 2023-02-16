@@ -34,13 +34,13 @@ public class SignupMemberRequestDto {
     private String gender;
 
     @NotBlank
-    @Pattern(regexp = "^[a-z0-9_-]{5,20}$",
+    @Pattern(regexp = "^[a-z0-9]{5,20}$",
             message = "아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.")
     private String memberId;
 
     @NotBlank
-    @Pattern(regexp = "^.*(?=.{8,20}$)(?=.*\\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$",
-            message = "패스워드는 대문자, 소문자, 숫자, 특수문자로 구성된 8글자에서 20글자로 입력해주세요.")
+    @Pattern(regexp = "^(?=.*[A-Za-z])(?=.*\\d)(?=.*[!@#$%^&*()_+=?<>.,/|~`])[A-Za-z\\d!@#$%^&*()_+=?<>.,/|~`]{8,}$",
+            message = "패스워드는 영문자, 숫자, 특수문자로 구성된 8글자에서 20글자로 입력해주세요.")
     private String pwd;
 
     @NotBlank

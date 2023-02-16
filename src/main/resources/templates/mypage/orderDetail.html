@@ -13,6 +13,8 @@
     <link rel='stylesheet' href='//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
+
+    <script src="/static/js/order/orderDetail.js"></script>
 </head>
 <body>
 <th:block th:include="mypage/fragments/mypageSidebar"></th:block>
@@ -54,7 +56,7 @@
             </thead>
             <tbody>
             <tr th:each="product : ${orderDetail.orderProducts}">
-                <td class="prod_img">
+                <td class="prod_img" style="padding: 1rem 0;">
                     <div>
                         <div>
                                     <span class="img_box" th:if="${#strings.isEmpty(product.thumbnail)}">
@@ -85,7 +87,7 @@
                                         <span class="order_num" th:text="${product.stateCode}"></span>
                                     </div>
                                     <span class="val"
-                                          th:text="${#numbers.formatInteger(product.salesPrice,0,'COMMA')}"></span>
+                                          th:text="${#numbers.formatInteger(product.salesPrice * product.productAmount,0,'COMMA')}"></span>
                                     <span class="unit">원</span>
                                 </span>
                 </td>
@@ -96,8 +98,16 @@
                                 th:onclick="modal(event,[[${orderDetail.orderNo}]] ,[[${product.orderProductNo}]])">
                             반품 신청
                         </button>
-                        <button type="button" class="prd_btn">
+                        <button th:if="${product.stateCode == '구매확정대기'}"
+                                type="button" class="prd_btn"
+                                th:onclick="modalOpen(event,[[${orderDetail.orderNo}]] ,[[${product.orderProductNo}]])">
                             교환 신청
+                        </button>
+                        <button th:if="${product.stateCode != '결제대기'}"
+                                style="color: black !important;"
+                                type="button" class="prd_btn"
+                                th:onclick="inquiry([[${product.productNo}]])">
+                            상품 문의
                         </button>
                     </div>
                 </td>
@@ -252,47 +262,14 @@
     </div>
 </div>
 <div id="refund" class="modal-overlay2">
-
 </div>
+<div id="exchange" class="modal-overlay3">
+</div>
+
 <script>
-    var modal1 = document.getElementById("refund");
 
-    function modal(event, orderNum, orderProductNum) {
-        event.stopPropagation();
-
-        let refund = document.getElementById('refund');
-        refund.innerHTML = '';
-
-        let modalDiv = document.createElement('div');
-        modalDiv.classList.add('modal_box');
-        modalDiv.innerHTML = `<h2>환불</h2>
-            <form action="/payment/order-product/refund" method="post" style="width: 100%;">
-            <table style="width: 100%">
-                <tbody>
-               <tr>
-                    <th scope="row" style="padding: 10px 20px;" class="has_ip">환불사유</th>
-                </tr>
-                <tr>
-                    <input type="hidden" name="orderNo" value="${orderNum}">
-                    <input type="hidden" name="orderProductNo" value="${orderProductNum}">
-                    <td style="padding: 0 1rem 1rem 1rem;">
-                        <textarea id="refund-text"
-                                  name="cancelReason"
-                                  placeholder="환불 사유를 입력해주세요"></textarea>
-                    </td>
-                </tr>
-                </tbody>
-            </table>
-            <div style="display: flex;justify-content: flex-end;padding: 0 1rem 0 0;">
-                <button type="submit" id="click"
-                        style="background-color: white;border: 1px solid #888888;border-radius: 10px;">환불신청
-                </button>
-            </div>
-        </form>`;
-
-        refund.appendChild(modalDiv);
-        modal1.style.display = "flex";
-    }
+    const modal2 = document.getElementById("exchange");
+    const modal1 = document.getElementById("refund");
 
     modal1.addEventListener("click", e => {
         const evTarget = e.target
@@ -300,10 +277,22 @@
             modal1.style.display = "none"
         }
     })
+    modal2.addEventListener("click", e => {
+        const evTarget = e.target
+        if (evTarget.classList.contains("modal-overlay3")) {
+            modal2.style.display = "none"
+        }
+    })
 
     window.addEventListener("keyup", e => {
         if (modal1.style.display === "flex" && e.key === "Escape") {
             modal1.style.display = "none"
+        }
+    })
+
+    window.addEventListener("keyup", e => {
+        if (modal2.style.display === "flex" && e.key === "Escape") {
+            modal2.style.display = "none"
         }
     })
 </script>

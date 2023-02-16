@@ -55,6 +55,21 @@ public class CookieUtil {
     }
 
     /**
+     * 최근본 상품을 저장할 쿠키 생성 메섣,.
+     *
+     * @param response HttpServletResponse
+     * @param key      쿠키 key
+     * @param value    쿠키 value
+     */
+    public static void makeRecentViewCookie(HttpServletResponse response,
+                                            String key, String value) {
+        Cookie cookie = new Cookie(key, value);
+        cookie.setMaxAge(86400);
+        cookie.setPath("/");
+        response.addCookie(cookie);
+    }
+
+    /**
      * 쿠키를 삭제하는 메소드 입니다.
      *
      * @param response 통신 응답객체.

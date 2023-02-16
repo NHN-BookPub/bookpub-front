@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ko">
 <head>
     <meta charset="UTF-8">
     <title>주문 관리</title>
-<link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
     <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
@@ -20,14 +20,6 @@
                 </div>
 
                 <div class="card-body" style="display: flex;flex-direction: column;">
-                    <div style="display: flex;gap: 7px;padding-bottom: 13px;">
-                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2"
-                           th:href="'/admin/tiers/add'">가격정책조회</a>
-                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2"
-                           th:href="'/admin/tiers/add'">주문상태조회</a>
-<!--                        <a class="btn btn-outline-primary justify-content-end float-sm-end col-sm-2"-->
-<!--                           th:href="'/admin/tiers/add'">주문조회</a>-->
-                    </div>
                     <div style="display: flex; flex-direction: column; gap: 8px">
                         <div class="order_summary_box" th:each="order : ${orderList}">
                             <div class="box_header"
@@ -54,14 +46,13 @@
                                                                      th:text="${order.orderState}"></span></span>
                                     <span class="gap">|</span>
                                     <span class="order_num">결제금액 <span class="num"
-                                                                       th:text="${order.totalAmount}"></span></span>
+                                                                       th:text="${#numbers.formatInteger(order.totalAmount,0,'COMMA')}"></span></span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?

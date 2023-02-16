@@ -94,8 +94,8 @@
             <a href="#"
                class="list-group-item list-group-item-action flex-column align-items-start list-group-item-dark">
                 <div class="d-flex w-50 justify-content">
-                    <span class="mb-2" th:text="${member.birthYear} + '년'"></span>
-                    <span class="mb-2" th:text="${member.birthMonth}"></span>
+                    <span class="mb-2" th:text="${birthYear}"></span>
+                    <span class="mb-2" th:text="${birthMonth}"></span>
                 </div>
             </a>
 
@@ -376,7 +376,7 @@
                                 </form>
                                 <form th:action="'/members/addresses-delete/' +${address.addressNo}"
                                       method="post">
-                                    <button type="submit" class="btn btn-outline-danger">기준 주소지삭제</button>
+                                    <button type="submit" class="btn btn-outline-danger">주소 삭제</button>
                                 </form>
                             </td>
                         </th:block>

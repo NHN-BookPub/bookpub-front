@@ -1,7 +1,7 @@
 let emptyReg = /\s/g;
 let nameReg = /^[가-힣a-z]{2,200}$/;
-let idReg = /^[a-z0-9_-]{5,20}$/;
-let pwdReg = /^.*(?=^.{8,20}$)(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&+=]).*$/
+let idReg = /^[a-z0-9]{5,20}$/;
+let pwdReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
 let nickReg = /^[a-zA-Z\d]{2,8}$/;
 let birthReg = /^\d{6}$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
@@ -21,7 +21,6 @@ window.addEventListener('load', () => {
                 event.preventDefault();
                 event.stopPropagation();
             }
-
             if (check() === false) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -39,6 +38,37 @@ function idPattern() {
         alert('아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.')
         return false;
     }
+    return true;
+}
+
+function birthPattern() {
+    const dateList1 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    let birth = document.getElementById('birth').value;
+
+    if (!birthReg.test(birth)) {
+        alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
+        return false;
+    }
+
+    let yy = birth.toString().substring(0, 2);
+    let mm = birth.toString().substring(2, 4);
+    let dd = birth.toString().substring(4, 6);
+
+    if (parseInt(yy) < 0) {
+        alert('정상적인 생년월일을 입력해주세요')
+        return false;
+    }
+    if (parseInt(mm) <= 0 || parseInt(mm) >= 13) {
+        alert('정상적인 생년월일을 입력해주세요')
+        return false;
+    }
+
+    if (dateList1[parseInt(mm)] < parseInt(dd) || parseInt(dd) <= 0) {
+        alert('정상적인 생년월일을 입력해주세요')
+        return false;
+    }
+
     return true;
 }
 
@@ -62,28 +92,33 @@ function emailPattern() {
 
 function phonePattern() {
     let phoneVal = document.getElementById('phone').value;
-    if (!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)) {
-        alert('전화번호 11자리를 입력해주세요 ( - 제외).')
+    if (isNaN(parseInt(phoneVal))) {
+        alert('전화번호를 입력해주세요')
+        return false;
+    }
+
+    if (emailReg.test(phoneVal)) {
+        alert('전화번호에는 공백이 있을 수 없습니다.')
+        return false;
+    }
+
+    console.log(parseInt(phoneVal));
+
+    if (parseInt(phoneVal) < 1000000000 || parseInt(phoneVal) >= 1100000000) {
+        alert('유효한 전화번호 11자리를 입력해주세요 ( - 제외).')
         return false;
     }
     return true;
 }
 
 function check() {
-    nicknamePattern();
-    idPattern();
-    emailPattern();
-    phonePattern();
-
-    let nameVal = document.getElementById('name').value;
-    if (!nameReg.test(nameVal) || emptyReg.test(nameVal)) {
-        alert('이름은 한글 2글자 이상으로 생성해주세요.')
+    if (!nicknamePattern() || !idPattern() || !emailPattern() || !phonePattern() || !birthPattern()) {
         return false;
     }
 
-    let birthVal = document.getElementById('birth').value;
-    if (!birthReg.test(birthVal) || emptyReg.test(birthVal)) {
-        alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
+    let nameVal = document.getElementById('name').value;
+    if (!nameReg.test(nameVal) || emptyReg.test(nameVal)) {
+        alert('이름은 영어 또는 한글 2글자 이상으로 생성해주세요.')
         return false;
     }
 
@@ -91,7 +126,7 @@ function check() {
     const pwdOkVal = document.getElementById('pwd-check').value;
 
     if (!pwdReg.test(pwdVal) || emptyReg.test(pwdVal)) {
-        alert('비밀번호는 영대소문자,숫자,특수문자로 구성된 8글자 이상 20글자 이하로 생성하세요.')
+        alert('비밀번호는 문자,숫자,특수문자로 구성된 8글자 이상 20글자 이하로 생성하세요.')
         return false;
     } else {
         if (pwdOkVal) {
@@ -104,6 +139,7 @@ function check() {
             return false;
         }
     }
+    return true;
 
 }
 
@@ -211,10 +247,14 @@ function smsConfirm() {
 }
 
 function finalCheck() {
+    if (!check()) {
+        return false;
+    }
     let authCheck = document.getElementById("auth-check")
     if (authCheck.value === "0") {
         alert("핸드폰 인증을 받아주세요. (bookpub 단톡방 초대 요청하세요)")
-    } else{
+        return false;
+    } else {
         let form = document.getElementById("signupForm")
         form.submit()
     }

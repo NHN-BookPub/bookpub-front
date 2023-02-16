@@ -8,6 +8,7 @@ import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointAdminRespo
 import com.nhnacademy.bookpub.bookpubfront.point.dto.response.GetPointResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.point.service.PointService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.time.LocalDateTime;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -56,12 +57,8 @@ public class PointController {
 
         model.addAttribute("member", member);
         model.addAttribute("type", type);
-        model.addAttribute("pointHistories", memberPointHistory.getContent());
-        model.addAttribute("totalPages", memberPointHistory.getTotalPages());
-        model.addAttribute("currentPage", memberPointHistory.getNumber());
-        model.addAttribute("isNext", memberPointHistory.isNext());
-        model.addAttribute("isPrevious", memberPointHistory.isPrevious());
-        model.addAttribute("pageButtonNum", 5);
+        Utils.settingPagination(model, memberPointHistory, "pointHistories");
+
         return "mypage/point";
     }
 
@@ -79,23 +76,17 @@ public class PointController {
 
     @GetMapping("/admin/points")
     public String points(@PageableDefault Pageable pageable,
-                         @RequestParam(value = "start",required = false)
+                         @RequestParam(value = "start", required = false)
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                          LocalDateTime start,
-                         @RequestParam(value = "end",required = false)
+                         @RequestParam(value = "end", required = false)
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                          LocalDateTime end,
                          Model model) {
 
         PageResponse<GetPointAdminResponseDto> result = pointService.getPoints(pageable, start, end);
-        model.addAttribute("content", result.getContent());
-        model.addAttribute("next", result.isNext());
-        model.addAttribute("previous", result.isPrevious());
-        model.addAttribute("totalPage", result.getTotalPages());
-        model.addAttribute("pageNum", result.getNumber());
-        model.addAttribute("previousPageNo", result.getNumber() - 1);
-        model.addAttribute("nextPageNo", result.getNumber() + 1);
-        model.addAttribute("size", pageable.getPageSize());
+
+        Utils.settingPagination(model, result, "content");
         model.addAttribute("uri", "/admin/points");
         return "admin/point/main";
     }

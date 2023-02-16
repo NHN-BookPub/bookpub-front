@@ -428,7 +428,7 @@
                          style="width: 13px; height: auto; display: inline">
                 </td>
                 <td th:text="${inquiry.memberNickname}"></td>
-                <td th:text="${inquiry.createdAt}"></td>
+                <td th:text="${#temporals.format(product.publishDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
                 <td th:text="${inquiry.inquiryAnswered} ? '답변 완료' : '답변 미완료'"></td>
             </tr>
             </tbody>

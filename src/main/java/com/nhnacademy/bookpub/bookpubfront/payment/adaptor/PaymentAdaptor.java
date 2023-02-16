@@ -40,5 +40,12 @@ public interface PaymentAdaptor {
      *
      * @param refundRequestDto 환불요청 dto.
      */
-    void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto);
+    void refundOrderProduct(OrderProductRefundRequestDto refundRequestDto, Long memberNo);
+
+    /**
+     * 주문 상품 교환하는 메소드.
+     *
+     * @param exchangeDto 환불요청 dto.
+     */
+    void exchangeOrderProduct(OrderProductRefundRequestDto exchangeDto, Long memberNo);
 }

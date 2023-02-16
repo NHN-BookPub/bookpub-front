@@ -10,7 +10,7 @@ import lombok.Getter;
  **/
 @Getter
 public enum DeliveryFeeType {
-    DELIVERY_FREE_FEE_STANDARD("무료 기준", 20000),
+    DELIVERY_FREE_FEE_STANDARD("무료 기준", 30000),
     DELIVERY_FEE("배송비", 3000);
 
     private final String standard;

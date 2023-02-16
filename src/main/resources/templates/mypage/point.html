@@ -85,25 +85,35 @@
     </div>
     <nav aria-label="Page navigation example">
         <ul class="pagination justify-content-center">
-            <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
-                <a class="page-link"
-                   th:href="'/members/point?page='+
-                   ${currentPage - 1}+
-                   '&type='+${type}">Previous</a>
-            </li>
-            <th:block th:with="start=${(currentPage/pageButtonNum) * pageButtonNum + 1},
-            end=(${(totalPages == 0) ? 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                <li class="page-item">
+                    <a class="page-link" th:href="'/members/point?page=0&type='+${type}">처음</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" th:if="${start > 1}"
+                       th:href="'/members/point?page='+${start - pageButtonNum -1}+'&type='+${type}">
+                        이전</a>
+                    <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                       href="javascript:void(0)">이전</a>
+                </li>
                 <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                    <a class="page-link"
-                       th:href="'/members/point?page='+${page - 1}+'&type='+${type}"
+                    <a class="page-link" th:href="'/members/point?page=' + ${page -1 } + '&type=' + ${type}"
                        th:text="${page}"></a></li>
+
+                <li class="page-item">
+                    <a class="page-link" th:if="${end < totalPages}"
+                       th:href="'/members/point?page='+${start + pageButtonNum}+'&type='+${type}">다음</a>
+                    <a class="page-link" th:if="${end >= totalPages}" style="cursor: not-allowed; color: gray;"
+                       href="javascript:void(0)">다음</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" th:href="'/members/point?page='+${totalPages - 1}+'&type='+${type}">마지막</a>
+                </li>
             </th:block>
-            <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
-                <a class="page-link"
-                   th:href="'/members/point?page='+${currentPage + 1}+'&type='+${type}">Next</a>
-            </li>
         </ul>
     </nav>
+
 </div>
 
 <!--주소입력 모달창-->

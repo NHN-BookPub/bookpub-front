@@ -4,6 +4,11 @@ import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.OrderCntResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleYearDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.service.SalesService;
+import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class AdminController {
 
     private final MemberService memberService;
+    private final SalesService salesService;
 
     /**
      * 어드민 페이지.
@@ -32,14 +38,27 @@ public class AdminController {
      * @param model 모델.
      * @return 어드민 페이지.
      */
-    @GetMapping
     @Auth
+    @GetMapping
     public String adminIndex(Model model) {
         MemberStatisticsResponseDto memberStatisticsResponseDto = memberService.memberStatistics();
         List<MemberTierStatisticsResponseDto> tierStatistics = memberService.memberTierStatistics();
+        List<TotalSaleDto> monthSales = salesService.getSales(null, null);
+        List<OrderCntResponseDto> orderCnt = salesService.getOrderCnt();
+        List<TotalSaleYearDto> yearSales = salesService.getOrderYear(getFirstDayOfYear(), LocalDateTime.now());
+
+        model.addAttribute("orderCount", orderCnt);
+        model.addAttribute("monthSales", monthSales);
+        model.addAttribute("yearSales", yearSales);
         model.addAttribute("memberStatistics", memberStatisticsResponseDto);
         model.addAttribute("tierStatistics", tierStatistics);
 
         return "admin/index";
+    }
+
+    private LocalDateTime getFirstDayOfYear() {
+        LocalDateTime currentDateTime = LocalDateTime.now();
+        return currentDateTime.withMinute(1)
+                .withDayOfMonth(1);
     }
 }

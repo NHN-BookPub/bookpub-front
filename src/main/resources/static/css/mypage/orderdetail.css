@@ -235,6 +235,7 @@
 
 .prod {
     vertical-align: middle;
+    text-align: center;
 }
 
 .prod_img {
@@ -391,7 +392,7 @@ thead {
     border-color: inherit;
 }
 
-#refund {
+#refund, #exchange {
     display: none;
     justify-content: center;
     align-items: center;
@@ -423,7 +424,6 @@ thead {
     border: 1px solid #7e7b7b;
     border-radius: 10px;
     padding: 5px 10px 5px 10px;
-    color: red;
 }
 
 .refund-btn:hover {
@@ -438,4 +438,10 @@ thead {
 
 .prd_btn:hover {
     background-color: #ddd;
+}
+
+.custom-th {
+    text-align: center;
+    border-bottom: 1px solid black;
+    padding-bottom: 1rem;
 }

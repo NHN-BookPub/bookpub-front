@@ -37,8 +37,8 @@ public class FileServiceImpl implements FileService {
      * {@inheritDoc}
      */
     @Override
-    public GetDownloadInfo downloadEBookInfo(Long productNo) {
-        return fileAdaptor.requestEBookInfo(productNo);
+    public GetDownloadInfo downloadEBookInfo(Long productNo, Long memberNo) {
+        return fileAdaptor.requestEBookInfo(productNo, memberNo);
     }
 
     /**

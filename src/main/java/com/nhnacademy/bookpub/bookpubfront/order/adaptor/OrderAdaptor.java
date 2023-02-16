@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.order.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetExchangeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
@@ -114,4 +115,19 @@ public interface OrderAdaptor {
      * @param memberNo 회원번호.
      */
     void confirmOrderProduct(String orderProductNo, Long memberNo);
+
+    /**
+     * 교환신청한 주문상품리스트 조회 메소드.
+     *
+     * @param pageable 페이저블.
+     * @return 주문상품리스트.
+     */
+    PageResponse<GetExchangeResponseDto> exchangeOrderList(Pageable pageable);
+
+    /**
+     * 주문상품 교환 허락 메소드.
+     *
+     * @param orderProductNo 주문상품번호.
+     */
+    void confirmExchange(String orderProductNo);
 }

@@ -42,25 +42,32 @@
           </table>
           <nav aria-label="Page navigation example">
             <ul class="pagination justify-content-center">
-              <li class="page-item" th:classappend="${!previous} ? 'disabled'">
-                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum -1}+
-                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}" tabindex="-1">Previous</a>
-              </li>
-              <th:block th:with="
-                            start=${(pageNum/5)*5 + 1},
-                            end=(${(totalPage ==0) ? 1 : (start + (4) < totalPage ? start + 4 : totalPage)})">
-                <li class="page-item" th:each="page: ${#numbers.sequence(start,end)}">
-                  <a class="page-link"
-                     th:href="@{ ${uri} + '?page=' + ${page - 1}+
-                                ${#strings.isEmpty(size) ? '' : '&size=' + size}}"
-                     th:text="${page}">
-                  </a>
+              <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                <li class="page-item">
+                  <a class="page-link" href="/admin/points?page=0">처음</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" th:if="${start > 1}"
+                     th:href="'/admin/points?page='+${start - pageButtonNum -1}">
+                    이전</a>
+                  <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                     href="javascript:void(0)">이전</a>
+                </li>
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                  <a class="page-link" th:href="'/admin/points?page='+${page - 1}"
+                     th:text="${page}"></a></li>
+
+                <li class="page-item">
+                  <a class="page-link" th:if="${end < totalPages}"
+                     th:href="'/admin/points?page='+${start + pageButtonNum}">다음</a>
+                  <a class="page-link" th:if="${end >= totalPages}" style="cursor: not-allowed; color: gray;"
+                     href="javascript:void(0)">다음</a>
+                </li>
+                <li class="page-item">
+                  <a class="page-link" th:href="'/admin/points?page='+${totalPages - 1}">마지막</a>
                 </li>
               </th:block>
-              <li class="page-item" th:classappend="${!next} ? 'disabled'">
-                <a class="page-link" th:href="@{ ${uri} + '?page=' + ${pageNum + 1}+
-                                 ${#strings.isEmpty(size) ? '' : '&size=' + size}}">Next</a>
-              </li>
             </ul>
           </nav>
         </div>
