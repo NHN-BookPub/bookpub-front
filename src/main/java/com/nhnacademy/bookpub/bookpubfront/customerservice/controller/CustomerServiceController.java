@@ -1,5 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.customerservice.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.customerservice.dto.CreateCustomerServiceRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.customerservice.dto.GetCustomerServiceListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.customerservice.service.CustomerServiceService;
@@ -26,11 +28,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class CustomerServiceController {
     private final CustomerServiceService customerServiceService;
     private final MemberUtils memberUtils;
+    private final CategoryUtils categoryUtils;
+    private final CartUtils cartUtils;
 
     /**
      * 고객서비스 전체 조회.
      *
-     * @param model 모델
+     * @param model    모델
      * @param pageable 페이징
      * @return 고객서비스 전체
      */
@@ -40,12 +44,11 @@ public class CustomerServiceController {
         PageResponse<GetCustomerServiceListResponseDto> services =
                 customerServiceService.getCustomerServices(pageable);
 
-        for(GetCustomerServiceListResponseDto responseDto : services.getContent()) {
+        for (GetCustomerServiceListResponseDto responseDto : services.getContent()) {
             setCategoryEngToKor(responseDto);
         }
 
         setServicesInModel(model, services);
-
         memberUtils.modelRequestMemberNo(model);
 
         return "admin/customerservice/adminCustomerServiceMain";
@@ -55,7 +58,7 @@ public class CustomerServiceController {
      * 고객서비스를 생성합니다.
      *
      * @param request 생성시 필요한 dto
-     * @param image 이미지
+     * @param image   이미지
      * @return 고객서비스 뷰
      */
     @PostMapping("/admin/services")
@@ -72,7 +75,7 @@ public class CustomerServiceController {
      * 고객서비스 단건조회(관리자).
      *
      * @param serviceNo 서비스번호
-     * @param model 모델
+     * @param model     모델
      * @return 단건반환
      */
     @GetMapping("/admin/service/{serviceNo}")
@@ -105,12 +108,13 @@ public class CustomerServiceController {
      *
      * @param category 카테고리
      * @param pageable 페이징
-     * @param model 모델
+     * @param model    모델
      * @return FAQ
      */
     @GetMapping("/services/faq")
     public String viewCustomerServiceFAQ(@RequestParam(required = false) String category,
                                          @PageableDefault Pageable pageable,
+                                         @CookieValue(name = CartUtils.CART_COOKIE) String key,
                                          Model model) {
         PageResponse<GetCustomerServiceListResponseDto> services;
 
@@ -128,6 +132,9 @@ public class CustomerServiceController {
             setCategoryEngToKor(responseDto);
         }
 
+        cartUtils.getCountInCart(key, model);
+        memberUtils.modelRequestMemberNo(model);
+        categoryUtils.categoriesView(model);
         setServicesInModel(model, services);
 
         return "customerservice/customerServiceFAQ";
@@ -138,13 +145,14 @@ public class CustomerServiceController {
      *
      * @param category 카테고리
      * @param pageable 페이징
-     * @param model 모델
+     * @param model    모델
      * @return 고객서비스
      */
     @GetMapping("/services/notice")
     public String viewCustomerServiceNotice(@RequestParam(required = false) String category,
-                                           @PageableDefault Pageable pageable,
-                                           Model model) {
+                                            @PageableDefault Pageable pageable,
+                                            @CookieValue(name = CartUtils.CART_COOKIE) String key,
+                                            Model model) {
         PageResponse<GetCustomerServiceListResponseDto> services;
 
         if (category == null) {
@@ -161,6 +169,9 @@ public class CustomerServiceController {
             setCategoryEngToKor(responseDto);
         }
 
+        cartUtils.getCountInCart(key, model);
+        memberUtils.modelRequestMemberNo(model);
+        categoryUtils.categoriesView(model);
         setServicesInModel(model, services);
 
         return "customerservice/customerServiceNotification";
@@ -169,7 +180,7 @@ public class CustomerServiceController {
     /**
      * 고객서비스 단건 조회 뷰입니다.(공지사항)
      *
-     * @param no 서비스 번호
+     * @param no    서비스 번호
      * @param model 모델
      * @return 단건
      */
@@ -178,7 +189,6 @@ public class CustomerServiceController {
         GetCustomerServiceListResponseDto response = customerServiceService.getCustomerServiceByNo(no);
 
         setCategoryEngToKor(response);
-
         model.addAttribute("service", response);
 
         return "customerservice/customerServiceNoticeView";
@@ -187,16 +197,20 @@ public class CustomerServiceController {
     /**
      * 고객서비스 단건 조회 뷰입니다.(FAQ)
      *
-     * @param no 서비스 번호
+     * @param no    서비스 번호
      * @param model 모델
      * @return 단건
      */
     @GetMapping("/service/faq")
-    public String viewCustomerServiceFAQ(@RequestParam(name = "no") Integer no, Model model) {
+    public String viewCustomerServiceFAQ(@RequestParam(name = "no") Integer no, Model model,
+                                         @CookieValue(name = CartUtils.CART_COOKIE) String key) {
         GetCustomerServiceListResponseDto response = customerServiceService.getCustomerServiceByNo(no);
 
         setCategoryEngToKor(response);
 
+        cartUtils.getCountInCart(key, model);
+        memberUtils.modelRequestMemberNo(model);
+        categoryUtils.categoriesView(model);
         model.addAttribute("service", response);
 
         return "customerservice/customerServiceNoticeView";
@@ -205,7 +219,7 @@ public class CustomerServiceController {
     /**
      * 고객서비스들을 모델에 세팅하는 메소드입니다.
      *
-     * @param model 모델
+     * @param model    모델
      * @param services 서비스 페이지
      */
     private void setServicesInModel(Model model, PageResponse<GetCustomerServiceListResponseDto> services) {
@@ -235,7 +249,7 @@ public class CustomerServiceController {
             response.setCategory("일반");
         } else if (response.getServiceCategory().equals("noteServer")) {
             response.setCategory("서버");
-        }  else if (response.getServiceCategory().equals("notePayment")) {
+        } else if (response.getServiceCategory().equals("notePayment")) {
             response.setCategory("결제");
         } else if (response.getServiceCategory().equals("noteOthers")) {
             response.setCategory("기타");

@@ -1,7 +1,7 @@
 let emptyReg = /\s/g;
 let nameReg = /^[가-힣a-z]{2,200}$/;
 let idReg = /^[a-z0-9_-]{5,20}$/;
-let pwdReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/
+let pwdReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=?<>.,/|~`])[A-Za-z\d!@#$%^&*()_+=?<>.,/|~`]{8,}$/
 let nickReg = /^[a-zA-Z\d]{2,8}$/;
 let birthReg = /^\d{6}$/;
 let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
@@ -92,20 +92,27 @@ function emailPattern() {
 
 function phonePattern() {
     let phoneVal = document.getElementById('phone').value;
+    if (isNaN(parseInt(phoneVal))) {
+        alert('전화번호를 입력해주세요')
+        return false;
+    }
+
     if (emailReg.test(phoneVal)) {
         alert('전화번호에는 공백이 있을 수 없습니다.')
         return false;
     }
 
-    if (parseInt(phoneVal) < 1000000000 && parseInt(phoneVal) >= 1100000000) {
-        alert('전화번호 11자리를 입력해주세요 ( - 제외).')
+    console.log(parseInt(phoneVal));
+
+    if (parseInt(phoneVal) < 1000000000 || parseInt(phoneVal) >= 1100000000) {
+        alert('유효한 전화번호 11자리를 입력해주세요 ( - 제외).')
         return false;
     }
     return true;
 }
 
 function check() {
-    if(!nicknamePattern() || !idPattern() || !emailPattern() || !phonePattern() || !birthPattern()){
+    if (!nicknamePattern() || !idPattern() || !emailPattern() || !phonePattern() || !birthPattern()) {
         return false;
     }
 
@@ -240,7 +247,7 @@ function smsConfirm() {
 }
 
 function finalCheck() {
-    if(!check()){
+    if (!check()) {
         return false;
     }
     let authCheck = document.getElementById("auth-check")

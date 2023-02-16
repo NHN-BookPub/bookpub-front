@@ -373,18 +373,18 @@
             </div>
             <!--주소 모달 js-->
             <script>
-                var modal1 = document.getElementById("member_addresses");
+                var modal2 = document.getElementById("member_addresses");
 
-                modal1.addEventListener("click", e => {
+                modal2.addEventListener("click", e => {
                     const evTarget = e.target
                     if (evTarget.classList.contains("modal-overlay2")) {
-                        modal1.style.display = "none"
+                        modal2.style.display = "none"
                     }
                 })
 
                 window.addEventListener("keyup", e => {
-                    if (modal1.style.display === "flex" && e.key === "Escape") {
-                        modal1.style.display = "none"
+                    if (modal2.style.display === "flex" && e.key === "Escape") {
+                        modal2.style.display = "none"
                     }
                 })
             </script>
@@ -564,8 +564,6 @@
                     modal3.style.display = "none"
                 }
             </script>
-
-
             <!-- 결제컨테이너-->
             <div class="cart_info_wrap">
                 <div class="payments_info_area">

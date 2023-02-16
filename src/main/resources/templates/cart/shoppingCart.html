@@ -63,12 +63,14 @@
                     </div>
                 </div>
             </td>
-            <td style="text-align: center!important; vertical-align: middle" id="originPrice" th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></td>
+            <td style="text-align: center!important; vertical-align: middle" th:id="'originPrice' + ${product.productNo}"
+                th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></td>
             <td style="vertical-align: middle;">
                 <input type="number" id="num" name="number" min="1" max="99" value="1" class="form-control text-right"
-                onchange="totalPrice(this.value)">
+                       th:onchange="totalPrice(this.value, [[${product.productNo}]])">
             </td>
-            <td style="text-align: center!important; vertical-align: middle" id="totalPrice" th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></td>
+            <td style="text-align: center!important; vertical-align: middle" th:id="'totalPrice' + ${product.productNo}"
+                th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></td>
             <td style="text-align: center!important; vertical-align: middle">
                 <form th:action="@{/cart/{productNo}(productNo=${product.productNo})}" method="post">
                     <button class="btn btn-warning">

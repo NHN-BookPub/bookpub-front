@@ -66,8 +66,8 @@
                     <div class="footer">
                         <h3 class="footer-title">Information</h3>
                         <ul class="footer-links">
-                            <li><a href="#">FAQ</a></li>
-                            <li><a href="#">공지사항</a></li>
+                            <li><a href="/services/notice/">FAQ</a></li>
+                            <li><a href="/services/faq/">공지사항</a></li>
 <!--                            <li><a href="#">Privacy Policy</a></li>-->
 <!--                            <li><a href="#">Orders and Returns</a></li>-->
 <!--                            <li><a href="#">Terms & Conditions</a></li>-->
@@ -80,8 +80,8 @@
                         <h3 class="footer-title">Service</h3>
                         <ul class="footer-links">
                             <li>
-                                <a sec:authorize="hasAuthority('ROLE_MEMBER')" class="auth" href="#">내 정보</a>
-                                <a sec:authorize="!hasAuthority('ROLE_MEMBER')" class="unAuth" href="#">내 정보</a>
+                                <a sec:authorize="hasAuthority('ROLE_MEMBER')" class="auth" href="/members">내 정보</a>
+                                <a sec:authorize="!hasAuthority('ROLE_MEMBER')" class="unAuth" href="javascript:void(0)">내 정보</a>
                             <li>
                                 <a class="auth" href="/cart">장바구니</a>
                             </li>
