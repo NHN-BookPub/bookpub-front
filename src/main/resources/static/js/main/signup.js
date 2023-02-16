@@ -97,7 +97,7 @@ function phonePattern() {
         return false;
     }
 
-    if (emailReg.test(phoneVal)) {
+    if (emptyReg.test(phoneVal)) {
         alert('전화번호에는 공백이 있을 수 없습니다.')
         return false;
     }
