@@ -42,10 +42,10 @@
                         <div class="card mb-4">
                             <div class="card-header">
                                 <i class="fas fa-chart-area me-1"></i>
-                                Area Chart Example
+                                Sales
                             </div>
                             <div class="card-body">
-                                <canvas id="myAreaChart" width="100%" height="40"></canvas>
+                                <canvas id="myOrderCnt" width="100%" height="40"></canvas>
                             </div>
                         </div>
                     </div>
@@ -57,6 +57,54 @@
                             </div>
                             <div class="card-body">
                                 <canvas id="memberChart" width="100%" height="40"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Year Count
+                            </div>
+                            <div class="card-body">
+                                <canvas id="monthBar" width="100%" height="40"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Year Amount
+                            </div>
+                            <div class="card-body">
+                                <canvas id="monthAmount" width="100%" height="40"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-area me-1"></i>
+                                Month Count
+                            </div>
+                            <div class="card-body">
+                                <canvas id="weekBar" width="100%" height="40"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xl-6">
+                        <div class="card mb-4">
+                            <div class="card-header">
+                                <i class="fas fa-chart-bar me-1"></i>
+                                Month Amount
+                            </div>
+                            <div class="card-body">
+                                <canvas id="weekAmount" width="100%" height="40"></canvas>
                             </div>
                         </div>
                     </div>
@@ -90,7 +138,6 @@
             var memberCurrentCnt = [[${memberStatistics.currentMemberCnt}]];
             var memberDeleteCnt = [[${memberStatistics.deleteMemberCnt}]];
             var memberBlockCnt = [[${memberStatistics.blockMemberCnt}]];
-
             data = {
                 datasets: [{
                     backgroundColor: [randomChartColor(), randomChartColor(), randomChartColor(), randomChartColor()],
@@ -106,6 +153,327 @@
                 data: data,
                 options: {}
             });
+
+            var paymentCnt = [[${monthSales[0].cancelPaymentCnt}]]
+            var cancelOrderCnt = [[${monthSales[0].cancelOrderCnt}]]
+            var saleCnt = [[${monthSales[0].saleCnt}]];
+            var cancelPaymentAmount = [[${monthSales[0].cancelPaymentAmount}]]
+            var saleAmount = [[${monthSales[0].saleAmount}]]
+            var realAmount = [[${monthSales[0].total}]]
+            var totalAmount = cancelPaymentAmount + saleAmount;
+            var totalCnt = paymentCnt + cancelOrderCnt + saleCnt;
+
+            // 이번달 건수
+            bardata = {
+                datasets: [{
+                    label: '이번달 건수',
+                    data: [paymentCnt, cancelOrderCnt, saleCnt,totalCnt],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(75,63,63,0.2)'],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(75,63,63)'
+                    ],
+                    borderWidth: 1
+                }],
+                // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
+                labels: ['결제취소 횟수','주문취소 횟수', '판매 개수', '총 주문 횟수']
+            };
+
+            var ctx = document.getElementById('weekBar');
+            const amountBar = new Chart(ctx, {
+                type: 'bar',
+                data: bardata,
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+
+            amountdata = {
+                datasets: [{
+                    label: '이번달 금액',
+                    data: [cancelPaymentAmount, saleAmount, realAmount,totalAmount],
+                    backgroundColor: ['rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(75,63,63,0.2)'],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)',
+                        'rgb(75,63,63)'
+                    ],
+                    borderWidth: 1
+                }],
+                // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
+                labels: ['결제취소 금액','구매확정 금액', '순 수익', '총 금액']
+            };
+
+            var ctx3 = document.getElementById('weekAmount');
+            const stackedBar = new Chart(ctx3, {
+                type: 'bar',
+                data: amountdata,
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+
+
+
+
+
+
+
+
+
+
+            let orderCntList = [];
+            let orderCntDateList =[];
+
+            // 시간별 현황 통계
+            /*<![CDATA[*/
+            /*[# th:each="order : ${orderCount}"]*/
+            orderCntList.push(/*[[${order.orderCnt}]]*/);
+            orderCntDateList.push(/*[[${order.date}]]*/);
+            /*[/]*/
+            /*]]>*/
+
+            orderCntData = {
+                labels: orderCntDateList,
+                datasets: [{
+                    axis: 'y',
+                    label: '시간별 주문 현황',
+                    data: orderCntList,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(176,24,53,0.2)',
+                        'rgba(222,182,96,0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(134,116,119,0.2)',
+                        'rgba(77,75,73,0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)',
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                    ],
+                    borderColor: [
+                        'rgba(255, 99, 132)',
+                        'rgba(176,24,53)',
+                        'rgba(222,182,96)',
+                        'rgba(75, 192, 192)',
+                        'rgba(54, 162, 235)',
+                        'rgba(153, 102, 255)',
+                        'rgba(201, 203, 207)',
+                        'rgba(134,116,119)',
+                        'rgba(77,75,73)',
+                        'rgba(255, 205, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(54, 162, 235)',
+                        'rgba(153, 102, 252)',
+                        'rgba(201, 203, 202)',
+                        'rgba(255, 99, 132)',
+                        'rgba(255, 159, 64)',
+                        'rgba(255, 205, 86)',
+                        'rgba(75, 192, 192)',
+                        'rgba(54, 162, 235)',
+                        'rgba(153, 102, 252)',
+                        'rgba(201, 203, 202)',
+                        'rgba(255, 99, 132)',
+                        'rgba(255, 159, 64)',
+                        'rgba(255, 205, 86)',
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            var ctx4 = document.getElementById('myOrderCnt');
+            const orderCntBar = new Chart(ctx4, {
+                type: 'bar',
+                data: orderCntData,
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+
+            // 월별 통계
+            let yearSaleTotalCancelPaymentCnt =[];
+            let yearSaleTotalCancelOrderCnt =[];
+            let yearSaleTotalSaleCnt =[];
+            let yearSaleTotalCnt =[];
+
+            let yearSaleTotalSaleAmount =[]; //구매확
+            let yearSaleTotalTotal =[]; //순수익
+            let yearSaleTotalCancelPaymentAmount =[]; //결제취소금액
+            let yearSaleTotalAmount =[]; //총금액
+
+            let yearSaleTotalMonth = []; // 월별
+            /*<![CDATA[*/
+            /*[# th:each="month : ${yearSales}"]*/
+            yearSaleTotalCancelPaymentCnt.push(/*[[${month.cancelPaymentCnt}]]*/);
+            yearSaleTotalCancelPaymentAmount.push(/*[[${month.cancelPaymentAmount}]]*/);
+            yearSaleTotalCancelOrderCnt.push(/*[[${month.cancelOrderCnt}]]*/);
+            yearSaleTotalSaleCnt.push(/*[[${month.saleCnt}]]*/);
+            yearSaleTotalSaleAmount.push(/*[[${month.saleAmount}]]*/);
+            yearSaleTotalTotal.push(/*[[${month.total}]]*/);
+            yearSaleTotalMonth.push(/*[[${month.month}]]*/);
+            yearSaleTotalCnt.push(/*[[${month.cancelPaymentCnt}]] + [[${month.cancelOrderCnt}]] + [[${month.saleCnt}]]*/);
+            yearSaleTotalAmount.push(/*[[${month.cancelPaymentAmount}]] + [[${month.saleAmount}]]*/)
+            /*[/]*/
+            /*]]>*/
+
+            yearCntData = {
+                labels: yearSaleTotalMonth,
+                datasets: [{
+                    data: yearSaleTotalCnt,
+                    label: "총 카운트",
+                    borderColor: "#ffd582",
+                    backgroundColor: "rgb(248,230,177)",
+                    borderWidth:2,
+                    type: 'line',
+                    fill : false
+                }, {
+                    data: yearSaleTotalCancelPaymentCnt,
+                    label: "결제취소",
+                    borderColor: "#c6eee5",
+                    backgroundColor: "#bde1d9",
+                    borderWidth:2
+                }, {
+                    data: yearSaleTotalCancelOrderCnt,
+                    label: "주문취소",
+                    borderColor: "#ffa500",
+                    backgroundColor:"#ffa500",
+                    borderWidth:2,
+                }, {
+                    data: yearSaleTotalSaleCnt,
+                    label: "구매확정",
+                    borderColor: "#ffc8c5",
+                    backgroundColor:"#e8b4b1",
+                    borderWidth:2
+                }
+                ]
+            }
+
+            var ctx5 = document.getElementById('monthBar');
+            const yearChart = new Chart(ctx5, {
+                type: 'bar',
+                data: yearCntData,
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
+
+
+            // 월별 가격 통계
+            yearAmountData = {
+                labels: yearSaleTotalMonth,
+                datasets: [{
+                    data: yearSaleTotalAmount,
+                    label: "총 금액",
+                    borderColor: "rgba(235,161,255,0.7)",
+                    backgroundColor: "rgba(193,122,215,0.7)",
+                    borderWidth:2,
+                    type: 'line',
+                    fill : false
+                }, {
+                    data: yearSaleTotalCancelPaymentAmount,
+                    label: "결제취소 금액",
+                    borderColor: "#d4d6ff",
+                    backgroundColor: "#b2b4f6",
+                    borderWidth:2
+                }, {
+                    data: yearSaleTotalSaleAmount,
+                    label: "구매확정 금액",
+                    borderColor: "#ffa2a8",
+                    backgroundColor:"#ff8383",
+                    borderWidth:2,
+                }, {
+                    data: yearSaleTotalTotal,
+                    label: "순 수익",
+                    borderColor: "#fff8d3",
+                    backgroundColor:"#fce072",
+                    borderWidth:2
+                }
+                ]
+            }
+
+            var ctx6 = document.getElementById('monthAmount');
+            const monthAmountChart = new Chart(ctx6, {
+                type: 'bar',
+                data: yearAmountData,
+                options: {
+                    scales: {
+                        x: {
+                            stacked: true,
+                        },
+                        y: {
+                            stacked: true
+                        }
+                    }
+                }
+            });
         </script>
     </div>
 </div>
@@ -113,9 +481,10 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         crossorigin="anonymous"></script>
 <script src="/static/js/admin/scripts.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
-<script src="/static/js/admin/chart-area-demo.js"></script>
-<script src="/static/js/admin/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.2.1/chart.min.js"
+        integrity="sha512-v3ygConQmvH0QehvQa6gSvTE2VdBZ6wkLOlmK7Mcy2mZ0ZF9saNbbk19QeaoTHdWIEiTlWmrwAL4hS8ElnGFbA=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 <script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
 <script src="/static/js/admin/datatables-simple-demo.js"></script>
 </body>
