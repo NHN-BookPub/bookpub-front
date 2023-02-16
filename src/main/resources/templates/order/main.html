@@ -366,7 +366,7 @@
                                 th:text="${address.roadAddress}"></td>
                             <td class="member-address" th:id="'detailAddr' + ${num.index}"
                                 th:text="${address.addressDetail}"></td>
-                            <td class="member-address" th:text="${address.addressBased}"></td>
+                            <td class="member-address" th:text="${address.addressBased ? 'O' : 'X'}"></td>
                         </tr>
                     </table>
                 </div>
