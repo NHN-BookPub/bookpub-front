@@ -88,6 +88,9 @@ public class PaymentAdaptorImpl implements PaymentAdaptor {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void exchangeOrderProduct(OrderProductRefundRequestDto exchangeDto, Long memberNo) {
         String url = getGatewayUrl() + TOKEN_URL + "/order-product/members/" + memberNo;

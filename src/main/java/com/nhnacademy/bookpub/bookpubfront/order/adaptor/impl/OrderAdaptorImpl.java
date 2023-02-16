@@ -245,6 +245,9 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         ).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void confirmExchange(String orderProductNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
