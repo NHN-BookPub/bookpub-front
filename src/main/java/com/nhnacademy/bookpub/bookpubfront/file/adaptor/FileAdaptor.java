@@ -22,7 +22,8 @@ public interface FileAdaptor {
      * E-Book 정보 조회 API 호출.
      *
      * @param productNo 싱픔 반호
+     * @param memberNo  멤버 번호
      * @return E-Book 오브젝트 스토리지 정보
      */
-    GetDownloadInfo requestEBookInfo(Long productNo);
+    GetDownloadInfo requestEBookInfo(Long productNo, Long memberNo);
 }

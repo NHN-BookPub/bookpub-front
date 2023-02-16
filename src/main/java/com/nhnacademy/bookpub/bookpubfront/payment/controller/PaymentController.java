@@ -1,5 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.payment.controller;
 
+import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
+import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.config.TossConfig;
 import com.nhnacademy.bookpub.bookpubfront.member.util.MemberUtils;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
@@ -7,12 +9,14 @@ import com.nhnacademy.bookpub.bookpubfront.order.service.OrderService;
 import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.OrderProductRefundRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.payment.dto.request.RefundRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.payment.service.PaymentService;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -34,6 +38,8 @@ public class PaymentController {
     private final OrderService orderService;
     private final TossConfig tossConfig;
     private final MemberUtils memberUtils;
+    private final CategoryUtils categoryUtils;
+    private final CartUtils cartUtils;
 
     private static final String WAITING_PAYMENT = "결제대기";
 
@@ -45,13 +51,18 @@ public class PaymentController {
      * @return 결제페이지.
      */
     @GetMapping("/{orderNo}")
-    public String paymentPage(@PathVariable Long orderNo, Model model) {
+    public String paymentPage(@PathVariable Long orderNo, Model model,
+                              @CookieValue(name = CartUtils.CART_COOKIE, required = false) Cookie cookie) {
         GetOrderConfirmResponseDto orderConfirmInfo =
                 orderService.getOrderConfirmInfo(orderNo);
 
         if (!orderConfirmInfo.getOrderState().equals(WAITING_PAYMENT)) {
             return "error/401";
         }
+
+        memberUtils.modelRequestMemberNo(model);
+        categoryUtils.categoriesView(model);
+        cartUtils.getCountInCart(cookie.getValue(), model);
 
         model.addAttribute("order", orderConfirmInfo);
         model.addAttribute("toss", tossConfig.makeTossProvider());

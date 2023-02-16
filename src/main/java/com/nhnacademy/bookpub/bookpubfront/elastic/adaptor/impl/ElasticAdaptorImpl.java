@@ -4,7 +4,6 @@ import com.nhnacademy.bookpub.bookpubfront.config.ElasticConfig;
 import com.nhnacademy.bookpub.bookpubfront.elastic.adaptor.ElasticAdaptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -19,7 +18,6 @@ import org.springframework.web.util.UriComponentsBuilder;
  * @author : 박경서
  * @since : 1.0
  **/
-@Slf4j
 @Component
 @RequiredArgsConstructor
 public class ElasticAdaptorImpl implements ElasticAdaptor {
@@ -32,7 +30,6 @@ public class ElasticAdaptorImpl implements ElasticAdaptor {
      */
     @Override
     public String requestSearchProduct(String keyword) {
-        log.info("elastic index = {}", elasticConfig.getIndexName());
         String url = UriComponentsBuilder.fromHttpUrl(
                         elasticConfig.getUrl() + "/" + elasticConfig.getIndexName() + "/_search")
                 .encode()
