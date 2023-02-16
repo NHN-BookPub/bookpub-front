@@ -54,3 +54,24 @@ function order() {
         }
     })
 }
+
+function totalPrice(count) {
+    console.log(count)
+
+    let totalPrice = document.getElementById('totalPrice')
+    let originPrice = document.getElementById('originPrice')
+
+    console.log(totalPrice.innerText)
+    console.log(originPrice.innerText)
+
+    totalPrice.innerText = parseKRW((parseInt(parsingNumber(originPrice.innerText)) * count).toString());
+}
+
+
+function parseKRW(data) {
+    return data.replace(/\B(?<!\.\d*)(?=(\d{3})+(?!\d))/g, ",");
+}
+
+function parsingNumber(data) {
+    return data.replaceAll(",", "")
+}
