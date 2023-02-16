@@ -5,6 +5,7 @@ import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetExchangeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
@@ -219,6 +220,41 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         restTemplate.exchange(
                 url,
                 HttpMethod.PUT,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetExchangeResponseDto> exchangeOrderList(Pageable pageable) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        getGatewayUrl() + AUTH_ORDER_URL + "/order-product")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetExchangeResponseDto>>() {
+                }
+        ).getBody();
+    }
+
+    @Override
+    public void confirmExchange(String orderProductNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        getGatewayUrl() + AUTH_ORDER_URL + "/order-product/" + orderProductNo)
+                .encode()
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.POST,
                 new HttpEntity<>(makeHeader()),
                 Void.class
         );

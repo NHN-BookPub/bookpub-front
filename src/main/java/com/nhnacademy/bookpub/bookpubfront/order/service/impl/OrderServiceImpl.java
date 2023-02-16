@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.order.service.impl;
 import com.nhnacademy.bookpub.bookpubfront.order.adaptor.OrderAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.CreateOrderRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetExchangeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
@@ -193,5 +194,20 @@ public class OrderServiceImpl implements OrderService {
         orderAdaptor.confirmOrderProduct(orderProductNo, memberNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetExchangeResponseDto> getExchangeOrderList(Pageable pageable) {
+        return orderAdaptor.exchangeOrderList(pageable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void confirmExchange(String orderProductNo) {
+        orderAdaptor.confirmExchange(orderProductNo);
+    }
 
 }

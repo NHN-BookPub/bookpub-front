@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.order.service;
 
 import com.nhnacademy.bookpub.bookpubfront.order.dto.request.OrderFormRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetExchangeResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderAndPaymentResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderConfirmResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.order.dto.response.GetOrderDetailResponseDto;
@@ -107,4 +108,19 @@ public interface OrderService {
      * @param memberNo 회원번호.
      */
     void confirmOrderProduct(String orderProductNo, Long memberNo);
+
+    /**
+     * 교환상태인 주문상품의 상태를 구매확정으로 바꾸는 메소드.
+     *
+     * @param pageable 페이지.
+     * @return 교환상태 주문상품리스트.
+     */
+    PageResponse<GetExchangeResponseDto> getExchangeOrderList(Pageable pageable);
+
+    /**
+     * 교환을 수락해주는 메소드.
+     *
+     * @param orderProductNo 주문상품 번호.
+     */
+    void confirmExchange(String orderProductNo);
 }
