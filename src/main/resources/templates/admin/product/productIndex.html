@@ -344,7 +344,15 @@
         el: document.querySelector('#editor'),
         height: '300px',
         initialEditType: 'markdown',
-        previewStyle: 'vertical'
+        previewStyle: 'vertical',
+        toolbarItems: [
+            ['heading', 'bold', 'italic', 'strike'],
+            ['hr', 'quote'],
+            ['ul', 'ol', 'task', 'indent', 'outdent'],
+            ['table', 'link'],
+            ['code', 'codeblock'],
+            ['scrollSync'],
+        ]
     });
 
     function getDescription() {

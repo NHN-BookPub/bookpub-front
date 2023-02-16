@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Book-Pub</title>
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
+    <link rel="stylesheet" href="/static/css/mypage/point.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+
+
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
+    <div id="layoutSidenav_content">
+        <main>
+            </br>
+            <div style="position: relative">
+                <h2 style="border-bottom: 2px solid black;padding: 1rem 0;">고객서비스</h2>
+            </div>
+            <div align="right">
+                <button class="btn btn-primary float-right" th:onclick="|location.href='/admin/services/${service.customerServiceNo}'|">
+                    삭제
+                </button>
+            </div>
+            <div>
+                <div style="margin-top: 26px; min-height: 763px">
+                    <div class="point-tr-header">
+                        <div class="point-td-header">번호</div>
+                        <div class="point-td-header">작성자</div>
+                        <div class="point-td-header">대분류</div>
+                    </div>
+                    <div class="point-tr-body">
+                        <div class="center" id="serviceNo"
+                             th:text="${service.customerServiceNo}"></div>
+                        <div class="center" th:text="${service.memberId}"></div>
+                        <div class="center" th:text="${service.customerServiceStateCode}"></div>
+                    </div>
+                    <div class="point-tr-header">
+                        <div class="point-td-header">소분류</div>
+                        <div class="point-td-header">제목</div>
+                        <div class="point-td-header">작성일시</div>
+                    </div>
+                    <div class="point-tr-body">
+                        <div class="center"
+                             th:text="${service.serviceCategory}"></div>
+                        <div class="left" th:text="${service.serviceTitle}"></div>
+                        <div class="center" th:text="${#temporals.format(service.createdAt, 'yyyy.MM.dd')}"></div>
+                    </div>
+                    <div>
+                        <span style="width: 100%; height: 500px; " th:if="${not #strings.isEmpty(service.image)}">
+                        <img style="width: 100%; height: 100%; object-fit: cover;" th:src="@{${service.image}}"
+                            alt="No image">
+                        </span>
+                        <div id="viewer"></div>
+                        <button class="btn" type="button" onclick="window.history.back()">뒤로가기</button>
+                    </div>
+                </div>
+            </div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid px-4">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; Book-Pub</div>
+                    <div>
+                        <a href="#">Privacy Policy</a>
+                        &middot;
+                        <a href="#">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+    <p id="editor-hidden" style="display: none" th:text="${service.serviceContent}"></p>
+</div>
+</body>
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const viewer = toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true
+    });
+
+    let elem = document.getElementById('editor-hidden');
+    viewer.setMarkdown(elem.textContent);
+</script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+</body>
+</html>

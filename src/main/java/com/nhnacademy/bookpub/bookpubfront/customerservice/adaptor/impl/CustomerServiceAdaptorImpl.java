@@ -116,4 +116,41 @@ public class CustomerServiceAdaptorImpl implements CustomerServiceAdaptor {
                         })
                 .getBody();
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GetCustomerServiceListResponseDto getCustomerServiceByNo(Integer serviceNo) {
+        String url = UriComponentsBuilder
+                .fromHttpUrl(GateWayConfig.getGatewayUrl()
+                + "/api/service/"
+                + serviceNo)
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<GetCustomerServiceListResponseDto>() {
+
+                }).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteCustomerService(Integer serviceNo) {
+        String url = UriComponentsBuilder
+                .fromHttpUrl(GateWayConfig.getGatewayUrl()
+                + AUTH_SERVICE_URL + "/" + serviceNo)
+                .toUriString();
+
+        restTemplate.exchange(
+                url,
+                HttpMethod.DELETE,
+                new HttpEntity<>(Utils.makeHeader()),
+                Void.class);
+    }
 }

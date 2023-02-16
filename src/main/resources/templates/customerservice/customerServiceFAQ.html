@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book-Pub</title>
+    <link rel="stylesheet" href="/static/css/mypage/point.css">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+
+    <style>
+        .point-tr-body:hover {
+            background-color: #d2d2d23b;
+            cursor: pointer;
+        }
+    </style>
+
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        function typeAll() {
+            window.location.href = "/services/faq"
+        }
+
+        function typeUsing() {
+            window.location.href = "/services/faq?category=faqUsing"
+        }
+
+        function typeAccount() {
+            window.location.href = "/services/faq?category=faqAccount"
+        }
+
+        function typePayment() {
+            window.location.href = "/services/faq?category=faqPayment"
+        }
+
+        function typeOthers() {
+            window.location.href = "/services/faq?category=faqOthers"
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let linkList = document.querySelectorAll('.bold')
+
+            for (let i = 0; i < linkList.length; i++) {
+                let navLink = new URL(location.href).searchParams
+                let param = navLink.get('category')
+                if (param === null) {
+                    if (linkList[i].value === '1') {
+                        linkList[i].style.fontWeight = 'bold';
+                        linkList[i].style.color = 'black';
+                        break;
+                    }
+                }
+                if (linkList[i].value === param) {
+                    linkList[i].style.fontWeight = 'bold';
+                    linkList[i].style.color = 'black';
+                }
+            }
+        });
+    </script>
+</head>
+<body>
+<th:block th:include="main/fragments/rootHeader"></th:block>
+
+<div id="container" style="width: 60%; margin-left: 20%">
+    </br>
+    <div style="position: relative">
+        <h2 style="border-bottom: 2px solid black;padding: 1rem 0;">FAQ - 자주 묻는 질문</h2>
+    </div>
+    <div>
+        <div class="pointList-select-box">
+            <button class="point-select bold" value="1" onclick="typeAll()">전체</button>
+            <button class="point-select bold" value="faqUsing" onclick="typeUsing()">이용 문의</button>
+            <button class="point-select bold" value="faqAccount" onclick="typeAccount()">계정 문의</button>
+            <button class="point-select bold" value="faqPayment" onclick="typePayment()">결제 문의</button>
+            <button class="point-select bold" value="faqOthers" onclick="typeOthers()">기타 문의</button>
+
+        </div>
+        <div style="margin-top: 26px; min-height: 763px">
+            <div class="point-tr-header">
+                <div class="point-td-header">분류</div>
+                <div class="point-td-header">제목</div>
+                <div class="point-td-header">작성일시</div>
+            </div>
+            <div class="point-tr-body" th:each="content : ${services}"
+                 th:onclick="|location.href='/service/faq?no=${content.customerServiceNo}'|">
+                <div class="center"
+                     th:text="${content.serviceCategory}"></div>
+                <div class="left" th:text="${content.serviceTitle}">
+
+                </div>
+                <div class="center" th:text="${#temporals.format(content.createdAt, 'yyyy.MM.dd')}"></div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${paramValue != null}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="'/services/faq?page='+
+                   ${currentPage - 1}+
+                   '&category='+${paramValue}">Previous</a>
+                </li>
+                <th:block th:with="start=${(currentPage/pageButtonNum) * pageButtonNum + 1},
+            end=(${(totalPages == 0) ? 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link"
+                           th:href="'/services/faq?page='+${page - 1}+'&category='+${paramValue}"
+                           th:text="${page}"></a></li>
+                </th:block>
+                <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="'/services/faq?page='+${currentPage + 1}+'&category='+${paramValue}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+    <div th:if="${paramValue == null}">
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="'/services/faq?page='+
+                   ${currentPage - 1}">Previous</a>
+                </li>
+                <th:block th:with="start=${(currentPage/pageButtonNum) * pageButtonNum + 1},
+            end=(${(totalPages == 0) ? 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                        <a class="page-link"
+                           th:href="'/services/faq?page='+${page - 1}"
+                           th:text="${page}"></a></li>
+                </th:block>
+                <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                    <a class="page-link"
+                       th:href="'/services/faq?page='+${currentPage + 1}">Next</a>
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<th:block th:include="main/fragments/rootFooter"></th:block>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+        crossorigin="anonymous"></script>
+<script src="/static/js/admin/scripts.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" crossorigin="anonymous"></script>
+<script src="/static/js/admin/chart-area-demo.js"></script>
+<script src="/static/js/admin/chart-bar-demo.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/simple-datatables@latest" crossorigin="anonymous"></script>
+<script src="/static/js/admin/datatables-simple-demo.js"></script>
+</body>
+</html>

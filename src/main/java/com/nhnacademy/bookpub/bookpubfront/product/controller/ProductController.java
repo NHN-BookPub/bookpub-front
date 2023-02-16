@@ -143,6 +143,15 @@ public class ProductController {
         return "product/productListByCategory";
     }
 
+    /**
+     * 상품 유형으로 상품을 조회합니다.
+     *
+     * @param typeNo   유형번호
+     * @param pageable 페이징
+     * @param cookie   쿠키
+     * @param model    모델
+     * @return 상품들
+     */
     @GetMapping("/types/{typeNo}")
     public String viewProductsByType(@PathVariable Integer typeNo,
                                      @PageableDefault Pageable pageable,

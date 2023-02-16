@@ -68,11 +68,13 @@
             </td>
             <td th:text="${#temporals.format(coupon.finishedAt, 'yyyy년 MM월 dd일 HH시 mm분 ss초')}"></td>
             <td>
-                <div th:if="${coupon.couponUsed == false}">
-                    <span>사용 가능</span>
+                <div th:if="${coupon.typeName == '포인트'}">
+                    <form th:action="@{/members/coupons/{couponNo}/point(couponNo=${coupon.couponNo})}" method="post">
+                    <span><button type="submit" class="btn btn-sm btn-outline-dark">사용하기</button></span>
+                    </form>
                 </div>
-                <div th:unless="${coupon.couponUsed == false}">
-                    <span>사용 불가능</span>
+                <div th:unless="${coupon.typeName == '포인트'}">
+                    <span>사용 가능</span>
                 </div>
             </td>
         </tr>

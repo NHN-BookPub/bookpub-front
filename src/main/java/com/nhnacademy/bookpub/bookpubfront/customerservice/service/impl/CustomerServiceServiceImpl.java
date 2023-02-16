@@ -30,7 +30,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     public void createCustomerService(CreateCustomerServiceRequestDto requestDto, MultipartFile image) {
         MultiValueMap<String, Object> requestMap = new LinkedMultiValueMap<>();
         requestMap.add("requestDto", requestDto);
-        requestMap.add("image", image);
+        requestMap.add("image", image.getResource());
 
         customerServiceAdaptor.createCustomerService(requestMap);
     }
@@ -57,5 +57,21 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
     @Override
     public PageResponse<GetCustomerServiceListResponseDto> getCustomerServiceByCategory(String category, Pageable pageable) {
         return customerServiceAdaptor.getCustomerServiceByCategory(category, pageable);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public GetCustomerServiceListResponseDto getCustomerServiceByNo(Integer serviceNo) {
+        return customerServiceAdaptor.getCustomerServiceByNo(serviceNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void deleteCustomerService(Integer serviceNo) {
+        customerServiceAdaptor.deleteCustomerService(serviceNo);
     }
 }

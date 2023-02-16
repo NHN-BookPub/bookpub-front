@@ -4,8 +4,8 @@ import com.nhnacademy.bookpub.bookpubfront.state.CustomerServiceCategory;
 import com.nhnacademy.bookpub.bookpubfront.state.CustomerServiceState;
 import com.nhnacademy.bookpub.bookpubfront.state.anno.StateCode;
 import javax.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 /**
@@ -15,7 +15,7 @@ import org.hibernate.validator.constraints.Length;
  * @since : 1.0
  **/
 @Getter
-@NoArgsConstructor
+@AllArgsConstructor
 public class CreateCustomerServiceRequestDto {
     @StateCode(enumClass = CustomerServiceState.class)
     private String customerServiceStateCode;

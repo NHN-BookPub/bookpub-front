@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Book-Pub</title>
+    <link rel="stylesheet" href="/static/css/mypage/point.css">
+    <!-- Google font -->
+    <link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
+    <!-- Bootstrap -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/bootstrap.min.css"/>
+    <!-- Slick -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick.css"/>
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/slick-theme.css"/>
+    <!-- nouislider -->
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/nouislider.min.css"/>
+    <!-- Custom stlylesheet -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
+    <link rel="stylesheet" href="https://uicdn.toast.com/editor/latest/toastui-editor.min.css">
+
+    <script src="http://code.jquery.com/jquery-latest.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
+
+    <script>
+        function typeAll() {
+            window.location.href = "/services/notice"
+        }
+
+        function typeNormal() {
+            window.location.href = "/services/notice?category=noteNormal"
+        }
+
+        function typeServer() {
+            window.location.href = "/services/notice?category=noteServer"
+        }
+
+        function typePayment() {
+            window.location.href = "/services/notice?category=notePayment"
+        }
+
+        function typeOthers() {
+            window.location.href = "/services/notice?category=noteOthers"
+        }
+    </script>
+</head>
+
+<body>
+<th:block th:include="main/fragments/rootHeader"></th:block>
+
+<div id="container" style="width: 60%; margin-left: 20%">
+    </br>
+    <div style="position: relative">
+        <h2 style="border-bottom: 2px solid black;padding: 1rem 0;">공지사항</h2>
+    </div>
+    <div>
+        <div class="pointList-select-box">
+            <button class="point-select bold" value="1" onclick="typeAll()">전체</button>
+            <button class="point-select bold" value="2" onclick="typeNormal()">일반</button>
+            <button class="point-select bold" value="3" onclick="typeServer()">서버</button>
+            <button class="point-select bold" value="4" onclick="typePayment()">결제</button>
+            <button class="point-select bold" value="5" onclick="typeOthers()">기타</button>
+
+        </div>
+        <div style="margin-top: 26px; min-height: 763px">
+            <div class="point-tr-header">
+                <div class="point-td-header">분류</div>
+                <div class="point-td-header">제목</div>
+                <div class="point-td-header">작성일시</div>
+            </div>
+            <div class="point-tr-body">
+                <div class="center"
+                     th:text="${service.serviceCategory}"></div>
+                <div class="left" th:text="${service.serviceTitle}"></div>
+                <div class="center" th:text="${#temporals.format(service.createdAt, 'yyyy.MM.dd')}"></div>
+            </div>
+            <div>
+                <span style="width: 100%; height: 500px; " th:if="${not #strings.isEmpty(service.image)}">
+                        <img style="width: 100%; height: 100%; object-fit: cover;" th:src="@{${service.image}}"
+                             alt="No image">
+                        </span>
+                <div id="viewer"></div>
+                <button class="btn" type="button" onclick="window.history.back()">뒤로가기</button>
+            </div>
+        </div>
+    </div>
+</div>
+<p id="editor-hidden" style="display: none" th:text="${service.serviceContent}"></p>
+
+
+<script src="https://uicdn.toast.com/editor/latest/toastui-editor-all.min.js"></script>
+<script>
+    const viewer = toastui.Editor.factory({
+        el: document.querySelector('#viewer'),
+        viewer: true
+    });
+
+    let elem = document.getElementById('editor-hidden');
+    viewer.setMarkdown(elem.textContent);
+</script>
+</body>
+</html>

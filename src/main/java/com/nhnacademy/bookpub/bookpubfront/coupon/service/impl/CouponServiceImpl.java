@@ -58,6 +58,14 @@ public class CouponServiceImpl implements CouponService {
      * {@inheritDoc}
      */
     @Override
+    public void modifyUsedPointCoupon(Long couponNo) {
+        couponAdaptor.requestModifyUsedPointCoupon(couponNo);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
     public Boolean existCouponsByMemberNo(Long memberNo, List<Long> tierCoupons) {
         return couponAdaptor.requestExistCouponsByMemberNo(memberNo, tierCoupons);
     }
