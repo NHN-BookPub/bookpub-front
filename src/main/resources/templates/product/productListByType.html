@@ -23,19 +23,13 @@
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
 
-    <style>
-        .product-detail-price {
-            color: #ff6666;
-            font-size: 16px;
-        }
-    </style>
 </head>
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
 
 
 <div class="container" style="padding-top: 1%; padding-bottom: 3%">
-    <h2 style="padding-top: 2%;" th:text="'카테고리 : [' + ${categoryName} + ']'"></h2>
+    <h2 style="padding-top: 2%;" th:text="'상품유형 : [' + ${typeName} + ']'"></h2>
 
     <hr/>
     <br/>
@@ -45,11 +39,15 @@
             <div class="row">
                 <div class="col-sm-3">
                     <a th:href="@{/products/{productNo}(productNo=${product.productNo})}">
-                        <span class="img-thumbnail" style="width: 200px; height: 250px" th:if="${#strings.isEmpty(product.getThumbnail)}">
-                            <img class="img_thumbnail" style="width: 100%; height: 100%; object-fit: cover;" src="/static/img/main/no-image.png">
+                        <span class="img-thumbnail" style="width: 200px; height: 250px"
+                              th:if="${#strings.isEmpty(product.getThumbnail)}">
+                            <img class="img_thumbnail" style="width: 100%; height: 100%; object-fit: cover;"
+                                 src="/static/img/main/no-image.png">
                         </span>
-                        <span class="img-thumbnail" style="width: 200px; height: 250px" th:if="${not #strings.isEmpty(product.getThumbnail)}">
-                            <img class="img_thumbnail" style="width: 100%; height: 100%; object-fit: cover;" th:src="@{${product.getThumbnail()}}" alt="No image">
+                        <span class="img-thumbnail" style="width: 200px; height: 250px"
+                              th:if="${not #strings.isEmpty(product.getThumbnail)}">
+                            <img class="img_thumbnail" style="width: 100%; height: 100%; object-fit: cover;"
+                                 th:src="@{${product.getThumbnail()}}" alt="No image">
                         </span>
                     </a>
                 </div>
@@ -100,18 +98,18 @@
             <ul class="pagination justify-content-center">
                 <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/categories/{categoryNo}?(categoryNo=${categoryNo}, page=(${currentPage}-1))}">Previous</a>
+                       th:href="@{/types/{typeNo}?(typeNo=${typeNo}, page=(${currentPage}-1))}">Previous</a>
                 </li>
                 <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
                     <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
                         <a class="page-link"
-                           th:href="@{/categories/{categoryNo}?(categoryNo=${categoryNo}, page=(${page-1}))}"
+                           th:href="@{/types/{typeNo}?(typeNo=${typeNo}, page=(${page-1}))}"
                            th:text="${page}"></a></li>
                 </th:block>
                 <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
                     <a class="page-link"
-                       th:href="@{/categories/{categoryNo}?(categoryNo=${categoryNo}, page=(${currentPage}+1))}">Next</a>
+                       th:href="@{/types/{typeNo}?(typeNo=${typeNo}, page=(${currentPage}+1))}">Next</a>
                 </li>
             </ul>
         </nav>
