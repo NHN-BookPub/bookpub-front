@@ -45,7 +45,6 @@ public class OrderAdaptorImpl implements OrderAdaptor {
      */
     @Override
     public Long createOrderRequest(CreateOrderRequestDto requestDto) {
-        log.warn(String.valueOf(requestDto));
         String url = getGatewayUrl() + ORDER_URL;
         HttpEntity<CreateOrderRequestDto> httpEntity = new HttpEntity<>(requestDto, makeHeader());
         ResponseEntity<Long> response =

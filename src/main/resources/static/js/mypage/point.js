@@ -19,18 +19,29 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 function nickCheckFunc() {
-    let value = document.getElementById("nickname").value;
+    let value = document.getElementById("nickname");
+    let myNick = document.getElementById('myNickname').value;
     let check = document.getElementById('check');
+
+    if (value.value === myNick) {
+        Swal.fire({
+            icon: 'warning',
+            text: '자기 자신에겐 선물할 수 없습니다'
+        })
+        value.value = '';
+        return false;
+    }
+
     $.ajax({
         type: "post",
-        async: true,
+        async: false,
         url: "/nickCheck",
-        data: {"nickname": value},
+        data: {"nickname": value.value},
         success: function (result) {
             if (result === true) {
                 Swal.fire({
                     icon: 'success',
-                    text: "선물 가능한 유저입니다. (닉네임 : " + value + ")"
+                    text: "선물 가능한 유저입니다. (닉네임 : " + value.value + ")"
                 })
                 check.value = '1';
             } else {
@@ -48,6 +59,17 @@ function pointGift() {
     let usePoint = document.getElementById('point-amount')
     let userPoint = document.getElementById('hold-point')
     let check = document.getElementById('check');
+
+    let pointReg = /^\d{1,500}$/;
+
+    if (!pointReg.test(usePoint.value)) {
+        Swal.fire({
+            icon: 'warning',
+            text: "포인트는 숫자만 입력 가능합니다"
+        })
+        usePoint.value = '';
+        return;
+    }
 
     if (parseInt(usePoint.value) > parseInt(userPoint.value)) {
         Swal.fire({

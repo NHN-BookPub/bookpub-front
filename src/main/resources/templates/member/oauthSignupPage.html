@@ -25,10 +25,10 @@
     <div class="input-form-backgroud row">
         <div class="input-form col-md-12 mx-auto">
             <h4 class="mb-3">회원가입</h4>
-            <form class="validation-form" novalidate action="/oauth/signup" method="post">
+            <form class="validation-form" novalidate action="/oauth/signup" method="post" id="signupForm">
                 <div class="mb-3">
                     <label for="name">이름</label>
-                    <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상"
+                    <input type="text" class="form-control" id="name" name="name" placeholder="한글 또는 영어 2글자 이상 200자 이하"
                            value="" required>
                     <div class="invalid-feedback">
                         이름을 입력해주세요.
@@ -93,6 +93,7 @@
                     <div class="button-box">
                         <div class="confirm-box">
                             <label id="inputLabel" for="authInput">인증번호 입력</label>
+                            <input type="hidden" id="auth-check" value="0">
                             <input type="text" id="authInput" name="auth" required>
                             <button id="smsAuthConfirm" type="button" onclick="smsConfirm()">확인</button>
                         </div>
@@ -110,7 +111,8 @@
                     </div>
                     <div class="mb-3">
                         <label for="detailAddress">상세주소</label>
-                        <input type="text" class="form-control" id="detailAddress" name="detailAddress" placeholder="상세주소"
+                        <input type="text" class="form-control" id="detailAddress" name="detailAddress"
+                               placeholder="상세주소"
                                required>
                         <div class="invalid-feedback">상세주소를 입력해주세요.</div>
                     </div>
@@ -125,7 +127,8 @@
                     <label class="custom-control-label" for="aggrement">개인정보 수집 및 이용에 동의합니다.</label>
                 </div>
                 <div class="mb-4"></div>
-                <button class="btn btn-primary btn-lg btn-block" id="submitBtn" type="submit" disabled="disabled">가입
+                <button class="btn btn-primary btn-lg btn-block" id="submitBtn" type="button" onclick="finalCheck()"
+                        disabled="disabled">가입
                     완료
                 </button>
             </form>

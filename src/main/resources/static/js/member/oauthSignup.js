@@ -1,10 +1,10 @@
 let emptyReg = /\s/g;
-let nameReg = /^.*(?=.*[가-힣a-z])(?=^.{2,200}).*$/;
-let nickReg = /^[a-zA-Z\\d]{2,8}$/;
+let nameReg = /^[가-힣a-z]{2,200}$/;
+let nickReg = /^[a-zA-Z\d]{2,8}$/;
 let birthReg = /^\d{6}$/;
-let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 const nicknameCheck = $("#nickname-check");
+let addressReg = /^[가-힣0-9\s]{2,200}$/;
 
 let authMessage;
 let confirmBtn = $('#smsAuthConfirm');
@@ -18,7 +18,6 @@ window.addEventListener('load', () => {
                 event.preventDefault();
                 event.stopPropagation();
             }
-
             if (check() === false) {
                 event.preventDefault();
                 event.stopPropagation();
@@ -29,6 +28,37 @@ window.addEventListener('load', () => {
     });
 }, false);
 
+
+function birthPattern() {
+    const dateList1 = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+
+    let birth = document.getElementById('birth').value;
+
+    if (!birthReg.test(birth)) {
+        alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
+        return false;
+    }
+
+    let yy = birth.toString().substring(0, 2);
+    let mm = birth.toString().substring(2, 4);
+    let dd = birth.toString().substring(4, 6);
+
+    if (parseInt(yy) < 0) {
+        alert('정상적인 생년월일을 입력해주세요')
+        return false;
+    }
+    if (parseInt(mm) <= 0 || parseInt(mm) >= 13) {
+        alert('정상적인 생년월일을 입력해주세요')
+        return false;
+    }
+
+    if (dateList1[parseInt(mm)] < parseInt(dd) || parseInt(dd) <= 0) {
+        alert('정상적인 생년월일을 입력해주세요')
+        return false;
+    }
+
+    return true;
+}
 
 function nicknamePattern() {
     let nickVal = document.getElementById('nickname').value;
@@ -50,31 +80,53 @@ function emailPattern() {
 
 function phonePattern() {
     let phoneVal = document.getElementById('phone').value;
-    if (!phoneReg.test(phoneVal) || emptyReg.test(phoneVal)) {
-        alert('전화번호 11자리를 입력해주세요 ( - 제외).')
+    if (isNaN(parseInt(phoneVal))) {
+        alert('전화번호를 입력해주세요')
+        return false;
+    }
+
+    if (emailReg.test(phoneVal)) {
+        alert('전화번호에는 공백이 있을 수 없습니다.')
+        return false;
+    }
+
+    console.log(parseInt(phoneVal));
+
+    if (parseInt(phoneVal) < 1000000000 || parseInt(phoneVal) >= 1100000000) {
+        alert('유효한 전화번호 11자리를 입력해주세요 ( - 제외).')
         return false;
     }
     return true;
 }
 
 function check() {
-    nicknamePattern();
-    emailPattern();
-    phonePattern();
+    if (!nicknamePattern() ||  !emailPattern() || !phonePattern() || !birthPattern()) {
+        return false;
+    }
 
     let nameVal = document.getElementById('name').value;
     if (!nameReg.test(nameVal) || emptyReg.test(nameVal)) {
-        alert('이름은 한글 2글자 이상으로 생성해주세요.')
+        alert('이름은 한글 또는 영어 2글자 이상 200글자 이하로 입력해주세요.')
         return false;
     }
 
-    let birthVal = document.getElementById('birth').value;
-    if (!birthReg.test(birthVal) || emptyReg.test(birthVal)) {
-        alert('숫자로 이뤄진 생년월일 6자를 입력해주세요 (ex : 981008)')
+    let address = document.getElementById('address')
+
+    if (address.value === "" || !addressReg.test(address.value)) {
+        alert('도로명 주소를 입력해 주세요.')
         return false;
     }
+
+    let detailAddress = document.getElementById('detailAddress')
+
+    if (detailAddress.value === "" || !addressReg.test(detailAddress.value)) {
+        alert('상세 주소를 입력해 주세요.')
+        return false;
+    }
+
+    return true;
+
 }
-
 
 function nickCheckFunc() {
     const nickname = $("#nickname").val();
@@ -123,7 +175,6 @@ function smsAuth() {
             success: function (result) {
                 alert("인증번호가 전송되었습니다");
                 authMessage = result;
-                console.log(authMessage)
                 $('#smsAuthSend').css("display", "none");
                 $('#smsAuthConfirm').css("display", "inline-block");
                 $('#authInput').css("display", "inline-block");
@@ -140,9 +191,24 @@ function smsConfirm() {
         alert("인증에 성공하였습니다.");
         authInput.disabled = true;
         confirmBtn.css("display", "none");
+        document.getElementById("auth-check").value = "1"
     } else {
         alert("인증에 실패하였습니다.")
         authInput.value = '';
+    }
+}
+
+function finalCheck() {
+    if (!check()) {
+        return false;
+    }
+    let authCheck = document.getElementById("auth-check")
+    if (authCheck.value === "0") {
+        alert("핸드폰 인증을 받아주세요. (bookpub 단톡방 초대 요청하세요)")
+        return false;
+    } else {
+        let form = document.getElementById("signupForm")
+        form.submit()
     }
 }
 

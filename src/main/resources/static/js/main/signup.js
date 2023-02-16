@@ -4,7 +4,7 @@ let idReg = /^[a-z0-9]{5,20}$/;
 let pwdReg = /^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=?<>.,/|~`])[A-Za-z\d!@#$%^&*()_+=?<>.,/|~`]{8,}$/
 let nickReg = /^[a-zA-Z\d]{2,8}$/;
 let birthReg = /^\d{6}$/;
-let phoneReg = /^.*(?=.*\d)(?=^.{11}).*$/;
+let addressReg = /^[가-힣0-9\s]{2,200}$/;
 let emailReg = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 const nicknameCheck = $("#nickname-check");
 const idCheck = $("#id-check");
@@ -142,17 +142,18 @@ function check() {
 
     let address = document.getElementById('address')
 
-    if (address.value === "") {
+    if (address.value === "" || !addressReg.test(address.value)) {
         alert('도로명 주소를 입력해 주세요.')
         return false;
     }
 
     let detailAddress = document.getElementById('detailAddress')
 
-    if (detailAddress.value === "") {
+    if (detailAddress.value === "" || !addressReg.test(detailAddress.value)) {
         alert('상세 주소를 입력해 주세요.')
         return false;
     }
+
 
     return true;
 

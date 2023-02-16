@@ -17,6 +17,7 @@ import com.nhnacademy.bookpub.bookpubfront.pricepolicy.service.PricePolicyServic
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
+import com.nhnacademy.bookpub.bookpubfront.utils.Utils;
 import java.util.List;
 import java.util.Objects;
 import lombok.RequiredArgsConstructor;
@@ -77,12 +78,7 @@ public class MemberOrderController {
                 orderService.getOrderListByMemberNo(memberNo, pageable);
 
         model.addAttribute(MEMBER, memberService.getTokenMember(memberNo));
-        model.addAttribute("orderList", orders.getContent());
-        model.addAttribute("totalPages", orders.getTotalPages());
-        model.addAttribute("currentPage", orders.getNumber());
-        model.addAttribute("isNext", orders.isNext());
-        model.addAttribute("isPrevious", orders.isPrevious());
-        model.addAttribute("pageButtonNum", 5);
+        Utils.settingPagination(model, orders, "orderList");
 
         return "mypage/orderList";
     }
