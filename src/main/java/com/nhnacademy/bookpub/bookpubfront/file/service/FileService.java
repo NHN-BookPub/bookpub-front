@@ -22,9 +22,10 @@ public interface FileService {
      * E-Book 정보 호출 메서드.
      *
      * @param productNo 상품 번호
+     * @param memberNo  멤버 번호
      * @return 상품 정보
      */
-    GetDownloadInfo downloadEBookInfo(Long productNo);
+    GetDownloadInfo downloadEBookInfo(Long productNo, Long memberNo);
 
     /**
      * File Download 메서드.
