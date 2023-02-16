@@ -308,7 +308,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${populars[0].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${populars[0].productNo})}"
                                        th:text="${populars[0].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -337,7 +337,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${populars[1].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${populars[1].productNo})}"
                                        th:text="${populars[1].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -366,7 +366,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${populars[2].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${populars[2].productNo})}"
                                        th:text="${populars[2].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -397,7 +397,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${populars[3].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${populars[3].productNo})}"
                                        th:text="${populars[3].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -426,7 +426,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${populars[4].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${populars[4].productNo})}"
                                        th:text="${populars[4].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -455,7 +455,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${populars[5].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${populars[5].productNo})}"
                                        th:text="${populars[5].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -497,7 +497,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${discounts[0].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${discounts[0].productNo})}"
                                        th:text="${discounts[0].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -526,7 +526,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${discounts[1].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${discounts[1].productNo})}"
                                        th:text="${discounts[1].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -555,7 +555,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${discounts[2].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${discounts[2].productNo})}"
                                        th:text="${discounts[2].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -586,7 +586,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${discounts[3].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${discounts[3].productNo})}"
                                        th:text="${discounts[3].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -615,7 +615,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${discounts[4].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${discounts[4].productNo})}"
                                        th:text="${discounts[4].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -644,7 +644,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${discounts[5].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${discounts[5].productNo})}"
                                        th:text="${discounts[5].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -688,7 +688,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${recommends[0].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${recommends[0].productNo})}"
                                        th:text="${recommends[0].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -717,7 +717,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${recommends[1].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${recommends[1].productNo})}"
                                        th:text="${recommends[1].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -746,7 +746,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${recommends[2].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${recommends[2].productNo})}"
                                        th:text="${recommends[2].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -777,7 +777,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${recommends[3].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${recommends[3].productNo})}"
                                        th:text="${recommends[3].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -806,7 +806,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${recommends[4].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${recommends[4].productNo})}"
                                        th:text="${recommends[4].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"
@@ -835,7 +835,7 @@
                                     <p class="product-category" th:text="${category}"></p>
                                 </div>
                                 <h3 class="product-name">
-                                    <a href="@{/products/{productNo}(productNo=${recommends[5].productNo})} + '\'"
+                                    <a th:href="@{/products/{productNo}(productNo=${recommends[5].productNo})}"
                                        th:text="${recommends[5].getTitle()}"></a>
                                 </h3>
                                 <h4 class="product-price"

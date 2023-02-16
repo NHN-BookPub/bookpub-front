@@ -34,7 +34,7 @@ public class SignupMemberRequestDto {
     private String gender;
 
     @NotBlank
-    @Pattern(regexp = "^[a-z0-9_-]{5,20}$",
+    @Pattern(regexp = "^[a-z0-9]{5,20}$",
             message = "아이디는 영어나 숫자로 5글자에서 20글자로 입력해주세요.")
     private String memberId;
 
