@@ -161,7 +161,7 @@
                 <div class="d-flex w-100 height-0 justify-content-end">
                     <small class="badge bg-opacity-20">수정하기</small>
                 </div>
-                <span class="mb-2" th:text="${member.phone}">01043580106</span>
+                <span class="mb-2" th:text="${member.phone}"></span>
             </a>
             <!--        휴대전화 변경 모달       -->
 
@@ -231,7 +231,7 @@
                                     <label for="currentPwd">현재 비밀번호</label>
                                     <input type="password" class="form-control" id="currentPwd"
                                            placeholder="현재 비밀번호를 입력해주세요" name="currentPwd"
-                                           pattern="(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,50}$"
+                                           pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[!@#$%^&*()_+=?<>.,/|~`])[A-Za-z\d!@#$%^&*()_+=?<>.,/|~`]{8,}$/"
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">영문 대,소 문자,숫자,특수문자 로 8~50자</div>
@@ -294,7 +294,7 @@
                                     <label for="exchangeEmail">변경할 이메일</label>
                                     <input type="email" class="form-control" id="exchangeEmail"
                                            placeholder="abc@xxxx.xxx" name="exchangeEmail"
-                                           pattern="^[a-zA-Z0-9+-\_.]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$"
+                                           pattern="[a-zA-Z0-9]+[@][a-zA-Z0-9]+[.]+[a-zA-Z]+[.]*[a-zA-Z]*"
                                            required>
                                     <div class="valid-feedback">완료</div>
                                     <div class="invalid-feedback">이메일 형식에 맞지않습니다.</div>
@@ -337,11 +337,13 @@
                                     </button>
                                     <input type="text" class="form-control" id="address-detail" name="addressDetail"
                                            placeholder="상세주소를 입력해주세요" min="2" max="100"
+                                           onchange="checkAddress(this.value)"
+                                           disabled
                                            required>
                                     <div class="valid-feedback">완료</div>
                                 </div>
                                 <button type="button" class="btn btn-secondary" data-dismiss="modal">닫기</button>
-                                <button type="submit" class="check-address btn btn-primary">등록</button>
+                                <button type="submit" id="addressCheck" class="check-address btn btn-primary" disabled>등록</button>
                             </form>
                         </div>
                     </div>
@@ -461,15 +463,15 @@
 </script>
 <script th:inline="javascript">
     let findTier = (value) => {
-        if (value === 'white') {
+        if (value === 'WHITE') {
             return "#CCCCCC"
-        } else if (value === 'sliver') {
+        } else if (value === 'SLIVER') {
             return "#C0C0C0"
-        } else if (value === 'gold') {
+        } else if (value === 'GOLD') {
             return "#FFD700";
-        } else if (value === 'platinum') {
+        } else if (value === 'PLATINUM') {
             return "#00B4C9";
-        } else if (value === 'Diamond') {
+        } else if (value === 'DIAMOND') {
             return "#CCFFFF";
         } else
             return "#CC9999";
