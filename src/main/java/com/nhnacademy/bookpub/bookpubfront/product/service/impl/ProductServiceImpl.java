@@ -387,4 +387,12 @@ public class ProductServiceImpl implements ProductService {
     public PageResponse<GetProductByCategoryResponseDto> findProductByType(Integer typeNo, Pageable pageable) {
         return productAdaptor.requestProductsByType(typeNo, pageable);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public boolean isPurchaseProduct(String productNo, String memberNo) {
+        return productAdaptor.isPurchaseProduct(productNo, memberNo);
+    }
 }

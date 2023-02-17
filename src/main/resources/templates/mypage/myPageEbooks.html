@@ -54,15 +54,15 @@
                     </a>
                 </div>
 
-                <div class="col-sm-3">
+                <div class="col-sm-5">
                     <h4 th:text="'-' + ${product.title} + '-'"></h4>
-                    <div class="row" style="padding-left: 10px">
+                    <div style="display: flex;padding-left: 10px;flex-direction: row;gap: 10px;">
                         <label>카테고리 : </label>
                         <span th:each="category: ${product.categories}">
                             <span th:text="${category}"></span>
                         </span>
                     </div>
-                    <div class="row" style="padding-left: 10px">
+                    <div style="padding-left: 10px">
                         <label>저자 : </label>
                         <span th:each="author: ${product.authors}">
                             <span th:text="${author}"></span>
@@ -70,11 +70,10 @@
                     </div>
                 </div>
 
-                <div class="col-sm-5">
-                    <div class="row" style="text-align: right">
+                <div class="col-sm-3">
+                    <div class="row" style="text-align: left">
                         <a th:href="|@{/download/e-book/{productNo}(productNo=${product.productNo})}|">다운로드</a>
                     </div>
-
                 </div>
             </div>
         </div>

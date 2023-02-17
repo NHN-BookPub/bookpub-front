@@ -1,5 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.product.adaptor.impl;
 
+import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewayUrl;
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
@@ -56,7 +57,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestCreateProduct(CreateProductRequestDto requestDto,
                                      Map<String, MultipartFile> fileMap) {
-        String url = GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI;
+        String url = getGatewayUrl() + AUTH_PRODUCT_URI;
 
         MultiValueMap<String, Object> mapRequest = new LinkedMultiValueMap<>();
         mapRequest.add("requestDto", requestDto);
@@ -82,7 +83,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
      */
     @Override
     public PageResponse<GetProductListResponseDto> requestProducts(Pageable pageable) {
-        String url = UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + PRODUCT_URI)
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + PRODUCT_URI)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -103,7 +104,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestSetProductDeleted(Long productNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo)
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo)
                 .encode().toUriString();
 
         restTemplate.exchange(
@@ -120,7 +121,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public GetProductDetailResponseDto requestProductDetail(Long productNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/" + productNo)
+                        getGatewayUrl() + PRODUCT_URI + "/" + productNo)
                 .encode().toUriString();
         return restTemplate.exchange(
                 url,
@@ -136,7 +137,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public List<GetProductByTypeResponseDto> requestProductByType(Integer typeNo, Integer limit) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/types/" + typeNo)
+                        getGatewayUrl() + PRODUCT_URI + "/types/" + typeNo)
                 .queryParam("limit", limit)
                 .encode()
                 .toUriString();
@@ -156,7 +157,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public List<GetProductDetailResponseDto> requestProductInCart(List<Long> productsNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/cart")
+                        getGatewayUrl() + PRODUCT_URI + "/cart")
                 .queryParam("productNo", productsNo)
                 .encode()
                 .toUriString();
@@ -178,7 +179,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
             Integer categoryNo, Pageable pageable) {
 
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI
+                        getGatewayUrl() + PRODUCT_URI
                                 + "/product/categories/" + categoryNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -200,13 +201,14 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> requestEbooks(Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                GateWayConfig.getGatewayUrl() + PRODUCT_URI + "/ebooks").encode().toUriString();
+                getGatewayUrl() + PRODUCT_URI + "/ebooks").encode().toUriString();
 
         return restTemplate.exchange(
                 url,
                 HttpMethod.GET,
                 new HttpEntity<>(Utils.makeHeader()),
-                new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {}
+                new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {
+                }
         ).getBody();
     }
 
@@ -218,7 +220,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
             Long productNo, Long memberNo) {
 
         String requestUrl = UriComponentsBuilder
-                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/api/coupons/members/"
+                .fromHttpUrl(getGatewayUrl() + "/api/coupons/members/"
                         + memberNo + "/order")
                 .queryParam("productNo", productNo)
                 .encode()
@@ -238,7 +240,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductInfo(Long productNo, ModifyProductInfoRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/info")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/info")
                 .encode()
                 .toUriString();
 
@@ -256,7 +258,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductCategory(Long productNo, RestModifyProductCategoryRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/category")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/category")
                 .encode()
                 .toUriString();
 
@@ -274,7 +276,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductAuthor(Long productNo, ModifyProductAuthorRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/author")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/author")
                 .encode()
                 .toUriString();
 
@@ -292,7 +294,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductTag(Long productNo, ModifyProductTagRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/tag")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/tag")
                 .encode()
                 .toUriString();
 
@@ -310,7 +312,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductType(Long productNo, Integer typeStateNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/type")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/type")
                 .queryParam("no", typeStateNo)
                 .encode()
                 .toUriString();
@@ -329,7 +331,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductSale(Long productNo, Integer saleStateNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/sale")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/sale")
                 .queryParam("no", saleStateNo)
                 .encode()
                 .toUriString();
@@ -348,7 +350,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductPolicy(Long productNo, Integer policyNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/policy")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/policy")
                 .queryParam("no", policyNo)
                 .encode()
                 .toUriString();
@@ -367,7 +369,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductDescription(Long productNo, ModifyProductDescriptionRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/description")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/description")
                 .encode()
                 .toUriString();
 
@@ -385,7 +387,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductEBook(Long productNo, Map<String, MultipartFile> fileMap) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/e-book")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/e-book")
                 .encode()
                 .toUriString();
 
@@ -411,7 +413,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductImage(Long productNo, Map<String, MultipartFile> fileMap) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/thumbnail")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/thumbnail")
                 .encode()
                 .toUriString();
 
@@ -437,7 +439,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestModifyProductDetailImage(Long productNo, Map<String, MultipartFile> fileMap) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/detail-image")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/detail-image")
                 .encode()
                 .toUriString();
 
@@ -463,7 +465,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestAddProductImage(Long productNo, Map<String, MultipartFile> fileMap) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/new-thumbnail")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/new-thumbnail")
                 .encode()
                 .toUriString();
 
@@ -489,7 +491,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestAddProductDetailImage(Long productNo, Map<String, MultipartFile> fileMap) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/new-detail-image")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/new-detail-image")
                 .encode()
                 .toUriString();
 
@@ -515,7 +517,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestAddRelationProducts(Long productNo, CreateRelationProductRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/relation")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + productNo + "/relation")
                 .encode()
                 .toUriString();
 
@@ -533,7 +535,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public void requestDisconnectRelationProduct(Long childNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + AUTH_PRODUCT_URI + "/" + childNo + "/relation")
+                        getGatewayUrl() + AUTH_PRODUCT_URI + "/" + childNo + "/relation")
                 .encode()
                 .toUriString();
 
@@ -551,7 +553,7 @@ public class ProductAdaptorImpl implements ProductAdaptor {
     @Override
     public PageResponse<GetProductByCategoryResponseDto> requestProductsByType(Integer typeNo, Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + PRODUCT_URI
+                        getGatewayUrl() + PRODUCT_URI
                                 + "/type/" + typeNo)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
@@ -564,6 +566,22 @@ public class ProductAdaptorImpl implements ProductAdaptor {
                 new HttpEntity<>(Utils.makeHeader()),
                 new ParameterizedTypeReference<PageResponse<GetProductByCategoryResponseDto>>() {
                 }
+        ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean isPurchaseProduct(String productNo, String memberNo) {
+        String url =
+                getGatewayUrl() + PRODUCT_URI + "/" + productNo + "/" + memberNo;
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                Boolean.class
         ).getBody();
     }
 }

@@ -425,14 +425,12 @@ function finalLogic() {
 
 function patternCheck() {
     let nameReg = /^[가-힣a-z]{2,200}$/;
-    let addressReg = /^[가-힣0-9\s]{2,200}$/;
     let emptyReg = /\s/g;
 
     let buyerName = document.getElementById('buyerName')
     let buyerPhone = document.getElementById('buyerPhone')
     let receiverName = document.getElementById('receiverName')
     let receiverPhone = document.getElementById('receiverPhone')
-    let roadAddress = document.getElementById('roadAddress')
     let detailAddress = document.getElementById('detailAddress')
 
     if (!nameReg.test(buyerName.value)) {
@@ -453,12 +451,7 @@ function patternCheck() {
         return false;
     }
 
-    if (roadAddress.value === "" || !addressReg.test(roadAddress.value)) {
-        alert('도로명 주소를 다시 입력해 주세요.')
-        return false;
-    }
-
-    if (detailAddress.value === "" || !addressReg.test(detailAddress.value)) {
+    if (detailAddress.value === "") {
         alert('상세 주소를 다시 입력해 주세요.')
         return false;
     }

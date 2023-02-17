@@ -115,8 +115,10 @@
                                             <input class="point_policy" type="hidden" th:value="${product.pointPolicy}">
                                             <span sec:authorize="isAuthenticated()" class="prd_savePoint"></span>
                                             <span sec:authorize="isAuthenticated()" class="policy-method"></span>
-                                            <span sec:authorize="!isAuthenticated()" style="display: none" class="prd_savePoint">0</span>
-                                            <span sec:authorize="!isAuthenticated()" style="display: none" class="policy-method"></span>
+                                            <span sec:authorize="!isAuthenticated()" style="display: none"
+                                                  class="prd_savePoint">0</span>
+                                            <span sec:authorize="!isAuthenticated()" style="display: none"
+                                                  class="policy-method"></span>
                                             <span sec:authorize="!isAuthenticated()">비회원은 포인트 적립이 안됩니다</span>
                                         </div>
                                     </td>
@@ -184,7 +186,9 @@
                                 <tr>
                                     <th scope="row" class="has_ip custom-th">
                                         <span>수령인 정보 입력</span>
-                                        <button class="buyer-info-btn" type="button" onclick="getBuyerInfo()">주문인 정보 가져오기</button>
+                                        <button class="buyer-info-btn" type="button" onclick="getBuyerInfo()">주문인 정보
+                                            가져오기
+                                        </button>
                                     </th>
                                     <td class="col-box-wrapper">
                                         <div class="form_col_group">
@@ -205,8 +209,9 @@
                                                 <span style="color: #a7a7a7;" class="form_desc">입력하신 휴대폰번호로 주문에 관한 문자 및 메일이 발송됩니다.</span>
                                             </div>
                                             <div class="col_box">
-                                                <input type="text" class="form_ip" name="roadAddress" id="roadAddress"
-                                                       placeholder="도로명주소" required
+                                                <input type="text" class="form_ip" readonly name="roadAddress"
+                                                       id="roadAddress"
+                                                       placeholder="도로명주소" required style="cursor: pointer"
                                                        onclick="findAddress()">
                                             </div>
                                             <div class="col_box">

@@ -222,13 +222,15 @@
 
         <div class="col-sm-3">
             <div class="row text-center">
-                <button class="btn btn-primary" onclick="cart()" style="width: 60%; float: right">장바구니 담기</button>
+                <button class="btn btn-primary" th:onclick="cart([[${#authentication.getPrincipal()}]], [[${product}]])"
+                        style="width: 60%; float: right">장바구니 담기
+                </button>
             </div>
 
             <hr/>
 
             <div class="row text-center">
-                <button class="btn btn-info" onclick="direct_order()" style="width: 60%; float: right">바로 주문</button>
+                <button class="btn btn-info" th:onclick="direct_order([[${#authentication.getPrincipal()}]], [[${product}]])" style="width: 60%; float: right">바로 주문</button>
             </div>
 
             <hr/>
@@ -328,7 +330,6 @@
                      alt="No image">
             </span>
 
-            <!--            <p th:text="${product.productDescription}" style="font-size: 18px; padding-top: 20px;"></p>-->
             <div id="viewer"></div>
         </div>
 
@@ -428,7 +429,7 @@
                          style="width: 13px; height: auto; display: inline">
                 </td>
                 <td th:text="${inquiry.memberNickname}"></td>
-                <td th:text="${#temporals.format(product.publishDate, 'yyyy/MM/dd HH:mm:ss')}"></td>
+                <td th:text="${#temporals.format(inquiry.createdAt, 'yyyy/MM/dd HH:mm:ss')}"></td>
                 <td th:text="${inquiry.inquiryAnswered} ? '답변 완료' : '답변 미완료'"></td>
             </tr>
             </tbody>
@@ -542,8 +543,36 @@
     const productNo = $('#productNo').text();
     const productSaleState = $('#productSaleState').text();
 
-    function cart() {
-        if (productSaleState === '품절') {
+    function cart(member, product) {
+        let isPurchaseUser = false;
+
+        if (member !== 'anonymousUser') {
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "/products/purchase/" + productNo + "/" + member,
+                success: function (result) {
+                    if (result === true) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: '내정보 eBook을 확인해주세요',
+                            text: 'eBook 제품은 1번만 구매 가능합니다'
+                        })
+                        isPurchaseUser = true;
+                    }
+                }
+            })
+        }
+
+        if (member === 'anonymousUser' && product.ebook !== null) {
+            Swal.fire({
+                icon: 'info',
+                title: '비회원은 ebook을 구매할 수 없습니다',
+                text: '로그인 후 이용해 주세요'
+            })
+        } else if (isPurchaseUser) {
+            return false;
+        } else if (productSaleState === '품절') {
             Swal.fire({
                 icon: 'info',
                 title: '품절된 상품입니다.',
@@ -582,8 +611,36 @@
         }
     }
 
-    function direct_order() {
-        if (productSaleState === '품절') {
+    function direct_order(member, product) {
+        let isPurchaseUser = false;
+
+        if (member !== 'anonymousUser') {
+            $.ajax({
+                type: "get",
+                async: false,
+                url: "/products/purchase/" + productNo + "/" + member,
+                success: function (result) {
+                    if (result === true) {
+                        Swal.fire({
+                            icon: 'info',
+                            title: '내정보 eBook을 확인해주세요',
+                            text: 'eBook 제품은 1번만 구매 가능합니다'
+                        })
+                        isPurchaseUser = true;
+                    }
+                }
+            })
+        }
+
+        if (member === 'anonymousUser' && product.ebook !== null) {
+            Swal.fire({
+                icon: 'info',
+                title: '비회원은 ebook을 구매할 수 없습니다',
+                text: '로그인 후 이용해 주세요'
+            })
+        } else if (isPurchaseUser) {
+            return false;
+        } else if (productSaleState === '품절') {
             Swal.fire({
                 icon: 'info',
                 title: '품절된 상품입니다.',

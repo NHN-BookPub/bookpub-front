@@ -235,9 +235,18 @@ public interface ProductService {
     /**
      * 상품 유형으로 상품을 조회합니다.
      *
-     * @param typeNo 유형번호
+     * @param typeNo   유형번호
      * @param pageable 페이징
      * @return 상품들
      */
     PageResponse<GetProductByCategoryResponseDto> findProductByType(Integer typeNo, Pageable pageable);
+
+    /**
+     * ebook 구매이력이 있는가를 확인하는 메소드.
+     *
+     * @param productNo 상품번호.
+     * @param memberNo  회원번호.
+     * @return true, false
+     */
+    boolean isPurchaseProduct(String productNo, String memberNo);
 }
