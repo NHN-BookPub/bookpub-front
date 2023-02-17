@@ -1,6 +1,10 @@
 package com.nhnacademy.bookpub.bookpubfront.handler;
 
-import com.nhnacademy.bookpub.bookpubfront.exception.*;
+import com.nhnacademy.bookpub.bookpubfront.exception.NotFoundException;
+import com.nhnacademy.bookpub.bookpubfront.exception.NotLoginException;
+import com.nhnacademy.bookpub.bookpubfront.exception.ServerErrorException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.*;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.*;
 import java.net.ConnectException;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -14,6 +18,31 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  **/
 @ControllerAdvice
 public class CustomExceptionAdvice {
+
+    @ExceptionHandler(GoToMainException.class)
+    public String goToMain() {
+        return "redirect:/";
+    }
+
+    @ExceptionHandler(GoToAdminException.class)
+    public String goToAdmin() {
+        return "redirect:/admin";
+    }
+
+    @ExceptionHandler(GoToAdminTagException.class)
+    public String goToAdminAdminTag() {
+        return "redirect:/admin/tags";
+    }
+
+    @ExceptionHandler(GoToAdminTierException.class)
+    public String goToAdminTier() {
+        return "redirect:/admin/tiers";
+    }
+
+    @ExceptionHandler(GoToAdminCategoryException.class)
+    public String goToAdminCategory() {
+        return "redirect:/admin/categories";
+    }
 
     @ExceptionHandler(NotFoundException.class)
     public String notFound() {
@@ -49,6 +78,4 @@ public class CustomExceptionAdvice {
     public String otherAll() {
         return "error/500";
     }
-
-
 }

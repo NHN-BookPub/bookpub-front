@@ -64,19 +64,13 @@
 
                 <!--      --------------------------------------------------------------------------          -->
 
-                <a class="nav-link collapsed" href="javascript:void(0)" data-bs-toggle="collapse"
-                   data-bs-target="#collapseCustomerServices" aria-expanded="false"
-                   aria-controls="collapseCustomerServices">
-                    <div class="sb-nav-link-icon"><i class="fa-sharp fa-solid fa-headset"></i></div>
+                <a class="nav-link collapsed" href="/admin/service/" data-bs-toggle="collapse"
+                   aria-expanded="false" th:onclick="|location.href='/admin/services/'|">
+                    <div class="sb-nav-link-icon" th:onclick="|location.href='/admin/services/'|">
+                        <i class="fa fa-exclamation-circle" aria-hidden="true" th:onclick="|location.href='/admin/services/'|"></i>
+                    </div>
                     고객서비스
-                    <div class="sb-sidenav-collapse-arrow"><i class="fas fa-angle-down"></i></div>
                 </a>
-                <div class="collapse" id="collapseCustomerServices" aria-labelledby="headingTwo"
-                     data-bs-parent="#sidenavAccordion">
-                    <nav class="sb-sidenav-menu-nested nav">
-                        <a class="nav-link" href="/admin/services">전체 조회</a>
-                    </nav>
-                </div>
 
                 <!--      --------------------------------------------------------------------------          -->
                 <a class="nav-link collapsed" href="javascript:void(0)" data-bs-toggle="collapse" data-bs-target="#collapseReviews"
@@ -160,17 +154,6 @@
                         <a class="nav-link" href="layout-sidenav-light.html">1:1 채팅</a>
                     </nav>
                 </div>
-
-                <!--      --------------------------------------------------------------------------          -->
-
-                <div class="sb-sidenav-menu-heading" th:onclick="|location.href='/admin/services/'|">고객서비스</div>
-                <a class="nav-link collapsed" href="/admin/service/" data-bs-toggle="collapse"
-                   aria-expanded="false" th:onclick="|location.href='/admin/services/'|">
-                    <div class="sb-nav-link-icon" th:onclick="|location.href='/admin/services/'|">
-                        <i class="fa fa-exclamation-circle" aria-hidden="true" th:onclick="|location.href='/admin/services/'|"></i>
-                    </div>
-                    고객서비스
-                </a>
             </div>
         </div>
 
