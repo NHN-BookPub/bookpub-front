@@ -56,8 +56,8 @@
                         <div class="center" th:text="${#temporals.format(service.createdAt, 'yyyy.MM.dd')}"></div>
                     </div>
                     <div>
-                        <span style="width: 100%; height: 500px; " th:if="${not #strings.isEmpty(service.image)}">
-                        <img style="width: 100%; height: 100%; object-fit: cover;" th:src="@{${service.image}}"
+                        <span style="width: 100%; height: 250px; " th:if="${not #strings.isEmpty(service.image)}">
+                        <img style="width: 60%; height: 250px; object-fit: cover;" th:src="@{${service.image}}"
                             alt="No image">
                         </span>
                         <div id="viewer"></div>

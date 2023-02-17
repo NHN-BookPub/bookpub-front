@@ -1,4 +1,4 @@
-package com.nhnacademy.bookpub.bookpubfront.exception;
+package com.nhnacademy.bookpub.bookpubfront.handler.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ResponseStatus;
