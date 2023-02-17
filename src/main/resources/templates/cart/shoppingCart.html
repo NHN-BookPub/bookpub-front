@@ -67,10 +67,7 @@
                 th:id="'originPrice' + ${product.productNo}"
                 th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></td>
             <td style="vertical-align: middle;">
-                <input th:if="${product.ebook != ''}" type="number" id="num" name="number" readonly value="1"
-                       class="form-control text-right"
-                       th:onchange="totalPrice(this.value, [[${product.productNo}]])">
-                <input th:if="${product.ebook == ''}" type="number" id="num" name="number" min="1" max="99" value="1"
+                <input type="number" id="num" name="number" min="1" max="99" value="1"
                        class="form-control text-right"
                        th:onchange="totalPrice(this.value, [[${product.productNo}]])">
             </td>
