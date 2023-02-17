@@ -1,6 +1,8 @@
 package com.nhnacademy.bookpub.bookpubfront.handler;
 
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.bookpub.bookpubfront.exception.NotFoundException;
 import com.nhnacademy.bookpub.bookpubfront.exception.NotLoginException;
 import com.nhnacademy.bookpub.bookpubfront.exception.ServerErrorException;
@@ -10,7 +12,6 @@ import com.nhnacademy.bookpub.bookpubfront.handler.response.ErrorResponse;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.client.ClientHttpResponse;
@@ -26,10 +27,16 @@ import org.springframework.web.client.ResourceAccessException;
  * @since : 1.0
  **/
 @Component
-@RequiredArgsConstructor
 @Slf4j
 public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
     private final ObjectMapper mapper;
+
+    public CustomResponseErrorHandler() {
+        mapper = new ObjectMapper();
+        mapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
+        mapper.registerModule(new JavaTimeModule());
+    }
+
 
     @Override
     public void handleError(ClientHttpResponse response) throws IOException {
