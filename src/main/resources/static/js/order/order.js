@@ -418,7 +418,7 @@ function finalLogic() {
     savePoint.value = parsingNumber(save.innerText);
 
     if (patternCheck()) {
-        let form = document.getElementById('submitForm')
+        let form = document.getElementById('orderForm')
         form.submit();
     }
 }
