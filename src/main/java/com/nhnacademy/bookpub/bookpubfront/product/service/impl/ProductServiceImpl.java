@@ -17,6 +17,7 @@ import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductByCate
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductDetailResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.dto.response.GetProductListResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.product.service.ProductService;
+//import com.nhnacademy.bookpub.bookpubfront.state.CacheKeys;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,6 +25,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
+//import org.springframework.cache.annotation.CacheEvict;
+//import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -45,6 +48,11 @@ public class ProductServiceImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     @Override
     public void createProduct(InputProductFormRequestDto dto, List<Integer> tagList,
                               Map<String, MultipartFile> fileMap) {
@@ -96,6 +104,7 @@ public class ProductServiceImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+//    @Cacheable(value = {CacheKeys.PRODUCT})
     @Override
     public PageResponse<GetProductListResponseDto> findAllProducts(Pageable pageable) {
         return productAdaptor.requestProducts(pageable);
@@ -105,6 +114,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void setProductDeleted(Long productNo) {
         productAdaptor.requestSetProductDeleted(productNo);
     }
@@ -120,6 +134,7 @@ public class ProductServiceImpl implements ProductService {
     /**
      * {@inheritDoc}
      */
+//    @Cacheable(cacheNames = "products", key = "'products:'+#typeNo")
     @Override
     public List<GetProductByTypeResponseDto> findProductsByType(Integer typeNo, Integer limit) {
         return productAdaptor.requestProductByType(typeNo, limit);
@@ -207,6 +222,7 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @Cacheable(value = CacheKeys.PRODUCT_EBOOK)
     public PageResponse<GetProductByCategoryResponseDto> getEbooks(Pageable pageable) {
         return productAdaptor.requestEbooks(pageable);
     }
@@ -215,6 +231,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductInfo(Long productNo, ModifyProductInfoRequestDto request) {
         request.setSalePrice(request.getProductPrice(), request.getSalesRate());
 
@@ -225,6 +246,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductCategory(Long productNo, ModifyProductCategoryRequestDto request) {
         RestModifyProductCategoryRequestDto dto = new RestModifyProductCategoryRequestDto();
         dto.getCategoriesNo().add(Integer.parseInt(request.getCategoryOne()));
@@ -243,6 +269,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductAuthor(Long productNo, String authors) {
         String[] split = authors.split(",");
         List<Integer> tmp = new ArrayList<>();
@@ -260,6 +291,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductTag(Long productNo, List<Integer> tagList) {
         ModifyProductTagRequestDto dto = new ModifyProductTagRequestDto(tagList);
 
@@ -270,6 +306,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductType(Long productNo, Integer typeStateNo) {
         productAdaptor.requestModifyProductType(productNo, typeStateNo);
     }
@@ -278,6 +319,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductSale(Long productNo, Integer saleStateNo) {
         productAdaptor.requestModifyProductSale(productNo, saleStateNo);
     }
@@ -286,6 +332,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductPolicy(Long productNo, Integer policyNo) {
         productAdaptor.requestModifyProductPolicy(productNo, policyNo);
     }
@@ -294,6 +345,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyDescription(Long productNo, String productDescription) {
         ModifyProductDescriptionRequestDto dto =
                 new ModifyProductDescriptionRequestDto(productDescription);
@@ -305,6 +361,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductEBook(Long productNo, MultipartFile eBook) {
         Map<String, MultipartFile> fileMap = new HashMap<>();
         fileMap.put("eBook", eBook);
@@ -316,6 +377,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductImage(Long productNo, MultipartFile image) {
         Map<String, MultipartFile> fileMap = new HashMap<>();
         fileMap.put("image", image);
@@ -327,6 +393,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void modifyProductDetailImage(Long productNo, MultipartFile detailImage) {
         Map<String, MultipartFile> fileMap = new HashMap<>();
         fileMap.put("detailImage", detailImage);
@@ -338,6 +409,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void addNewImage(Long productNo, MultipartFile image) {
         Map<String, MultipartFile> fileMap = new HashMap<>();
         fileMap.put("image", image);
@@ -349,6 +425,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void addNewDetailImage(Long productNo, MultipartFile detailImage) {
         Map<String, MultipartFile> fileMap = new HashMap<>();
         fileMap.put("detailImage", detailImage);
@@ -360,6 +441,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void addRelationProduct(Long productNo, String relationProducts) {
         String[] tmp = relationProducts.split(",");
         List<Long> list = new ArrayList<>();
@@ -376,6 +462,11 @@ public class ProductServiceImpl implements ProductService {
      * {@inheritDoc}
      */
     @Override
+//    @CacheEvict(value = {CacheKeys.PRODUCT,
+//            CacheKeys.PRODUCT_EBOOK,
+//            CacheKeys.PRODUCT_NEW,
+//            CacheKeys.PRODUCT_BEST},
+//            allEntries = true)
     public void disconnectRelationProduct(Long childNo) {
         productAdaptor.requestDisconnectRelationProduct(childNo);
     }
