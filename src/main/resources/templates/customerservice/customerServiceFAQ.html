@@ -69,7 +69,7 @@
 <body>
 <th:block th:include="main/fragments/rootHeader"></th:block>
 
-<div id="container" style="width: 60%; margin-left: 20%">
+<div id="container" style="width: 60%; margin-left: 20%; padding-bottom: 5%">
     </br>
     <div style="position: relative">
         <h2 style="border-bottom: 2px solid black;padding: 1rem 0;">FAQ - 자주 묻는 질문</h2>
@@ -83,7 +83,7 @@
             <button class="point-select bold" value="faqOthers" onclick="typeOthers()">기타 문의</button>
 
         </div>
-        <div style="margin-top: 26px; min-height: 763px">
+        <div style="margin-top: 26px;">
             <div class="point-tr-header">
                 <div class="point-td-header">분류</div>
                 <div class="point-td-header">제목</div>
@@ -94,7 +94,6 @@
                 <div class="center"
                      th:text="${content.serviceCategory}"></div>
                 <div class="left" th:text="${content.serviceTitle}">
-
                 </div>
                 <div class="center" th:text="${#temporals.format(content.createdAt, 'yyyy.MM.dd')}"></div>
             </div>
@@ -102,27 +101,29 @@
     </div>
 
     <div th:if="${paramValue != null}">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-                <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="'/services/faq?page='+
-                   ${currentPage - 1}+
-                   '&category='+${paramValue}">Previous</a>
-                </li>
-                <th:block th:with="start=${(currentPage/pageButtonNum) * pageButtonNum + 1},
-            end=(${(totalPages == 0) ? 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
-                    <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+        <div style="text-align: center">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination justify-content-center">
+                    <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
                         <a class="page-link"
-                           th:href="'/services/faq?page='+${page - 1}+'&category='+${paramValue}"
-                           th:text="${page}"></a></li>
-                </th:block>
-                <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
-                    <a class="page-link"
-                       th:href="'/services/faq?page='+${currentPage + 1}+'&category='+${paramValue}">Next</a>
-                </li>
-            </ul>
-        </nav>
+                           th:href="'/services/faq?page='+
+                       ${currentPage - 1}+
+                       '&category='+${paramValue}">Previous</a>
+                    </li>
+                    <th:block th:with="start=${(currentPage/pageButtonNum) * pageButtonNum + 1},
+                end=(${(totalPages == 0) ? 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                            <a class="page-link"
+                               th:href="'/services/faq?page='+${page - 1}+'&category='+${paramValue}"
+                               th:text="${page}"></a></li>
+                    </th:block>
+                    <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                        <a class="page-link"
+                           th:href="'/services/faq?page='+${currentPage + 1}+'&category='+${paramValue}">Next</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
     <div th:if="${paramValue == null}">
         <nav aria-label="Page navigation example">

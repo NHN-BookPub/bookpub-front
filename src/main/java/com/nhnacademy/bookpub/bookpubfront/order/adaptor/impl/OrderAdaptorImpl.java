@@ -131,7 +131,7 @@ public class OrderAdaptorImpl implements OrderAdaptor {
     public GetOrderDetailResponseDto getOrderDetailByOrderIdRequest(
             String orderId, String phoneNo) {
         String url = getGatewayUrl()
-                + ORDER_URL + "/non/" + orderId + "?phoneNo=" + phoneNo;
+                + ORDER_URL + "/non/" + orderId;
         ResponseEntity<GetOrderDetailResponseDto> response =
                 restTemplate.exchange(url, HttpMethod.GET,
                         new HttpEntity<>(makeHeader()),

@@ -20,6 +20,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link type="text/css" rel="stylesheet" href="/static/css/main/root/style.css"/>
     <link type="text/css" rel="stylesheet" href="/static/css/main/custom.css"/>
+    <link rel="stylesheet" href="/static/css/main/search.css">
 
     <script src="http://code.jquery.com/jquery-latest.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@10"></script>
@@ -129,7 +130,7 @@
                     <div class="header-search" style="width: 80%">
                         <form action="/search" method="get">
                             <select class="input-select" name="type">
-                                <!--                                <option value="0">통합 검색</option>-->
+                                <option value="0">통합 검색</option>
                                 <option value="1">제목 검색</option>
                             </select>
                             <input class="input" name="q" placeholder="Search here">
@@ -269,11 +270,100 @@
                 background-color: #f8f9fa!important">
             상품
         </span>
+        <div th:if="${#lists.isEmpty(productResults)}">
+            <div class="col-sm-5">
+                <h4>검색 결과가 없습니다...</h4>
+            </div>
+            <div class="col-sm-7">
+                <img src="/static/img/main/no_search.png">
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(productResults)}">
+            <div style="flex-wrap: wrap; display: flex; justify-content: center">
+                <div th:each="product: ${productResults}" style="width: 280px; padding: 2%">
+                    <div class="well well-sm">
+                        <div class="col" style="text-align: center">
+                            <a th:href="@{/products/{productNo}(productNo=${product.id})}">
+                                <span th:if="${#strings.isEmpty(product.filePath)}">
+                                    <img class="cursor" width="200px" height="300px"
+                                         src="/static/img/main/no-image.png">
+                                </span>
+                                <span th:if="${not #strings.isEmpty(product.filePath)}">
+                                    <img class="cursor" width="200px" height="300px" th:src="${product.filePath}">
+                                </span>
+                            </a>
+                            <hr/>
+                            <a th:href="@{/products/{productNo}(productNo=${product.id})}">
+                                <p class="cursor" th:text="${product.title}"></p>
+                            </a>
+                            <div style="display: inline-block">
+                                <span th:text="|${#numbers.formatInteger(product.salesPrice, 0, 'COMMA')}원|"></span>
+                                <span style="color: #ef0d0d" th:text="'(' + ${product.salesRate} + '% 할인)'"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+        <hr/>
+
+        <span class="badge rounded-pill" style="font-size: 26px;
+         color: #212529!important; background-color: #f8f9fa!important">FAQ</span>
+
+        <div th:if="${#lists.isEmpty(faqResults)}">
+            <div class="col-sm-5">
+                <h4>검색 결과가 없습니다...</h4>
+            </div>
+            <div class="col-sm-7">
+                <img src="/static/img/main/no_search.png">
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(faqResults)}">
+            <div style="margin-top: 26px">
+                <div class="point-tr-header">
+                    <div class="point-td-header">분류</div>
+                    <div class="point-td-header">제목</div>
+                    <div class="point-td-header">작성일시</div>
+                </div>
+            </div>
+            <div class="point-tr-body" th:each="faqResult : ${faqResults}"
+                 th:onclick="|location.href='/service/faq?no=${faqResult.csId}'|">
+                <div class="center" th:text="${faqResult.csCategory}"></div>
+                <div class="center" th:text="${faqResult.csTitle}"></div>
+                <div class="center" th:text="${#temporals.format(faqResult.csDate, 'yyyy.MM.dd')}"></div>
+            </div>
+        </div>
 
         <hr/>
 
         <span class="badge rounded-pill" style="font-size: 26px;
          color: #212529!important; background-color: #f8f9fa!important">공지사항</span>
+        <div th:if="${#lists.isEmpty(noticeResults)}">
+            <div class="col-sm-5">
+                <h4>검색 결과가 없습니다...</h4>
+            </div>
+            <div class="col-sm-7">
+                <img src="/static/img/main/no_search.png">
+            </div>
+        </div>
+        <div th:unless="${#lists.isEmpty(noticeResults)}">
+            <div style="margin-top: 26px">
+                <div class="point-tr-header">
+                    <div class="point-td-header">분류</div>
+                    <div class="point-td-header">제목</div>
+                    <div class="point-td-header">작성일시</div>
+                </div>
+            </div>
+            <div class="point-tr-body" th:each="notice : ${noticeResults}"
+                 th:onclick="|location.href='/service/notice?no=${notice.csId}'|">
+                <div class="center" th:text="${notice.csCategory}"></div>
+                <div class="center" th:text="${notice.csTitle}"></div>
+                <div class="center" th:text="${#temporals.format(notice.csDate, 'yyyy.MM.dd')}"></div>
+            </div>
+        </div>
 
     </div>
 
