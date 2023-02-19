@@ -13,7 +13,8 @@ import org.springframework.context.annotation.Configuration;
 @ConfigurationProperties(prefix = "elastic")
 public class ElasticConfig {
     private String url;
-    private String indexName;
+    private String productIndexName;
+    private String csIndexName;
 
     /**
      * ElasticSearch URL 조회.
@@ -34,20 +35,38 @@ public class ElasticConfig {
     }
 
     /**
-     * 검색할 ElasticSearch 인덱스 조회.
+     * 검색할 ElasticSearch 상품 인덱스 조회.
      *
      * @return 인덱스명
      */
-    public String getIndexName() {
-        return indexName;
+    public String getProductIndexName() {
+        return productIndexName;
     }
 
     /**
-     * 인덱스명 세팅.
+     * 상품 인덱스명 세팅.
      *
-     * @param indexName 인덱스명
+     * @param productIndexName 인덱스명
      */
-    public void setIndexName(String indexName) {
-        this.indexName = indexName;
+    public void setProductIndexName(String productIndexName) {
+        this.productIndexName = productIndexName;
+    }
+
+    /**
+     * 고객 서비스 인덱스 조회.
+     *
+     * @return 인덱스명
+     */
+    public String getCsIndexName() {
+        return csIndexName;
+    }
+
+    /**
+     * 고객 서비스 인덱스 세팅.
+     *
+     * @param csIndexName 인덱스명
+     */
+    public void setCsIndexName(String csIndexName) {
+        this.csIndexName = csIndexName;
     }
 }
