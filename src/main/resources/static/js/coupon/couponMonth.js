@@ -38,12 +38,19 @@ function clickInfo(templateNo) {
                         text: '다음 기회에 참여해주세요.'
                     })
 
-                } else {
+                } else if (result === 1) {
                     Swal.fire({
                         icon: 'warning',
                         title: '이미 수령한 쿠폰입니다.',
                         text: '마이 쿠폰함을 확인해주세요.'
                     })
+                } else {
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '오류가 발생하였습니다..',
+                        text: '다시 시도해주세요.'
+                    })
+
                 }
             }
 
