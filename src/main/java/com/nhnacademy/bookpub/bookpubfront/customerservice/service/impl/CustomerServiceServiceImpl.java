@@ -6,6 +6,8 @@ import com.nhnacademy.bookpub.bookpubfront.customerservice.dto.GetCustomerServic
 import com.nhnacademy.bookpub.bookpubfront.customerservice.service.CustomerServiceService;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.util.LinkedMultiValueMap;
@@ -27,6 +29,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
      * {@inheritDoc}
      */
     @Override
+    @CacheEvict(cacheNames = "customerService", allEntries = true)
     public void createCustomerService(CreateCustomerServiceRequestDto requestDto, MultipartFile image) {
         MultiValueMap<String, Object> requestMap = new LinkedMultiValueMap<>();
         requestMap.add("requestDto", requestDto);
@@ -39,6 +42,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable(cacheNames = "customerService", key = "'service:' + #pageable.pageNumber")
     public PageResponse<GetCustomerServiceListResponseDto> getCustomerServices(Pageable pageable) {
         return customerServiceAdaptor.getCustomerServices(pageable);
     }
@@ -47,6 +51,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable(cacheNames = "customerService", key = "'code:'+#name+'page'+#pageable.pageNumber")
     public PageResponse<GetCustomerServiceListResponseDto> getCustomerServiceByCodeName(String name, Pageable pageable) {
         return customerServiceAdaptor.getCustomerServiceByCodeName(name, pageable);
     }
@@ -55,6 +60,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
      * {@inheritDoc}
      */
     @Override
+    @Cacheable(cacheNames = "customerService", key = "'category:'+#category+'page'+#pageable.pageNumber")
     public PageResponse<GetCustomerServiceListResponseDto> getCustomerServiceByCategory(String category, Pageable pageable) {
         return customerServiceAdaptor.getCustomerServiceByCategory(category, pageable);
     }
