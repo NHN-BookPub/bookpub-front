@@ -89,39 +89,9 @@ public class ElasticServiceImpl implements ElasticService {
 
         for (int i = 0; i < allResponseHit.getHits().getHits().size(); i++) {
             String csCategory = getCsCategory(allResponseHit, i);
-
-            if (Objects.nonNull(allResponseHit.getHits().getHits()
-                    .get(i).get_source().get(0).getId())) {
-                productSearch.add(new AllSearchResponseDto(
-                        allResponseHit.getHits().getHits().get(i).get_source().get(0).getId(),
-                        allResponseHit.getHits().getHits().get(i).get_source().get(0).getTitle(),
-                        allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesprice(),
-                        allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesrate(),
-                        allResponseHit.getHits().getHits().get(i).get_source().get(0).getFilepath(),
-                        null, null, null, null, null
-                ));
-            } else {
-                if (allResponseHit.getHits().getHits()
-                        .get(i).get_source().get(0).getCscodename().equals("FAQ")) {
-                    faqSearch.add(new AllSearchResponseDto(
-                            null, null, null, null, null,
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename(),
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCstitle(),
-                            csCategory,
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
-                    ));
-                } else {
-                    noticeSearch.add(new AllSearchResponseDto(
-                            null, null, null, null, null,
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename(),
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCstitle(),
-                            csCategory,
-                            allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
-                    ));
-                }
-            }
+            getProductSearchResult(allResponseHit, productSearch, i);
+            getFaqSearchResult(allResponseHit, faqSearch, i, csCategory);
+            getNoticeSearchResult(allResponseHit, noticeSearch, i, csCategory);
         }
 
         map.put(SearchState.PRODUCT.getKey(), productSearch);
@@ -129,6 +99,70 @@ public class ElasticServiceImpl implements ElasticService {
         map.put(SearchState.NOTICE.getKey(), noticeSearch);
 
         return map;
+    }
+
+    /**
+     * 공지사항 검색 결과를 저장하는 메서드.
+     *
+     * @param allResponseHit 엘라스틱 검색 결과
+     * @param noticeSearch   공지사항 검색 결과
+     * @param i              반복문 i
+     * @param csCategory     고객서비스 카테고리
+     */
+    private void getNoticeSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> noticeSearch, int i, String csCategory) {
+        if (allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename().equals("공지사항")) {
+            noticeSearch.add(new AllSearchResponseDto(
+                    null, null, null, null, null,
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCstitle(),
+                    csCategory,
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
+            ));
+        }
+    }
+
+    /**
+     * FAQ 검색 결과를 저장하는 메서드.
+     *
+     * @param allResponseHit 엘라스틱 검색 결과
+     * @param faqSearch      FAQ 검색 결과
+     * @param i              반복문 i
+     * @param csCategory     고객서비스 카테고리
+     */
+    private void getFaqSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> faqSearch, int i, String csCategory) {
+        if (allResponseHit.getHits().getHits()
+                .get(i).get_source().get(0).getCscodename().equals("FAQ")) {
+            faqSearch.add(new AllSearchResponseDto(
+                    null, null, null, null, null,
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCstitle(),
+                    csCategory,
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
+            ));
+        }
+    }
+
+    /**
+     * 상품 검색 결과를 저장하는 메서드.
+     *
+     * @param allResponseHit 엘라스틱 검색 결과
+     * @param productSearch  상품 검색 결과
+     * @param i              반복문 i
+     */
+    private void getProductSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> productSearch, int i) {
+        if (Objects.nonNull(allResponseHit.getHits().getHits()
+                .get(i).get_source().get(0).getId())) {
+            productSearch.add(new AllSearchResponseDto(
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getId(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getTitle(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesprice(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesrate(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getFilepath(),
+                    null, null, null, null, null
+            ));
+        }
     }
 
     /**
