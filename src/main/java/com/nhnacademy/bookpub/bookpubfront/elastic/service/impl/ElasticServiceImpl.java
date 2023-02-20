@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.elastic.service.impl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import com.nhnacademy.bookpub.bookpubfront.elastic.adaptor.ElasticAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.elastic.dto.response.AllResponseHit;
 import com.nhnacademy.bookpub.bookpubfront.elastic.dto.response.AllSearchResponseDto;
@@ -30,13 +31,14 @@ import org.springframework.stereotype.Service;
 public class ElasticServiceImpl implements ElasticService {
 
     private final ElasticAdaptor elasticAdaptor;
-    private final ObjectMapper objectMapper;
+    private ObjectMapper objectMapper;
 
     /**
      * {@inheritDoc}
      */
     @Override
     public List<ProductSearchResultDto> searchProduct(String keyword) {
+        objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
 
@@ -69,8 +71,10 @@ public class ElasticServiceImpl implements ElasticService {
      */
     @Override
     public Map<String, List<AllSearchResponseDto>> searchAll(String keyword) {
+        objectMapper = new ObjectMapper();
         objectMapper.enable(DeserializationFeature.ACCEPT_SINGLE_VALUE_AS_ARRAY);
         objectMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
+        objectMapper.registerModule(new JavaTimeModule());
 
         String result = elasticAdaptor.requestSearchAll(keyword);
         AllResponseHit allResponseHit;
@@ -89,9 +93,7 @@ public class ElasticServiceImpl implements ElasticService {
 
         for (int i = 0; i < allResponseHit.getHits().getHits().size(); i++) {
             String csCategory = getCsCategory(allResponseHit, i);
-            getProductSearchResult(allResponseHit, productSearch, i);
-            getFaqSearchResult(allResponseHit, faqSearch, i, csCategory);
-            getNoticeSearchResult(allResponseHit, noticeSearch, i, csCategory);
+            getSearchResult(allResponseHit, productSearch, faqSearch, noticeSearch, i, csCategory);
         }
 
         map.put(SearchState.PRODUCT.getKey(), productSearch);
@@ -102,37 +104,56 @@ public class ElasticServiceImpl implements ElasticService {
     }
 
     /**
-     * 공지사항 검색 결과를 저장하는 메서드.
+     * 통합 검색 결과를 얻는 메서드.
      *
      * @param allResponseHit 엘라스틱 검색 결과
-     * @param noticeSearch   공지사항 검색 결과
+     * @param productSearch  상품에 결과
+     * @param faqSearch      FAQ 결과
+     * @param noticeSearch   공지사항 결과
      * @param i              반복문 i
-     * @param csCategory     고객서비스 카테고리
+     * @param csCategory     고객 서비스 카테고리
      */
-    private void getNoticeSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> noticeSearch, int i, String csCategory) {
-        if (allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename().equals("공지사항")) {
-            noticeSearch.add(new AllSearchResponseDto(
-                    null, null, null, null, null,
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename(),
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCstitle(),
-                    csCategory,
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
-            ));
+    private void getSearchResult(AllResponseHit allResponseHit,
+                                 List<AllSearchResponseDto> productSearch,
+                                 List<AllSearchResponseDto> faqSearch,
+                                 List<AllSearchResponseDto> noticeSearch,
+                                 int i, String csCategory) {
+        if (Objects.nonNull(allResponseHit.getHits().getHits().get(i).get_source().get(0).getId())) {
+            getProductSearchResult(allResponseHit, productSearch, i);
+        } else {
+            getCsSearchResult(allResponseHit, faqSearch, noticeSearch, i, csCategory);
         }
     }
 
     /**
-     * FAQ 검색 결과를 저장하는 메서드.
+     * 통합 검색어에 대한 상품 검색 결과 추출 메서드.
      *
      * @param allResponseHit 엘라스틱 검색 결과
-     * @param faqSearch      FAQ 검색 결과
+     * @param productSearch  상품 결과
      * @param i              반복문 i
-     * @param csCategory     고객서비스 카테고리
      */
-    private void getFaqSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> faqSearch, int i, String csCategory) {
-        if (allResponseHit.getHits().getHits()
-                .get(i).get_source().get(0).getCscodename().equals("FAQ")) {
+    private void getProductSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> productSearch, int i) {
+        productSearch.add(new AllSearchResponseDto(
+                allResponseHit.getHits().getHits().get(i).get_source().get(0).getId(),
+                allResponseHit.getHits().getHits().get(i).get_source().get(0).getTitle(),
+                allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesprice(),
+                allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesrate(),
+                allResponseHit.getHits().getHits().get(i).get_source().get(0).getFilepath(),
+                null, null, null, null, null
+        ));
+    }
+
+    /**
+     * 통함 검색어에 대한 FAQ, 공지사항 검색 결과 추출 메서드.
+     *
+     * @param allResponseHit 엘라스틱 검색 결과
+     * @param faqSearch      FAQ 결과
+     * @param noticeSearch   공지사항 결과
+     * @param i              반목문 i
+     * @param csCategory     상품 카테고리
+     */
+    private void getCsSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> faqSearch, List<AllSearchResponseDto> noticeSearch, int i, String csCategory) {
+        if (allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename().equals("FAQ")) {
             faqSearch.add(new AllSearchResponseDto(
                     null, null, null, null, null,
                     allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
@@ -141,26 +162,14 @@ public class ElasticServiceImpl implements ElasticService {
                     csCategory,
                     allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
             ));
-        }
-    }
-
-    /**
-     * 상품 검색 결과를 저장하는 메서드.
-     *
-     * @param allResponseHit 엘라스틱 검색 결과
-     * @param productSearch  상품 검색 결과
-     * @param i              반복문 i
-     */
-    private void getProductSearchResult(AllResponseHit allResponseHit, List<AllSearchResponseDto> productSearch, int i) {
-        if (Objects.nonNull(allResponseHit.getHits().getHits()
-                .get(i).get_source().get(0).getId())) {
-            productSearch.add(new AllSearchResponseDto(
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getId(),
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getTitle(),
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesprice(),
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getSalesrate(),
-                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getFilepath(),
-                    null, null, null, null, null
+        } else {
+            noticeSearch.add(new AllSearchResponseDto(
+                    null, null, null, null, null,
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsid(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCscodename(),
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCstitle(),
+                    csCategory,
+                    allResponseHit.getHits().getHits().get(i).get_source().get(0).getCsdate()
             ));
         }
     }
