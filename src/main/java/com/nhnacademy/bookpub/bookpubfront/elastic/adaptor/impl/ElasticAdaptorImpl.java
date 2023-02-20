@@ -31,7 +31,7 @@ public class ElasticAdaptorImpl implements ElasticAdaptor {
     @Override
     public String requestSearchProduct(String keyword) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        elasticConfig.getUrl() + "/" + elasticConfig.getIndexName() + "/_search")
+                        elasticConfig.getUrl() + "/" + elasticConfig.getProductIndexName() + "/_search")
                 .encode()
                 .toUriString();
 
@@ -47,6 +47,46 @@ public class ElasticAdaptorImpl implements ElasticAdaptor {
                 "            ]\n" +
                 "        }\n" +
                 "    }\n" +
+                "}";
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        headers.setAccept(List.of(MediaType.APPLICATION_JSON));
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.POST,
+                new HttpEntity<>(body, headers),
+                String.class
+        ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String requestSearchAll(String keyword) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        elasticConfig.getUrl() + "/" + elasticConfig.getProductIndexName() + "," + elasticConfig.getCsIndexName() + "/_search")
+                .encode()
+                .toUriString();
+
+        String body = "{\n" +
+                "  \"query\": {\n" +
+                "    \"multi_match\": {\n" +
+                "      \"analyzer\": \"suggest_search_analyzer\", \n" +
+                "      \"query\": \"" + keyword + "\",\n" +
+                "      \"fields\": [\n" +
+                "        \"title^3\",\n" +
+                "        \"titlenori^3\",\n" +
+                "        \"titlejaso^3\",\n" +
+                "        \"cstitlejaso^2\",\n" +
+                "        \"cstitlenori^2\",\n" +
+                "        \"cscontentjaso\",\n" +
+                "        \"cscontentnori\"\n" +
+                "      ]\n" +
+                "    }\n" +
+                "  }\n" +
                 "}";
 
         HttpHeaders headers = new HttpHeaders();

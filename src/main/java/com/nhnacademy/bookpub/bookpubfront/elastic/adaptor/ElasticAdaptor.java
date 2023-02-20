@@ -15,4 +15,12 @@ public interface ElasticAdaptor {
      * @return ElasticSearch 응답
      */
     String requestSearchProduct(String keyword);
+
+    /**
+     * 통함 검색어에 대한 결과를 조회하는 API 호출.
+     *
+     * @param keyword 검색어
+     * @return ElasticSearch 응답
+     */
+    String requestSearchAll(String keyword);
 }
