@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.config;
 
 import com.nhnacademy.bookpub.bookpubfront.handler.CustomResponseErrorHandler;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.ClientHttpRequestFactory;
@@ -14,7 +15,9 @@ import org.springframework.web.client.RestTemplate;
  * @since : 1.0
  **/
 @Configuration
+@RequiredArgsConstructor
 public class RestTemplateConfig {
+    private final CustomResponseErrorHandler customResponseErrorHandler;
 
     /**
      * 클라이언트와 서버 사이에 커넥션 객체를 생성, 소요 및 요청하는 최대시간 설정을 위한 클래스.
@@ -41,7 +44,7 @@ public class RestTemplateConfig {
     @Bean
     public RestTemplate restTemplate(ClientHttpRequestFactory clientHttpRequestFactory) {
         RestTemplate restTemplate = new RestTemplate(clientHttpRequestFactory);
-        restTemplate.setErrorHandler(new CustomResponseErrorHandler());
+        restTemplate.setErrorHandler(customResponseErrorHandler);
         return restTemplate;
     }
 }
