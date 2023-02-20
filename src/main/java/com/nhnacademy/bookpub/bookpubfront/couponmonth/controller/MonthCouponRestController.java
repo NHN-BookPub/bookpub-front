@@ -34,20 +34,13 @@ public class MonthCouponRestController {
     @Auth
     @GetMapping("/coupon/month-coupon")
     public Integer issueMonthCoupon(@RequestParam Long memberNo, @RequestParam Long templateNo) {
-        // 수량 확인 - redis
-        boolean issued = couponService.checkCouponIssuedByMemberNo(memberNo, templateNo);
-        if (issued) {
-            return 1;
+        if (redisTemplate.opsForValue().get(COUPON + templateNo).equals(0)) {
+            //수량이 없으면
+            return 2;
         } else {
-            if (redisTemplate.opsForValue().get(COUPON + templateNo).equals(0)) {
-                return 2;
-            } else {
-                redisTemplate.opsForValue().decrement(COUPON + templateNo);
-                couponService.issueMonthCoupon(memberNo, templateNo);
-
-                // "redis 에서 수량 감소 시키고 insert 시키기" //db
-                return 3;
-            }
+            //수량이 존재하면 수량 감소 후 발급
+            redisTemplate.opsForValue().decrement(COUPON + templateNo);
+            return couponService.issueMonthCoupon(memberNo, templateNo);
         }
 
     }

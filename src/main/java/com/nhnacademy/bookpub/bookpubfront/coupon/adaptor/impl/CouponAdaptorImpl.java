@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
+
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
@@ -30,7 +31,6 @@ import org.springframework.web.util.UriComponentsBuilder;
 public class CouponAdaptorImpl implements CouponAdaptor {
 
     private final RestTemplate restTemplate;
-    private static final String COUPON_URL = "/api/coupons";
     private static final String COUPON_AUTH_URL = "/token/coupons";
     private final MemberUtils memberUtils;
 
@@ -177,42 +177,25 @@ public class CouponAdaptorImpl implements CouponAdaptor {
         );
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Boolean requestExistMonthCoupon(Long memberNo, Long templateNo) {
-        String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
-                                + memberNo + "/month-coupon")
-                .queryParam("templateNo", templateNo)
-                .encode()
-                .toUriString();
-
-        return restTemplate.exchange(
-                url,
-                HttpMethod.GET,
-                new HttpEntity<>(makeHeader()),
-                new ParameterizedTypeReference<Boolean>() {
-                }).getBody();
-    }
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void requestIssueMonthCoupon(Long memberNo, Long templateNo) {
+    public Integer requestIssueMonthCoupon(Long memberNo, Long templateNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
                                 + memberNo + "/month-coupon")
                 .queryParam("templateNo", templateNo)
                 .encode().toUriString();
-        
-        restTemplate.exchange(
+
+        ResponseEntity<Integer> result = restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(makeHeader()),
-                Void.class
+                Integer.class
         );
+
+        return result.getBody();
     }
 }

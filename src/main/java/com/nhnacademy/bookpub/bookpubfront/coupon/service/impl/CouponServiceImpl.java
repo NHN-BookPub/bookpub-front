@@ -81,17 +81,8 @@ public class CouponServiceImpl implements CouponService {
     /**
      * {@inheritDoc}
      */
-
     @Override
-    public boolean checkCouponIssuedByMemberNo(Long memberNo, Long templateNo) {
-        return couponAdaptor.requestExistMonthCoupon(memberNo, templateNo);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void issueMonthCoupon(Long memberNo, Long templateNo) {
-        couponAdaptor.requestIssueMonthCoupon(memberNo, templateNo);
+    public Integer issueMonthCoupon(Long memberNo, Long templateNo) {
+        return couponAdaptor.requestIssueMonthCoupon(memberNo, templateNo);
     }
 }
