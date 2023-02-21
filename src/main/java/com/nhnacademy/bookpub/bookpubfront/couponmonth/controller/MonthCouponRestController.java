@@ -33,15 +33,32 @@ public class MonthCouponRestController {
      */
     @Auth
     @GetMapping("/coupon/month-coupon")
-    public Integer issueMonthCoupon(@RequestParam Long memberNo, @RequestParam Long templateNo) {
+    public String issueMonthCoupon(@RequestParam Long memberNo, @RequestParam Long templateNo) {
+
         if (redisTemplate.opsForValue().get(COUPON + templateNo).equals(0)) {
             //수량이 없으면
-            return 2;
+            return "ZERO";
         } else {
             //수량이 존재하면 수량 감소 후 발급
             redisTemplate.opsForValue().decrement(COUPON + templateNo);
-            return couponService.issueMonthCoupon(memberNo, templateNo);
+            couponService.issueMonthCoupon(memberNo, templateNo);
+            return "OK";
         }
+
+    }
+
+    /**
+     * 이달의 쿠폰 발급 확인 여부를 위한 api 입니다.
+     *
+     * @param memberNo   멤버 번호
+     * @param templateNo 쿠폰 템플릿 번호
+     * @return 발급 여부
+     */
+    @Auth
+    @GetMapping("/coupon/month-coupon/check-issued")
+    public boolean checkCouponMonthIssued(@RequestParam Long memberNo,
+            @RequestParam Long templateNo) {
+        return couponService.checkCouponMonthIssued(memberNo, templateNo);
 
     }
 

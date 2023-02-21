@@ -56,7 +56,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
-                                                             String search) {
+            String search) {
         String url =
                 UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL)
                         .queryParam("page", pageable.getPageNumber())
@@ -82,7 +82,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
-                                                                     Long memberNo) {
+            Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/positive")
@@ -105,7 +105,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable,
-                                                                     Long memberNo) {
+            Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/negative")
@@ -182,20 +182,39 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public Integer requestIssueMonthCoupon(Long memberNo, Long templateNo) {
+    public void requestIssueMonthCoupon(Long memberNo, Long templateNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
                                 + memberNo + "/month-coupon")
                 .queryParam("templateNo", templateNo)
                 .encode().toUriString();
 
-        ResponseEntity<Integer> result = restTemplate.exchange(
+        restTemplate.exchange(
                 url,
                 HttpMethod.POST,
                 new HttpEntity<>(makeHeader()),
-                Integer.class
+                Void.class
         );
 
-        return result.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public Boolean checkCouponMonthIssued(Long memberNo, Long templateNo) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
+                                + memberNo + "/month-coupon")
+                .queryParam("templateNo", templateNo)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<Boolean>() {
+                }).getBody();
     }
 }

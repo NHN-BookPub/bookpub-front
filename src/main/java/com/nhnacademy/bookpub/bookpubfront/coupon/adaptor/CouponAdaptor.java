@@ -80,7 +80,15 @@ public interface CouponAdaptor {
      *
      * @param memberNo   멤버 번호
      * @param templateNo 쿠폰 템플릿 번호
-     * @return 쿠폰 발행 상태 값
      */
-    Integer requestIssueMonthCoupon(Long memberNo, Long templateNo);
+    void requestIssueMonthCoupon(Long memberNo, Long templateNo);
+
+    /**
+     * 이달의 쿠폰 발급 여부 확인 메서드입니다.
+     *
+     * @param memberNo   멤버 번호
+     * @param templateNo 쿠폰 템플릿 번호
+     * @return 쿠폰 발급 여부
+     */
+    Boolean checkCouponMonthIssued(Long memberNo, Long templateNo);
 }
