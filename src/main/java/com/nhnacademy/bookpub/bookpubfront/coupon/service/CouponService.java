@@ -80,7 +80,15 @@ public interface CouponService {
      *
      * @param memberNo   멤버 번호
      * @param templateNo 쿠폰 템플릿 번호
-     * @return 결과 상태 값 : Integer
      */
-    Integer issueMonthCoupon(Long memberNo, Long templateNo);
+    void issueMonthCoupon(Long memberNo, Long templateNo);
+
+    /**
+     * 이달의 쿠폰 발급 여부를 위한 메서드입니다.
+     *
+     * @param memberNo 멤버 번호
+     * @param templateNo 쿠폰 템플릿 번호
+     * @return 발급 여부
+     */
+    boolean checkCouponMonthIssued(Long memberNo, Long templateNo);
 }
