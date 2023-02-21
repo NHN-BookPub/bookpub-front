@@ -55,9 +55,27 @@ function order() {
     })
 }
 
-function totalPrice(count, productNo) {
-    let totalPrice = document.getElementById('totalPrice' + productNo)
-    let originPrice = document.getElementById('originPrice' + productNo)
+function totalPrice(count, product) {
+    let countInput = document.getElementById('num' + product.productNo);
+
+    if (!Number.isInteger(count)) {
+        count = Math.ceil(count);
+        countInput.value = count;
+    }
+
+    if (count <= 0) {
+        count = 1;
+        countInput.value = count;
+    }
+
+    if (count > product.productStock) {
+        alert("해당 상품의 재고는 " + product.productStock + "개 입니다")
+        count = product.productStock;
+        countInput.value = count;
+    }
+
+    let totalPrice = document.getElementById('totalPrice' + product.productNo)
+    let originPrice = document.getElementById('originPrice' + product.productNo)
 
     totalPrice.innerText = parseKRW((parseInt(parsingNumber(originPrice.innerText)) * count).toString() + '원');
 }
