@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.main.controller;
 
 import static com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils.CART_COOKIE;
-
 import com.nhnacademy.bookpub.bookpubfront.cart.util.CartUtils;
 import com.nhnacademy.bookpub.bookpubfront.category.util.CategoryUtils;
 import com.nhnacademy.bookpub.bookpubfront.main.dto.response.GetProductByTypeResponseDto;
@@ -52,6 +51,10 @@ public class MainController {
     private static final String RECENT_VIEW_COOKIE = "RECENT-VIEW";
     private static final String DIVIDE_LINE = "======";
 
+    @GetMapping("/api-docs")
+    public String apiDocs(){
+        return "generated-docs/index";
+    }
     /**
      * 메인 홈페이지 view.
      *
