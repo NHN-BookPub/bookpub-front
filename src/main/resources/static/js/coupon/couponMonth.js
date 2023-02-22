@@ -41,7 +41,7 @@ function clickInfo(templateNo) {
                 else{
                     Swal.fire({
                         icon: 'warning',
-                        title: '수량이 없습니다.',
+                        title: '수량이 모두 소진되었습니다.',
                         text: '다음 기회에 도전해보세요.'
                     })
                     loading.style.display = "none";
