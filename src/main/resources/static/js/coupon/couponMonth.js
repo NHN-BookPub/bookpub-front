@@ -57,6 +57,7 @@ function confirm(templateNo){
         success: function (result){
             if(callCount >= 6){
                 clearInterval(interval);
+                loading.style.display = "none";
                 Swal.fire({
                     icon: 'warning',
                     title: '시간이 초과되었습니다..',
@@ -65,13 +66,13 @@ function confirm(templateNo){
             }
             else if(result === true){
                 clearInterval(interval);
+                loading.style.display = "none";
                 Swal.fire({
                     icon: 'success',
                     title: '쿠폰이 발급되었습니다!',
                     text: '마이 쿠폰함을 확인해주세요.'
                 })
             }
-            loading.style.display = "none";
         }
     })
 }
