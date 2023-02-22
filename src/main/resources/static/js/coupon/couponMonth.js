@@ -26,6 +26,11 @@ window.onload = function () {
             }
         })
     }
+    else {
+        for(var j=0; j<couponValueList.length; j++) {
+            document.getElementById("couponBtn"+couponValueList[j]).classList.remove("disabled");
+        }
+    }
 }
 
 function clickInfo(templateNo) {
