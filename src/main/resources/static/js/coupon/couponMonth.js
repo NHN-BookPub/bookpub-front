@@ -3,11 +3,8 @@ let callCount;
 const memberNo = $('#memberNo').text();
 function clickInfo(templateNo) {
     callCount = 0;
-    console.log("최초 함수 callCount : " + callCount);
 
     var openedAt = document.getElementById(templateNo).textContent;
-    console.log("click")
-
     openedAt = new Date(openedAt);
 
     const current = new Date();
@@ -58,9 +55,7 @@ function confirm(templateNo){
         url:"/coupon/month-coupon/check-issued",
         data: {"memberNo": memberNo, "templateNo": templateNo},
         success: function (result){
-            console.log("callcount: " + callCount);
             if(callCount >= 6){
-                console.log("call count 초과");
                 clearInterval(interval);
                 Swal.fire({
                     icon: 'warning',
@@ -69,7 +64,6 @@ function confirm(templateNo){
                 })
             }
             else if(result === true){
-                console.log("true 반환");
                 clearInterval(interval);
                 Swal.fire({
                     icon: 'success',
