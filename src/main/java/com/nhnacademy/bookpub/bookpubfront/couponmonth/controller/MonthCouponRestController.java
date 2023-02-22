@@ -64,6 +64,13 @@ public class MonthCouponRestController {
 
     }
 
+    /**
+     * 이달의 쿠폰 발급 중복 여부 확인을 위한 api 입니다.
+     *
+     * @param memberNo     회원 번호
+     * @param templateList 이달의 쿠폰 쿠폰템플릿 번호 리스트
+     * @return 중복 여부가 담긴 boolean 리스트
+     */
     @Auth
     @GetMapping("/token/coupons/{memberNo}/month-coupons/issue-check")
     public List<Boolean> getCouponMonthDuplicate(

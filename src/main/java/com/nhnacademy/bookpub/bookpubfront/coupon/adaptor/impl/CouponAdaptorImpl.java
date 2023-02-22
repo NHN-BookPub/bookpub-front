@@ -217,6 +217,9 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 }).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Boolean> requestCouponMonthDuplicate(Long memberNo, List<Long> templateList) {
         String url = UriComponentsBuilder.fromHttpUrl(

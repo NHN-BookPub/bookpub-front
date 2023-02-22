@@ -94,6 +94,9 @@ public class CouponServiceImpl implements CouponService {
         return couponAdaptor.checkCouponMonthIssued(memberNo, templateNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<Boolean> getCouponMonthDuplicate(Long memberNo, List<Long> templateList) {
         return couponAdaptor.requestCouponMonthDuplicate(memberNo, templateList);
