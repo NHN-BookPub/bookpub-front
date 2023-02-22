@@ -1,6 +1,33 @@
 let interval;
 let callCount;
 const memberNo = $('#memberNo').text();
+
+let couponList = document.getElementsByClassName("templateGroup");
+let couponValueList = [];
+
+window.onload = function () {
+    for(var i=0; i<couponList.length; i++) {
+        couponValueList.push(couponList[i].value);
+    }
+
+    if(memberNo >= 0) {
+        $.ajax({
+            type: "get",
+            url: "/token/coupons/" + memberNo +"/month-coupons/issue-check",
+            traditional: true,
+            data: {"templateList": couponValueList},
+            success: function (result) {
+                result.forEach((couponElement, index) => {
+                    if (couponElement === false) {
+                        console.log(document.getElementById("couponBtn" + couponValueList[index]));
+                        document.getElementById("couponBtn"+couponValueList[index]).classList.remove("disabled");
+                    }
+                })
+            }
+        })
+    }
+}
+
 function clickInfo(templateNo) {
     callCount = 0;
 
@@ -72,6 +99,7 @@ function confirm(templateNo){
                     title: '쿠폰이 발급되었습니다!',
                     text: '마이 쿠폰함을 확인해주세요.'
                 })
+                document.getElementById("couponBtn"+templateNo).classList.add("disabled");
             }
         }
     })

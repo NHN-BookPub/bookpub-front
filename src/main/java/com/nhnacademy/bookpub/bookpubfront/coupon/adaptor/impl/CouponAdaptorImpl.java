@@ -1,7 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.impl;
 
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
-
 import com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig;
 import com.nhnacademy.bookpub.bookpubfront.coupon.adaptor.CouponAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.coupon.dto.request.CreateCouponRequestDto;
@@ -56,7 +55,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestCoupons(Pageable pageable, String searchKey,
-            String search) {
+                                                             String search) {
         String url =
                 UriComponentsBuilder.fromHttpUrl(GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL)
                         .queryParam("page", pageable.getPageNumber())
@@ -82,7 +81,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestPositiveCoupons(Pageable pageable,
-            Long memberNo) {
+                                                                     Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/positive")
@@ -105,7 +104,7 @@ public class CouponAdaptorImpl implements CouponAdaptor {
      */
     @Override
     public PageResponse<GetCouponResponseDto> requestNegativeCoupons(Pageable pageable,
-            Long memberNo) {
+                                                                     Long memberNo) {
         String url = UriComponentsBuilder.fromHttpUrl(
                         GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/members/" + memberNo
                                 + "/negative")
@@ -216,5 +215,28 @@ public class CouponAdaptorImpl implements CouponAdaptor {
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<Boolean>() {
                 }).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public List<Boolean> requestCouponMonthDuplicate(Long memberNo, List<Long> templateList) {
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + COUPON_AUTH_URL + "/"
+                                + memberNo + "/month-coupons/issue-check")
+                .queryParam("memberNo", memberNo)
+                .queryParam("couponList", templateList)
+                .encode()
+                .toUriString();
+
+        ResponseEntity<List<Boolean>> response = restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<>() {
+                });
+
+        return response.getBody();
     }
 }

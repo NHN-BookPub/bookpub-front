@@ -91,4 +91,13 @@ public interface CouponService {
      * @return 발급 여부
      */
     boolean checkCouponMonthIssued(Long memberNo, Long templateNo);
+
+    /**
+     * 회원에 따른 이달의 쿠폰 중복 여부를 확인하기 위한 메서드입니다.
+     *
+     * @param memberNo 회원 번호
+     * @param templateList 이달의 쿠폰 쿠폰템플릿 번호 리스트
+     * @return 중복 여부가 담긴 boolean 리스트
+     */
+    List<Boolean> getCouponMonthDuplicate(Long memberNo, List<Long> templateList);
 }

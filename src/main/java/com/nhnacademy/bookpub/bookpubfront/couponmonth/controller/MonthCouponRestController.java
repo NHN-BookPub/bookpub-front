@@ -2,9 +2,11 @@ package com.nhnacademy.bookpub.bookpubfront.couponmonth.controller;
 
 import com.nhnacademy.bookpub.bookpubfront.annotation.Auth;
 import com.nhnacademy.bookpub.bookpubfront.coupon.service.CouponService;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -62,4 +64,18 @@ public class MonthCouponRestController {
 
     }
 
+    /**
+     * 이달의 쿠폰 발급 중복 여부 확인을 위한 api 입니다.
+     *
+     * @param memberNo     회원 번호
+     * @param templateList 이달의 쿠폰 쿠폰템플릿 번호 리스트
+     * @return 중복 여부가 담긴 boolean 리스트
+     */
+    @Auth
+    @GetMapping("/token/coupons/{memberNo}/month-coupons/issue-check")
+    public List<Boolean> getCouponMonthDuplicate(
+            @PathVariable("memberNo") Long memberNo,
+            @RequestParam List<Long> templateList) {
+        return couponService.getCouponMonthDuplicate(memberNo, templateList);
+    }
 }
