@@ -91,4 +91,6 @@ public interface CouponService {
      * @return 발급 여부
      */
     boolean checkCouponMonthIssued(Long memberNo, Long templateNo);
+
+    List<Boolean> getCouponMonthDuplicate(Long memberNo, List<Long> templateList);
 }
