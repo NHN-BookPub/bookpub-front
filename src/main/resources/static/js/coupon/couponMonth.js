@@ -1,9 +1,12 @@
 let interval;
-let callCount = 0;
+let callCount;
 const memberNo = $('#memberNo').text();
 function clickInfo(templateNo) {
+    callCount = 0;
+    console.log("최초 함수 callCount : " + callCount);
 
     var openedAt = document.getElementById(templateNo).textContent;
+    console.log("click")
 
     openedAt = new Date(openedAt);
 
@@ -22,13 +25,26 @@ function clickInfo(templateNo) {
             text: '오픈 시간 : ' + openedAt.toUTCString()
         })
     } else {
+        let loading = document.getElementById("loading");
+        let img = document.getElementById("loading-img");
+        loading.style.display = "flex";
+        img.style.display = "block";
+
         $.ajax({
             type: "get",
             url: "/coupon/month-coupon",
             data: {"memberNo": memberNo, "templateNo": templateNo},
             success: function (result) {
                 if(result === "OK"){
-                    interval = setInterval(function () { confirm(templateNo); },5000);
+                    interval = setInterval(function () { confirm(templateNo); },1500);
+                }
+                else{
+                    Swal.fire({
+                        icon: 'warning',
+                        title: '수량이 없습니다.',
+                        text: '다음 기회에 도전해보세요.'
+                    })
+                    loading.style.display = "none";
                 }
             }
         })
@@ -42,7 +58,8 @@ function confirm(templateNo){
         url:"/coupon/month-coupon/check-issued",
         data: {"memberNo": memberNo, "templateNo": templateNo},
         success: function (result){
-            if(callCount == 3){
+            console.log("callcount: " + callCount);
+            if(callCount >= 6){
                 console.log("call count 초과");
                 clearInterval(interval);
                 Swal.fire({
@@ -60,10 +77,9 @@ function confirm(templateNo){
                     text: '마이 쿠폰함을 확인해주세요.'
                 })
             }
+            loading.style.display = "none";
         }
-
     })
-
 }
 
 
