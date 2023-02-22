@@ -786,8 +786,8 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_문의">2.28. 문의</a>
 <ul class="sectlevel3">
 <li><a href="#_문의_등록">2.28.1. 문의 등록</a></li>
-<li><a href="#_문의_이력확인">2.28.2. 문의 이력확인</a></li>
-<li><a href="#_문의_이력확인_2">2.28.3. 문의 이력확인</a></li>
+<li><a href="#_문의_이미지추가">2.28.2. 문의 이미지추가</a></li>
+<li><a href="#_문의_이력확인">2.28.3. 문의 이력확인</a></li>
 <li><a href="#_문의_답변_삭제">2.28.4. 문의 답변 삭제</a></li>
 <li><a href="#_문의_삭제">2.28.5. 문의 삭제</a></li>
 <li><a href="#_문의_수정">2.28.6. 문의 수정</a></li>
@@ -797,7 +797,6 @@ table.CodeRay td.code>pre{padding:0}
 <li><a href="#_멤버관련_문의_조회">2.28.10. 멤버관련 문의 조회</a></li>
 <li><a href="#_상품문의_단건_조회공개중">2.28.11. 상품문의 단건 조회(공개중)</a></li>
 <li><a href="#_상품문의_단건_조회비공개">2.28.12. 상품문의 단건 조회(비공개)</a></li>
-<li><a href="#_상품문의_회원번호를_통해조회비공개">2.28.13. 상품문의 회원번호를 통해조회(비공개)</a></li>
 </ul>
 </li>
 </ul>
@@ -2116,9 +2115,9 @@ Content-Length: 388
     &quot;birthMonth&quot; : 1,
     &quot;email&quot; : &quot;email&quot;,
     &quot;point&quot; : 1,
-    &quot;social&quot; : false,
     &quot;deleted&quot; : false,
-    &quot;blocked&quot; : false
+    &quot;blocked&quot; : false,
+    &quot;social&quot; : false
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -2538,28 +2537,28 @@ Host: localhost:8080
   } ],
   &quot;pageable&quot; : {
     &quot;sort&quot; : {
+      &quot;empty&quot; : true,
       &quot;unsorted&quot; : true,
-      &quot;sorted&quot; : false,
-      &quot;empty&quot; : true
+      &quot;sorted&quot; : false
     },
-    &quot;pageNumber&quot; : 0,
-    &quot;pageSize&quot; : 10,
     &quot;offset&quot; : 0,
+    &quot;pageSize&quot; : 10,
+    &quot;pageNumber&quot; : 0,
     &quot;paged&quot; : true,
     &quot;unpaged&quot; : false
   },
+  &quot;last&quot; : true,
   &quot;totalElements&quot; : 1,
   &quot;totalPages&quot; : 1,
-  &quot;last&quot; : true,
-  &quot;numberOfElements&quot; : 1,
-  &quot;sort&quot; : {
-    &quot;unsorted&quot; : true,
-    &quot;sorted&quot; : false,
-    &quot;empty&quot; : true
-  },
   &quot;first&quot; : true,
-  &quot;number&quot; : 0,
   &quot;size&quot; : 10,
+  &quot;number&quot; : 0,
+  &quot;sort&quot; : {
+    &quot;empty&quot; : true,
+    &quot;unsorted&quot; : true,
+    &quot;sorted&quot; : false
+  },
+  &quot;numberOfElements&quot; : 1,
   &quot;empty&quot; : false
 }</code></pre>
 </div>
@@ -3556,7 +3555,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 295
+Content-Length: 296
 
 {
   &quot;couponNo&quot; : 1,
@@ -3568,7 +3567,7 @@ Content-Length: 295
   &quot;policyPrice&quot; : 10,
   &quot;policyMinimum&quot; : 1000,
   &quot;maxDiscount&quot; : 1000,
-  &quot;finishedAt&quot; : &quot;2023-02-21T14:37:34.78777&quot;,
+  &quot;finishedAt&quot; : &quot;2023-02-22T20:00:07.486213&quot;,
   &quot;couponUsed&quot; : true
 }</code></pre>
 </div>
@@ -3670,7 +3669,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 417
+Content-Length: 418
 
 {
   &quot;content&quot; : [ {
@@ -3683,7 +3682,7 @@ Content-Length: 417
     &quot;policyPrice&quot; : 10,
     &quot;policyMinimum&quot; : 1000,
     &quot;maxDiscount&quot; : 1000,
-    &quot;finishedAt&quot; : &quot;2023-02-21T14:37:34.88132&quot;,
+    &quot;finishedAt&quot; : &quot;2023-02-22T20:00:07.509627&quot;,
     &quot;couponUsed&quot; : true
   } ],
   &quot;totalPages&quot; : 1,
@@ -3950,12 +3949,12 @@ Content-Length: 220
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /token/coupon-months HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 102
+Content-Length: 101
 Host: localhost:8080
 
 {
   &quot;templateNo&quot; : 1,
-  &quot;openedAt&quot; : [ 2023, 2, 21, 14, 37, 46, 687815000 ],
+  &quot;openedAt&quot; : [ 2023, 2, 22, 20, 0, 11, 976645000 ],
   &quot;monthQuantity&quot; : 100
 }</code></pre>
 </div>
@@ -4068,12 +4067,12 @@ Content-Length: 67
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">PUT /token/coupon-months HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 99
+Content-Length: 98
 Host: localhost:8080
 
 {
   &quot;monthNo&quot; : 1,
-  &quot;openedAt&quot; : [ 2023, 2, 21, 14, 37, 46, 618631000 ],
+  &quot;openedAt&quot; : [ 2023, 2, 22, 20, 0, 11, 957063000 ],
   &quot;monthQuantity&quot; : 100
 }</code></pre>
 </div>
@@ -4225,7 +4224,7 @@ Content-Length: 169
   &quot;templateNo&quot; : 1,
   &quot;templateName&quot; : &quot;name&quot;,
   &quot;templateImage&quot; : &quot;image&quot;,
-  &quot;openedAt&quot; : &quot;2023-02-21T14:37:46.646049&quot;,
+  &quot;openedAt&quot; : &quot;2023-02-22T20:00:11.965366&quot;,
   &quot;monthQuantity&quot; : 100
 } ]</code></pre>
 </div>
@@ -5646,7 +5645,7 @@ Content-Length: 389
   &quot;codeTarget&quot; : &quot;test_target&quot;,
   &quot;templateName&quot; : &quot;test_name&quot;,
   &quot;templateImage&quot; : &quot;test_image&quot;,
-  &quot;finishedAt&quot; : &quot;2023-02-21T14:37:49.899083&quot;,
+  &quot;finishedAt&quot; : &quot;2023-02-22T20:00:13.038666&quot;,
   &quot;templateBundled&quot; : true
 }</code></pre>
 </div>
@@ -5908,7 +5907,7 @@ Content-Length: 48
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">POST /api/orders HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 744
+Content-Length: 745
 Host: localhost:8080
 
 {
@@ -5935,7 +5934,7 @@ Host: localhost:8080
   &quot;recipientNumber&quot; : &quot;test_recipient_phone&quot;,
   &quot;addressDetail&quot; : &quot;IT&quot;,
   &quot;roadAddress&quot; : &quot;광주 동구 조선대길&quot;,
-  &quot;receivedAt&quot; : [ 2023, 2, 21, 14, 37, 6, 987489000 ],
+  &quot;receivedAt&quot; : [ 2023, 2, 22, 19, 59, 57, 533181000 ],
   &quot;packaged&quot; : true,
   &quot;orderRequest&quot; : null,
   &quot;pointAmount&quot; : 100,
@@ -6596,7 +6595,7 @@ Content-Length: 645
   &quot;addressBase&quot; : &quot;광주 동구 조선대길&quot;,
   &quot;addressDetail&quot; : &quot;IT&quot;,
   &quot;createdAt&quot; : null,
-  &quot;receivedAt&quot; : &quot;2023-02-21T14:37:07.502946&quot;,
+  &quot;receivedAt&quot; : &quot;2023-02-22T19:59:57.630962&quot;,
   &quot;invoiceNo&quot; : null,
   &quot;packaged&quot; : true,
   &quot;packageAmount&quot; : 3000,
@@ -6749,10 +6748,10 @@ Content-Length: 645
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">GET /token/orders?page=0&amp;size=10 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
-Content-Length: 232
+Content-Length: 233
 Host: localhost:8080
 
-{&quot;content&quot;:[{&quot;orderNo&quot;:null,&quot;memberId&quot;:&quot;test_id&quot;,&quot;createdAt&quot;:null,&quot;invoiceNo&quot;:null,&quot;orderState&quot;:&quot;결제완료&quot;,&quot;totalAmount&quot;:10000,&quot;receivedAt&quot;:[2023,2,21,14,37,7,424007000]}],&quot;totalPages&quot;:1,&quot;number&quot;:0,&quot;previous&quot;:false,&quot;next&quot;:false}</code></pre>
+{&quot;content&quot;:[{&quot;orderNo&quot;:null,&quot;memberId&quot;:&quot;test_id&quot;,&quot;createdAt&quot;:null,&quot;invoiceNo&quot;:null,&quot;orderState&quot;:&quot;결제완료&quot;,&quot;totalAmount&quot;:10000,&quot;receivedAt&quot;:[2023,2,22,19,59,57,615780000]}],&quot;totalPages&quot;:1,&quot;number&quot;:0,&quot;previous&quot;:false,&quot;next&quot;:false}</code></pre>
 </div>
 </div>
 </div>
@@ -6762,7 +6761,7 @@ Host: localhost:8080
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 311
+Content-Length: 310
 
 {
   &quot;content&quot; : [ {
@@ -6772,7 +6771,7 @@ Content-Length: 311
     &quot;invoiceNo&quot; : null,
     &quot;orderState&quot; : &quot;결제완료&quot;,
     &quot;totalAmount&quot; : 10000,
-    &quot;receivedAt&quot; : &quot;2023-02-21T14:37:07.424007&quot;
+    &quot;receivedAt&quot; : &quot;2023-02-22T19:59:57.61578&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -7038,7 +7037,7 @@ Content-Length: 645
   &quot;addressBase&quot; : &quot;광주 동구 조선대길&quot;,
   &quot;addressDetail&quot; : &quot;IT&quot;,
   &quot;createdAt&quot; : null,
-  &quot;receivedAt&quot; : &quot;2023-02-21T14:37:07.321607&quot;,
+  &quot;receivedAt&quot; : &quot;2023-02-22T19:59:57.596383&quot;,
   &quot;invoiceNo&quot; : null,
   &quot;packaged&quot; : true,
   &quot;packageAmount&quot; : 3000,
@@ -11761,7 +11760,7 @@ Content-Length: 291
     &quot;reviewStar&quot; : 5,
     &quot;reviewContent&quot; : &quot;content&quot;,
     &quot;imagePath&quot; : &quot;imagePath&quot;,
-    &quot;createdAt&quot; : &quot;2023-02-21T14:37:48.675552&quot;
+    &quot;createdAt&quot; : &quot;2023-02-22T20:00:12.597475&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -11884,7 +11883,7 @@ Host: localhost:8080</code></pre>
 <div class="content">
 <pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
 Content-Type: application/json
-Content-Length: 323
+Content-Length: 321
 
 {
   &quot;reviewNo&quot; : 1,
@@ -11896,7 +11895,7 @@ Content-Length: 323
   &quot;reviewStar&quot; : 5,
   &quot;reviewContent&quot; : &quot;content&quot;,
   &quot;reviewImagePath&quot; : &quot;reviewImagePath&quot;,
-  &quot;createdAt&quot; : &quot;2023-02-21T14:37:48.811343&quot;
+  &quot;createdAt&quot; : &quot;2023-02-22T20:00:12.6447&quot;
 }</code></pre>
 </div>
 </div>
@@ -12053,7 +12052,7 @@ Content-Length: 443
     &quot;reviewStar&quot; : 5,
     &quot;reviewContent&quot; : &quot;content&quot;,
     &quot;reviewImagePath&quot; : &quot;reviewImagePath&quot;,
-    &quot;createdAt&quot; : &quot;2023-02-21T14:37:48.773364&quot;
+    &quot;createdAt&quot; : &quot;2023-02-22T20:00:12.631555&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -15176,28 +15175,28 @@ Host: localhost:8080
   } ],
   &quot;pageable&quot; : {
     &quot;sort&quot; : {
+      &quot;empty&quot; : true,
       &quot;unsorted&quot; : true,
-      &quot;sorted&quot; : false,
-      &quot;empty&quot; : true
+      &quot;sorted&quot; : false
     },
-    &quot;pageNumber&quot; : 0,
-    &quot;pageSize&quot; : 10,
     &quot;offset&quot; : 0,
+    &quot;pageSize&quot; : 10,
+    &quot;pageNumber&quot; : 0,
     &quot;paged&quot; : true,
     &quot;unpaged&quot; : false
   },
+  &quot;last&quot; : true,
   &quot;totalElements&quot; : 1,
   &quot;totalPages&quot; : 1,
-  &quot;last&quot; : true,
-  &quot;numberOfElements&quot; : 1,
-  &quot;sort&quot; : {
-    &quot;unsorted&quot; : true,
-    &quot;sorted&quot; : false,
-    &quot;empty&quot; : true
-  },
   &quot;first&quot; : true,
-  &quot;number&quot; : 0,
   &quot;size&quot; : 10,
+  &quot;number&quot; : 0,
+  &quot;sort&quot; : {
+    &quot;empty&quot; : true,
+    &quot;unsorted&quot; : true,
+    &quot;sorted&quot; : false
+  },
+  &quot;numberOfElements&quot; : 1,
   &quot;empty&quot; : false
 }</code></pre>
 </div>
@@ -15917,7 +15916,7 @@ Content-Length: 65
 </div>
 </div>
 <div class="sect3">
-<h4 id="_문의_이력확인"><a class="link" href="#_문의_이력확인">2.28.2. 문의 이력확인</a></h4>
+<h4 id="_문의_이미지추가"><a class="link" href="#_문의_이미지추가">2.28.2. 문의 이미지추가</a></h4>
 <div class="paragraph">
 <p>문의 (Inquiry) 이미지 추가</p>
 </div>
@@ -15976,7 +15975,7 @@ path</code></pre>
 </div>
 </div>
 <div class="sect3">
-<h4 id="_문의_이력확인_2"><a class="link" href="#_문의_이력확인_2">2.28.3. 문의 이력확인</a></h4>
+<h4 id="_문의_이력확인"><a class="link" href="#_문의_이력확인">2.28.3. 문의 이력확인</a></h4>
 <div class="paragraph">
 <p>문의 (Inquiry) 구매이력 확인</p>
 </div>
@@ -16255,7 +16254,7 @@ Content-Length: 375
     &quot;inquiryTitle&quot; : &quot;title&quot;,
     &quot;inquiryDisplayed&quot; : true,
     &quot;inquiryAnswered&quot; : true,
-    &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.144003&quot;
+    &quot;createdAt&quot; : &quot;2023-02-22T20:00:00.508874&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -16425,7 +16424,7 @@ Content-Length: 498
     &quot;inquiryTitle&quot; : &quot;title&quot;,
     &quot;inquiryDisplayed&quot; : true,
     &quot;inquiryAnswered&quot; : true,
-    &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.999748&quot;
+    &quot;createdAt&quot; : &quot;2023-02-22T20:00:00.718468&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -16602,7 +16601,7 @@ Content-Length: 498
     &quot;inquiryTitle&quot; : &quot;title&quot;,
     &quot;inquiryDisplayed&quot; : true,
     &quot;inquiryAnswered&quot; : true,
-    &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.413317&quot;
+    &quot;createdAt&quot; : &quot;2023-02-22T20:00:00.545956&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -16776,7 +16775,7 @@ Content-Length: 407
     &quot;inquiryTitle&quot; : &quot;title&quot;,
     &quot;inquiryDisplayed&quot; : true,
     &quot;inquiryAnswered&quot; : true,
-    &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.960187&quot;
+    &quot;createdAt&quot; : &quot;2023-02-22T20:00:00.704504&quot;
   } ],
   &quot;totalPages&quot; : 1,
   &quot;number&quot; : 0,
@@ -16933,7 +16932,7 @@ Content-Length: 339
   &quot;inquiryDisplayed&quot; : true,
   &quot;inquiryAnswered&quot; : true,
   &quot;childInquiries&quot; : [ ],
-  &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.468767&quot;
+  &quot;createdAt&quot; : &quot;2023-02-22T20:00:00.559862&quot;
 }</code></pre>
 </div>
 </div>
@@ -17027,7 +17026,7 @@ Content-Length: 339
 </div>
 <div class="listingblock">
 <div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /api/inquiries/1 HTTP/1.1
+<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /token/inquiries/1/members/1 HTTP/1.1
 Content-Type: application/json;charset=UTF-8
 Host: localhost:8080</code></pre>
 </div>
@@ -17036,7 +17035,7 @@ Host: localhost:8080</code></pre>
 <p>PathVariable</p>
 </div>
 <table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 55. /api/inquiries/{inquiryNo}</caption>
+<caption class="title">Table 55. /token/inquiries/{inquiryNo}/members/{memberNo}</caption>
 <colgroup>
 <col style="width: 50%;">
 <col style="width: 50%;">
@@ -17051,6 +17050,10 @@ Host: localhost:8080</code></pre>
 <tr>
 <td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryNo</code></p></td>
 <td class="tableblock halign-left valign-top"><p class="tableblock">문의번호가 기입</p></td>
+</tr>
+<tr>
+<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberNo</code></p></td>
+<td class="tableblock halign-left valign-top"><p class="tableblock">회원번호가 기입</p></td>
 </tr>
 </tbody>
 </table>
@@ -17075,159 +17078,13 @@ Content-Length: 339
   &quot;inquiryDisplayed&quot; : true,
   &quot;inquiryAnswered&quot; : true,
   &quot;childInquiries&quot; : [ ],
-  &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.468767&quot;
+  &quot;createdAt&quot; : &quot;2023-02-22T20:00:00.539405&quot;
 }</code></pre>
 </div>
 </div>
 </div>
 <div class="sect4">
 <h5 id="_응답_파라미터들_69"><a class="link" href="#_응답_파라미터들_69">응답 파라미터들</a></h5>
-<table class="tableblock frame-all grid-all stretch">
-<colgroup>
-<col style="width: 33.3333%;">
-<col style="width: 33.3333%;">
-<col style="width: 33.3334%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Path</th>
-<th class="tableblock halign-left valign-top">Type</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryNo</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의번호가 반환.</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>productNo</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상품번호가 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberNo</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Number</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원번호가 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryStateCodeName</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의상태코드가 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberNickname</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원닉네임을 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>productTitle</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">상품 제목을 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryTitle</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의 제목을 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryContent</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의 내용을 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryDisplayed</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의 공개여부 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryAnswered</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Boolean</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의 답변여부가 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>childInquiries.[]</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>Array</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">하위 문의들 반환</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>createdAt</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>String</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">생성일시 반환</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<div class="sect3">
-<h4 id="_상품문의_회원번호를_통해조회비공개"><a class="link" href="#_상품문의_회원번호를_통해조회비공개">2.28.13. 상품문의 회원번호를 통해조회(비공개)</a></h4>
-<div class="sect4">
-<h5 id="_요청구조_130"><a class="link" href="#_요청구조_130">요청구조</a></h5>
-<div class="paragraph">
-<p>RequestBody</p>
-</div>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">GET /token/inquiries/1/members/1 HTTP/1.1
-Content-Type: application/json;charset=UTF-8
-Host: localhost:8080</code></pre>
-</div>
-</div>
-<div class="paragraph">
-<p>PathVariable</p>
-</div>
-<table class="tableblock frame-all grid-all stretch">
-<caption class="title">Table 56. /token/inquiries/{inquiryNo}/members/{memberNo}</caption>
-<colgroup>
-<col style="width: 50%;">
-<col style="width: 50%;">
-</colgroup>
-<thead>
-<tr>
-<th class="tableblock halign-left valign-top">Parameter</th>
-<th class="tableblock halign-left valign-top">Description</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>inquiryNo</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">문의번호가 기입</p></td>
-</tr>
-<tr>
-<td class="tableblock halign-left valign-top"><p class="tableblock"><code>memberNo</code></p></td>
-<td class="tableblock halign-left valign-top"><p class="tableblock">회원번호가 기입</p></td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="sect4">
-<h5 id="_응답구조_89"><a class="link" href="#_응답구조_89">응답구조</a></h5>
-<div class="listingblock">
-<div class="content">
-<pre class="CodeRay highlight nowrap"><code data-lang="http">HTTP/1.1 200 OK
-Content-Type: application/json
-Content-Length: 339
-
-{
-  &quot;inquiryNo&quot; : 1,
-  &quot;productNo&quot; : 1,
-  &quot;memberNo&quot; : 1,
-  &quot;inquiryStateCodeName&quot; : &quot;code&quot;,
-  &quot;memberNickname&quot; : &quot;nick&quot;,
-  &quot;productTitle&quot; : &quot;title&quot;,
-  &quot;inquiryTitle&quot; : &quot;title&quot;,
-  &quot;inquiryContent&quot; : &quot;content&quot;,
-  &quot;inquiryDisplayed&quot; : true,
-  &quot;inquiryAnswered&quot; : true,
-  &quot;childInquiries&quot; : [ ],
-  &quot;createdAt&quot; : &quot;2023-02-21T14:37:20.379382&quot;
-}</code></pre>
-</div>
-</div>
-</div>
-<div class="sect4">
-<h5 id="_응답_파라미터들_70"><a class="link" href="#_응답_파라미터들_70">응답 파라미터들</a></h5>
 <table class="tableblock frame-all grid-all stretch">
 <colgroup>
 <col style="width: 33.3333%;">
@@ -17313,7 +17170,7 @@ Content-Length: 339
 <div id="footer">
 <div id="footer-text">
 Version 2023.02.13<br>
-Last updated 2023-02-21 14:20:31 +0900
+Last updated 2023-02-22 19:42:01 +0900
 </div>
 </div>
 </body>
