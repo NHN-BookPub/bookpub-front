@@ -83,6 +83,8 @@ public class CustomResponseErrorHandler extends DefaultResponseErrorHandler {
             throw new GoToAdminTagException();
         } else if (code.equals("TIER")) {
             throw new GoToAdminTierException();
+        } else if (code.equals("ORDER")) {
+            throw new GoToAdminOrderException();
         }
     }
 }

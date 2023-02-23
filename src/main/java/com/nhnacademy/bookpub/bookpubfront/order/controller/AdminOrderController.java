@@ -85,9 +85,16 @@ public class AdminOrderController {
      */
     @Auth
     @GetMapping("/list")
-    public String adminOrderView(Model model, @PageableDefault Pageable pageable) {
-        PageResponse<GetOrderListForAdminResponseDto> orders =
-                orderService.getOrderList(pageable);
+    public String adminOrderView(Model model, @PageableDefault Pageable pageable,
+                                 @RequestParam(required = false) String type) {
+        PageResponse<GetOrderListForAdminResponseDto> orders;
+
+        if (type == null) {
+            orders = orderService.getOrderList(pageable);
+        } else {
+            orders = orderService.getorderListByCodeName(pageable, type);
+            model.addAttribute("type", type);
+        }
 
         settingPagination(model, orders, "orderList");
 

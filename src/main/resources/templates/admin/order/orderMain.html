@@ -3,9 +3,72 @@
 <head>
     <meta charset="UTF-8">
     <title>주문 관리</title>
+    <link rel="stylesheet" href="/static/css/mypage/point.css">
     <link type="text/css" rel="stylesheet" href="/static/css/mypage/orderdetail.css">
     <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
     <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+
+    <script>
+        function typeAll() {
+            window.location.href = "/admin/orders/list"
+        }
+
+        function waitPay() {
+            window.location.href = "/admin/orders/list?type=waitpay"
+        }
+
+        function completePay() {
+            window.location.href = "/admin/orders/list?type=completepay"
+        }
+
+        function waitDeliver() {
+            window.location.href = "/admin/orders/list?type=waitdeliver"
+        }
+
+        function shipDeliver() {
+            window.location.href = "/admin/orders/list?type=shipdeliver"
+        }
+
+        function complDeliver() {
+            window.location.href = "/admin/orders/list?type=compldeliver"
+        }
+
+        function cancelDeliver() {
+            window.location.href = "/admin/orders/list?type=canceldeliver"
+        }
+
+        function cancelPay() {
+            window.location.href = "/admin/orders/list?type=cancelpay"
+        }
+
+        function confirm() {
+            window.location.href = "/admin/orders/list?type=confirm"
+        }
+
+        function canceled() {
+            window.location.href = "/admin/orders/list?type=canceled"
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            let linkList = document.querySelectorAll('.bold')
+
+            for (let i = 0; i < linkList.length; i++) {
+                let navLink = new URL(location.href).searchParams
+                let param = navLink.get('type')
+                if (param === null) {
+                    if (linkList[i].value === '1') {
+                        linkList[i].style.fontWeight = 'bold';
+                        linkList[i].style.color = 'black';
+                        break;
+                    }
+                }
+                if (linkList[i].value === param) {
+                    linkList[i].style.fontWeight = 'bold';
+                    linkList[i].style.color = 'black';
+                }
+            }
+        });
+    </script>
 </head>
 
 <body class="sb-nav-fixed">
@@ -18,7 +81,18 @@
                 <div class="card-header" style="justify-content: center">
                     <h1 class="mb-3 sm">주문 목록</h1>
                 </div>
-
+                <div class="pointList-select-box" style="margin-top: 10px">
+                    <button class="point-select bold" value="1" onclick="typeAll()">전체</button>
+                    <button class="point-select bold" value="waitpay" onclick="waitPay()">결제 대기</button>
+                    <button class="point-select bold" value="completepay" onclick="completePay()">결제 완료</button>
+                    <button class="point-select bold" value="waitdeliver" onclick="waitDeliver()">배송준비</button>
+                    <button class="point-select bold" value="shipdeliver" onclick="shipDeliver()">배송중</button>
+                    <button class="point-select bold" value="compldeliver" onclick="complDeliver()">배송완료</button>
+                    <button class="point-select bold" value="canceldeliver" onclick="cancelDeliver()">배송취소</button>
+                    <button class="point-select bold" value="cancelpay" onclick="cancelPay()">결제취소</button>
+                    <button class="point-select bold" value="confirm" onclick="confirm()">구매확정</button>
+                    <button class="point-select bold" value="canceled" onclick="canceled()">주문취소</button>
+                </div>
                 <div class="card-body" style="display: flex;flex-direction: column;">
                     <div style="display: flex; flex-direction: column; gap: 8px">
                         <div class="order_summary_box" th:each="order : ${orderList}">
@@ -53,7 +127,8 @@
                     </div>
                 </div>
             </div>
-            <nav aria-label="Page navigation example">
+
+            <nav aria-label="Page navigation example" th:if="${#strings.isEmpty(type)}">
                 <ul class="pagination justify-content-center">
                     <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
@@ -79,6 +154,36 @@
                         </li>
                         <li class="page-item">
                             <a class="page-link" th:href="'/admin/orders/list?page='+${totalPages - 1}">마지막</a>
+                        </li>
+                    </th:block>
+                </ul>
+            </nav>
+            <nav aria-label="Page navigation example" th:if="not ${#strings.isEmpty(type)}">
+                <ul class="pagination justify-content-center">
+                    <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                        <li class="page-item">
+                            <a class="page-link" th:href="'/admin/orders/list?type='+${type}+'&page=0'">처음</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" th:if="${start > 1}"
+                               th:href="'/admin/orders/list?type='+${type}+'&page='+${start - pageButtonNum -1}">
+                                이전</a>
+                            <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                               href="javascript:void(0)">이전</a>
+                        </li>
+                        <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                            <a class="page-link" th:href="'/admin/orders/list?type='+${type}+'&page=' + ${page - 1}"
+                               th:text="${page}"></a></li>
+
+                        <li class="page-item">
+                            <a class="page-link" th:if="${end < totalPages}"
+                               th:href="'/admin/orders/list?type='+${type}+ '&page='+${start + pageButtonNum}">다음</a>
+                            <a class="page-link" th:if="${end >= totalPages}" style="cursor: not-allowed; color: gray;"
+                               href="javascript:void(0)">다음</a>
+                        </li>
+                        <li class="page-item">
+                            <a class="page-link" th:href="'/admin/orders/list?type='+${type}+'&page='+${totalPages - 1}">마지막</a>
                         </li>
                     </th:block>
                 </ul>
