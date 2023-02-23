@@ -210,4 +210,8 @@ public interface MemberAdaptor {
      */
     Integer requestMemberTier(Long memberNo);
 
+    /**
+     * 로그아웃.
+     */
+    void logout();
 }

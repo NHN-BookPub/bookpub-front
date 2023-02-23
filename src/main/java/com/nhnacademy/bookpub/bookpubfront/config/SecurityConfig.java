@@ -51,8 +51,8 @@ public class SecurityConfig {
                 = authenticationManager(http.getSharedObject(AuthenticationConfiguration.class));
 
         http.authorizeRequests()
-//                .antMatchers("/", "/login", "/signup").permitAll()
-//                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
+                .antMatchers("/", "/login", "/signup").permitAll()
+                .antMatchers("/admin/**").hasAuthority("ROLE_ADMIN")
                 .anyRequest().permitAll()
                 .and()
                 .csrf()
