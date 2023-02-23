@@ -254,8 +254,7 @@ public class InquiryAdaptorImpl implements InquiryAdaptor {
                 .queryParam("searchValueFir", searchValueFir)
                 .queryParam("searchKeySec", searchKeySec)
                 .queryParam("searchValueSec", searchValueSec)
-                .encode()
-                .toUriString();
+                .build().toUriString();
 
         ResponseEntity<PageResponse<GetInquirySummaryResponseDto>> response =
                 restTemplate.exchange(

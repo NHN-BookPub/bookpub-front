@@ -1,8 +1,6 @@
 package com.nhnacademy.bookpub.bookpubfront.inquiry.dto.response;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 import lombok.Getter;
 
 /**
@@ -19,8 +17,6 @@ public class GetInquirySummaryResponseDto {
     private String inquiryStateCodeName;
     private String memberNickname;
     private String productTitle;
-    private String productIsbn;
-    private List<String> productCategories = new ArrayList<>();
     private String inquiryTitle;
     private boolean inquiryDisplayed;
     private boolean inquiryAnswered;
