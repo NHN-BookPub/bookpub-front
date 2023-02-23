@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.sales.service;
 
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.OrderCntResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.SaleProductCntDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleYearDto;
 import java.time.LocalDateTime;
@@ -37,4 +38,14 @@ public interface SalesService {
      * @return the order year
      */
     List<TotalSaleYearDto> getOrderYear(LocalDateTime start, LocalDateTime end);
+
+    /**
+     * 상품 판매량 랭킹을 조회하기 위한 메서드입니다.
+     * 조건이 없을 경우, 올해의 상품 판매량 랭킹이 반환됩니다.
+     *
+     * @param start 시작일자
+     * @param end   종료일자
+     * @return 상품 판매량 랭킹 정보가 담긴 dto 리스트
+     */
+    List<SaleProductCntDto> getSaleProductRankCount(LocalDateTime start, LocalDateTime end);
 }
