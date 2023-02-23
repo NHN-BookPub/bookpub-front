@@ -18,6 +18,7 @@ public class JwtUtil {
     public static final String EXP_HEADER = "X-Expire";
     public static final String TOKEN_TYPE = "Bearer ";
     public static final Long MILL_SEC = 1000L;
+    public static final Integer EXPIRE_TIME = 7200;
 
     private JwtUtil() {
     }
@@ -35,7 +36,7 @@ public class JwtUtil {
         Cookie cookie = new Cookie(JwtUtil.JWT_COOKIE, tokenInfo);
         cookie.setSecure(true);
         cookie.setHttpOnly(true);
-        cookie.setMaxAge(7200);
+        cookie.setMaxAge(EXPIRE_TIME);
         return cookie;
     }
 }

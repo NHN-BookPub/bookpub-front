@@ -48,6 +48,7 @@ public class MemberAdaptorImpl implements MemberAdaptor {
     private final RestTemplate restTemplate;
     private static final String TOKEN_API = "/token/members/";
     private static final String MEMBER_API = "/api/members/";
+    private static final String AUTH_API = "/auth";
 
 
     /**
@@ -405,5 +406,18 @@ public class MemberAdaptorImpl implements MemberAdaptor {
         );
 
         return response.getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public void logout() {
+        restTemplate.exchange(
+                GateWayConfig.getGatewayUrl() + AUTH_API + "/logout",
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                Void.class
+        );
     }
 }

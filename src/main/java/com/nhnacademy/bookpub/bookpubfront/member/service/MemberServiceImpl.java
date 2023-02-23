@@ -106,6 +106,8 @@ public class MemberServiceImpl implements MemberService {
             response.addCookie(jwtCookie);
             response.addCookie(sessionCookie);
             SecurityContextHolder.clearContext();
+
+            memberAdaptor.logout();
         }
     }
 
