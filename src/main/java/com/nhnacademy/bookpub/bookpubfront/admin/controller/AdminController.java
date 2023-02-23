@@ -61,6 +61,11 @@ public class AdminController {
         return "admin/index";
     }
 
+    /**
+     * 올해의 1월 1일 0시 0분 0초를 구하는 메서드입니다.
+     *
+     * @return 1월 1일 0시 0분 0초 시간정보
+     */
     private LocalDateTime getFirstDayOfYear() {
         LocalDateTime currentDateTime = LocalDateTime.now();
         return currentDateTime.withHour(0)
