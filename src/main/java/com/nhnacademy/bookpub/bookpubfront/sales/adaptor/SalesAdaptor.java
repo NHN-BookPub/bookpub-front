@@ -1,6 +1,7 @@
 package com.nhnacademy.bookpub.bookpubfront.sales.adaptor;
 
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.OrderCntResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.SaleProductCntDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleYearDto;
 import java.time.LocalDateTime;
@@ -38,4 +39,6 @@ public interface SalesAdaptor {
      */
     List<TotalSaleYearDto> getSalesYearRequest(LocalDateTime start,
                                                LocalDateTime end);
+
+    List<SaleProductCntDto> requestSaleProductRankCount(LocalDateTime start, LocalDateTime end);
 }

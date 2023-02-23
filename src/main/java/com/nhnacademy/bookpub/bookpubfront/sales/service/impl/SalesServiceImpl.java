@@ -2,6 +2,7 @@ package com.nhnacademy.bookpub.bookpubfront.sales.service.impl;
 
 import com.nhnacademy.bookpub.bookpubfront.sales.adaptor.SalesAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.OrderCntResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.SaleProductCntDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleYearDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.service.SalesService;
@@ -67,13 +68,19 @@ public class SalesServiceImpl implements SalesService {
         return salesYearRequest;
     }
 
+    @Override
+    public List<SaleProductCntDto> getSaleProductRankCount(LocalDateTime start, LocalDateTime end) {
+        return salesAdaptor.requestSaleProductRankCount(start, end);
+    }
+
     /**
      * 주문개수를 확인하기위해 map 으로 변환합니다.
      *
      * @param count    카운트 개수
      * @param orderCnt 주문 카운트
      */
-    private static void checkOrderCnt(List<OrderCntResponseDto> count, HashMap<Integer, Long> orderCnt) {
+    private static void checkOrderCnt(List<OrderCntResponseDto> count,
+                                      HashMap<Integer, Long> orderCnt) {
         for (OrderCntResponseDto result : count) {
             orderCnt.put(result.getDate(), result.getOrderCnt());
         }
@@ -85,13 +92,15 @@ public class SalesServiceImpl implements SalesService {
      * @param content 월별 조회.
      * @param hashMap 해쉬 맵.
      */
-    private static void checkSalesYear(List<TotalSaleYearDto> content, HashMap<Integer, TotalSaleYearDto> hashMap) {
+    private static void checkSalesYear(List<TotalSaleYearDto> content,
+                                       HashMap<Integer, TotalSaleYearDto> hashMap) {
         for (TotalSaleYearDto totalSaleYearDto : content) {
             hashMap.put(totalSaleYearDto.getMonth(), totalSaleYearDto);
         }
     }
 
-    private static void checkMonth(List<TotalSaleYearDto> content, HashMap<Integer, TotalSaleYearDto> hashMap) {
+    private static void checkMonth(List<TotalSaleYearDto> content,
+                                   HashMap<Integer, TotalSaleYearDto> hashMap) {
         for (int i = 1; i <= 12; i++) {
             content.add(hashMap.getOrDefault(i, new TotalSaleYearDto(null,
                     null, null, null, null, null, i)));
@@ -104,7 +113,8 @@ public class SalesServiceImpl implements SalesService {
      * @param count    카운트 개수
      * @param orderCnt 주문 카운트
      */
-    private static void checkHours(List<OrderCntResponseDto> count, HashMap<Integer, Long> orderCnt) {
+    private static void checkHours(List<OrderCntResponseDto> count,
+                                   HashMap<Integer, Long> orderCnt) {
         for (int i = 0; i < 24; i++) {
             count.add(new OrderCntResponseDto(i, orderCnt.getOrDefault(i, 0L)));
         }

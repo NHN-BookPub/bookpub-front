@@ -4,6 +4,7 @@ import static com.nhnacademy.bookpub.bookpubfront.config.GateWayConfig.getGatewa
 import static com.nhnacademy.bookpub.bookpubfront.utils.Utils.makeHeader;
 import com.nhnacademy.bookpub.bookpubfront.sales.adaptor.SalesAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.OrderCntResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.SaleProductCntDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleYearDto;
 import java.time.LocalDateTime;
@@ -79,6 +80,24 @@ public class SalesAdaptorImpl implements SalesAdaptor {
                 HttpMethod.GET,
                 new HttpEntity<>(makeHeader()),
                 new ParameterizedTypeReference<List<TotalSaleYearDto>>() {
+                }
+        ).getBody();
+    }
+
+    @Override
+    public List<SaleProductCntDto> requestSaleProductRankCount(
+            LocalDateTime start, LocalDateTime end) {
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + "/token/sale-product-rank")
+                .queryParam("start", start)
+                .queryParam("end", end)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<List<SaleProductCntDto>>() {
                 }
         ).getBody();
     }

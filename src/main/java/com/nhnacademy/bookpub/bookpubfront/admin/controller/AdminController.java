@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberStatisticsR
 import com.nhnacademy.bookpub.bookpubfront.member.dto.response.MemberTierStatisticsResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.OrderCntResponseDto;
+import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.SaleProductCntDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.dto.response.TotalSaleYearDto;
 import com.nhnacademy.bookpub.bookpubfront.sales.service.SalesService;
@@ -45,20 +46,27 @@ public class AdminController {
         List<MemberTierStatisticsResponseDto> tierStatistics = memberService.memberTierStatistics();
         List<TotalSaleDto> monthSales = salesService.getSales(null, null);
         List<OrderCntResponseDto> orderCnt = salesService.getOrderCnt();
-        List<TotalSaleYearDto> yearSales = salesService.getOrderYear(getFirstDayOfYear(), LocalDateTime.now());
+        List<TotalSaleYearDto> yearSales =
+                salesService.getOrderYear(getFirstDayOfYear(), LocalDateTime.now());
+        List<SaleProductCntDto> saleProductCnt = salesService.getSaleProductRankCount(
+                getFirstDayOfYear(), LocalDateTime.now());
 
         model.addAttribute("orderCount", orderCnt);
         model.addAttribute("monthSales", monthSales);
         model.addAttribute("yearSales", yearSales);
         model.addAttribute("memberStatistics", memberStatisticsResponseDto);
         model.addAttribute("tierStatistics", tierStatistics);
+        model.addAttribute("saleProductCounts", saleProductCnt);
 
         return "admin/index";
     }
 
     private LocalDateTime getFirstDayOfYear() {
         LocalDateTime currentDateTime = LocalDateTime.now();
-        return currentDateTime.withMinute(1)
-                .withDayOfMonth(1);
+        return currentDateTime.withHour(0)
+                .withMinute(0)
+                .withSecond(0)
+                .withNano(0)
+                .withDayOfYear(1);
     }
 }
