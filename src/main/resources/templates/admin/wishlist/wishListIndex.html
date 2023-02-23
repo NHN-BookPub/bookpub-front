@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>좋아요 현황</title>
+  <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+  <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js"
+          crossorigin="anonymous"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta/js/bootstrap.min.js"></script>
+  <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+  <link rel="stylesheet" href="/static/css/admin/subscribe/main.css">
+
+</head>
+<body class="sb-nav-fixed">
+<div id="layoutSidenav">
+  <th:block th:include="admin/fragments/adminHeader"/>
+  <th:block th:include="admin/fragments/adminNavigationBar"/>
+
+  <div id="layoutSidenav_content">
+    <main>
+      <div class="container-fluid px-4">
+        <h1 class="mt-4">좋아요 현황</h1>
+        <ol class="breadcrumb mb-4">
+          <li class="breadcrumb-item active">상품 좋아요 통계</li>
+        </ol>
+        <hr/>
+
+        <div align="right">
+          <form action="/admin/wishlist" method="get">
+            <select name="categoryNo">
+              <div class="btn-group">
+                <option value="" selected>==카테고리 선택==</option>
+                  <div th:each="category : ${categoryList}">
+                    <option th:value="${category.categoryNo}"
+                            th:text="${category.categoryNo} +'. '+ ${category.categoryName}">
+                    </option>
+                  </div>
+              </div>
+
+            </select>
+            <button class="btn btn-primary float-right" type="submit">검색</button>
+          </form>
+        </div>
+
+        </br>
+
+        <div>
+          <table class="table table-striped">
+            <thead>
+            <tr>
+              <th scope="col">상품 번호</th>
+              <th scope="col">상품 명</th>
+              <th scope="col">좋아요 수</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="wishListCount : ${wishListCounts}">
+              <td th:text="${wishListCount.productNo}"></td>
+              <td th:text="${wishListCount.title}"></td>
+              <td th:text="${wishListCount.wishCount}"></td>
+            </tr>
+            </tbody>
+          </table>
+          <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+              <li class="page-item" th:classappend="${!isPrevious} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/wishlist?(page=(${currentPage}-1))}">Previous</a>
+              </li>
+              <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                  <a class="page-link" th:href="@{/admin/wishlist?(page=(${page-1}))}"
+                     th:text="${page}"></a></li>
+              </th:block>
+              <li class="page-item" th:classappend="${!isNext} ? 'disabled'">
+                <a class="page-link"
+                   th:href="@{/admin/wishlist?(page=(${currentPage}+1))}">Next</a>
+              </li>
+            </ul>
+          </nav>
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+<script src="/static/js/subscribe/main.js"></script>
+</body>
+</html>
