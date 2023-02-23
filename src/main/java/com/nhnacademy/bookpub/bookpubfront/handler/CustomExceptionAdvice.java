@@ -3,9 +3,19 @@ package com.nhnacademy.bookpub.bookpubfront.handler;
 import com.nhnacademy.bookpub.bookpubfront.exception.NotFoundException;
 import com.nhnacademy.bookpub.bookpubfront.exception.NotLoginException;
 import com.nhnacademy.bookpub.bookpubfront.exception.ServerErrorException;
-import com.nhnacademy.bookpub.bookpubfront.handler.exception.*;
-import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.*;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.BadGatewayException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.BadRequestException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.UnAuthorizedException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.GoToAdminCategoryException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.GoToAdminException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.GoToAdminOrderException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.GoToAdminTagException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.GoToAdminTierException;
+import com.nhnacademy.bookpub.bookpubfront.handler.exception.gotoexception.GoToMainException;
+import com.nhnacademy.bookpub.bookpubfront.member.service.MemberService;
 import java.net.ConnectException;
+import javax.servlet.http.HttpServletResponse;
+import lombok.RequiredArgsConstructor;
 import org.springframework.web.HttpRequestMethodNotSupportedException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -17,7 +27,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
  * @since : 1.0
  **/
 @ControllerAdvice
+@RequiredArgsConstructor
 public class CustomExceptionAdvice {
+    private final MemberService memberService;
 
     @ExceptionHandler(GoToMainException.class)
     public String goToMain() {
@@ -54,9 +66,10 @@ public class CustomExceptionAdvice {
         return "error/404";
     }
 
-    @ExceptionHandler(UnAuthorizedException.class)
-    public String unAuthorized() {
-        return "error/401";
+    @ExceptionHandler({UnAuthorizedException.class})
+    public String unAuthorized(HttpServletResponse response) {
+        memberService.logout(response);
+        return "redirect:/login";
     }
 
     @ExceptionHandler({BadRequestException.class, HttpRequestMethodNotSupportedException.class})
