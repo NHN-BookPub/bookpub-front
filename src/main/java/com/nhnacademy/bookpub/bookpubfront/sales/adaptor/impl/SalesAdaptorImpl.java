@@ -84,6 +84,9 @@ public class SalesAdaptorImpl implements SalesAdaptor {
         ).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<SaleProductCntDto> requestSaleProductRankCount(
             LocalDateTime start, LocalDateTime end) {

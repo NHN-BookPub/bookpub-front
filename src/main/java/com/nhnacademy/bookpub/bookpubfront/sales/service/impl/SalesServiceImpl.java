@@ -68,6 +68,9 @@ public class SalesServiceImpl implements SalesService {
         return salesYearRequest;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<SaleProductCntDto> getSaleProductRankCount(LocalDateTime start, LocalDateTime end) {
         return salesAdaptor.requestSaleProductRankCount(start, end);

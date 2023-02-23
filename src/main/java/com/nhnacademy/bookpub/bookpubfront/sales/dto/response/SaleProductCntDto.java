@@ -4,7 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 /**
- * Some description here.
+ * 상품 판매량 랭킹 조회시 사용되는 dto.
  *
  * @author : 정유진
  * @since : 1.0

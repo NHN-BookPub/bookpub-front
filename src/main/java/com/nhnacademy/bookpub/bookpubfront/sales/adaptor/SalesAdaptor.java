@@ -40,5 +40,12 @@ public interface SalesAdaptor {
     List<TotalSaleYearDto> getSalesYearRequest(LocalDateTime start,
                                                LocalDateTime end);
 
+    /**
+     * 상품 판매량 랭킹을 조회하기 위한 요청입니다.
+     *
+     * @param start 시작일자
+     * @param end   종료일자
+     * @return 상품 판매량 랭킹 정보가 담긴 dto 리스트
+     */
     List<SaleProductCntDto> requestSaleProductRankCount(LocalDateTime start, LocalDateTime end);
 }
