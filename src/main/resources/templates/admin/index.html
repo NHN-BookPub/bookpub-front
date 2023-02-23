@@ -109,7 +109,25 @@
                         </div>
                     </div>
                 </div>
+                <div class="row">
+                    <div class="card mb-4">
+                        <div class="card-header">
+                            <i class="fas fa-chart-bar me-1"></i>
+                            올해의 판매량 순위
+                        </div>
+                        <div class="card-body">
+                            <canvas id="productSalesBar" width="100%" height="40"></canvas>
+                        </div>
+                    </div>
+                </div>
             </div>
+
+            <br/>
+            <br/>
+            <div>
+
+            </div>
+
         </main>
 
         <th:block th:include="../templates/admin/fragments/adminFooter"/>
@@ -167,7 +185,7 @@
             bardata = {
                 datasets: [{
                     label: '이번달 건수',
-                    data: [paymentCnt, cancelOrderCnt, saleCnt,totalCnt],
+                    data: [paymentCnt, cancelOrderCnt, saleCnt, totalCnt],
                     backgroundColor: ['rgba(255, 99, 132, 0.2)',
                         'rgba(255, 159, 64, 0.2)',
                         'rgba(255, 205, 86, 0.2)',
@@ -189,7 +207,7 @@
                     borderWidth: 1
                 }],
                 // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
-                labels: ['결제취소 횟수','주문취소 횟수', '판매 개수', '총 주문 횟수']
+                labels: ['결제취소 횟수', '주문취소 횟수', '판매 개수', '총 주문 횟수']
             };
 
             var ctx = document.getElementById('weekBar');
@@ -211,7 +229,7 @@
             amountdata = {
                 datasets: [{
                     label: '이번달 금액',
-                    data: [cancelPaymentAmount, saleAmount, realAmount,totalAmount],
+                    data: [cancelPaymentAmount, saleAmount, realAmount, totalAmount],
                     backgroundColor: ['rgba(255, 99, 132, 0.2)',
                         'rgba(255, 159, 64, 0.2)',
                         'rgba(255, 205, 86, 0.2)',
@@ -233,7 +251,7 @@
                     borderWidth: 1
                 }],
                 // 라벨의 이름이 툴팁처럼 마우스가 근처에 오면 나타남
-                labels: ['결제취소 금액','구매확정 금액', '순 수익', '총 금액']
+                labels: ['결제취소 금액', '구매확정 금액', '순 수익', '총 금액']
             };
 
             var ctx3 = document.getElementById('weekAmount');
@@ -253,16 +271,8 @@
             });
 
 
-
-
-
-
-
-
-
-
             let orderCntList = [];
-            let orderCntDateList =[];
+            let orderCntDateList = [];
 
             // 시간별 현황 통계
             /*<![CDATA[*/
@@ -352,15 +362,15 @@
             });
 
             // 월별 통계
-            let yearSaleTotalCancelPaymentCnt =[];
-            let yearSaleTotalCancelOrderCnt =[];
-            let yearSaleTotalSaleCnt =[];
-            let yearSaleTotalCnt =[];
+            let yearSaleTotalCancelPaymentCnt = [];
+            let yearSaleTotalCancelOrderCnt = [];
+            let yearSaleTotalSaleCnt = [];
+            let yearSaleTotalCnt = [];
 
-            let yearSaleTotalSaleAmount =[]; //구매확
-            let yearSaleTotalTotal =[]; //순수익
-            let yearSaleTotalCancelPaymentAmount =[]; //결제취소금액
-            let yearSaleTotalAmount =[]; //총금액
+            let yearSaleTotalSaleAmount = []; //구매확
+            let yearSaleTotalTotal = []; //순수익
+            let yearSaleTotalCancelPaymentAmount = []; //결제취소금액
+            let yearSaleTotalAmount = []; //총금액
 
             let yearSaleTotalMonth = []; // 월별
             /*<![CDATA[*/
@@ -384,27 +394,27 @@
                     label: "총 카운트",
                     borderColor: "#ffd582",
                     backgroundColor: "rgb(248,230,177)",
-                    borderWidth:2,
+                    borderWidth: 2,
                     type: 'line',
-                    fill : false
+                    fill: false
                 }, {
                     data: yearSaleTotalCancelPaymentCnt,
                     label: "결제취소",
                     borderColor: "#c6eee5",
                     backgroundColor: "#bde1d9",
-                    borderWidth:2
+                    borderWidth: 2
                 }, {
                     data: yearSaleTotalCancelOrderCnt,
                     label: "주문취소",
                     borderColor: "#ffa500",
-                    backgroundColor:"#ffa500",
-                    borderWidth:2,
+                    backgroundColor: "#ffa500",
+                    borderWidth: 2,
                 }, {
                     data: yearSaleTotalSaleCnt,
                     label: "구매확정",
                     borderColor: "#ffc8c5",
-                    backgroundColor:"#e8b4b1",
-                    borderWidth:2
+                    backgroundColor: "#e8b4b1",
+                    borderWidth: 2
                 }
                 ]
             }
@@ -434,27 +444,27 @@
                     label: "총 금액",
                     borderColor: "rgba(235,161,255,0.7)",
                     backgroundColor: "rgba(193,122,215,0.7)",
-                    borderWidth:2,
+                    borderWidth: 2,
                     type: 'line',
-                    fill : false
+                    fill: false
                 }, {
                     data: yearSaleTotalCancelPaymentAmount,
                     label: "결제취소 금액",
                     borderColor: "#d4d6ff",
                     backgroundColor: "#b2b4f6",
-                    borderWidth:2
+                    borderWidth: 2
                 }, {
                     data: yearSaleTotalSaleAmount,
                     label: "구매확정 금액",
                     borderColor: "#ffa2a8",
-                    backgroundColor:"#ff8383",
-                    borderWidth:2,
+                    backgroundColor: "#ff8383",
+                    borderWidth: 2,
                 }, {
                     data: yearSaleTotalTotal,
                     label: "순 수익",
                     borderColor: "#fff8d3",
-                    backgroundColor:"#fce072",
-                    borderWidth:2
+                    backgroundColor: "#fce072",
+                    borderWidth: 2
                 }
                 ]
             }
@@ -474,6 +484,86 @@
                     }
                 }
             });
+
+
+            // 판매량 차트
+
+            let saleProductName = [];
+            let saleProductTotalCount = [];
+
+            /* <![CDATA[ */
+            /*[# th:each="saleProductCount : ${saleProductCounts}"]*/
+            saleProductName.push(/*[[${saleProductCount.productTitle}]]*/);
+            saleProductTotalCount.push(/*[[${saleProductCount.productCount}]]*/)
+            /*[/]*/
+            /*]]>*/
+
+            const productSalesData = {
+                labels: saleProductName,
+                datasets: [{
+                    label: '판매부수',
+                    data: saleProductTotalCount,
+                    fill: false,
+                    backgroundColor: [
+                        'rgba(255, 99, 132, 0.2)',
+                        'rgba(255, 159, 64, 0.2)',
+                        'rgba(255, 205, 86, 0.2)',
+                        'rgba(75, 192, 192, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(153, 102, 255, 0.2)',
+                        'rgba(201, 203, 207, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(255, 99, 132)',
+                        'rgb(255, 159, 64)',
+                        'rgb(255, 205, 86)',
+                        'rgb(75, 192, 192)',
+                        'rgb(54, 162, 235)',
+                        'rgb(153, 102, 255)',
+                        'rgb(201, 203, 207)'
+                    ],
+                    borderWidth: 1
+                }]
+            };
+
+            const productSalesBarConfig = new Chart(
+                document.getElementById("productSalesBar"), {
+                    type: 'bar',
+                    data: productSalesData,
+                    options: {
+                        scales : {
+                            yAxes : [ {
+                                ticks : {
+                                    beginAtZero : true
+                                }
+                            }],
+                            xAxes : [{
+                                ticks : {
+                                    callback: function(labels){
+                                        var lasb = labels.substr(0, 17);
+                                        if(lasb.length > 16 ){
+                                            lasb = labels.substr(0, 17)+ "...";
+                                        }else{
+                                            lasb ;
+                                        }
+                                        return lasb;
+                                    }
+                                }
+                            } ]
+                        }
+                    }
+                });
+            productSalesBarConfig.options.scales.xAxes[0].ticks.callback = function(labels){
+                var lasb = labels.substr(0, 9);
+                if(lasb.length > 8 ){
+                    lasb = labels.substr(0, 9)+ "...";
+                }else{
+                    lasb ;
+                }
+                return lasb;
+            };
+
+
         </script>
     </div>
 </div>
