@@ -15,12 +15,23 @@
         <main>
             <div class="container-fluid px-4">
                 <h1 class="mt-4">회원 목록</h1>
-                <ol class="breadcrumb mb-4">
-                    구독 세부 정보
-                </ol>
-
+<!--                <ol class="breadcrumb mb-4">-->
+<!--                    구독 세부 정보-->
+<!--                </ol>-->
                 <hr/>
-
+                <div align="right">
+                    <select id="searchPoint">
+                        <option>---분류---</option>
+                        <option value="nick">닉네임</option>
+                        <option value="id">아이디</option>
+                    </select>
+                    <input type="text" id="searchWord" placeholder="입력하세요."
+                           name="searchWord"
+                           minlength="1" required>
+                    <button class="btn btn-primary float-right" id="searchNames" onclick="searchNames()">
+                        검색
+                    </button>
+                </div>
                 <div>
                     <table class="table table-striped">
                         <thead>
@@ -94,5 +105,28 @@
         <th:block th:include="admin/fragments/adminFooter"/>
     </div>
 </div>
+<script>
+    const searchPoint = document.getElementById("searchPoint");
+    const searchWord = document.getElementById("searchWord")
+
+    function searchNames() {
+        if (searchPoint.value === "nick") {
+            searchMemberByNickName();
+        } else if (searchPoint.value === "id") {
+            searchMembersById();
+        } else {
+            alert("분류를 선택하세요.")
+        }
+    }
+
+    function searchMembersById() {
+        window.location.href = "/admin/members?id=" + searchWord.value;
+    }
+
+    function searchMemberByNickName() {
+        window.location.href = "/admin/members?nick=" + searchWord.value;
+    }
+
+</script>
 </body>
 </html>

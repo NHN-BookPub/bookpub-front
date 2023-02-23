@@ -193,4 +193,22 @@ public interface MemberService {
      * @return 등급 번호
      */
     Integer getTierByMemberNo(Long memberNo);
+
+    /**
+     * 아이디로 멤버를 검색합니다.
+     *
+     * @param pageable 페이징
+     * @param id 검색할 문자
+     * @return 멤버리스트
+     */
+    PageResponse<MemberResponseDto> getMembersById(Pageable pageable, String id);
+
+    /**
+     * 닉네임으로 멤버를 검색합니다.
+     *
+     * @param pageable 페이징
+     * @param nickName 검색할 문자
+     * @return 멤버리스트
+     */
+    PageResponse<MemberResponseDto> getMembersByNickName(Pageable pageable, String nickName);
 }

@@ -258,4 +258,20 @@ public class MemberServiceImpl implements MemberService {
     public Integer getTierByMemberNo(Long memberNo) {
         return memberAdaptor.requestMemberTier(memberNo);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<MemberResponseDto> getMembersById(Pageable pageable, String id) {
+        return memberAdaptor.requestMembersById(pageable, id);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<MemberResponseDto> getMembersByNickName(Pageable pageable, String nickName) {
+        return memberAdaptor.requestMembersByNickName(pageable, nickName);
+    }
 }

@@ -214,4 +214,22 @@ public interface MemberAdaptor {
      * 로그아웃.
      */
     void logout();
+
+    /**
+     * 아이디로 멤버를 검색합니다.
+     *
+     * @param pageable 페이징
+     * @param id 검색할 문자
+     * @return 멤버리스트
+     */
+    PageResponse<MemberResponseDto> requestMembersById(Pageable pageable, String id);
+
+    /**
+     * 닉네임으로 멤버를 검색합니다.
+     *
+     * @param pageable 페이징
+     * @param nickName 검색할 문자
+     * @return 멤버리스트
+     */
+    PageResponse<MemberResponseDto> requestMembersByNickName(Pageable pageable, String nickName);
 }
