@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.category.service;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.CreateCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryInfoResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -64,4 +65,10 @@ public interface CategoryService {
      */
     List<GetParentCategoryWithChildrenResponseDto> getParentCategoryWithChildren();
 
+    /**
+     * 관리자 좋아요 현황을 위한 카테고리 검색을 위한 메서드.
+     *
+     * @return 카테고리 정보 반환.
+     */
+    List<GetCategoryInfoResponseDto> getAllCategories();
 }

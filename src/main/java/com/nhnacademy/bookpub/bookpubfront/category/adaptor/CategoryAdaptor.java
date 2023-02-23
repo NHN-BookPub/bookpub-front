@@ -3,6 +3,7 @@ package com.nhnacademy.bookpub.bookpubfront.category.adaptor;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.CreateCategoryRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.request.ModifyCategoryRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryInfoResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetCategoryResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.category.dto.response.GetParentCategoryWithChildrenResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
@@ -63,5 +64,12 @@ public interface CategoryAdaptor {
      * @return 최상위 카테고리 그 하위 카테고리 정보
      */
     List<GetParentCategoryWithChildrenResponseDto> requestParentWithChildList();
+
+    /**
+     * 좋아요 현황 카테고리 검색을 위한 메서드.
+     *
+     * @return 카테고리 기본 정보
+     */
+    List<GetCategoryInfoResponseDto> requestAllCategoryList();
 
 }
