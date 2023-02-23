@@ -123,4 +123,13 @@ public interface OrderService {
      * @param orderProductNo 주문상품 번호.
      */
     void confirmExchange(String orderProductNo);
+
+    /**
+     * 주문상태에 따른 주문목록.
+     *
+     * @param pageable 페이징
+     * @param codeName 코드명
+     * @return 주문페이지
+     */
+    PageResponse<GetOrderListForAdminResponseDto> getorderListByCodeName(Pageable pageable, String codeName);
 }

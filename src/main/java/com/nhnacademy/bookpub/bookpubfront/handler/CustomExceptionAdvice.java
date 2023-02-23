@@ -44,6 +44,11 @@ public class CustomExceptionAdvice {
         return "redirect:/admin/categories";
     }
 
+    @ExceptionHandler(GoToAdminOrderException.class)
+    public String goToAdminOrder() {
+        return "redirect:/admin/orders/list";
+    }
+
     @ExceptionHandler(NotFoundException.class)
     public String notFound() {
         return "error/404";

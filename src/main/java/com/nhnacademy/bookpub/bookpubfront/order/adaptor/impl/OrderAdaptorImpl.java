@@ -265,4 +265,27 @@ public class OrderAdaptorImpl implements OrderAdaptor {
         );
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetOrderListForAdminResponseDto> exchangeOrderListByCodeName(
+            Pageable pageable, String codeName) {
+        String url =
+                UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + AUTH_ORDER_URL + "/" + codeName)
+                        .queryParam("page", pageable.getPageNumber())
+                        .queryParam("size", pageable.getPageSize())
+                        .encode()
+                        .toUriString();
+
+        ResponseEntity<PageResponse<GetOrderListForAdminResponseDto>> response =
+                restTemplate.exchange(url,
+                        HttpMethod.GET,
+                        new HttpEntity<>(makeHeader()),
+                        new ParameterizedTypeReference<>() {
+                        });
+
+        return response.getBody();
+    }
+
 }

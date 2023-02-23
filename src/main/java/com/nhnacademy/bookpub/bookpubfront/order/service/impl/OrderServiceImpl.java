@@ -210,4 +210,12 @@ public class OrderServiceImpl implements OrderService {
         orderAdaptor.confirmExchange(orderProductNo);
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetOrderListForAdminResponseDto> getorderListByCodeName(Pageable pageable, String codeName) {
+        return orderAdaptor.exchangeOrderListByCodeName(pageable, codeName);
+    }
+
 }

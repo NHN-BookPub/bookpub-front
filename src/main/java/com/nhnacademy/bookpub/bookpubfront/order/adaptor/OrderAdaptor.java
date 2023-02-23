@@ -130,4 +130,14 @@ public interface OrderAdaptor {
      * @param orderProductNo 주문상품번호.
      */
     void confirmExchange(String orderProductNo);
+
+    /**
+     * 주문상태에 따른 주문목록.
+     *
+     * @param pageable 페이징
+     * @param codeName 코드명
+     * @return 주문페이지
+     */
+    PageResponse<GetOrderListForAdminResponseDto>
+    exchangeOrderListByCodeName(Pageable pageable, String codeName);
 }
