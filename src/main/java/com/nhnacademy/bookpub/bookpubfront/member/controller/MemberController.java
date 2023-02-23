@@ -252,13 +252,12 @@ public class MemberController {
     /**
      * 로그아웃.
      *
-     * @param request  HTTP Request.
      * @param response the response
      * @return 로그아웃 후 메인화면으로 리다이렉트.
      */
     @GetMapping("/logout")
-    public String logoutSubmit(HttpServletRequest request, HttpServletResponse response) {
-        memberService.logout(response, request.getSession());
+    public String logoutSubmit(HttpServletResponse response) {
+        memberService.logout(response);
 
         return "redirect:/";
     }

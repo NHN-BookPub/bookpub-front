@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Objects;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
@@ -80,7 +79,7 @@ public class MemberServiceImpl implements MemberService {
      * {@inheritDoc}
      */
     @Override
-    public void logout(HttpServletResponse response, HttpSession session) {
+    public void logout(HttpServletResponse response) {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (Objects.nonNull(authentication)) {
@@ -91,11 +90,6 @@ public class MemberServiceImpl implements MemberService {
             }
 
             Cookie sessionCookie = CookieUtil.findCookie(Utils.SESSION_COOKIE);
-            if (Objects.isNull(session)) {
-                SecurityContextHolder.clearContext();
-                return;
-            }
-
             jwtCookie.setMaxAge(0);
             jwtCookie.setValue("");
             sessionCookie.setMaxAge(0);
@@ -106,6 +100,8 @@ public class MemberServiceImpl implements MemberService {
             response.addCookie(jwtCookie);
             response.addCookie(sessionCookie);
             SecurityContextHolder.clearContext();
+
+            memberAdaptor.logout();
         }
     }
 
