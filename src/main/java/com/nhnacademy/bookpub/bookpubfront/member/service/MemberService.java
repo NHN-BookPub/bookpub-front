@@ -12,7 +12,6 @@ import com.nhnacademy.bookpub.bookpubfront.member.dto.response.SignupMemberRespo
 import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import java.util.List;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import org.springframework.data.domain.Pageable;
 
 /**
@@ -41,10 +40,9 @@ public interface MemberService {
 
     /**
      * 회원 로그아웃 메소드.
-     *
-     * @param session HttpSession 객체.
+     * @param response 리스폰스 값이 반환
      */
-    void logout(HttpServletResponse response, HttpSession session);
+    void logout(HttpServletResponse response);
 
 
     /**
