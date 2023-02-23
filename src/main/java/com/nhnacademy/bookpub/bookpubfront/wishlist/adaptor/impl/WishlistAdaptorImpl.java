@@ -10,6 +10,7 @@ import com.nhnacademy.bookpub.bookpubfront.wishlist.adaptor.WishlistAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.CreateWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.DeleteWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.ModifyWishlistAlarmRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetWishlistCountResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetWishlistResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -43,7 +44,8 @@ public class WishlistAdaptorImpl implements WishlistAdaptor {
     @Override
     public void requestCreateWishlist(Long memberNo, CreateWishlistRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo + WISHLIST_URL)
+                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo
+                                + WISHLIST_URL)
                 .encode()
                 .toUriString();
 
@@ -59,9 +61,11 @@ public class WishlistAdaptorImpl implements WishlistAdaptor {
      * {@inheritDoc}
      */
     @Override
-    public PageResponse<GetWishlistResponseDto> requestWishlistsByMember(Long memberNo, Pageable pageable) {
+    public PageResponse<GetWishlistResponseDto> requestWishlistsByMember(Long memberNo,
+            Pageable pageable) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo + WISHLIST_URL)
+                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo
+                                + WISHLIST_URL)
                 .queryParam("page", pageable.getPageNumber())
                 .queryParam("size", pageable.getPageSize())
                 .encode()
@@ -82,7 +86,8 @@ public class WishlistAdaptorImpl implements WishlistAdaptor {
     @Override
     public void requestDeleteWishlist(Long memberNo, DeleteWishlistRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo + WISHLIST_URL)
+                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo
+                                + WISHLIST_URL)
                 .encode()
                 .toUriString();
 
@@ -104,7 +109,8 @@ public class WishlistAdaptorImpl implements WishlistAdaptor {
     @Override
     public void requestModifyWishlistAlarm(Long memberNo, ModifyWishlistAlarmRequestDto request) {
         String url = UriComponentsBuilder.fromHttpUrl(
-                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo + WISHLIST_URL)
+                        GateWayConfig.getGatewayUrl() + WISHLIST_TOKEN_URL + memberNo
+                                + WISHLIST_URL)
                 .encode()
                 .toUriString();
 
@@ -118,5 +124,29 @@ public class WishlistAdaptorImpl implements WishlistAdaptor {
         } catch (JsonProcessingException e) {
             throw new ServerErrorException();
         }
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetWishlistCountResponseDto> requestWishListCount(Integer categoryNo,
+            Pageable pageable) {
+
+        String url = UriComponentsBuilder.fromHttpUrl(
+                        GateWayConfig.getGatewayUrl() + "/token/wishlist")
+                .queryParam("categoryNo", categoryNo)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(Utils.makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetWishlistCountResponseDto>>() {
+                }
+        ).getBody();
     }
 }
