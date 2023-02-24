@@ -1,80 +1,128 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Points</title>
-  <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
-  <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Points</title>
+    <link rel="stylesheet" href="/static/css/admin/adminStyle.css">
+    <script src="https://use.fontawesome.com/releases/v6.1.0/js/all.js" crossorigin="anonymous"></script>
 </head>
 <body class="sb-nav-fixed">
 <div id="layoutSidenav">
-  <th:block th:include="admin/fragments/adminHeader"/>
-  <th:block th:include="admin/fragments/adminNavigationBar"/>
+    <th:block th:include="admin/fragments/adminHeader"/>
+    <th:block th:include="admin/fragments/adminNavigationBar"/>
 
-  <div id="layoutSidenav_content">
-    <main>
-      <div class="container-fluid px-4">
-        <h1 class="mt-4">포인트 내역</h1>
-        <ol class="breadcrumb mb-4">
-          포인트 내역 정보
-        </ol>
-        <hr/>
-        <div>
-          <table class="table table-striped">
-            <thead>
-            <tr>
-              <th scope="col">회원 아이디</th>
-              <th scope="col">포인트 금액</th>
-              <th scope="col">포인트 사유</th>
-              <th scope="col">증감 여부</th>
-              <th scope="col">증감 일자</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr th:each="point : ${content}">
-              <td th:text="${point.memberId}"></td>
-              <td th:text="${#numbers.formatInteger(point.pointHistoryAmount,0,'COMMA')}"></td>
-              <td th:text="${point.pointHistoryReason}"></td>
-              <td th:text="${point.increased}"></td>
-              <td th:text="${point.createdAt}"></td>
-            </tr>
-            </tbody>
-          </table>
-          <nav aria-label="Page navigation example">
-            <ul class="pagination justify-content-center">
-              <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid px-4">
+                <h1 class="mt-4">포인트 내역</h1>
+                <ol class="breadcrumb mb-4">
+                    포인트 내역 정보
+                </ol>
+                <div align="right">
+                    <input type="text" id="searchWord" placeholder="입력하세요."
+                           name="searchWord"
+                           minlength="1" required>
+                    <button class="btn btn-primary float-right" onclick="searchPointById()">
+                        검색
+                    </button>
+                </div>
+                <hr/>
+                <div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th scope="col">회원 아이디</th>
+                            <th scope="col">포인트 금액</th>
+                            <th scope="col">포인트 사유</th>
+                            <th scope="col">증감 여부</th>
+                            <th scope="col">증감 일자</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="point : ${content}">
+                            <td th:text="${point.memberId}"></td>
+                            <td th:text="${#numbers.formatInteger(point.pointHistoryAmount,0,'COMMA')}"></td>
+                            <td th:text="${point.pointHistoryReason}"></td>
+                            <td th:text="${point.increased}"></td>
+                            <td th:text="${point.createdAt}"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <nav aria-label="Page navigation example" th:if="${#strings.isEmpty(key)}">
+                        <ul class="pagination justify-content-center">
+                            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
                                  1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
-                <li class="page-item">
-                  <a class="page-link" href="/admin/points?page=0">처음</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" th:if="${start > 1}"
-                     th:href="'/admin/points?page='+${start - pageButtonNum -1}">
-                    이전</a>
-                  <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
-                     href="javascript:void(0)">이전</a>
-                </li>
-                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
-                  <a class="page-link" th:href="'/admin/points?page='+${page - 1}"
-                     th:text="${page}"></a></li>
+                                <li class="page-item">
+                                    <a class="page-link" href="/admin/points?page=0">처음</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:if="${start > 1}"
+                                       th:href="'/admin/points?page='+${start - pageButtonNum -1}">
+                                        이전</a>
+                                    <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                                       href="javascript:void(0)">이전</a>
+                                </li>
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="'/admin/points?page='+${page - 1}"
+                                       th:text="${page}"></a></li>
 
-                <li class="page-item">
-                  <a class="page-link" th:if="${end < totalPages}"
-                     th:href="'/admin/points?page='+${start + pageButtonNum}">다음</a>
-                  <a class="page-link" th:if="${end >= totalPages}" style="cursor: not-allowed; color: gray;"
-                     href="javascript:void(0)">다음</a>
-                </li>
-                <li class="page-item">
-                  <a class="page-link" th:href="'/admin/points?page='+${totalPages - 1}">마지막</a>
-                </li>
-              </th:block>
-            </ul>
-          </nav>
-        </div>
-      </div>
-    </main>
-    <th:block th:include="admin/fragments/adminFooter"/>
-  </div>
+                                <li class="page-item">
+                                    <a class="page-link" th:if="${end < totalPages}"
+                                       th:href="'/admin/points?page='+${start + pageButtonNum}">다음</a>
+                                    <a class="page-link" th:if="${end >= totalPages}"
+                                       style="cursor: not-allowed; color: gray;"
+                                       href="javascript:void(0)">다음</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:href="'/admin/points?page='+${totalPages - 1}">마지막</a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </nav>
+
+                    <nav aria-label="Page navigation example" th:if="not ${#strings.isEmpty(key)}">
+                        <ul class="pagination justify-content-center">
+                            <th:block th:with="start=${(currentPage/pageButtonNum)*pageButtonNum + 1}, end=(${(totalPages == 0) ?
+                                 1 : (start + (pageButtonNum - 1) < totalPages ? start + (pageButtonNum - 1) : totalPages)})">
+                                <li class="page-item">
+                                    <a class="page-link" th:href="'/admin/points?key='+${key}+'&page=0'">처음</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:if="${start > 1}"
+                                       th:href="'/admin/points?key='+${key}+'&page='+${start - pageButtonNum -1}">
+                                        이전</a>
+                                    <a class="page-link" th:if="${start <= 1}" style="cursor: not-allowed; color: gray;"
+                                       href="javascript:void(0)">이전</a>
+                                </li>
+                                <li class="page-item" th:each="page: ${#numbers.sequence(start, end)}">
+                                    <a class="page-link" th:href="'/admin/points?key='+${key}+'&page='+${page - 1}"
+                                       th:text="${page}"></a></li>
+
+                                <li class="page-item">
+                                    <a class="page-link" th:if="${end < totalPages}"
+                                       th:href="'/admin/points?key='+${key}+'&page='+${start + pageButtonNum}">다음</a>
+                                    <a class="page-link" th:if="${end >= totalPages}"
+                                       style="cursor: not-allowed; color: gray;"
+                                       href="javascript:void(0)">다음</a>
+                                </li>
+                                <li class="page-item">
+                                    <a class="page-link" th:href="'/admin/points?key='+${key}+'&page='+${totalPages - 1}">마지막</a>
+                                </li>
+                            </th:block>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
+        </main>
+        <th:block th:include="admin/fragments/adminFooter"/>
+    </div>
 </div>
+<script>
+    const searchWord = document.getElementById("searchWord")
+
+    function searchPointById() {
+        window.location.href = "/admin/points?key=" + searchWord.value;
+    }
+</script>
 </body>
 </html>

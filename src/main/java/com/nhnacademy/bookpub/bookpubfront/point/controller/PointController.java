@@ -82,14 +82,20 @@ public class PointController {
                          @RequestParam(value = "end", required = false)
                          @DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)
                          LocalDateTime end,
-                         Model model) {
+                         Model model,
+                         @RequestParam(required = false) String key) {
+        PageResponse<GetPointAdminResponseDto> result;
 
-        PageResponse<GetPointAdminResponseDto> result = pointService.getPoints(pageable, start, end);
+        if (key == null) {
+            result = pointService.getPoints(pageable, start, end);
+        } else {
+            result = pointService.getPointsBySearch(pageable, start, end, key);
+            model.addAttribute("key", key);
+        }
 
         Utils.settingPagination(model, result, "content");
         model.addAttribute("uri", "/admin/points");
         return "admin/point/main";
     }
-
 }
 
