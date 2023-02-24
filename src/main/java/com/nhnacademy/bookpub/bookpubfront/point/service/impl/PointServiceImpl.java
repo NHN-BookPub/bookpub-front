@@ -47,4 +47,15 @@ public class PointServiceImpl implements PointService {
                                                             LocalDateTime end) {
         return pointAdaptor.getPoints(pageable, start, end);
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetPointAdminResponseDto> getPointsBySearch(Pageable pageable,
+                                                                    LocalDateTime start,
+                                                                    LocalDateTime end,
+                                                                    String key) {
+        return pointAdaptor.getPointsBySearch(pageable, start, end, key);
+    }
 }

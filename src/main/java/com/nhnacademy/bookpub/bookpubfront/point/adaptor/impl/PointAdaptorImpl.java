@@ -89,4 +89,29 @@ public class PointAdaptorImpl implements PointAdaptor {
         ).getBody();
     }
 
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetPointAdminResponseDto> getPointsBySearch(Pageable pageable,
+                                                                    LocalDateTime start,
+                                                                    LocalDateTime end,
+                                                                    String key) {
+        String url = UriComponentsBuilder.fromHttpUrl(getGatewayUrl() + "/token/points/" + key)
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .queryParam("start", start)
+                .queryParam("end", end)
+                .encode()
+                .toUriString();
+
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<PageResponse<GetPointAdminResponseDto>>() {
+                }
+        ).getBody();
+    }
+
 }

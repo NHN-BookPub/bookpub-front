@@ -68,10 +68,13 @@ public class MemberController {
 
         if (nick != null) {
             members = memberService.getMembersByNickName(pageable, nick);
+            model.addAttribute("uri", "/admin/members?nick=" + nick);
         } else if (id != null) {
             members = memberService.getMembersById(pageable, id);
+            model.addAttribute("uri", "/admin/members?id=" + id);
         } else {
             members = memberService.getMembers(pageable);
+            model.addAttribute("uri", "/admin/members");
         }
 
         model.addAttribute("content", members.getContent());
@@ -82,7 +85,6 @@ public class MemberController {
         model.addAttribute("previousPageNo", members.getNumber() - 1);
         model.addAttribute("nextPageNo", members.getNumber() + 1);
         model.addAttribute("size", pageable.getPageSize());
-        model.addAttribute("uri", "/admin/members");
 
         return "admin/member/memberList";
     }
