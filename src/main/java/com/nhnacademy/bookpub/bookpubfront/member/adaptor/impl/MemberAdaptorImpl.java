@@ -420,4 +420,44 @@ public class MemberAdaptorImpl implements MemberAdaptor {
                 Void.class
         );
     }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<MemberResponseDto> requestMembersById(Pageable pageable, String id) {
+        String url = UriComponentsBuilder
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/token/admin/members/" + id + "/id")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<PageResponse<MemberResponseDto>>() {
+                }
+        ).getBody();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<MemberResponseDto> requestMembersByNickName(Pageable pageable, String nickName) {
+        String url = UriComponentsBuilder
+                .fromHttpUrl(GateWayConfig.getGatewayUrl() + "/token/admin/members/" + nickName + "/nick")
+                .queryParam("page", pageable.getPageNumber())
+                .queryParam("size", pageable.getPageSize())
+                .encode()
+                .toUriString();
+        return restTemplate.exchange(
+                url,
+                HttpMethod.GET,
+                new HttpEntity<>(makeHeader()),
+                new ParameterizedTypeReference<PageResponse<MemberResponseDto>>() {
+                }
+        ).getBody();
+    }
 }

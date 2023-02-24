@@ -61,8 +61,18 @@ public class MemberController {
     @GetMapping("/admin/members")
     @Auth
     public String memberList(@PageableDefault Pageable pageable,
-                             Model model) {
-        PageResponse<MemberResponseDto> members = memberService.getMembers(pageable);
+                             Model model,
+                             @RequestParam(required = false) String nick,
+                             @RequestParam(required = false) String id) {
+        PageResponse<MemberResponseDto> members;
+
+        if (nick != null) {
+            members = memberService.getMembersByNickName(pageable, nick);
+        } else if (id != null) {
+            members = memberService.getMembersById(pageable, id);
+        } else {
+            members = memberService.getMembers(pageable);
+        }
 
         model.addAttribute("content", members.getContent());
         model.addAttribute("next", members.isNext());
