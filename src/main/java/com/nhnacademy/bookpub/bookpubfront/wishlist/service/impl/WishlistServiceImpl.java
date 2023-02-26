@@ -5,6 +5,7 @@ import com.nhnacademy.bookpub.bookpubfront.wishlist.adaptor.WishlistAdaptor;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.CreateWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.DeleteWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.ModifyWishlistAlarmRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetWishlistCountResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetWishlistResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.service.WishlistService;
 import lombok.RequiredArgsConstructor;
@@ -36,7 +37,7 @@ public class WishlistServiceImpl implements WishlistService {
      */
     @Override
     public PageResponse<GetWishlistResponseDto> getWishlistByMember(Long memberNo,
-                                                                    Pageable pageable) {
+            Pageable pageable) {
         return wishlistAdaptor.requestWishlistsByMember(memberNo, pageable);
     }
 
@@ -54,5 +55,14 @@ public class WishlistServiceImpl implements WishlistService {
     @Override
     public void modifyWishlistAlarm(Long memberNo, ModifyWishlistAlarmRequestDto request) {
         wishlistAdaptor.requestModifyWishlistAlarm(memberNo, request);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public PageResponse<GetWishlistCountResponseDto> getWishListCount(Integer categoryNo,
+            Pageable pageable) {
+        return wishlistAdaptor.requestWishListCount(categoryNo, pageable);
     }
 }

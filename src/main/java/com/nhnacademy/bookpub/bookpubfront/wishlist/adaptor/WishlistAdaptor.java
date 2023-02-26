@@ -4,6 +4,7 @@ import com.nhnacademy.bookpub.bookpubfront.utils.PageResponse;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.CreateWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.DeleteWishlistRequestDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.request.ModifyWishlistAlarmRequestDto;
+import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetWishlistCountResponseDto;
 import com.nhnacademy.bookpub.bookpubfront.wishlist.dto.response.GetWishlistResponseDto;
 import org.springframework.data.domain.Pageable;
 
@@ -47,4 +48,14 @@ public interface WishlistAdaptor {
      * @param request  수정을 위한 dto
      */
     void requestModifyWishlistAlarm(Long memberNo, ModifyWishlistAlarmRequestDto request);
+
+    /**
+     * 관리자 좋아요 통계를 조회하기 위한 메서드.
+     *
+     * @param categoryNo 카테고리 번호
+     * @param pageable   페이징 정보
+     * @return 상품별 좋아요 카운트
+     */
+    PageResponse<GetWishlistCountResponseDto> requestWishListCount(Integer categoryNo,
+            Pageable pageable);
 }
