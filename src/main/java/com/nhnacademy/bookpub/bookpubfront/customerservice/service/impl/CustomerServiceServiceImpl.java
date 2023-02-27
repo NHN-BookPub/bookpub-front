@@ -77,6 +77,7 @@ public class CustomerServiceServiceImpl implements CustomerServiceService {
      * {@inheritDoc}
      */
     @Override
+    @CacheEvict(cacheNames = "customerService", allEntries = true)
     public void deleteCustomerService(Integer serviceNo) {
         customerServiceAdaptor.deleteCustomerService(serviceNo);
     }
