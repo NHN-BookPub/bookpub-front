@@ -213,7 +213,7 @@ public class CustomerServiceController {
         categoryUtils.categoriesView(model);
         model.addAttribute("service", response);
 
-        return "customerservice/customerServiceNoticeView";
+        return "customerservice/customerServiceFAQView";
     }
 
     /**
@@ -237,22 +237,33 @@ public class CustomerServiceController {
      * @param response 변환할 dto
      */
     private void setCategoryEngToKor(GetCustomerServiceListResponseDto response) {
-        if (response.getServiceCategory().equals("faqUsing")) {
-            response.setCategory("이용안내");
-        } else if (response.getServiceCategory().equals("faqAccount")) {
-            response.setCategory("계정안내");
-        } else if (response.getServiceCategory().equals("faqPayment")) {
-            response.setCategory("결제안내");
-        } else if (response.getServiceCategory().equals("faqOthers")) {
-            response.setCategory("기타안내");
-        } else if (response.getServiceCategory().equals("noteNormal")) {
-            response.setCategory("일반");
-        } else if (response.getServiceCategory().equals("noteServer")) {
-            response.setCategory("서버");
-        } else if (response.getServiceCategory().equals("notePayment")) {
-            response.setCategory("결제");
-        } else if (response.getServiceCategory().equals("noteOthers")) {
-            response.setCategory("기타");
+        switch (response.getServiceCategory()) {
+            case "faqUsing":
+                response.setCategory("이용안내");
+                break;
+            case "faqAccount":
+                response.setCategory("계정안내");
+                break;
+            case "faqPayment":
+                response.setCategory("결제안내");
+                break;
+            case "faqOthers":
+                response.setCategory("기타안내");
+                break;
+            case "noteNormal":
+                response.setCategory("일반");
+                break;
+            case "noteServer":
+                response.setCategory("서버");
+                break;
+            case "notePayment":
+                response.setCategory("결제");
+                break;
+            case "noteOthers":
+                response.setCategory("기타");
+                break;
+            default:
+                response.setCategory("에러");
         }
     }
 }
