@@ -77,11 +77,11 @@ public class ElasticAdaptorImpl implements ElasticAdaptor {
                 "      \"analyzer\": \"suggest_search_analyzer\", \n" +
                 "      \"query\": \"" + keyword + "\",\n" +
                 "      \"fields\": [\n" +
-                "        \"title^3\",\n" +
-                "        \"titlenori^3\",\n" +
-                "        \"titlejaso^3\",\n" +
-                "        \"cstitlejaso^2\",\n" +
-                "        \"cstitlenori^2\",\n" +
+                "        \"title\",\n" +
+                "        \"titlenori\",\n" +
+                "        \"titlejaso\",\n" +
+                "        \"cstitlejaso^100\",\n" +
+                "        \"cstitlenori^100\",\n" +
                 "        \"cscontentjaso\",\n" +
                 "        \"cscontentnori\"\n" +
                 "      ]\n" +
